@@ -1,0 +1,22 @@
+{
+  "name": "wf-riventrader-typescript",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "TypeScript Warframe.market riven arbitrage dashboard with MCP-over-SSE output.",
+  "scripts": {
+    "dev": "tsx src/main.ts",
+    "start": "tsx src/main.ts",
+    "start:bun": "bun src/main.ts",
+    "check": "tsc --noEmit",
+    "test": "tsx test/opportunities.test.ts && tsx test/cache.test.ts"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}
