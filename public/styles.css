@@ -109,8 +109,8 @@ footer { color: var(--muted); padding: 26px 0 42px; font-size: 12px; }
 .weapon-thumb-md { width: 88px; height: 88px; }
 .weapon-thumb-lg { width: 128px; height: 128px; }
 .weapon-thumb-blank { background: repeating-linear-gradient(45deg, #10192480 0 6px, #16212f80 6px 12px); }
-.weapon-cell { display: flex; gap: 10px; align-items: center; }
-.weapon-cell > div { min-width: 0; }
+.weapon-cell { display: flex; gap: 12px; align-items: center; }
+.weapon-cell-text { min-width: 0; }
 .weapon-card-head { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; }
 .weapon-card-head h3 { margin: 0; font-size: 15px; }
 .instant-head-main { display: flex; gap: 10px; align-items: center; min-width: 0; }

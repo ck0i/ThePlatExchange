@@ -134,7 +134,7 @@ function renderTable(opportunities) {
     row.className = `tier-${tier}`;
     row.innerHTML = `
       <td>${index + 1}</td>
-      <td class="weapon-cell">${weaponThumb(opportunity.imageName, opportunity.weaponName, "sm")}<div><strong>${escapeHtml(opportunity.weaponName)}</strong><div class="small">${escapeHtml(opportunity.rivenName)}</div></div></td>
+      <td><div class="weapon-cell">${weaponThumb(opportunity.imageName, opportunity.weaponName, "sm")}<div class="weapon-cell-text"><strong>${escapeHtml(opportunity.weaponName)}</strong><div class="small">${escapeHtml(opportunity.rivenName)}</div></div></div></td>
       <td class="price">${opportunity.buyPrice}p</td>
       <td>${opportunity.targetSellPrice}p<div class="small">median ${opportunity.conservativeSellPrice}p</div></td>
       <td class="profit">+${opportunity.expectedProfit}p</td>
