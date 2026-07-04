@@ -1,12 +1,57 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-07-04T20:53:05.928Z",
+  "updated_at": "2026-07-04T20:58:28.970Z",
   "tiers": {
     "reference": {
       "last_run_at": "2026-07-04T20:53:05.928Z",
       "weapons": 417,
       "attributes": 32,
       "version_hash": "MjAyNi0wNi0xOVQwMzo0MjozNw=="
+    },
+    "hot": {
+      "last_run_at": "2026-07-04T20:58:28.938Z",
+      "scanned_slugs": [
+        "harpak",
+        "flux_rifle",
+        "magnus",
+        "kraken",
+        "aklato",
+        "cestra",
+        "akzani",
+        "bolto",
+        "kunai",
+        "amphis",
+        "ankyros",
+        "mutalist_quanta",
+        "miter",
+        "seer",
+        "ether_daggers",
+        "spectra",
+        "tetra",
+        "dual_skana",
+        "heat_sword",
+        "cronus",
+        "plasma_sword",
+        "dark_sword",
+        "kama",
+        "stug",
+        "pangolin_sword",
+        "anku",
+        "phage",
+        "kogake",
+        "deth_machine_rifle",
+        "convectrix",
+        "afuris",
+        "vulkar",
+        "kestrel",
+        "dual_ether",
+        "nukor",
+        "burst_laser",
+        "machete",
+        "boar",
+        "twin_vipers",
+        "bronco"
+      ]
     }
   }
 }
