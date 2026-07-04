@@ -42,7 +42,7 @@ jobs:
             git add data/.gitkeep
             git commit -m "chore: bootstrap data branch"
             git push origin data
-            git switch -
+            git checkout main
           fi
           git fetch origin data:refs/remotes/origin/data
           git worktree add data-tree origin/data
