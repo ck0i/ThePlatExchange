@@ -411,7 +411,8 @@ async function rollupValuations(dataDir: string, windowDays: number, vanishThres
     valuations,
     velocities,
   };
-  await writeFile(join(dataDir, "valuations", "latest.json"), JSON.stringify(payload, null, 2));
+  // Minified — pretty-printing this was writing 3M+ line diffs per hourly commit.
+  await writeFile(join(dataDir, "valuations", "latest.json"), JSON.stringify(payload));
   return { valuations: bySignature.size };
 }
 

@@ -70,6 +70,7 @@ export class WarframeMarketClient {
     }
 
     if (cached && referenceCacheMatches(cached, versionInfo)) {
+      await this.backfillImageNames(cached);
       return cached;
     }
 
@@ -87,6 +88,7 @@ export class WarframeMarketClient {
     } catch {
       // non-fatal — reference works without images
     }
+    // fall-through to snapshot build below
 
     const snapshot: ReferenceSnapshot = {
       versions: versionInfo.collections,
@@ -133,6 +135,17 @@ export class WarframeMarketClient {
     });
     if (!isRecord(payload)) return [];
     return compact(readArray(payload, "auctions").map(parseRivenAuction));
+  }
+
+  private async backfillImageNames(snapshot: ReferenceSnapshot): Promise<void> {
+    if (!snapshot.rivenWeapons.some((weapon) => !weapon.imageName)) return;
+    try {
+      const imageMap = await fetchWarframestatImageMap(this.headers["User-Agent"] ?? "wf-riventrader/0.1");
+      const matched = enrichWeaponsWithImageNames(snapshot.rivenWeapons, imageMap);
+      if (matched > 0) await this.writeReferenceCache(snapshot);
+    } catch {
+      // non-fatal
+    }
   }
 
   private async readReferenceCache(): Promise<ReferenceSnapshot | null> {
