@@ -1,0 +1,2 @@
+data/valuations/*.json filter=lfs diff=lfs merge=lfs -text
+data/signatures/*.jsonl filter=lfs diff=lfs merge=lfs -text
