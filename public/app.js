@@ -499,7 +499,7 @@ function escapeHtml(value) {
 function weaponThumb(imageName, alt, size = "sm") {
   if (!imageName) return `<span class="weapon-thumb weapon-thumb-${size} weapon-thumb-blank" aria-hidden="true"></span>`;
   const escaped = encodeURIComponent(imageName);
-  return `<img class="weapon-thumb weapon-thumb-${size}" loading="lazy" src="https://cdn.warframestat.us/img/${escaped}" alt="${escapeHtml(alt)}" onerror="this.classList.add('weapon-thumb-blank'); this.removeAttribute('src');" />`;
+  return `<img class="weapon-thumb weapon-thumb-${size}" loading="lazy" src="/img/${escaped}" alt="${escapeHtml(alt)}" onerror="this.classList.add('weapon-thumb-blank'); this.removeAttribute('src');" />`;
 }
 
 function sortedOpportunities(opportunities) {

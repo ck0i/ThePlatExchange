@@ -104,9 +104,9 @@ footer { color: var(--muted); padding: 26px 0 42px; font-size: 12px; }
 
 /* Weapon thumbnails (warframestat.us CDN) */
 .weapon-thumb { display: inline-block; border-radius: 8px; object-fit: contain; background: #0c141d; border: 1px solid var(--border); flex-shrink: 0; }
-.weapon-thumb-sm { width: 34px; height: 34px; padding: 3px; }
-.weapon-thumb-md { width: 44px; height: 44px; padding: 4px; }
-.weapon-thumb-lg { width: 56px; height: 56px; padding: 5px; }
+.weapon-thumb-sm { width: 52px; height: 52px; padding: 4px; }
+.weapon-thumb-md { width: 72px; height: 72px; padding: 6px; }
+.weapon-thumb-lg { width: 96px; height: 96px; padding: 8px; }
 .weapon-thumb-blank { background: repeating-linear-gradient(45deg, #10192480 0 6px, #16212f80 6px 12px); }
 .weapon-cell { display: flex; gap: 10px; align-items: center; }
 .weapon-cell > div { min-width: 0; }

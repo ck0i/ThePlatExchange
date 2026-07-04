@@ -1,7 +1,8 @@
 import { createServer } from "node:http";
 import type { IncomingMessage, Server, ServerResponse } from "node:http";
-import { readFile } from "node:fs/promises";
-import { extname, join, normalize } from "node:path";
+import { existsSync } from "node:fs";
+import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { extname, join, normalize, resolve } from "node:path";
 import { McpSseServer } from "./mcp.js";
 import { enrichOpportunity, type SignatureLookupHit } from "./mcp/schemas.js";
 import { attributeSignature } from "./wfm/opportunities.js";
@@ -12,6 +13,82 @@ import type { DashboardState, Opportunity, SellerStatus, TraderConfig } from "./
 export interface AppServerOptions {
   publicDir?: string;
   remoteFallback?: RemoteFallbackOptions;
+  imageCacheDir?: string;
+}
+
+const WARFRAMESTAT_IMAGE_BASE = "https://cdn.warframestat.us/img/";
+const IMAGE_CACHE_MAX_AGE_SECONDS = 30 * 24 * 60 * 60;
+const IMAGE_ALLOWED_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg"]);
+const IMAGE_MIME_BY_EXT: Record<string, string> = {
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".webp": "image/webp",
+  ".gif": "image/gif",
+  ".svg": "image/svg+xml",
+};
+
+class ImageProxy {
+  private readonly inflight = new Map<string, Promise<void>>();
+  constructor(private readonly cacheDir: string) {}
+
+  async serve(response: ServerResponse, requestedName: string): Promise<void> {
+    const safeName = sanitizeImageName(requestedName);
+    if (!safeName) {
+      sendText(response, 400, "invalid image name");
+      return;
+    }
+    const cachedPath = resolve(this.cacheDir, safeName);
+    if (!cachedPath.startsWith(resolve(this.cacheDir))) {
+      sendText(response, 400, "invalid image path");
+      return;
+    }
+    try {
+      if (!existsSync(cachedPath)) {
+        await this.fetchToCache(safeName, cachedPath);
+      }
+      const data = await readFile(cachedPath);
+      const ext = extname(safeName).toLowerCase();
+      response.writeHead(200, {
+        "Content-Type": IMAGE_MIME_BY_EXT[ext] ?? "application/octet-stream",
+        "Cache-Control": `public, max-age=${IMAGE_CACHE_MAX_AGE_SECONDS}, immutable`,
+      });
+      response.end(data);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      sendText(response, 502, `upstream image error: ${message}`);
+    }
+  }
+
+  private async fetchToCache(name: string, targetPath: string): Promise<void> {
+    let inflight = this.inflight.get(name);
+    if (inflight) return inflight;
+    inflight = (async () => {
+      const response = await fetch(`${WARFRAMESTAT_IMAGE_BASE}${encodeURIComponent(name)}`);
+      if (!response.ok) throw new Error(`upstream ${response.status}`);
+      const buffer = Buffer.from(await response.arrayBuffer());
+      await mkdir(this.cacheDir, { recursive: true });
+      const tempPath = `${targetPath}.${process.pid}.${Date.now()}.tmp`;
+      await writeFile(tempPath, buffer);
+      await rename(tempPath, targetPath);
+    })();
+    this.inflight.set(name, inflight);
+    try {
+      await inflight;
+    } finally {
+      this.inflight.delete(name);
+    }
+  }
+}
+
+function sanitizeImageName(raw: string): string | null {
+  const trimmed = raw.trim();
+  if (!trimmed || trimmed.length > 128) return null;
+  if (trimmed.includes("/") || trimmed.includes("\\") || trimmed.includes("..")) return null;
+  if (!/^[A-Za-z0-9._-]+$/.test(trimmed)) return null;
+  const ext = extname(trimmed).toLowerCase();
+  if (!IMAGE_ALLOWED_EXTENSIONS.has(ext)) return null;
+  return trimmed;
 }
 
 export interface RemoteFallbackOptions {
@@ -58,10 +135,17 @@ export function createAppServer(service: RivenTraderService, options: AppServerO
   const publicDir = options.publicDir ?? join(process.cwd(), "public");
   const mcp = new McpSseServer(service);
   const remote = options.remoteFallback ? new RemoteFallback(options.remoteFallback) : null;
+  const imageCacheDir = options.imageCacheDir ?? join(process.cwd(), ".cache", "wf-riventrader", "images");
+  const imageProxy = new ImageProxy(imageCacheDir);
 
   return createServer(async (request, response) => {
     try {
       const url = new URL(request.url ?? "/", `http://${request.headers.host ?? "127.0.0.1"}`);
+      if (request.method === "GET" && url.pathname.startsWith("/img/")) {
+        const name = decodeURIComponent(url.pathname.slice(5));
+        await imageProxy.serve(response, name);
+        return;
+      }
       if (request.method === "GET" && url.pathname === "/events") {
         handleDashboardSse(request, response, service);
         return;
