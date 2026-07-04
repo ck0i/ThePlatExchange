@@ -1,0 +1,66 @@
+name: Reference + disposition diff
+
+on:
+  schedule:
+    - cron: "43 5 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: reference-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Ensure data branch exists
+        run: |
+          if ! git ls-remote --exit-code --heads origin data > /dev/null 2>&1; then
+            git switch --orphan data
+            mkdir -p data
+            touch data/.gitkeep
+            git add data/.gitkeep
+            git commit -m "chore: bootstrap data branch"
+            git push origin data
+            git switch -
+          fi
+          git fetch origin data:refs/remotes/origin/data
+          git worktree add data-tree origin/data
+
+      - name: Refresh reference + diff dispositions
+        env:
+          WFM_USER_AGENT: "wf-riventrader-ci/0.1 (+https://github.com/${{ github.repository }})"
+          WFM_CACHE_DIR: /tmp/wfm-cache
+          WFM_RATE_PER_SEC: "2"
+        run: npx tsx scripts/scan-and-write.ts --tier reference --data-dir data-tree/data
+
+      - name: Commit and push data
+        run: |
+          cd data-tree
+          git add data
+          if git diff --cached --quiet; then
+            echo "No reference changes"
+            exit 0
+          fi
+          git commit -m "data(reference): $(date -u +%FT%TZ)"
+          git push origin HEAD:data
