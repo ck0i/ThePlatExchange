@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,257 +9,275 @@
 <body>
   <div id="spotlightOverlay" class="spotlight-overlay" hidden>
     <div class="spotlight-backdrop" data-spotlight-close></div>
-    <div id="spotlight" class="spotlight">
-      <svg class="spotlight-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <circle cx="8.5" cy="8.5" r="5.5" />
-        <path d="M17 17l-4.5-4.5" />
-      </svg>
-      <input id="spotlightInput" type="search" placeholder="Search weapons, filter by price (e.g. dark sword &lt; 100p)…" autocomplete="off" spellcheck="false" />
+    <div id="spotlight" class="spotlight" role="dialog" aria-modal="true" aria-label="Search">
+      <div class="spotlight-input-row">
+        <svg class="spotlight-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="8.5" cy="8.5" r="5.5" />
+          <path d="M17 17l-4.5-4.5" />
+        </svg>
+        <input id="spotlightInput" type="search" placeholder="Search weapons, filter by price (e.g. dark sword < 100p)…" autocomplete="off" spellcheck="false" />
+        <kbd>Esc</kbd>
+      </div>
       <div id="spotlightResults" class="spotlight-results" hidden></div>
     </div>
   </div>
-  <div id="topBar" class="topbar">
-    <div class="topbar-inner">
-      <div class="topbar-left">
-        <span class="brand-mark">ThePlatExchange</span>
-      </div>
 
-      <div class="topbar-center">
-        <button id="spotlightTrigger" class="spotlight-trigger" type="button">
-          <svg class="spotlight-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <circle cx="8.5" cy="8.5" r="5.5" />
-            <path d="M17 17l-4.5-4.5" />
-          </svg>
-          <span class="spotlight-trigger-text">Search weapons, filter by price…</span>
-        </button>
-      </div>
-
-      <div class="topbar-right">
-        <button id="settingsButton" class="icon-button" type="button" aria-label="Settings" title="Settings">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="10" cy="10" r="3" />
-            <path d="M17.5 10a7.5 7.5 0 0 0-.14-1.44l1.6-1.24-1.9-3.3-1.87.79a7.5 7.5 0 0 0-2.5-1.44L12.4 1.5h-4.8l-.29 1.87a7.5 7.5 0 0 0-2.5 1.44l-1.87-.79-1.9 3.3 1.6 1.24A7.5 7.5 0 0 0 2.5 10c0 .49.05.97.14 1.44l-1.6 1.24 1.9 3.3 1.87-.79a7.5 7.5 0 0 0 2.5 1.44l.29 1.87h4.8l.29-1.87a7.5 7.5 0 0 0 2.5-1.44l1.87.79 1.9-3.3-1.6-1.24c.09-.47.14-.95.14-1.44Z" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Settings modal -->
-  <div id="settingsModal" class="modal" hidden>
-    <div class="modal-backdrop" data-modal-close></div>
-    <div class="modal-dialog panel settings-dialog">
-      <button class="modal-close" data-modal-close type="button" aria-label="Close">×</button>
-      <h2>Settings</h2>
-      <div class="settings-tabs">
-        <button class="settings-tab active" data-settings-tab="data">Data source</button>
-        <button class="settings-tab" data-settings-tab="mcp">MCP connect</button>
-        <button class="settings-tab" data-settings-tab="about">About</button>
-      </div>
-
-      <div class="settings-panel" data-settings-panel="data">
-        <div class="mode-toggle" style="border:0;padding:0;margin:0">
-          <div class="mode-title">Where should the dashboard get data?</div>
-          <div class="mode-buttons" role="tablist">
-            <button type="button" class="mode-btn" data-mode="tiered">Local scan</button>
-            <button type="button" class="mode-btn" data-mode="remote">CI feed</button>
-          </div>
-          <div id="modeHint" class="mode-hint">Local scan runs warframe.market fetches from this machine. CI feed reads the shared feed published by GitHub Actions.</div>
-        </div>
-        <div class="settings-status" id="dataStatusLine"></div>
-      </div>
-
-      <div class="settings-panel" data-settings-panel="mcp" hidden>
-        <p class="small">Point Claude Desktop, Claude Code, or any MCP-aware client at the endpoint below to get live opportunities, trait valuations, instant-wins, and a health probe.</p>
-        <div class="mcp-block">
-          <div class="mcp-block-head"><h3>SSE endpoint</h3><button class="mcp-copy" data-copy-target="mcpEndpoint" type="button">Copy</button></div>
-          <code id="mcpEndpoint" class="mcp-endpoint"></code>
-        </div>
-        <div class="mcp-block">
-          <div class="mcp-block-head"><h3>Claude Desktop</h3><button class="mcp-copy" data-copy-target="mcpConfigDesktop" type="button">Copy config</button></div>
-          <p class="small">Paste into <code>%APPDATA%\Claude\claude_desktop_config.json</code> (Win) or <code>~/Library/Application Support/Claude/claude_desktop_config.json</code> (macOS), then restart Claude Desktop.</p>
-          <pre><code id="mcpConfigDesktop"></code></pre>
-        </div>
-        <div class="mcp-block">
-          <div class="mcp-block-head"><h3>Claude Code CLI</h3><button class="mcp-copy" data-copy-target="mcpConfigCli" type="button">Copy command</button></div>
-          <pre><code id="mcpConfigCli"></code></pre>
-        </div>
-        <div class="mcp-block">
-          <div class="mcp-block-head"><h3>Available tools</h3><button id="mcpTestButton" class="secondary" type="button">Test connection</button></div>
-          <div id="mcpTestResult" class="small"></div>
-          <ul id="mcpToolList" class="mcp-tool-list"></ul>
-        </div>
-      </div>
-
-      <div class="settings-panel" data-settings-panel="about" hidden>
-        <p class="small">ThePlatExchange is an open-source server-side Warframe.market riven arbitrage scanner. Data lives in a public GitHub branch, weapon images come from the community warframestat.us CDN.</p>
-        <p class="small">Profit numbers are median-based over trimmed comparables — outlier listings can't inflate expected returns.</p>
-        <p class="small">Source: <a href="https://github.com/ck0i/ThePlatExchange" target="_blank" style="color:var(--accent)">github.com/ck0i/ThePlatExchange</a></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Weapon detail modal -->
   <div id="weaponModal" class="modal" hidden>
     <div class="modal-backdrop" data-modal-close></div>
-    <div class="modal-dialog panel weapon-detail-dialog">
+    <div class="modal-dialog panel weapon-detail-dialog" role="dialog" aria-modal="true" aria-label="Weapon detail">
       <button class="modal-close" data-modal-close type="button" aria-label="Close">×</button>
       <div id="wdContent" class="wd-content"></div>
     </div>
   </div>
 
-  <main>
-    <!-- Hero: top opportunity right now -->
-    <section id="heroDeal" class="hero-deal panel" hidden>
-      <div class="hero-thumb-wrap"><div id="heroThumb"></div></div>
-      <div class="hero-body">
-        <div class="hero-eyebrow">Top deal right now <span class="hero-rank">#1</span></div>
-        <div class="hero-title"><span id="heroWeapon"></span> <span id="heroTier" class="tier-badge"></span></div>
-        <div id="heroRiven" class="hero-riven"></div>
-        <div class="hero-trade">
-          <span class="hero-buy" id="heroBuy"></span>
-          <span class="hero-arrow">→</span>
-          <span class="hero-target" id="heroTarget"></span>
-        </div>
-        <div class="hero-meta">
-          <span class="hero-profit" id="heroProfit"></span>
-          <span class="hero-roi" id="heroRoi"></span>
-          <span class="hero-comps" id="heroComps"></span>
-          <span id="heroSignals" class="signals hero-signals"></span>
-        </div>
+  <div class="app-shell">
+    <div class="ticker-strip" aria-label="Market ticker">
+      <div class="ticker-track" id="tickerItems">
+        <span class="ticker-item"><span class="ticker-dot"></span> Waiting for market feed…</span>
       </div>
-      <div class="hero-actions">
-        <button id="heroOpen" type="button" class="hero-cta">Open on WFM ↗</button>
-      </div>
-    </section>
-
-    <!-- Compact meta strip -->
-    <div id="metaStrip" class="meta-strip">
-      <span class="meta-item"><span id="statOpps">0</span> opportunities</span>
-      <span class="meta-dot">·</span>
-      <span class="meta-item"><span id="statWeapons">0/0</span> weapons</span>
-      <span class="meta-dot">·</span>
-      <span class="meta-item"><span id="statAuctions">0</span> live auctions</span>
-      <span class="meta-dot">·</span>
-      <span class="meta-item">updated <span id="statRefresh">—</span></span>
-      <span id="statWeaponsSub" class="meta-sub"></span>
     </div>
 
-    <div class="grid">
-      <aside class="panel controls">
-        <details class="section" open>
-          <summary><h2>Filters</h2></summary>
-          <form id="filters">
-            <label>Watchlist
-              <textarea id="watchlist" placeholder="blank = all weapons&#10;war&#10;kuva bramma"></textarea>
-            </label>
-            <div class="inline">
-              <label>Min profit
-                <input id="minProfit" type="number" min="0" step="1" value="25" />
-              </label>
-              <label>Min ROI
-                <input id="minRoi" type="number" min="0" step="0.05" value="0.35" />
-              </label>
-            </div>
-            <div class="inline">
-              <label>Min buy
-                <input id="minBuyPrice" type="number" min="0" step="1" placeholder="—" />
-              </label>
-              <label>Max buy
-                <input id="maxBuyPrice" type="number" min="0" step="1" placeholder="—" />
-              </label>
-            </div>
-            <div class="inline">
-              <label>Min comps
-                <input id="minGroupSize" type="number" min="2" step="1" value="4" />
-              </label>
-              <label>Max target
-                <input id="maxSellPrice" type="number" min="0" step="1" placeholder="—" />
-              </label>
-            </div>
-            <label>Max results
-              <input id="maxResults" type="number" min="5" max="500" step="5" value="75" />
-            </label>
-            <div class="small" style="margin-bottom:6px">Seller status</div>
-            <div class="status-chips">
-              <label class="status-chip"><input class="status" type="checkbox" value="ingame" checked /><span>ingame</span></label>
-              <label class="status-chip"><input class="status" type="checkbox" value="online" checked /><span>online</span></label>
-              <label class="status-chip"><input class="status" type="checkbox" value="offline" /><span>offline</span></label>
-            </div>
-            <div class="actions">
-              <button id="apply" type="submit">Apply</button>
-              <button id="refresh" class="secondary" type="button">Refresh</button>
-            </div>
-          </form>
-        </details>
+    <header id="topBar" class="topbar">
+      <button class="brand-button" data-page="home" type="button" aria-label="Home">
+        <span class="brand-gem">◆</span>
+        <span class="brand-name">Plat Exchange</span>
+        <span class="brand-code">PLTX</span>
+      </button>
+
+      <button id="spotlightTrigger" class="spotlight-trigger" type="button">
+        <svg class="spotlight-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="8.5" cy="8.5" r="5.5" />
+          <path d="M17 17l-4.5-4.5" />
+        </svg>
+        <span class="spotlight-trigger-text">Search items, weapons, filters…</span>
+        <kbd>Ctrl K</kbd>
+      </button>
+
+      <div class="topbar-actions">
+        <span id="liveBadge" class="live-badge"><span></span> Live</span>
+        <button id="settingsButton" class="icon-button" data-page="settings" type="button" aria-label="Settings" title="Settings">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="10" cy="10" r="3" />
+            <path d="M17.5 10a7.5 7.5 0 0 0-.14-1.44l1.6-1.24-1.9-3.3-1.87.79a7.5 7.5 0 0 0-2.5-1.44L12.4 1.5h-4.8l-.29 1.87a7.5 7.5 0 0 0-2.5 1.44l-1.87-.79-1.9 3.3 1.6 1.24A7.5 7.5 0 0 0 2.5 10c0 .49.05.97.14 1.44l-1.6 1.24 1.9 3.3 1.87-.79a7.5 7.5 0 0 0 2.5 1.44l.29 1.87h4.8l.29-1.87a7.5 7.5 0 0 0 2.5-1.44l1.87.79 1.9-3.3-1.6-1.24c.09-.47.14-.95.14-1.44Z" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <aside id="leftRail" class="left-rail" aria-label="Primary navigation">
+        <nav class="rail-nav">
+          <button class="rail-item active" data-page="home" type="button"><span class="rail-icon">⌂</span><span class="rail-label">Home</span></button>
+          <button class="rail-item" data-page="opportunities" type="button"><span class="rail-icon">◎</span><span class="rail-label">Opportunities</span></button>
+          <button class="rail-item" data-page="instant" type="button"><span class="rail-icon">ϟ</span><span class="rail-label">Instant Wins</span></button>
+          <button class="rail-item" data-page="markets" type="button"><span class="rail-icon">▦</span><span class="rail-label">Riven Markets</span></button>
+          <button class="rail-item" data-page="settings" type="button"><span class="rail-icon">⚙</span><span class="rail-label">Settings</span></button>
+        </nav>
+        <div class="rail-section">
+          <div class="rail-section-title">Tools</div>
+          <button class="rail-item rail-item-sub" id="railRefresh" type="button"><span class="rail-icon">↻</span><span class="rail-label">Refresh feed</span></button>
+          <button class="rail-item rail-item-sub" id="railMcp" data-page="settings" data-settings-tab-target="mcp" type="button"><span class="rail-icon">⌁</span><span class="rail-label">MCP Connect</span></button>
+        </div>
+        <button id="railToggle" class="rail-toggle" type="button" aria-label="Collapse navigation">‹</button>
       </aside>
 
-      <section class="content">
-        <section class="panel table-panel">
-          <div class="table-head">
-            <div>
-              <h2>Buy-low / sell-high queue</h2>
-              <p id="summary">Waiting for the first scan.</p>
+      <main id="pageRoot" class="page-root">
+        <section class="page active" data-page-panel="home" aria-labelledby="homeTitle">
+          <div class="page-inner home-grid">
+            <div class="page-heading">
+              <div>
+                <h1 id="homeTitle">Market command center</h1>
+                <p id="summary">Waiting for the first scan.</p>
+              </div>
+              <button id="homeRefresh" class="ghost-button" type="button">Refresh</button>
             </div>
-            <div id="statBest" class="best-badge"></div>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th data-sort="rank">#</th>
-                  <th data-sort="weaponName">Weapon</th>
-                  <th data-sort="buyPrice">Trade</th>
-                  <th data-sort="expectedProfit">Profit</th>
-                  <th data-sort="roi">ROI</th>
-                  <th>Signals</th>
-                  <th data-sort="score">Tier</th>
-                </tr>
-              </thead>
-              <tbody id="opps"></tbody>
-            </table>
+
+            <section class="kpi-grid" aria-label="Market statistics">
+              <article class="kpi-card"><span>Live Opportunities</span><strong id="statOpps">0</strong><small>Actionable spreads</small></article>
+              <article class="kpi-card"><span>Weapon Coverage</span><strong id="statWeapons">0/0</strong><small id="statWeaponsSub">Reference coverage</small></article>
+              <article class="kpi-card"><span>Live Auctions</span><strong id="statAuctions">0</strong><small>Current cached listings</small></article>
+              <article class="kpi-card"><span>Updated</span><strong id="statRefresh">—</strong><small id="statBest">No best spread yet</small></article>
+            </section>
+
+            <section id="heroDeal" class="hero-deal panel" hidden>
+              <div class="hero-thumb-wrap"><div id="heroThumb"></div></div>
+              <div class="hero-body">
+                <div class="eyebrow">Top deal right now <span class="hero-rank">#1</span></div>
+                <div class="hero-title"><span id="heroWeapon"></span> <span id="heroTier" class="tier-badge"></span></div>
+                <div id="heroRiven" class="hero-riven"></div>
+                <div class="hero-trade"><span id="heroBuy" class="hero-buy"></span><span class="hero-arrow">→</span><span id="heroTarget" class="hero-target"></span></div>
+                <div class="hero-meta"><span id="heroProfit" class="profit-text"></span><span id="heroRoi" class="roi-text"></span><span id="heroComps"></span></div>
+                <div id="heroSignals" class="signals hero-signals"></div>
+              </div>
+              <div class="hero-actions"><button id="heroOpen" type="button" class="primary-button">Open on WFM ↗</button></div>
+            </section>
+
+            <div class="home-panels">
+              <section class="panel movers-panel">
+                <div class="section-head"><h2>Fresh opportunities</h2><button class="link-button" data-page="opportunities" type="button">View all ›</button></div>
+                <div id="freshOpps" class="fresh-opps"></div>
+              </section>
+
+              <section class="panel heat-panel">
+                <div class="section-head"><h2>Market coverage</h2><span>Size by listings · color by signal</span></div>
+                <div id="heatmap" class="heatmap"></div>
+              </section>
+            </div>
+
+            <section class="panel chart-panel">
+              <div class="section-head">
+                <div><h2>ROI vs profit</h2><span>Hover any dot to inspect · click to open</span></div>
+                <div class="legend"><span class="dot tier-A"></span>A<span class="dot tier-B"></span>B<span class="dot tier-C"></span>C<span class="dot tier-D"></span>D<span class="dot undervalued"></span>undervalued</div>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="profitChart" width="1200" height="320"></canvas>
+                <div id="chartTip" class="chart-tip" hidden></div>
+              </div>
+            </section>
+
+            <section class="panel instant-preview-panel">
+              <div class="section-head"><h2>Instant wins</h2><button class="link-button" data-page="instant" type="button">Open feed ›</button></div>
+              <div id="instantPreview" class="instant-preview"></div>
+            </section>
           </div>
         </section>
 
-        <section id="instantWinsPanel" class="panel instant-wins" hidden>
-          <div class="table-head">
-            <div>
-              <h2>Instant wins <span class="badge good">signature undervalued</span></h2>
-              <p id="instantSummary">Undervalued listings priced below their same-signature p25.</p>
+        <section class="page" data-page-panel="opportunities" aria-labelledby="opportunitiesTitle">
+          <div class="page-inner opportunities-layout">
+            <div class="page-heading">
+              <div>
+                <h1 id="opportunitiesTitle">Opportunities</h1>
+                <p>Buy-low / sell-high queue from the current scan.</p>
+              </div>
+              <div id="sortPills" class="sort-pills" aria-label="Sort opportunities">
+                <button data-sort="score" type="button">Score</button>
+                <button data-sort="expectedProfit" type="button" class="active">Profit</button>
+                <button data-sort="roi" type="button">ROI</button>
+                <button data-sort="confidence" type="button">Confidence</button>
+                <button data-sort="updated" type="button">Recency</button>
+              </div>
+            </div>
+
+            <div class="opportunities-grid">
+              <aside class="panel filters-card">
+                <details class="section" open>
+                  <summary><h2>Filters</h2></summary>
+                  <form id="filters">
+                    <label>Watchlist<textarea id="watchlist" placeholder="blank = all weapons&#10;war&#10;kuva bramma"></textarea></label>
+                    <div class="inline"><label>Min profit<input id="minProfit" type="number" min="0" step="1" value="25" /></label><label>Min ROI<input id="minRoi" type="number" min="0" step="0.05" value="0.35" /></label></div>
+                    <div class="inline"><label>Min buy<input id="minBuyPrice" type="number" min="0" step="1" placeholder="—" /></label><label>Max buy<input id="maxBuyPrice" type="number" min="0" step="1" placeholder="—" /></label></div>
+                    <div class="inline"><label>Min comps<input id="minGroupSize" type="number" min="2" step="1" value="4" /></label><label>Max target<input id="maxSellPrice" type="number" min="0" step="1" placeholder="—" /></label></div>
+                    <label>Max results<input id="maxResults" type="number" min="5" max="500" step="5" value="75" /></label>
+                    <div class="field-title">Seller status</div>
+                    <div class="status-chips">
+                      <label class="status-chip"><input class="status" type="checkbox" value="ingame" checked /><span>ingame</span></label>
+                      <label class="status-chip"><input class="status" type="checkbox" value="online" checked /><span>online</span></label>
+                      <label class="status-chip"><input class="status" type="checkbox" value="offline" /><span>offline</span></label>
+                    </div>
+                    <div class="actions"><button id="apply" class="primary-button" type="submit">Apply</button><button id="refresh" class="ghost-button" type="button">Refresh</button></div>
+                  </form>
+                </details>
+              </aside>
+
+              <section class="opportunity-feed" aria-live="polite">
+                <div id="opps" class="opportunity-list"></div>
+              </section>
             </div>
           </div>
-          <div id="instantList" class="instant-list"></div>
         </section>
 
-        <section class="panel chart-panel">
-          <div class="section-head">
-            <div>
-              <h2>ROI vs profit</h2>
-              <div class="small">Hover any dot to inspect · click to open</div>
+        <section class="page" data-page-panel="instant" aria-labelledby="instantTitle">
+          <div class="page-inner">
+            <div class="page-heading">
+              <div>
+                <h1 id="instantTitle">Instant wins</h1>
+                <p id="instantSummary">Undervalued listings priced below same-signature p25.</p>
+              </div>
+              <button id="instantRefresh" class="ghost-button" type="button">Refresh</button>
             </div>
-            <div class="legend">
-              <span class="dot tier-A"></span>A
-              <span class="dot tier-B"></span>B
-              <span class="dot tier-C"></span>C
-              <span class="dot tier-D"></span>D
-              <span class="dot undervalued"></span>undervalued
-            </div>
-          </div>
-          <div class="chart-wrap">
-            <canvas id="profitChart" width="1200" height="320"></canvas>
-            <div id="chartTip" class="chart-tip" hidden></div>
+            <section id="instantWinsPanel" class="instant-wins-feed">
+              <div id="instantList" class="instant-list"></div>
+            </section>
           </div>
         </section>
 
-        <section class="weapons-section">
-          <h2>Weapon markets <span class="section-hint small">click any card for the full detail</span></h2>
-          <div id="weapons" class="weapons"></div>
+        <section class="page" data-page-panel="markets" aria-labelledby="marketsTitle">
+          <div class="page-inner">
+            <div class="page-heading">
+              <div>
+                <h1 id="marketsTitle">Riven markets</h1>
+                <p>Weapon-level price stats from the current cache. Click any card for listings and signature values.</p>
+              </div>
+            </div>
+            <div id="weapons" class="weapons"></div>
+          </div>
         </section>
-      </section>
+
+        <section class="page" data-page-panel="settings" aria-labelledby="settingsTitle">
+          <div class="page-inner settings-page">
+            <h1 id="settingsTitle">Settings</h1>
+            <div class="settings-tabs">
+              <button class="settings-tab active" data-settings-tab="data" type="button">Data Source</button>
+              <button class="settings-tab" data-settings-tab="mcp" type="button">MCP Connect</button>
+              <button class="settings-tab" data-settings-tab="about" type="button">About</button>
+            </div>
+
+            <div class="settings-panel" data-settings-panel="data">
+              <p class="muted-copy">Choose how ThePlatExchange receives market data.</p>
+              <div class="mode-buttons" role="radiogroup">
+                <button type="button" class="mode-btn" data-mode="remote"><strong>Remote feed</strong><span>Read the CI-published feed. No local Warframe.market traffic.</span></button>
+                <button type="button" class="mode-btn" data-mode="tiered"><strong>Tiered local</strong><span>Remote seed plus local scans for uncovered weapons.</span></button>
+                <button type="button" class="mode-btn" data-mode="full"><strong>Full local</strong><span>Scan every reference weapon from this machine.</span></button>
+              </div>
+              <div id="modeHint" class="mode-hint">Select a data source.</div>
+              <div class="settings-status" id="dataStatusLine"></div>
+            </div>
+
+            <div class="settings-panel" data-settings-panel="mcp" hidden>
+              <p class="muted-copy">Point Claude Desktop, Claude Code, or any MCP-aware client at this app for live opportunities, trait valuations, instant wins, and health checks.</p>
+              <div class="mcp-block panel-subtle">
+                <div class="mcp-block-head"><h3>SSE endpoint</h3><button class="mcp-copy" data-copy-target="mcpEndpoint" type="button">Copy</button></div>
+                <code id="mcpEndpoint" class="mcp-endpoint"></code>
+              </div>
+              <div class="mcp-block panel-subtle">
+                <div class="mcp-block-head"><h3>Claude Desktop</h3><button class="mcp-copy" data-copy-target="mcpConfigDesktop" type="button">Copy config</button></div>
+                <pre><code id="mcpConfigDesktop"></code></pre>
+              </div>
+              <div class="mcp-block panel-subtle">
+                <div class="mcp-block-head"><h3>Claude Code CLI</h3><button class="mcp-copy" data-copy-target="mcpConfigCli" type="button">Copy command</button></div>
+                <pre><code id="mcpConfigCli"></code></pre>
+              </div>
+              <div class="mcp-block panel-subtle">
+                <div class="mcp-block-head"><h3>Available tools</h3><button id="mcpTestButton" class="ghost-button" type="button">Test connection</button></div>
+                <div id="mcpTestResult" class="small"></div>
+                <ul id="mcpToolList" class="mcp-tool-list"></ul>
+              </div>
+            </div>
+
+            <div class="settings-panel" data-settings-panel="about" hidden>
+              <div class="panel-subtle about-card">
+                <span class="brand-gem">◆</span>
+                <div>
+                  <h2>ThePlatExchange</h2>
+                  <p>Warframe.market riven arbitrage scanner with MCP-over-SSE output. Profit is median-based over outlier-trimmed comparables.</p>
+                  <a href="https://github.com/ck0i/ThePlatExchange" target="_blank" rel="noopener">github.com/ck0i/ThePlatExchange ↗</a>
+                </div>
+              </div>
+              <p class="muted-copy">Data via public Warframe.market endpoints and the community warframestat.us CDN. Not affiliated with Digital Extremes.</p>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
-  </main>
 
-  <footer><small>Data via public warframe.market endpoints + warframestat.us CDN. Server-side rate-limited. Profit is median-based over outlier-trimmed comparables.</small></footer>
+    <footer class="status-footer">
+      <div><span class="status-dot"></span><span id="statusMode">Remote feed</span></div>
+      <div>Refreshed <span id="footerRefresh">—</span></div>
+      <div><span id="footerMcp">MCP ready</span></div>
+      <div class="rate-status"><span>Scan</span><div class="rate-meter"><span id="rateBar"></span></div><span id="rateLabel">0%</span></div>
+    </footer>
+  </div>
+
   <script type="module" src="/app.js"></script>
 </body>
 </html>

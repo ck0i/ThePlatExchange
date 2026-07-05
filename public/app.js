@@ -1,5 +1,19 @@
 const elements = {
   topBar: document.getElementById("topBar"),
+  leftRail: document.getElementById("leftRail"),
+  railToggle: document.getElementById("railToggle"),
+  pagePanels: document.querySelectorAll("[data-page-panel]"),
+  pageButtons: document.querySelectorAll("[data-page]"),
+  railRefresh: document.getElementById("railRefresh"),
+  homeRefresh: document.getElementById("homeRefresh"),
+  instantRefresh: document.getElementById("instantRefresh"),
+  tickerItems: document.getElementById("tickerItems"),
+  liveBadge: document.getElementById("liveBadge"),
+  statusMode: document.getElementById("statusMode"),
+  footerRefresh: document.getElementById("footerRefresh"),
+  footerMcp: document.getElementById("footerMcp"),
+  rateBar: document.getElementById("rateBar"),
+  rateLabel: document.getElementById("rateLabel"),
   statOpps: document.getElementById("statOpps"),
   statWeapons: document.getElementById("statWeapons"),
   statWeaponsSub: document.getElementById("statWeaponsSub"),
@@ -7,10 +21,13 @@ const elements = {
   statBest: document.getElementById("statBest"),
   statRefresh: document.getElementById("statRefresh"),
   summary: document.getElementById("summary"),
+  heatmap: document.getElementById("heatmap"),
+  freshOpps: document.getElementById("freshOpps"),
   opps: document.getElementById("opps"),
   weapons: document.getElementById("weapons"),
   chart: document.getElementById("profitChart"),
   chartTip: document.getElementById("chartTip"),
+  sortPills: document.getElementById("sortPills"),
   form: document.getElementById("filters"),
   refresh: document.getElementById("refresh"),
   watchlist: document.getElementById("watchlist"),
@@ -23,12 +40,12 @@ const elements = {
   maxResults: document.getElementById("maxResults"),
   instantWinsPanel: document.getElementById("instantWinsPanel"),
   instantList: document.getElementById("instantList"),
+  instantPreview: document.getElementById("instantPreview"),
   instantSummary: document.getElementById("instantSummary"),
   modeButtons: document.querySelectorAll(".mode-btn"),
   modeHint: document.getElementById("modeHint"),
   dataStatusLine: document.getElementById("dataStatusLine"),
   settingsButton: document.getElementById("settingsButton"),
-  settingsModal: document.getElementById("settingsModal"),
   settingsTabs: document.querySelectorAll(".settings-tab"),
   settingsPanels: document.querySelectorAll(".settings-panel"),
   mcpEndpoint: document.getElementById("mcpEndpoint"),
@@ -69,6 +86,9 @@ let spotlightTimer = null;
 let spotlightItems = [];
 let spotlightIndex = -1;
 let spotlightFilter = null;
+let currentPage = "home";
+let expandedOpportunityKey = null;
+let copiedOpportunityKey = null;
 
 const SIGNAL_PRIORITY = [
   "undervalued_signature",
@@ -82,6 +102,40 @@ const SIGNAL_PRIORITY = [
   "disposition_falling",
   "outlier_price",
 ];
+
+const TIER_COLORS = { A: "#4ade80", B: "#38bdf8", C: "#fbbf24", D: "#f87171" };
+
+const MODE_HINTS = {
+  remote: "Reading the CI-published feed. Refreshes without browser-side Warframe.market traffic.",
+  tiered: "Tiered local scan is active. Uses the remote seed, then scans uncovered weapons locally.",
+  full: "Full local scan is active. This machine scans the whole riven weapon reference with rate limiting.",
+};
+
+function navigate(page, options = {}) {
+  currentPage = page;
+  for (const panel of elements.pagePanels) panel.classList.toggle("active", panel.dataset.pagePanel === page);
+  for (const button of elements.pageButtons) button.classList.toggle("active", button.dataset.page === page);
+  if (page === "settings") {
+    populateMcp();
+    switchSettingsTab(options.settingsTab ?? "data");
+  }
+  if (page === "instant") renderInstantWins(latestInstantWins);
+  document.querySelector(".page-root")?.scrollTo({ top: 0, behavior: "auto" });
+}
+
+for (const button of elements.pageButtons) {
+  button.addEventListener("click", () => {
+    const page = button.dataset.page;
+    if (!page) return;
+    navigate(page, { settingsTab: button.dataset.settingsTabTarget });
+  });
+}
+
+if (elements.railToggle) {
+  elements.railToggle.addEventListener("click", () => {
+    elements.leftRail?.classList.toggle("collapsed");
+  });
+}
 
 async function loadState() {
   const response = await fetch("/api/state");
@@ -98,13 +152,14 @@ async function refreshDerived() {
     ]);
     latestEnrichedOpps = Array.isArray(opps) ? opps : [];
     latestInstantWins = Array.isArray(wins) ? wins : [];
-    const filtered = applySpotlightFilter(latestEnrichedOpps);
-    renderTable(sortedOpportunities(filtered));
-    drawChart(filtered);
+    renderOpportunitySurfaces();
     renderInstantWins(latestInstantWins);
-    renderHero(filtered[0] ?? latestEnrichedOpps[0] ?? null);
+    if (latestState) {
+      renderTicker(latestState, currentOpportunitySource());
+      renderStatusFooter(latestState);
+    }
   } catch {
-    // ignore
+    // Keep the last good UI state while EventSource or the next timer reconnects.
   }
 }
 
@@ -118,46 +173,95 @@ async function postJson(path, body) {
 function render(state) {
   latestState = state;
   hydrateControls(state);
-  elements.statOpps.textContent = String(state.totals.opportunities);
+
   const totalRefWeapons = state.reference?.weapons ?? 0;
   const covered = state.totals?.weaponsWithAuctions ?? 0;
-  elements.statWeapons.textContent = `${covered}/${totalRefWeapons}`;
-  const running = state.status.running;
-  const tierLabel = state.status.reason && state.status.reason.includes("-") ? state.status.reason.split("-").pop() : null;
+  const best = (state.opportunities ?? []).reduce((winner, opportunity) => !winner || opportunity.expectedProfit > winner.expectedProfit ? opportunity : winner, null);
+
+  if (elements.statOpps) elements.statOpps.textContent = formatNumber(state.totals?.opportunities ?? 0);
+  if (elements.statWeapons) elements.statWeapons.textContent = `${formatNumber(covered)}/${formatNumber(totalRefWeapons)}`;
   if (elements.statWeaponsSub) {
+    const running = state.status?.running;
+    const scanTotal = state.status?.totalWeapons ?? 0;
+    const tierLabel = state.status?.reason && state.status.reason.includes("-") ? state.status.reason.split("-").pop() : null;
     elements.statWeaponsSub.textContent = running
-      ? ` · scanning ${state.status.scannedWeapons}/${state.status.totalWeapons}${tierLabel ? ` (${tierLabel})` : ""}`
-      : "";
+      ? (scanTotal > 0 ? `scanning ${formatNumber(state.status.scannedWeapons)}/${formatNumber(scanTotal)}${tierLabel ? ` (${tierLabel})` : ""}` : "Loading reference data")
+      : "Reference coverage";
   }
-  elements.statAuctions.textContent = String(state.totals.auctions);
-  const best = state.opportunities.reduce((winner, opportunity) => !winner || opportunity.expectedProfit > winner.expectedProfit ? opportunity : winner, null);
-  elements.statBest.textContent = best ? `Best +${best.expectedProfit}p` : "";
-  elements.statBest.style.display = best ? "" : "none";
-  elements.statRefresh.textContent = shortTime(state.status.finishedAt || state.generatedAt);
-  elements.summary.textContent = state.status.lastError ? state.status.lastError : state.status.lastMessage;
+  if (elements.statAuctions) elements.statAuctions.textContent = formatNumber(state.totals?.auctions ?? 0);
+  if (elements.statBest) elements.statBest.textContent = best ? `Best +${best.expectedProfit}◈ spread` : "No best spread yet";
+  if (elements.statRefresh) elements.statRefresh.textContent = shortTime(state.status?.finishedAt || state.generatedAt);
+  if (elements.summary) elements.summary.textContent = state.status?.lastError ? state.status.lastError : state.status?.lastMessage ?? "Waiting for data.";
+
   updateModeUi(state.scanMode ?? "tiered", state);
-  renderWeapons(state.weaponSummaries);
-  if (latestEnrichedOpps.length === 0) {
-    const filtered = applySpotlightFilter(state.opportunities);
-    renderTable(sortedOpportunities(filtered));
-    drawChart(filtered);
-    renderHero(filtered[0] ?? state.opportunities?.[0] ?? null);
-  }
+  renderStatusFooter(state);
+  renderWeapons(state.weaponSummaries ?? []);
+  renderHeatmap(state.weaponSummaries ?? []);
+
+  if (latestEnrichedOpps.length === 0) renderOpportunitySurfaces();
+  renderTicker(state, currentOpportunitySource());
+}
+
+function renderOpportunitySurfaces() {
+  const filtered = applySpotlightFilter(currentOpportunitySource());
+  const sorted = sortedOpportunities(filtered);
+  renderOpportunities(sorted);
+  renderFreshOpportunities(sorted);
+  drawChart(filtered);
+  renderHero(sorted[0] ?? currentOpportunitySource()[0] ?? null);
+}
+
+function currentOpportunitySource() {
+  if (latestEnrichedOpps.length > 0) return latestEnrichedOpps;
+  return latestState?.opportunities ?? [];
 }
 
 function hydrateControls(state) {
   if (controlsHydrated) return;
+  if (!elements.watchlist) return;
   controlsHydrated = true;
-  elements.watchlist.value = state.config.watchlist.join("\n");
-  elements.minProfit.value = state.config.minProfit;
-  elements.minRoi.value = state.config.minRoi;
-  elements.minGroupSize.value = state.config.minGroupSize;
-  elements.minBuyPrice.value = state.config.minBuyPrice == null ? "" : state.config.minBuyPrice;
-  elements.maxBuyPrice.value = state.config.maxBuyPrice == null ? "" : state.config.maxBuyPrice;
-  elements.maxSellPrice.value = state.config.maxSellPrice == null ? "" : state.config.maxSellPrice;
-  elements.maxResults.value = state.config.maxResults;
-  for (const checkbox of document.querySelectorAll(".status")) {
-    checkbox.checked = state.config.statuses.includes(checkbox.value);
+  elements.watchlist.value = (state.config?.watchlist ?? []).join("\n");
+  elements.minProfit.value = state.config?.minProfit ?? 25;
+  elements.minRoi.value = state.config?.minRoi ?? 0.35;
+  elements.minGroupSize.value = state.config?.minGroupSize ?? 4;
+  elements.minBuyPrice.value = state.config?.minBuyPrice == null ? "" : state.config.minBuyPrice;
+  elements.maxBuyPrice.value = state.config?.maxBuyPrice == null ? "" : state.config.maxBuyPrice;
+  elements.maxSellPrice.value = state.config?.maxSellPrice == null ? "" : state.config.maxSellPrice;
+  elements.maxResults.value = state.config?.maxResults ?? 75;
+  for (const checkbox of document.querySelectorAll(".status")) checkbox.checked = (state.config?.statuses ?? []).includes(checkbox.value);
+}
+
+function renderStatusFooter(state) {
+  const mode = state.scanMode ?? "tiered";
+  if (elements.statusMode) elements.statusMode.textContent = mode === "remote" ? "Remote feed" : mode === "full" ? "Full local scan" : "Tiered local scan";
+  if (elements.footerRefresh) elements.footerRefresh.textContent = shortTime(state.status?.finishedAt || state.generatedAt);
+  if (elements.footerMcp) elements.footerMcp.textContent = "MCP ready";
+  const total = Math.max(1, state.status?.totalWeapons ?? 0);
+  const scanned = Math.max(0, state.status?.scannedWeapons ?? 0);
+  const progress = state.status?.running ? Math.min(100, Math.round((scanned / total) * 100)) : 100;
+  if (elements.rateBar) elements.rateBar.style.width = `${progress}%`;
+  if (elements.rateLabel) elements.rateLabel.textContent = state.status?.running ? `${progress}%` : "idle";
+  elements.liveBadge?.classList.toggle("warn", Boolean(state.status?.lastError));
+}
+
+function renderTicker(state, opportunities) {
+  if (!elements.tickerItems) return;
+  const items = opportunities.slice(0, 10);
+  if (items.length === 0) {
+    elements.tickerItems.innerHTML = `<span class="ticker-item"><span class="ticker-dot"></span>${escapeHtml(state.status?.lastMessage ?? "Waiting for market feed…")}</span>`;
+    return;
+  }
+  const html = items.map((opportunity, index) => {
+    const delta = Math.round((opportunity.roi ?? 0) * 100);
+    const trendClass = delta >= 0 ? "ticker-up" : "ticker-down";
+    return `<span class="ticker-item"><button type="button" data-ticker-index="${index}"><span class="ticker-dot"></span>${escapeHtml(opportunity.weaponName)} <span class="ticker-price">${opportunity.buyPrice}◈ → ${opportunity.conservativeSellPrice ?? opportunity.targetSellPrice}◈</span> <span class="${trendClass}">+${opportunity.expectedProfit}◈ ${delta}%</span></button></span>`;
+  }).join("");
+  elements.tickerItems.innerHTML = html + html;
+  for (const button of elements.tickerItems.querySelectorAll("[data-ticker-index]")) {
+    button.addEventListener("click", () => {
+      const opportunity = items[Number(button.dataset.tickerIndex)];
+      if (opportunity?.weaponSlug) openWeaponDetail(opportunity.weaponSlug);
+    });
   }
 }
 
@@ -171,19 +275,17 @@ function renderHero(opportunity) {
   elements.heroDeal.hidden = false;
   elements.heroThumb.innerHTML = weaponThumb(opportunity.imageName, opportunity.weaponName, "lg");
   elements.heroWeapon.textContent = opportunity.weaponName;
-  const tier = opportunity.quality?.tier ?? "D";
+  const tier = opportunity.quality?.tier ?? tierFromScore(opportunity.score);
   elements.heroTier.textContent = tier;
   elements.heroTier.className = `tier-badge tier-${tier}`;
   elements.heroRiven.textContent = opportunity.rivenName;
-  elements.heroBuy.textContent = `${opportunity.buyPrice}p`;
-  elements.heroTarget.textContent = `${opportunity.conservativeSellPrice}p`;
-  elements.heroTarget.title = `Median target · p75 aggressive ${opportunity.targetSellPrice}p`;
-  elements.heroProfit.textContent = `+${opportunity.expectedProfit}p profit`;
-  elements.heroRoi.textContent = `${Math.round(opportunity.roi * 100)}% ROI`;
+  elements.heroBuy.textContent = `${opportunity.buyPrice}◈`;
+  elements.heroTarget.textContent = `${opportunity.conservativeSellPrice ?? opportunity.targetSellPrice}◈`;
+  elements.heroTarget.title = `Median target · p75 aggressive ${opportunity.targetSellPrice}◈`;
+  elements.heroProfit.textContent = `+${opportunity.expectedProfit}◈ profit`;
+  elements.heroRoi.textContent = `${Math.round((opportunity.roi ?? 0) * 100)}% ROI`;
   elements.heroComps.textContent = `${opportunity.comparableListings} comparable listing${opportunity.comparableListings === 1 ? "" : "s"}`;
-  elements.heroSignals.innerHTML = topSignalsFor(opportunity, 3)
-    .map((signal) => `<span class="signal signal-${signal}">${signal.replace(/_/g, " ")}</span>`)
-    .join("");
+  elements.heroSignals.innerHTML = topSignalsFor(opportunity, 3).map(signalChip).join("");
 }
 
 if (elements.heroOpen) {
@@ -202,121 +304,258 @@ function topSignalsFor(opportunity, limit) {
   return ranked.slice(0, limit);
 }
 
-function renderTable(opportunities) {
+function signalChip(signal) {
+  return `<span class="signal signal-${escapeHtml(signal)}">${escapeHtml(signal.replace(/_/g, " "))}</span>`;
+}
+
+function renderOpportunities(opportunities) {
+  if (!elements.opps) return;
   elements.opps.textContent = "";
-  for (const [index, opportunity] of opportunities.entries()) {
-    const row = document.createElement("tr");
-    const tier = opportunity.quality?.tier ?? "D";
-    row.className = `tier-${tier}`;
-    const topSignals = topSignalsFor(opportunity, 2);
-    const signalHtml = topSignals.map((signal) => `<span class="signal signal-${signal}">${signal.replace(/_/g, " ")}</span>`).join("");
-    row.title = `${opportunity.seller.ingameName} · ${opportunity.status} · rep ${opportunity.seller.reputation}\n${opportunity.comparableListings} comparable · ${opportunity.groupType}\nScore ${opportunity.score}/100 · confidence ${Math.round(opportunity.confidence * 100)}%`;
-    row.innerHTML = `
-      <td class="rank-cell">${index + 1}</td>
-      <td>
-        <div class="weapon-cell" data-weapon-slug="${escapeHtml(opportunity.weaponSlug)}">
-          ${weaponThumb(opportunity.imageName, opportunity.weaponName, "sm")}
-          <div class="weapon-cell-text">
-            <strong>${escapeHtml(opportunity.weaponName)}</strong>
-            <div class="small">${escapeHtml(opportunity.rivenName)}</div>
-          </div>
-        </div>
-      </td>
-      <td class="trade-cell">
-        <span class="trade-buy">${opportunity.buyPrice}p</span>
-        <span class="trade-arrow">→</span>
-        <span class="trade-target" title="Median of trimmed comparables">${opportunity.conservativeSellPrice}p</span>
-      </td>
-      <td class="profit-cell">+${opportunity.expectedProfit}<span class="p-suffix">p</span></td>
-      <td class="roi-cell">${Math.round(opportunity.roi * 100)}%</td>
-      <td class="signals-cell">${signalHtml || `<span class="signal-empty">—</span>`}</td>
-      <td class="tier-cell"><span class="tier-badge tier-${tier}">${tier}</span></td>
-    `;
-    row.addEventListener("click", (event) => {
-      const weaponCell = event.target instanceof HTMLElement ? event.target.closest("[data-weapon-slug]") : null;
-      if (weaponCell) {
-        openWeaponDetail(weaponCell.dataset.weaponSlug);
-        event.stopPropagation();
-        return;
-      }
-      window.open(opportunity.url, "_blank", "noopener");
-    });
-    elements.opps.appendChild(row);
-  }
   if (opportunities.length === 0) {
-    const row = document.createElement("tr");
-    row.innerHTML = `<td colspan="7" class="small" style="padding:24px 16px">No opportunities match. Adjust filters, clear the search, or wait for the next scan.</td>`;
-    elements.opps.appendChild(row);
+    elements.opps.innerHTML = `<div class="empty-state">No opportunities match. Adjust filters, clear the search, or wait for the next scan.</div>`;
+    updateSortControls();
+    return;
+  }
+
+  for (const [index, opportunity] of opportunities.entries()) {
+    const key = opportunityKey(opportunity);
+    const tier = opportunity.quality?.tier ?? tierFromScore(opportunity.score);
+    const expanded = expandedOpportunityKey === key;
+    const topSignals = topSignalsFor(opportunity, 3);
+    const positives = (opportunity.positives ?? []).slice(0, 4).map((p) => `<span class="flag good">+${escapeHtml(p)}</span>`).join("");
+    const negatives = (opportunity.negatives ?? []).slice(0, 2).map((n) => `<span class="flag bad">-${escapeHtml(n)}</span>`).join("");
+    const card = document.createElement("article");
+    card.className = `opp-card tier-${tier}${expanded ? " expanded" : ""}`;
+    card.dataset.key = key;
+    card.innerHTML = `
+      <button class="opp-row" type="button" data-action="toggle" title="${escapeHtml(opportunity.seller?.ingameName ?? "seller")} · ${escapeHtml(opportunity.status)} · ${opportunity.comparableListings} comparables · score ${Math.round(opportunity.score ?? 0)}">
+        <span class="opp-rank">${String(index + 1).padStart(2, "0")}</span>
+        <span class="opp-main" data-action="weapon" data-weapon-slug="${escapeHtml(opportunity.weaponSlug)}">
+          ${weaponThumb(opportunity.imageName, opportunity.weaponName, "sm")}
+          <span class="opp-title"><strong>${escapeHtml(opportunity.weaponName)}</strong><span>${escapeHtml(opportunity.rivenName)}</span></span>
+        </span>
+        <span class="opp-metric"><span>Buy</span><strong class="buy">${opportunity.buyPrice}◈</strong></span>
+        <span class="opp-metric"><span>Sell</span><strong class="sell">${opportunity.conservativeSellPrice ?? opportunity.targetSellPrice}◈</strong></span>
+        <span class="opp-metric"><span>Profit</span><strong class="profit">+${opportunity.expectedProfit}◈</strong></span>
+        <span class="opp-metric"><span>ROI</span><strong class="roi">${Math.round((opportunity.roi ?? 0) * 100)}%</strong></span>
+        <span class="opp-metric"><span>Conf</span>${confidenceBar(opportunity.confidence ?? 0)}</span>
+        <span class="opp-age">${timeAgo(opportunity.updated)}</span>
+        <span class="opp-chevron">⌄</span>
+      </button>
+      ${expanded ? `<div class="opp-detail">
+        <div>
+          <h3>Signals and listing context</h3>
+          <div class="signals">${topSignals.map(signalChip).join("") || `<span class="signal">no quality flags</span>`}</div>
+          <div class="opp-flags">${positives}${negatives}<span class="tier-badge tier-${tier}">${tier}</span><span class="chip">${escapeHtml(opportunity.groupType)}</span><span class="chip">${opportunity.comparableListings} comps</span><span class="chip">seller ${escapeHtml(opportunity.seller?.ingameName ?? "unknown")}</span><span class="chip">${escapeHtml(opportunity.status)}</span></div>
+          <p class="small">Median target ${opportunity.conservativeSellPrice ?? opportunity.targetSellPrice}◈ · p75 aggressive ${opportunity.targetSellPrice}◈ · score ${Math.round(opportunity.score ?? 0)}/100 · confidence ${Math.round((opportunity.confidence ?? 0) * 100)}%.</p>
+        </div>
+        <div class="opp-actions">
+          <button class="primary-button" type="button" data-action="open">Open on WFM ↗</button>
+          <button class="ghost-button" type="button" data-action="weapon" data-weapon-slug="${escapeHtml(opportunity.weaponSlug)}">Open weapon detail</button>
+          <button class="ghost-button" type="button" data-action="copy">${copiedOpportunityKey === key ? "Copied ✓" : "Copy /w to seller"}</button>
+        </div>
+      </div>` : ""}
+    `;
+    card.addEventListener("click", (event) => handleOpportunityClick(event, opportunity));
+    elements.opps.appendChild(card);
+  }
+  updateSortControls();
+}
+
+function handleOpportunityClick(event, opportunity) {
+  const target = event.target instanceof HTMLElement ? event.target.closest("[data-action]") : null;
+  if (!target) return;
+  const action = target.dataset.action;
+  if (action === "weapon") {
+    event.preventDefault();
+    event.stopPropagation();
+    openWeaponDetail(target.dataset.weaponSlug || opportunity.weaponSlug);
+    return;
+  }
+  if (action === "open") {
+    event.preventDefault();
+    event.stopPropagation();
+    if (opportunity.url) window.open(opportunity.url, "_blank", "noopener");
+    return;
+  }
+  if (action === "copy") {
+    event.preventDefault();
+    event.stopPropagation();
+    copiedOpportunityKey = opportunityKey(opportunity);
+    void copyText(tradeWhisper(opportunity), target).then(() => {
+      renderOpportunities(sortedOpportunities(applySpotlightFilter(currentOpportunitySource())));
+      setTimeout(() => {
+        if (copiedOpportunityKey === opportunityKey(opportunity)) {
+          copiedOpportunityKey = null;
+          renderOpportunities(sortedOpportunities(applySpotlightFilter(currentOpportunitySource())));
+        }
+      }, 1600);
+    });
+    return;
+  }
+  if (action === "toggle") {
+    const key = opportunityKey(opportunity);
+    expandedOpportunityKey = expandedOpportunityKey === key ? null : key;
+    renderOpportunities(sortedOpportunities(applySpotlightFilter(currentOpportunitySource())));
+  }
+}
+
+function renderFreshOpportunities(opportunities) {
+  if (!elements.freshOpps) return;
+  const items = opportunities.slice(0, 5);
+  if (items.length === 0) {
+    elements.freshOpps.innerHTML = `<div class="empty-state">No fresh opportunities yet.</div>`;
+    return;
+  }
+  elements.freshOpps.textContent = "";
+  for (const opportunity of items) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "fresh-card";
+    button.innerHTML = `
+      ${weaponThumb(opportunity.imageName, opportunity.weaponName, "sm")}
+      <span><strong>${escapeHtml(opportunity.weaponName)}</strong><small>${escapeHtml(opportunity.rivenName)}</small></span>
+      <span class="fresh-value"><strong>+${opportunity.expectedProfit}◈</strong><small>${Math.round((opportunity.roi ?? 0) * 100)}% ROI</small></span>
+    `;
+    button.addEventListener("click", () => openWeaponDetail(opportunity.weaponSlug));
+    elements.freshOpps.appendChild(button);
   }
 }
 
 function renderInstantWins(items) {
-  const panel = elements.instantWinsPanel;
-  if (!items || items.length === 0) {
-    if (panel) panel.hidden = true;
+  const wins = Array.isArray(items) ? items : [];
+  if (elements.instantSummary) {
+    elements.instantSummary.textContent = wins.length === 0
+      ? "No same-signature undervalued listings right now."
+      : `${wins.length} listing${wins.length === 1 ? "" : "s"} priced below their same-signature p25.`;
+  }
+  renderInstantPreview(wins);
+  if (!elements.instantList) return;
+  elements.instantList.textContent = "";
+  if (wins.length === 0) {
+    elements.instantList.innerHTML = `<div class="empty-state">No instant wins match the current cache. Refresh or widen filters.</div>`;
     return;
   }
-  if (panel) panel.hidden = false;
-  elements.instantList.textContent = "";
-  elements.instantSummary.textContent = `${items.length} listing${items.length === 1 ? "" : "s"} priced below their same-signature p25.`;
-  for (const item of items) {
+  for (const item of wins) {
     const opportunity = item.opportunity;
-    const value = item.signature_value;
+    const value = item.signature_value ?? {};
+    const key = opportunityKey(opportunity);
     const card = document.createElement("article");
     card.className = "instant-card";
     card.innerHTML = `
-      <div class="instant-head">
-        <div class="instant-head-main">
-          ${weaponThumb(opportunity.imageName, opportunity.weaponName, "md")}
-          <div>
-            <strong>${escapeHtml(opportunity.weaponName)}</strong>
-            <div class="small">${escapeHtml(opportunity.rivenName)}</div>
-          </div>
-        </div>
-        <div class="uplift">+${item.expected_uplift}p</div>
+      <div class="instant-main">
+        ${weaponThumb(opportunity.imageName, opportunity.weaponName, "md")}
+        <div><strong>${escapeHtml(opportunity.weaponName)}</strong><span>${escapeHtml(opportunity.rivenName)} · ${escapeHtml(opportunity.seller?.ingameName ?? "seller")} · ${timeAgo(opportunity.updated)}</span></div>
       </div>
-      <div class="instant-body small">
-        buy <span class="price">${opportunity.buyPrice}p</span>
-        vs p25 <strong>${Math.round(value.p25)}p</strong>
-        · median <strong>${Math.round(value.p50)}p</strong>
-        · ${value.sample_count} samples · conf ${Math.round(value.confidence * 100)}%
-      </div>
-      <div class="signals">${topSignalsFor(opportunity, 3).map((s) => `<span class="signal signal-${s}">${s.replace(/_/g, " ")}</span>`).join("")}</div>`;
-    card.addEventListener("click", () => window.open(opportunity.url, "_blank", "noopener"));
+      <div class="instant-stat"><span>Listed</span><strong class="listed">${opportunity.buyPrice}◈</strong></div>
+      <div class="instant-stat"><span>p25 value</span><strong>${Math.round(value.p25 ?? 0)}◈</strong></div>
+      <div class="instant-stat hide-mobile"><span>Undervalue</span><strong class="uplift">+${Math.round(item.expected_uplift ?? 0)}◈</strong></div>
+      <div class="instant-actions"><button class="ghost-button" data-action="open" type="button">Open</button><button class="primary-button" data-action="copy" type="button">${copiedOpportunityKey === key ? "Copied ✓" : "Copy /w"}</button></div>
+    `;
+    card.addEventListener("click", (event) => {
+      const action = event.target instanceof HTMLElement ? event.target.closest("[data-action]")?.dataset.action : null;
+      if (!action) return;
+      if (action === "open" && opportunity.url) window.open(opportunity.url, "_blank", "noopener");
+      if (action === "copy") {
+        copiedOpportunityKey = key;
+        void copyText(tradeWhisper(opportunity), event.target.closest("button")).then(() => {
+          renderInstantWins(latestInstantWins);
+          setTimeout(() => {
+            if (copiedOpportunityKey === key) {
+              copiedOpportunityKey = null;
+              renderInstantWins(latestInstantWins);
+            }
+          }, 1600);
+        });
+      }
+    });
     elements.instantList.appendChild(card);
   }
 }
 
+function renderInstantPreview(items) {
+  if (!elements.instantPreview) return;
+  const wins = items.slice(0, 3);
+  elements.instantPreview.textContent = "";
+  if (wins.length === 0) {
+    elements.instantPreview.innerHTML = `<div class="empty-state">No instant wins right now.</div>`;
+    return;
+  }
+  for (const item of wins) {
+    const opportunity = item.opportunity;
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "instant-preview-card";
+    card.innerHTML = `<strong>${escapeHtml(opportunity.weaponName)}</strong><div class="small">${escapeHtml(opportunity.rivenName)} · buy ${opportunity.buyPrice}◈ · uplift +${Math.round(item.expected_uplift ?? 0)}◈</div>`;
+    card.addEventListener("click", () => navigate("instant"));
+    elements.instantPreview.appendChild(card);
+  }
+}
+
 function renderWeapons(summaries) {
+  if (!elements.weapons) return;
   elements.weapons.textContent = "";
-  for (const summary of summaries.slice(0, 24)) {
+  for (const summary of summaries.slice(0, 36)) {
     const stats = summary.priceStats;
     const card = document.createElement("article");
-    card.className = "panel weapon-card";
+    card.className = "weapon-card";
     card.dataset.weaponSlug = summary.slug;
-    card.innerHTML = `<div class="weapon-card-head">${weaponThumb(summary.imageName, summary.name, "sm")}<h3>${escapeHtml(summary.name)}</h3></div>
+    card.innerHTML = `
+      <div class="weapon-card-head">${weaponThumb(summary.imageName, summary.name, "sm")}<h3>${escapeHtml(summary.name)}</h3></div>
       <dl>
-        <dt>Listings</dt><dd>${summary.directListings}</dd>
-        <dt>Online</dt><dd>${summary.onlineListings}</dd>
-        <dt>Median</dt><dd>${stats ? `${stats.median}p` : "—"}</dd>
-        <dt>P75</dt><dd>${stats ? `${stats.p75}p` : "—"}</dd>
-        <dt>Dispo</dt><dd>${summary.disposition.toFixed(2)}</dd>
+        <dt>Listings</dt><dd>${formatNumber(summary.directListings ?? summary.listings ?? 0)}</dd>
+        <dt>Online</dt><dd>${formatNumber(summary.onlineListings ?? 0)}</dd>
+        <dt>Median</dt><dd>${stats ? `${stats.median}◈` : "—"}</dd>
+        <dt>P75</dt><dd>${stats ? `${stats.p75}◈` : "—"}</dd>
+        <dt>Dispo</dt><dd>${Number(summary.disposition ?? 0).toFixed(2)}</dd>
       </dl>`;
     card.addEventListener("click", () => openWeaponDetail(summary.slug));
     elements.weapons.appendChild(card);
   }
+  if (summaries.length === 0) elements.weapons.innerHTML = `<div class="empty-state">No weapon market summaries yet.</div>`;
 }
 
-const TIER_COLORS = { A: "#5eead4", B: "#7dd3fc", C: "#fbbf24", D: "#f87171" };
+function renderHeatmap(summaries) {
+  if (!elements.heatmap) return;
+  const items = summaries.filter((summary) => (summary.directListings ?? summary.listings ?? 0) > 0).slice(0, 18);
+  if (items.length === 0) {
+    elements.heatmap.innerHTML = `<div class="empty-state">Market coverage appears after the first feed load.</div>`;
+    return;
+  }
+  const maxListings = Math.max(1, ...items.map((summary) => summary.directListings ?? summary.listings ?? 0));
+  elements.heatmap.textContent = "";
+  for (const summary of items) {
+    const listings = summary.directListings ?? summary.listings ?? 0;
+    const actionable = summary.actionableListings ?? 0;
+    const intensity = Math.min(0.28, 0.06 + (listings / maxListings) * 0.22);
+    const positive = actionable > 0;
+    const bg = positive ? `rgba(74, 222, 128, ${intensity})` : `rgba(123, 111, 239, ${intensity})`;
+    const border = positive ? `rgba(74, 222, 128, ${Math.min(.45, intensity + .18)})` : `rgba(123, 111, 239, ${Math.min(.45, intensity + .18)})`;
+    const text = positive ? "#4ade80" : "#a09af8";
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "heat-card";
+    button.style.background = bg;
+    button.style.borderColor = border;
+    button.style.flexGrow = String(Math.max(1, listings / Math.max(1, maxListings / 4)));
+    button.style.flexBasis = `${Math.max(92, Math.min(190, 70 + listings * 2))}px`;
+    button.style.height = `${Math.max(58, Math.min(96, 48 + listings))}px`;
+    button.innerHTML = `<strong>${escapeHtml(summary.name)}</strong><span style="color:${text}">${formatNumber(listings)} listings · ${actionable} actionable</span>`;
+    button.addEventListener("click", () => openWeaponDetail(summary.slug));
+    elements.heatmap.appendChild(button);
+  }
+}
 
 function drawChart(opportunities) {
   const canvas = elements.chart;
+  if (!canvas) return;
   const context = canvas.getContext("2d");
   if (!context) return;
   const rect = canvas.getBoundingClientRect();
-  if (rect.width > 0 && Math.abs(canvas.width - rect.width) > 2) canvas.width = Math.floor(rect.width);
-  const width = canvas.width;
-  const height = canvas.height;
+  if (rect.width > 0) canvas.width = Math.floor(rect.width);
+  if (rect.height > 0) canvas.height = Math.floor(rect.height);
+  const width = canvas.width || 1200;
+  const height = canvas.height || 320;
   context.clearRect(0, 0, width, height);
 
   const marginX = 46;
@@ -324,7 +563,7 @@ function drawChart(opportunities) {
   const plotW = width - marginX * 2;
   const plotH = height - marginY * 2;
 
-  context.strokeStyle = "rgba(28, 38, 50, 0.9)";
+  context.strokeStyle = "rgba(30, 30, 39, 0.95)";
   context.lineWidth = 1;
   for (let i = 0; i <= 4; i += 1) {
     const y = marginY + (i * plotH) / 4;
@@ -334,8 +573,8 @@ function drawChart(opportunities) {
   }
 
   scatterHits = [];
-  if (opportunities.length === 0) {
-    context.fillStyle = "#4a5566";
+  if (!opportunities || opportunities.length === 0) {
+    context.fillStyle = "#6b6b7a";
     context.font = "13px Inter, sans-serif";
     context.fillText("Waiting for opportunities…", marginX + 4, height / 2);
     return;
@@ -344,13 +583,13 @@ function drawChart(opportunities) {
   const maxRoi = Math.max(1, ...opportunities.map((entry) => entry.roi ?? 0));
   const maxProfit = Math.max(1, ...opportunities.map((entry) => entry.expectedProfit ?? 0));
 
-  context.fillStyle = "#7d8b9c";
-  context.font = "10.5px Inter, sans-serif";
+  context.fillStyle = "#6b6b7a";
+  context.font = "10px JetBrains Mono, monospace";
   for (let i = 0; i <= 4; i += 1) {
-    const roi = ((i * maxRoi) / 4).toFixed(1);
-    context.fillText(`${roi}×`, marginX + (i * plotW) / 4 - 8, height - 8);
+    const roi = Math.round(((i * maxRoi) / 4) * 100);
+    context.fillText(`${roi}%`, marginX + (i * plotW) / 4 - 10, height - 8);
     const profit = Math.round(((4 - i) * maxProfit) / 4);
-    context.fillText(`${profit}p`, 4, marginY + (i * plotH) / 4 + 4);
+    context.fillText(`${profit}◈`, 4, marginY + (i * plotH) / 4 + 4);
   }
 
   for (const opportunity of opportunities) {
@@ -358,12 +597,12 @@ function drawChart(opportunities) {
     const profit = Math.max(0, Math.min(maxProfit, opportunity.expectedProfit ?? 0));
     const cx = marginX + (roi / maxRoi) * plotW;
     const cy = height - marginY - (profit / maxProfit) * plotH;
-    const tier = opportunity.quality?.tier ?? "D";
+    const tier = opportunity.quality?.tier ?? tierFromScore(opportunity.score);
     const undervalued = (opportunity.quality?.signals ?? []).includes("undervalued_signature");
     context.fillStyle = TIER_COLORS[tier] ?? TIER_COLORS.D;
     context.beginPath(); context.arc(cx, cy, 4.5, 0, Math.PI * 2); context.fill();
     if (undervalued) {
-      context.strokeStyle = "rgba(255,255,255,0.85)"; context.lineWidth = 1.5;
+      context.strokeStyle = "rgba(255,255,255,0.86)"; context.lineWidth = 1.5;
       context.beginPath(); context.arc(cx, cy, 8, 0, Math.PI * 2); context.stroke();
     }
     scatterHits.push({ cx, cy, r: 4.5, opportunity });
@@ -405,10 +644,10 @@ if (elements.chart) {
       const rect = elements.chart.getBoundingClientRect();
       const px = rect.left - wrap.left + localX + 12;
       const py = rect.top - wrap.top + localY + 12;
-      elements.chartTip.style.left = `${Math.min(px, elements.chart.width - 240)}px`;
+      elements.chartTip.style.left = `${Math.min(px, Math.max(20, rect.width - 280))}px`;
       elements.chartTip.style.top = `${py}px`;
-      const tier = opportunity.quality?.tier ?? "D";
-      const signals = topSignalsFor(opportunity, 3).map((s) => `<span class="signal signal-${s}">${s.replace(/_/g, " ")}</span>`).join("");
+      const tier = opportunity.quality?.tier ?? tierFromScore(opportunity.score);
+      const signals = topSignalsFor(opportunity, 3).map(signalChip).join("");
       elements.chartTip.innerHTML = `
         <div class="tt-head">
           ${weaponThumb(opportunity.imageName, opportunity.weaponName, "sm")}
@@ -418,8 +657,8 @@ if (elements.chart) {
           </div>
         </div>
         <div class="tt-body">
-          <div><span class="price">${opportunity.buyPrice}p</span> → <strong>${opportunity.targetSellPrice}p</strong> <span class="profit">+${opportunity.expectedProfit}p</span> <span class="roi">${Math.round(opportunity.roi * 100)}%</span></div>
-          <div class="small">${escapeHtml(opportunity.seller.ingameName)} · ${opportunity.status} · ${opportunity.comparableListings} comps</div>
+          <div><span class="price">${opportunity.buyPrice}◈</span> → <strong>${opportunity.targetSellPrice}◈</strong> <span class="profit">+${opportunity.expectedProfit}◈</span> <span class="roi">${Math.round((opportunity.roi ?? 0) * 100)}%</span></div>
+          <div class="small">${escapeHtml(opportunity.seller?.ingameName ?? "seller")} · ${escapeHtml(opportunity.status)} · ${opportunity.comparableListings} comps</div>
           ${signals ? `<div class="signals">${signals}</div>` : ""}
           <div class="tt-hint">click to open</div>
         </div>`;
@@ -433,11 +672,9 @@ if (elements.chart) {
   elements.chart.addEventListener("click", (event) => {
     const { mx, my } = canvasPointFromEvent(event);
     const hit = findScatterHit(mx, my, 6);
-    if (hit) window.open(hit.opportunity.url, "_blank", "noopener");
+    if (hit?.opportunity?.url) window.open(hit.opportunity.url, "_blank", "noopener");
   });
 }
-
-// -------- Spotlight search --------
 
 function parseSpotlightQuery(raw) {
   const trimmed = raw.trim();
@@ -458,7 +695,7 @@ function applySpotlightFilter(opportunities) {
   const { text, filter } = spotlightFilter;
   const needle = text.toLowerCase();
   return opportunities.filter((opportunity) => {
-    if (needle && !(opportunity.weaponName.toLowerCase().includes(needle) || opportunity.weaponSlug.toLowerCase().includes(needle))) return false;
+    if (needle && !(opportunity.weaponName.toLowerCase().includes(needle) || opportunity.weaponSlug.toLowerCase().includes(needle) || opportunity.rivenName.toLowerCase().includes(needle))) return false;
     if (!filter) return true;
     const value = opportunity[filter.field] ?? 0;
     switch (filter.op) {
@@ -475,6 +712,20 @@ function applySpotlightFilter(opportunities) {
 async function updateSpotlight(raw) {
   const parsed = parseSpotlightQuery(raw);
   const items = [];
+  const text = parsed.text.toLowerCase();
+  if (parsed.filter) items.push({ type: "filter", text: parsed.text, filter: parsed.filter });
+  for (const page of [
+    { name: "Home", sub: "Market command center", page: "home" },
+    { name: "Opportunities", sub: "Ranked buy-low / sell-high queue", page: "opportunities" },
+    { name: "Instant Wins", sub: "Same-signature undervalued listings", page: "instant" },
+    { name: "Riven Markets", sub: "Weapon cards and price stats", page: "markets" },
+    { name: "MCP Connect", sub: "Endpoint, configs, tool list", page: "settings", settingsTab: "mcp" },
+    { name: "Data Source", sub: "Remote/tiered/full scan mode", page: "settings", settingsTab: "data" },
+  ]) {
+    if (text && (page.name.toLowerCase().includes(text) || page.sub.toLowerCase().includes(text))) items.push({ type: "page", ...page });
+  }
+  if (text && "refresh feed".includes(text)) items.push({ type: "action", name: "Refresh feed", sub: "Force-refresh market data", action: "refresh" });
+
   if (parsed.text.length > 0) {
     try {
       const response = await fetch(`/api/weapons?q=${encodeURIComponent(parsed.text)}&limit=8`);
@@ -494,9 +745,6 @@ async function updateSpotlight(raw) {
       }
     } catch { /* ignore */ }
   }
-  if (parsed.filter) {
-    items.unshift({ type: "filter", text: parsed.text, filter: parsed.filter });
-  }
   spotlightItems = items;
   renderSpotlightResults(items);
 }
@@ -505,42 +753,56 @@ function renderSpotlightResults(items) {
   if (!elements.spotlightResults) return;
   if (items.length === 0) {
     elements.spotlightResults.hidden = false;
-    elements.spotlightResults.innerHTML = `<div class="spotlight-empty">No matches. Try a partial name or use a price filter like <code>&lt; 100p</code>.</div>`;
+    elements.spotlightResults.innerHTML = `<div class="spotlight-empty">No matches. Try a weapon name, page name, or price filter like <code>&lt; 100p</code>.</div>`;
     return;
   }
   elements.spotlightResults.hidden = false;
   spotlightIndex = -1;
-  const html = items.map((item, index) => {
-    if (item.type === "filter") {
-      const label = item.text ? `${item.text} · ` : "";
-      return `<button class="spotlight-item spotlight-filter" data-index="${index}" type="button">
-        <span class="spotlight-glyph">≡</span>
-        <div class="spotlight-body">
-          <div class="spotlight-title">Filter table</div>
-          <div class="spotlight-sub">${escapeHtml(label)}buy price ${item.filter.op} ${item.filter.value}p</div>
-        </div>
-      </button>`;
+  const groups = groupSpotlightItems(items);
+  const html = [];
+  let index = 0;
+  for (const [label, groupItems] of groups) {
+    html.push(`<div class="spotlight-section-label">${label}</div>`);
+    for (const item of groupItems) {
+      const currentIndex = index;
+      item.__index = currentIndex;
+      index += 1;
+      if (item.type === "filter") {
+        const labelText = item.text ? `${item.text} · ` : "";
+        html.push(`<button class="spotlight-item spotlight-filter" data-index="${currentIndex}" type="button"><span class="spotlight-glyph">≡</span><div class="spotlight-body"><div class="spotlight-title">Filter opportunities</div><div class="spotlight-sub">${escapeHtml(labelText)}buy price ${item.filter.op} ${item.filter.value}◈</div></div><span class="spotlight-arrow">↵</span></button>`);
+      } else if (item.type === "weapon") {
+        const priceLine = item.summary?.priceStats ? `median ${item.summary.priceStats.median}◈ · p75 ${item.summary.priceStats.p75}◈` : "no cached price stats";
+        html.push(`<button class="spotlight-item spotlight-weapon" data-index="${currentIndex}" type="button">${weaponThumb(item.imageName, item.name, "sm")}<div class="spotlight-body"><div class="spotlight-title">${escapeHtml(item.name)}</div><div class="spotlight-sub">${escapeHtml(item.group)} · dispo ${Number(item.disposition ?? 0).toFixed(2)} · ${escapeHtml(priceLine)}</div></div><span class="spotlight-arrow">↵</span></button>`);
+      } else if (item.type === "page") {
+        html.push(`<button class="spotlight-item" data-index="${currentIndex}" type="button"><span class="spotlight-glyph">⌂</span><div class="spotlight-body"><div class="spotlight-title">${escapeHtml(item.name)}</div><div class="spotlight-sub">${escapeHtml(item.sub)}</div></div><span class="spotlight-arrow">›</span></button>`);
+      } else if (item.type === "action") {
+        html.push(`<button class="spotlight-item" data-index="${currentIndex}" type="button"><span class="spotlight-glyph">ϟ</span><div class="spotlight-body"><div class="spotlight-title">${escapeHtml(item.name)}</div><div class="spotlight-sub">${escapeHtml(item.sub)}</div></div><span class="spotlight-arrow">↵</span></button>`);
+      }
     }
-    const priceLine = item.summary?.priceStats
-      ? `median ${item.summary.priceStats.median}p · p75 ${item.summary.priceStats.p75}p`
-      : "";
-    return `<button class="spotlight-item spotlight-weapon" data-index="${index}" data-slug="${escapeHtml(item.slug)}" type="button">
-      ${weaponThumb(item.imageName, item.name, "sm")}
-      <div class="spotlight-body">
-        <div class="spotlight-title">${escapeHtml(item.name)}</div>
-        <div class="spotlight-sub">${escapeHtml(item.group)} · dispo ${item.disposition.toFixed(2)}${priceLine ? ` · ${escapeHtml(priceLine)}` : ""}</div>
-      </div>
-      <span class="spotlight-arrow">↵</span>
-    </button>`;
-  }).join("");
-  elements.spotlightResults.innerHTML = html;
+  }
+  elements.spotlightResults.innerHTML = html.join("");
   for (const button of elements.spotlightResults.querySelectorAll(".spotlight-item:not(.spotlight-hint)")) {
     button.addEventListener("click", () => activateSpotlightItem(Number(button.dataset.index)));
   }
 }
 
+function groupSpotlightItems(items) {
+  const labels = new Map([
+    ["filter", "Actions"],
+    ["action", "Actions"],
+    ["page", "Pages"],
+    ["weapon", "Weapons"],
+  ]);
+  const grouped = [];
+  for (const type of ["filter", "action", "page", "weapon"]) {
+    const groupItems = items.filter((item) => item.type === type);
+    if (groupItems.length > 0) grouped.push([labels.get(type), groupItems]);
+  }
+  return grouped;
+}
+
 function activateSpotlightItem(index) {
-  const item = spotlightItems[index];
+  const item = spotlightItems.find((entry) => entry.__index === index) ?? spotlightItems[index];
   if (!item) return;
   if (item.type === "weapon") {
     openWeaponDetail(item.slug);
@@ -549,7 +811,14 @@ function activateSpotlightItem(index) {
   } else if (item.type === "filter") {
     spotlightFilter = { text: item.text, filter: item.filter };
     closeSpotlightOverlay();
-    void refreshDerived();
+    navigate("opportunities");
+    renderOpportunitySurfaces();
+  } else if (item.type === "page") {
+    closeSpotlightOverlay();
+    navigate(item.page, { settingsTab: item.settingsTab });
+  } else if (item.type === "action" && item.action === "refresh") {
+    closeSpotlightOverlay();
+    void refreshNow();
   }
 }
 
@@ -561,21 +830,16 @@ function closeSpotlight() {
 function moveSpotlightSelection(delta) {
   if (spotlightItems.length === 0) return;
   spotlightIndex = (spotlightIndex + delta + spotlightItems.length) % spotlightItems.length;
-  for (const button of elements.spotlightResults.querySelectorAll(".spotlight-item")) {
-    button.classList.toggle("active", Number(button.dataset.index) === spotlightIndex);
-  }
+  for (const button of elements.spotlightResults.querySelectorAll(".spotlight-item")) button.classList.toggle("active", Number(button.dataset.index) === spotlightIndex);
 }
 
 function openSpotlightOverlay() {
   if (!elements.spotlightOverlay) return;
   elements.spotlightOverlay.removeAttribute("hidden");
   document.body.classList.add("spotlight-active");
-  // Render hints immediately so the dropdown paints on the same frame as the overlay,
-  // before requestAnimationFrame or focus events have a chance to reorder things.
   const value = (elements.spotlightInput?.value ?? "").trim();
   if (value === "") renderSpotlightHints();
-  else if (value.length > 0) updateSpotlight(value);
-  // Focus after a microtask so the overlay is fully attached to the DOM
+  else void updateSpotlight(value);
   Promise.resolve().then(() => elements.spotlightInput?.focus());
 }
 
@@ -583,27 +847,20 @@ function renderSpotlightHints() {
   const results = elements.spotlightResults;
   if (!results) return;
   spotlightItems = [
-    { type: "hint", title: "Search any weapon", sub: "Type a name — e.g. bramma, war, kuva karak" },
-    { type: "hint", title: "Filter table by price", sub: "e.g. dark sword < 100p, > 500p, = 250p" },
-    { type: "hint", title: "Click a weapon anywhere", sub: "Opens the full detail: live listings, price stats, common combos" },
+    { type: "page", name: "Opportunities", sub: "Ranked buy-low / sell-high queue", page: "opportunities", __index: 0 },
+    { type: "page", name: "Instant Wins", sub: "Live undervalued signature listings", page: "instant", __index: 1 },
+    { type: "hint", title: "Search any weapon", sub: "Type a name — e.g. bramma, war, kuva karak", __index: 2 },
+    { type: "hint", title: "Filter by price", sub: "e.g. dark sword < 100p, > 500p, = 250p", __index: 3 },
   ];
   spotlightIndex = -1;
   results.removeAttribute("hidden");
-  const glyphs = ["🔎", "≡", "⌕"];
-  const html = ['<div class="spotlight-section-label">Try this</div>'];
-  for (let i = 0; i < spotlightItems.length; i += 1) {
-    const item = spotlightItems[i];
-    html.push(
-      `<div class="spotlight-item spotlight-hint" data-index="${i}">` +
-        `<span class="spotlight-glyph">${glyphs[i] ?? "•"}</span>` +
-        `<div class="spotlight-body">` +
-          `<div class="spotlight-title">${escapeHtml(item.title)}</div>` +
-          `<div class="spotlight-sub">${escapeHtml(item.sub)}</div>` +
-        `</div>` +
-      `</div>`,
-    );
-  }
-  results.innerHTML = html.join("");
+  results.innerHTML = `
+    <div class="spotlight-section-label">Try this</div>
+    <button class="spotlight-item" data-index="0" type="button"><span class="spotlight-glyph">◎</span><div class="spotlight-body"><div class="spotlight-title">Opportunities</div><div class="spotlight-sub">Open the ranked trade queue</div></div><span class="spotlight-arrow">›</span></button>
+    <button class="spotlight-item" data-index="1" type="button"><span class="spotlight-glyph">ϟ</span><div class="spotlight-body"><div class="spotlight-title">Instant Wins</div><div class="spotlight-sub">Open same-signature undervalued listings</div></div><span class="spotlight-arrow">›</span></button>
+    <div class="spotlight-item spotlight-hint"><span class="spotlight-glyph">⌕</span><div class="spotlight-body"><div class="spotlight-title">Search any weapon</div><div class="spotlight-sub">Type a name — e.g. bramma, war, kuva karak</div></div></div>
+    <div class="spotlight-item spotlight-hint"><span class="spotlight-glyph">≡</span><div class="spotlight-body"><div class="spotlight-title">Filter by price</div><div class="spotlight-sub">e.g. dark sword &lt; 100p, &gt; 500p, = 250p</div></div></div>`;
+  for (const button of results.querySelectorAll(".spotlight-item:not(.spotlight-hint)")) button.addEventListener("click", () => activateSpotlightItem(Number(button.dataset.index)));
 }
 
 function closeSpotlightOverlay() {
@@ -612,68 +869,42 @@ function closeSpotlightOverlay() {
   closeSpotlight();
 }
 
-if (elements.spotlightTrigger) {
-  elements.spotlightTrigger.addEventListener("click", () => openSpotlightOverlay());
-}
+if (elements.spotlightTrigger) elements.spotlightTrigger.addEventListener("click", () => openSpotlightOverlay());
 if (elements.spotlightOverlay) {
   elements.spotlightOverlay.addEventListener("click", (event) => {
-    if (event.target instanceof HTMLElement && event.target.dataset.spotlightClose !== undefined) {
-      closeSpotlightOverlay();
-    }
+    if (event.target instanceof HTMLElement && event.target.dataset.spotlightClose !== undefined) closeSpotlightOverlay();
   });
 }
-
 if (elements.spotlightInput) {
   elements.spotlightInput.addEventListener("input", () => {
+    clearTimeout(spotlightTimer);
     const value = elements.spotlightInput.value;
-    if (spotlightTimer) clearTimeout(spotlightTimer);
-    if (value.trim() === "") {
-      if (spotlightFilter) { spotlightFilter = null; void refreshDerived(); }
+    if (!value.trim()) {
       renderSpotlightHints();
       return;
     }
-    spotlightTimer = setTimeout(() => updateSpotlight(value), 150);
-  });
-  elements.spotlightInput.addEventListener("focus", () => {
-    if (elements.spotlightInput.value.trim().length > 0) updateSpotlight(elements.spotlightInput.value);
+    spotlightTimer = setTimeout(() => updateSpotlight(value), 120);
   });
   elements.spotlightInput.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      elements.spotlightInput.value = "";
-      spotlightFilter = null;
-      closeSpotlightOverlay();
-      elements.spotlightInput.blur();
-      void refreshDerived();
-    } else if (event.key === "ArrowDown") {
-      event.preventDefault();
-      moveSpotlightSelection(1);
-    } else if (event.key === "ArrowUp") {
-      event.preventDefault();
-      moveSpotlightSelection(-1);
-    } else if (event.key === "Enter") {
-      event.preventDefault();
-      if (spotlightIndex >= 0) activateSpotlightItem(spotlightIndex);
-      else if (spotlightItems.length > 0) activateSpotlightItem(0);
-    }
+    if (event.key === "Escape") { event.preventDefault(); closeSpotlightOverlay(); return; }
+    if (event.key === "ArrowDown") { event.preventDefault(); moveSpotlightSelection(1); return; }
+    if (event.key === "ArrowUp") { event.preventDefault(); moveSpotlightSelection(-1); return; }
+    if (event.key === "Enter" && spotlightIndex >= 0) { event.preventDefault(); activateSpotlightItem(spotlightIndex); }
   });
 }
-
 document.addEventListener("keydown", (event) => {
-  const modKey = event.metaKey || event.ctrlKey;
-  if (modKey && event.key.toLowerCase() === "k") {
+  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
     event.preventDefault();
-    openSpotlightOverlay();
-  }
-  if (event.key === "Escape") {
-    if (elements.weaponModal && !elements.weaponModal.hidden) closeWeaponModal();
-    else if (elements.settingsModal && !elements.settingsModal.hidden) closeSettingsModal();
+    if (elements.spotlightOverlay?.hidden === false) closeSpotlightOverlay();
+    else openSpotlightOverlay();
+  } else if (event.key === "Escape") {
+    if (elements.spotlightOverlay?.hidden === false) closeSpotlightOverlay();
+    if (elements.weaponModal?.hidden === false) closeWeaponModal();
   }
 });
 
-// -------- Weapon detail modal --------
-
 async function openWeaponDetail(slug) {
-  if (!slug) return;
+  if (!slug || !elements.weaponModal) return;
   elements.weaponModal.hidden = false;
   document.body.classList.add("modal-open");
   elements.wdContent.innerHTML = `<div class="wd-loading">Loading ${escapeHtml(slug)}…</div>`;
@@ -688,6 +919,7 @@ async function openWeaponDetail(slug) {
 }
 
 function closeWeaponModal() {
+  if (!elements.weaponModal) return;
   elements.weaponModal.hidden = true;
   document.body.classList.remove("modal-open");
 }
@@ -709,15 +941,13 @@ function renderWeaponDetail(detail) {
         const positives = pos.map((p) => `<span class="flag good">+${escapeHtml(p)}</span>`).join("");
         const negatives = neg.map((n) => `<span class="flag bad">-${escapeHtml(n)}</span>`).join("");
         const velocity = entry.velocity;
-        const classification = velocity?.classification && velocity.classification !== "unknown"
-          ? `<span class="signal signal-${velocity.classification}">${velocity.classification.replace(/_/g, " ")}</span>`
-          : "";
+        const classification = velocity?.classification && velocity.classification !== "unknown" ? signalChip(velocity.classification) : "";
         return `<div class="wd-signature">
           <div class="wd-signature-attrs"><div class="flags">${positives}${negatives}</div>${classification}</div>
           <div class="wd-signature-stats">
-            <span><span class="small">p25</span> ${Math.round(entry.p25 ?? 0)}p</span>
-            <span><span class="small">median</span> <strong>${Math.round(entry.p50 ?? 0)}p</strong></span>
-            <span><span class="small">p75</span> ${Math.round(entry.p75 ?? 0)}p</span>
+            <span><span class="small">p25</span> ${Math.round(entry.p25 ?? 0)}◈</span>
+            <span><span class="small">median</span> <strong>${Math.round(entry.p50 ?? 0)}◈</strong></span>
+            <span><span class="small">p75</span> ${Math.round(entry.p75 ?? 0)}◈</span>
             <span><span class="small">samples</span> ${entry.sample_count}</span>
             <span><span class="small">conf</span> ${Math.round((entry.confidence ?? 0) * 100)}%</span>
           </div>
@@ -725,16 +955,16 @@ function renderWeaponDetail(detail) {
       }).join("")
     : `<div class="wd-empty">No signature history yet. Once cold-scans have logged samples for this weapon over ~30 days, common stat combos with p25/median/p75 pricing will appear here.</div>`;
 
-  const opportunitiesHtml = opportunities.length > 0
+  const opportunitiesHtml = (opportunities ?? []).length > 0
     ? opportunities.slice(0, 8).map((opp) => {
-        const tier = opp.quality?.tier ?? "D";
+        const tier = opp.quality?.tier ?? tierFromScore(opp.score);
         return `<div class="wd-opp" data-url="${escapeHtml(opp.url)}">
-          <div class="wd-opp-price"><span class="price">${opp.buyPrice}p</span> → ${opp.targetSellPrice}p <span class="profit">+${opp.expectedProfit}p</span></div>
-          <div class="wd-opp-meta small">${escapeHtml(opp.rivenName)} · ${escapeHtml(opp.seller.ingameName)} · ${opp.status} · comps ${opp.comparableListings}</div>
+          <div class="wd-opp-price"><span class="price">${opp.buyPrice}◈</span> → ${opp.targetSellPrice}◈ <span class="profit">+${opp.expectedProfit}◈</span></div>
+          <div class="wd-opp-meta small">${escapeHtml(opp.rivenName)} · ${escapeHtml(opp.seller?.ingameName ?? "seller")} · ${escapeHtml(opp.status)} · comps ${opp.comparableListings}</div>
           <div class="wd-opp-flags">${(opp.positives ?? []).slice(0, 4).map((p) => `<span class="flag good">+${escapeHtml(p)}</span>`).join("")}${(opp.negatives ?? []).slice(0, 2).map((n) => `<span class="flag bad">-${escapeHtml(n)}</span>`).join("")}<span class="tier-badge tier-${tier}">${tier}</span></div>
         </div>`;
       }).join("")
-    : `<div class="wd-empty">No actionable listings that match your current filters. Widen seller-status or lower min-profit to see more.</div>`;
+    : `<div class="wd-empty">No actionable listings match your current filters. Widen seller-status or lower min-profit to see more.</div>`;
 
   elements.wdContent.innerHTML = `
     <div class="wd-head">
@@ -743,7 +973,7 @@ function renderWeaponDetail(detail) {
         <div class="wd-eyebrow">${escapeHtml(weapon.group)} · MR ${weapon.reqMasteryRank}</div>
         <h2 class="wd-name">${escapeHtml(weapon.name)}</h2>
         <div class="wd-facts">
-          <span>disposition <strong>${weapon.disposition.toFixed(2)}</strong></span>
+          <span>disposition <strong>${Number(weapon.disposition ?? 0).toFixed(2)}</strong></span>
           <span>direct listings <strong>${summary?.directListings ?? 0}</strong></span>
           <span>online <strong>${summary?.onlineListings ?? 0}</strong></span>
         </div>
@@ -752,16 +982,16 @@ function renderWeaponDetail(detail) {
     </div>
 
     ${stats ? `<div class="wd-stats">
-      <div class="wd-stat"><div class="wd-stat-label">Min</div><div class="wd-stat-value">${stats.min}p</div></div>
-      <div class="wd-stat"><div class="wd-stat-label">P25</div><div class="wd-stat-value">${stats.p25}p</div></div>
-      <div class="wd-stat wd-stat-primary"><div class="wd-stat-label">Median</div><div class="wd-stat-value">${stats.median}p</div></div>
-      <div class="wd-stat"><div class="wd-stat-label">P75</div><div class="wd-stat-value">${stats.p75}p</div></div>
-      <div class="wd-stat"><div class="wd-stat-label">P90</div><div class="wd-stat-value">${stats.p90}p</div></div>
-      <div class="wd-stat"><div class="wd-stat-label">Max</div><div class="wd-stat-value">${stats.max}p</div></div>
+      <div class="wd-stat"><div class="wd-stat-label">Min</div><div class="wd-stat-value">${stats.min}◈</div></div>
+      <div class="wd-stat"><div class="wd-stat-label">P25</div><div class="wd-stat-value">${stats.p25}◈</div></div>
+      <div class="wd-stat wd-stat-primary"><div class="wd-stat-label">Median</div><div class="wd-stat-value">${stats.median}◈</div></div>
+      <div class="wd-stat"><div class="wd-stat-label">P75</div><div class="wd-stat-value">${stats.p75}◈</div></div>
+      <div class="wd-stat"><div class="wd-stat-label">P90</div><div class="wd-stat-value">${stats.p90}◈</div></div>
+      <div class="wd-stat"><div class="wd-stat-label">Max</div><div class="wd-stat-value">${stats.max}◈</div></div>
     </div>` : `<div class="wd-empty">No live market data cached for this weapon yet.</div>`}
 
     <div class="wd-section">
-      <div class="wd-section-head"><h3>Live listings that match your filters</h3><span class="small">${opportunities.length} total</span></div>
+      <div class="wd-section-head"><h3>Live listings that match your filters</h3><span class="small">${(opportunities ?? []).length} total</span></div>
       <div class="wd-opps">${opportunitiesHtml}</div>
     </div>
 
@@ -781,16 +1011,14 @@ function renderWeaponDetail(detail) {
 
 function parseSignature(sig) {
   if (!sig) return [[], []];
-  const [posPart = "", negPart = ""] = sig.split("|");
-  const positives = posPart.split("+").filter(Boolean);
-  const negatives = negPart.split("-").filter(Boolean);
+  const positives = [];
+  const negatives = [];
+  for (const part of String(sig).split("|")) {
+    if (part.startsWith("+")) positives.push(part.slice(1));
+    else if (part.startsWith("-")) negatives.push(part.slice(1));
+  }
   return [positives, negatives];
 }
-
-// -------- Weapon browser (now driven by spotlight only, but keep function) --------
-async function loadWeaponBrowser() { /* deprecated; spotlight handles search now */ }
-
-// -------- Filters form --------
 
 function collectConfig() {
   const statuses = [...document.querySelectorAll(".status")].filter((checkbox) => checkbox.checked).map((checkbox) => checkbox.value);
@@ -812,8 +1040,20 @@ function shortTime(value) {
   return new Date(value).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
 
+function timeAgo(value) {
+  if (!value) return "—";
+  const diff = Date.now() - Date.parse(value);
+  if (!Number.isFinite(diff)) return shortTime(value);
+  const minutes = Math.max(0, Math.round(diff / 60_000));
+  if (minutes < 1) return "now";
+  if (minutes < 60) return `${minutes}m`;
+  const hours = Math.round(minutes / 60);
+  if (hours < 48) return `${hours}h`;
+  return `${Math.round(hours / 24)}d`;
+}
+
 function escapeHtml(value) {
-  return String(value).replace(/[&<>'"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[character]);
+  return String(value ?? "").replace(/[&<>'"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[character]);
 }
 
 function weaponThumb(imageName, alt, size = "sm") {
@@ -832,94 +1072,82 @@ function sortedOpportunities(opportunities) {
     else comparison = String(leftValue).localeCompare(String(rightValue));
     return sortState.direction === "asc" ? comparison : -comparison;
   });
-  updateSortHeaders();
+  updateSortControls();
   return sorted;
 }
 
 function sortValue(opportunity, key) {
   if (key === "rank") return opportunity.expectedProfit;
-  if (key === "seller") return opportunity.seller.ingameName;
+  if (key === "seller") return opportunity.seller?.ingameName ?? "";
+  if (key === "updated") return Date.parse(opportunity.updated ?? "") || 0;
+  if (key === "confidence") return opportunity.confidence ?? 0;
+  if (key === "score") return opportunity.score ?? 0;
   return opportunity[key] ?? "";
 }
 
-function updateSortHeaders() {
-  for (const header of document.querySelectorAll("th[data-sort]")) {
-    header.classList.remove("sorted-asc", "sorted-desc");
-    if (header.dataset.sort === sortState.key) header.classList.add(sortState.direction === "asc" ? "sorted-asc" : "sorted-desc");
+function updateSortControls() {
+  for (const button of document.querySelectorAll("[data-sort]")) {
+    button.classList.remove("active", "sorted-asc", "sorted-desc");
+    if (button.dataset.sort === sortState.key) {
+      button.classList.add("active", sortState.direction === "asc" ? "sorted-asc" : "sorted-desc");
+    }
   }
 }
 
-for (const header of document.querySelectorAll("th[data-sort]")) {
-  header.addEventListener("click", () => {
-    const key = header.dataset.sort;
+for (const button of document.querySelectorAll("[data-sort]")) {
+  button.addEventListener("click", () => {
+    const key = button.dataset.sort;
     if (!key) return;
     if (sortState.key === key) sortState = { key, direction: sortState.direction === "asc" ? "desc" : "asc" };
     else sortState = { key, direction: key === "weaponName" ? "asc" : "desc" };
-    void refreshDerived();
+    renderOpportunitySurfaces();
   });
 }
 
-elements.form.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  elements.form.querySelector("button").disabled = true;
-  try {
-    await postJson("/api/scan", collectConfig());
-  } finally {
-    elements.form.querySelector("button").disabled = false;
-  }
-});
+if (elements.form) {
+  elements.form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const submitButton = elements.form.querySelector("button[type='submit']");
+    if (submitButton) submitButton.disabled = true;
+    try {
+      spotlightFilter = null;
+      await postJson("/api/scan", collectConfig());
+      navigate("opportunities");
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
+  });
+}
 
-elements.refresh.addEventListener("click", async () => {
-  elements.refresh.disabled = true;
+for (const refreshButton of [elements.refresh, elements.homeRefresh, elements.instantRefresh, elements.railRefresh].filter(Boolean)) {
+  refreshButton.addEventListener("click", () => refreshNow(refreshButton));
+}
+
+async function refreshNow(button = null) {
+  if (button) button.disabled = true;
   try {
     await postJson("/api/refresh", {});
   } finally {
-    elements.refresh.disabled = false;
+    if (button) button.disabled = false;
   }
-});
-
-// -------- Settings modal (merges data source + MCP) --------
-
-function openSettingsModal(defaultTab = "data") {
-  if (!elements.settingsModal) return;
-  elements.settingsModal.hidden = false;
-  document.body.classList.add("modal-open");
-  switchSettingsTab(defaultTab);
-  populateMcp();
 }
 
-function closeSettingsModal() {
-  if (!elements.settingsModal) return;
-  elements.settingsModal.hidden = true;
-  document.body.classList.remove("modal-open");
+function openSettingsModal(defaultTab = "data") {
+  navigate("settings", { settingsTab: defaultTab });
 }
 
 function switchSettingsTab(tabName) {
-  for (const tab of elements.settingsTabs) {
-    tab.classList.toggle("active", tab.dataset.settingsTab === tabName);
-  }
-  for (const panel of elements.settingsPanels) {
-    panel.hidden = panel.dataset.settingsPanel !== tabName;
-  }
+  for (const tab of elements.settingsTabs) tab.classList.toggle("active", tab.dataset.settingsTab === tabName);
+  for (const panel of elements.settingsPanels) panel.hidden = panel.dataset.settingsPanel !== tabName;
 }
 
-for (const tab of elements.settingsTabs) {
-  tab.addEventListener("click", () => switchSettingsTab(tab.dataset.settingsTab));
-}
-
-if (elements.settingsButton) {
-  elements.settingsButton.addEventListener("click", () => openSettingsModal("data"));
-}
-if (elements.settingsModal) {
-  elements.settingsModal.addEventListener("click", (event) => {
-    if (event.target instanceof HTMLElement && event.target.dataset.modalClose !== undefined) closeSettingsModal();
-  });
-  elements.settingsModal.querySelectorAll(".mcp-copy").forEach((button) => {
-    button.addEventListener("click", () => {
-      const targetId = button.getAttribute("data-copy-target");
-      const target = targetId ? document.getElementById(targetId) : null;
-      if (target) copyText(target.textContent ?? "", button);
-    });
+for (const tab of elements.settingsTabs) tab.addEventListener("click", () => switchSettingsTab(tab.dataset.settingsTab));
+if (elements.settingsButton) elements.settingsButton.addEventListener("click", () => openSettingsModal("data"));
+for (const button of document.querySelectorAll(".mcp-copy")) {
+  button.addEventListener("click", () => {
+    const targetId = button.getAttribute("data-copy-target");
+    const target = targetId ? document.getElementById(targetId) : null;
+    if (target) copyText(target.textContent ?? "", button);
   });
 }
 
@@ -937,9 +1165,7 @@ function populateMcp() {
       },
     }, null, 2);
   }
-  if (elements.mcpConfigCli) {
-    elements.mcpConfigCli.textContent = `claude mcp add the-plat-exchange --transport sse ${sseUrl}`;
-  }
+  if (elements.mcpConfigCli) elements.mcpConfigCli.textContent = `claude mcp add the-plat-exchange --transport sse ${sseUrl}`;
   if (elements.mcpTestResult) elements.mcpTestResult.textContent = "";
   void loadMcpToolList();
 }
@@ -955,9 +1181,7 @@ async function loadMcpToolList() {
       elements.mcpToolList.innerHTML = `<li class="small">No tools registered.</li>`;
       return;
     }
-    elements.mcpToolList.innerHTML = info.tools
-      .map((tool) => `<li><strong>${escapeHtml(tool.name)}</strong><div class="small">${escapeHtml(tool.description)}</div></li>`)
-      .join("");
+    elements.mcpToolList.innerHTML = info.tools.map((tool) => `<li><strong>${escapeHtml(tool.name)}</strong><div class="small">${escapeHtml(tool.description)}</div></li>`).join("");
   } catch (error) {
     elements.mcpToolList.innerHTML = `<li class="small">Failed: ${escapeHtml(error.message)}</li>`;
   }
@@ -995,11 +1219,12 @@ async function testMcpConnection() {
 }
 
 async function copyText(text, button) {
+  if (!button) return;
   try {
     await navigator.clipboard.writeText(text);
     const original = button.textContent;
     button.textContent = "Copied ✓";
-    setTimeout(() => (button.textContent = original), 1600);
+    setTimeout(() => { button.textContent = original; }, 1600);
   } catch {
     button.textContent = "Copy blocked";
   }
@@ -1007,21 +1232,11 @@ async function copyText(text, button) {
 
 if (elements.mcpTestButton) elements.mcpTestButton.addEventListener("click", testMcpConnection);
 
-// -------- Data source toggle --------
-
 function updateModeUi(activeMode, state) {
-  const normalized = activeMode === "remote" ? "remote" : "tiered";
-  for (const button of elements.modeButtons) {
-    button.classList.toggle("active", button.dataset.mode === normalized);
-  }
-  if (elements.modeHint) {
-    elements.modeHint.textContent = normalized === "remote"
-      ? "Reading the CI-published feed. Refreshes every ~45s; no warframe.market traffic from this browser."
-      : "Local tiered scan is active. Uses this machine's IP against warframe.market with a token-bucket limiter.";
-  }
-  if (elements.dataStatusLine && state) {
-    elements.dataStatusLine.innerHTML = `<span class="small">${escapeHtml(state.status.lastMessage ?? "")}</span>`;
-  }
+  const normalized = ["remote", "tiered", "full"].includes(activeMode) ? activeMode : "tiered";
+  for (const button of elements.modeButtons) button.classList.toggle("active", button.dataset.mode === normalized);
+  if (elements.modeHint) elements.modeHint.textContent = MODE_HINTS[normalized] ?? MODE_HINTS.tiered;
+  if (elements.dataStatusLine && state) elements.dataStatusLine.innerHTML = `<span class="small">${escapeHtml(state.status?.lastMessage ?? "")}</span>`;
 }
 
 async function switchMode(mode) {
@@ -1029,13 +1244,13 @@ async function switchMode(mode) {
     const response = await fetch("/api/mode", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mode }) });
     if (!response.ok) {
       const payload = await response.json().catch(() => ({}));
-      elements.summary.textContent = `Mode switch failed: ${payload.error ?? response.status}`;
+      if (elements.summary) elements.summary.textContent = `Mode switch failed: ${payload.error ?? response.status}`;
       return;
     }
     render(await response.json());
     await refreshDerived();
   } catch (error) {
-    elements.summary.textContent = `Mode switch failed: ${error.message}`;
+    if (elements.summary) elements.summary.textContent = `Mode switch failed: ${error.message}`;
   }
 }
 
@@ -1047,20 +1262,48 @@ for (const button of elements.modeButtons) {
   });
 }
 
-// -------- SSE --------
+function confidenceBar(value) {
+  const score = Math.max(0, Math.min(1, Number(value) || 0));
+  const filled = Math.round(score * 5);
+  return `<span class="confbar" aria-label="${Math.round(score * 100)}% confidence">${Array.from({ length: 5 }, (_, i) => `<span class="${i < filled ? "on" : ""}"></span>`).join("")}</span>`;
+}
 
-const events = new EventSource("/events");
-events.addEventListener("state", async (event) => {
-  render(JSON.parse(event.data));
-  await refreshDerived();
-});
-events.addEventListener("error", () => {
-  // silently reconnect
-});
+function tierFromScore(score) {
+  const value = Number(score) || 0;
+  if (value >= 85) return "A";
+  if (value >= 70) return "B";
+  if (value >= 50) return "C";
+  return "D";
+}
 
-loadState().catch((error) => { elements.summary.textContent = error.message; });
+function opportunityKey(opportunity) {
+  return opportunity.auctionId || `${opportunity.weaponSlug}:${opportunity.rivenName}:${opportunity.buyPrice}:${opportunity.seller?.ingameName ?? ""}`;
+}
+
+function tradeWhisper(opportunity) {
+  const seller = opportunity.seller?.ingameName ?? "seller";
+  return `/w ${seller} Hi! I want to buy your ${opportunity.rivenName} ${opportunity.weaponName} riven listed for ${opportunity.buyPrice} platinum.`;
+}
+
+function formatNumber(value) {
+  return Number(value ?? 0).toLocaleString();
+}
+
+if (window.EventSource) {
+  const events = new EventSource("/events");
+  events.addEventListener("state", async (event) => {
+    render(JSON.parse(event.data));
+    await refreshDerived();
+  });
+  events.addEventListener("error", () => {
+    // Native EventSource reconnects automatically.
+  });
+}
+
+loadState().catch((error) => {
+  if (elements.summary) elements.summary.textContent = error.message;
+});
 setInterval(() => { refreshDerived().catch(() => undefined); }, 60_000);
 window.addEventListener("resize", () => {
-  const source = applySpotlightFilter(latestEnrichedOpps.length > 0 ? latestEnrichedOpps : latestState?.opportunities ?? []);
-  drawChart(source);
+  drawChart(applySpotlightFilter(currentOpportunitySource()));
 });
