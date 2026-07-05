@@ -429,14 +429,34 @@ export class RivenTraderService {
     if (this.mode === "remote") {
       if (this.remoteState) {
         const imageMap = this.buildRemoteImageMap();
+        const enriched = this.remoteState.opportunities
+          .map((opportunity) => {
+            const withImage = opportunity.imageName ? opportunity : { ...opportunity, ...(imageMap.get(opportunity.weaponSlug) ? { imageName: imageMap.get(opportunity.weaponSlug)! } : {}) };
+            // Sanity-recompute profit/ROI from the displayed median so trades that
+            // used to look attractive under the p75-based math but are actually
+            // losses at the real (median) sell price get dropped or corrected.
+            const medianProfit = withImage.conservativeSellPrice - withImage.buyPrice;
+            if (medianProfit <= 0) return null;
+            if (medianProfit === withImage.expectedProfit) return withImage;
+            return {
+              ...withImage,
+              expectedProfit: medianProfit,
+              roi: Math.round((medianProfit / withImage.buyPrice) * 1000) / 1000,
+              buyToSellRatio: Math.round((withImage.conservativeSellPrice / withImage.buyPrice) * 1000) / 1000,
+            };
+          })
+          .filter((opportunity): opportunity is NonNullable<typeof opportunity> => opportunity !== null)
+          .sort((left, right) => right.expectedProfit - left.expectedProfit);
         return {
           ...this.remoteState,
           scanMode: "remote",
           generatedAt: new Date().toISOString(),
           status: { ...this.status },
-          opportunities: imageMap.size > 0
-            ? this.remoteState.opportunities.map((opportunity) => opportunity.imageName ? opportunity : { ...opportunity, ...(imageMap.get(opportunity.weaponSlug) ? { imageName: imageMap.get(opportunity.weaponSlug)! } : {}) })
-            : this.remoteState.opportunities,
+          totals: {
+            ...this.remoteState.totals,
+            opportunities: enriched.length,
+          },
+          opportunities: enriched,
           weaponSummaries: imageMap.size > 0
             ? this.remoteState.weaponSummaries.map((summary) => summary.imageName ? summary : { ...summary, ...(imageMap.get(summary.slug) ? { imageName: imageMap.get(summary.slug)! } : {}) })
             : this.remoteState.weaponSummaries,

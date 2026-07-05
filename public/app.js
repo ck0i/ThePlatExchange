@@ -504,7 +504,8 @@ async function updateSpotlight(raw) {
 function renderSpotlightResults(items) {
   if (!elements.spotlightResults) return;
   if (items.length === 0) {
-    elements.spotlightResults.hidden = true;
+    elements.spotlightResults.hidden = false;
+    elements.spotlightResults.innerHTML = `<div class="spotlight-empty">No matches. Try a partial name or use a price filter like <code>&lt; 100p</code>.</div>`;
     return;
   }
   elements.spotlightResults.hidden = false;
@@ -533,7 +534,7 @@ function renderSpotlightResults(items) {
     </button>`;
   }).join("");
   elements.spotlightResults.innerHTML = html;
-  for (const button of elements.spotlightResults.querySelectorAll(".spotlight-item")) {
+  for (const button of elements.spotlightResults.querySelectorAll(".spotlight-item:not(.spotlight-hint)")) {
     button.addEventListener("click", () => activateSpotlightItem(Number(button.dataset.index)));
   }
 }
@@ -569,8 +570,36 @@ function openSpotlightOverlay() {
   if (elements.spotlightOverlay) {
     elements.spotlightOverlay.hidden = false;
     document.body.classList.add("spotlight-active");
-    requestAnimationFrame(() => elements.spotlightInput?.focus());
+    requestAnimationFrame(() => {
+      elements.spotlightInput?.focus();
+      if (!elements.spotlightInput || elements.spotlightInput.value.trim() === "") {
+        renderSpotlightHints();
+      }
+    });
   }
+}
+
+function renderSpotlightHints() {
+  if (!elements.spotlightResults) return;
+  spotlightItems = [
+    { type: "hint", title: "Search any weapon", sub: "Type a name — e.g. bramma, war, kuva karak" },
+    { type: "hint", title: "Filter table by price", sub: "e.g. dark sword < 100p · > 500p · = 250p" },
+    { type: "hint", title: "Click a weapon anywhere", sub: "Opens the full detail: live listings, price stats, common combos" },
+  ];
+  spotlightIndex = -1;
+  elements.spotlightResults.hidden = false;
+  elements.spotlightResults.innerHTML = `
+    <div class="spotlight-section-label">Try this</div>
+    ${spotlightItems.map((item, index) => `
+      <div class="spotlight-item spotlight-hint" data-index="${index}">
+        <span class="spotlight-glyph">${index === 0 ? "🔎" : index === 1 ? "≡" : "⌕"}</span>
+        <div class="spotlight-body">
+          <div class="spotlight-title">${escapeHtml(item.title)}</div>
+          <div class="spotlight-sub">${escapeHtml(item.sub)}</div>
+        </div>
+      </div>
+    `).join("")}
+  `;
 }
 
 function closeSpotlightOverlay() {
@@ -594,9 +623,10 @@ if (elements.spotlightInput) {
   elements.spotlightInput.addEventListener("input", () => {
     const value = elements.spotlightInput.value;
     if (spotlightTimer) clearTimeout(spotlightTimer);
-    if (value.trim() === "" && spotlightFilter) {
-      spotlightFilter = null;
-      void refreshDerived();
+    if (value.trim() === "") {
+      if (spotlightFilter) { spotlightFilter = null; void refreshDerived(); }
+      renderSpotlightHints();
+      return;
     }
     spotlightTimer = setTimeout(() => updateSpotlight(value), 150);
   });

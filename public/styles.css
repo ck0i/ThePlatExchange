@@ -217,6 +217,31 @@ main {
   flex-shrink: 0;
 }
 .spotlight-filter { padding: 10px; }
+.spotlight-section-label {
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+  padding: 8px 12px 6px;
+  font-weight: 600;
+}
+.spotlight-hint { cursor: default; }
+.spotlight-hint:hover { background: transparent; }
+.spotlight-empty {
+  padding: 20px 14px;
+  color: var(--muted);
+  font-size: 12.5px;
+  text-align: center;
+  line-height: 1.55;
+}
+.spotlight-empty code {
+  background: var(--bg-elev);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11.5px;
+  color: var(--text);
+}
 
 /* Icon button */
 .icon-button {
