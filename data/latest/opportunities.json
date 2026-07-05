@@ -1,49 +1,95 @@
 [
   {
-    "auctionId": "6a4841761dbb3d03dae59dea",
-    "weaponSlug": "mutalist_cernos",
-    "weaponName": "Mutalist Cernos",
-    "imageName": "MutalistCernos.png",
-    "rivenName": "visi-critatis",
-    "buyPrice": 5000,
-    "targetSellPrice": 9250,
-    "conservativeSellPrice": 7000,
-    "expectedProfit": 2000,
-    "roi": 0.4,
-    "buyToSellRatio": 1.85,
-    "confidence": 0.872,
-    "score": 79.8,
+    "auctionId": "6a460ff099b97903447be11e",
+    "weaponSlug": "velocitus",
+    "weaponName": "Velocitus",
+    "imageName": "Velocitus.png",
+    "rivenName": "crita-satiata",
+    "buyPrice": 1500,
+    "targetSellPrice": 4500,
+    "conservativeSellPrice": 4000,
+    "expectedProfit": 2500,
+    "roi": 1.667,
+    "buyToSellRatio": 3,
+    "confidence": 0.898,
+    "score": 100,
     "seller": {
-      "id": "6480f6f2fba7571536331812",
-      "ingameName": "SebastianDaBrave",
-      "slug": "sebastiandabrave",
-      "reputation": 78,
+      "id": "695554f0635d45000a42f4a3",
+      "ingameName": "BossAsu",
+      "slug": "bossasu",
+      "reputation": 26,
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-04T19:11:01.004+00:00"
+      "lastSeen": "2026-07-05T05:49:18.391+00:00"
     },
     "status": "ingame",
     "groupType": "exact-stats",
-    "comparableListings": 4,
-    "pricePercentile": 0.5,
-    "signature": "+base_damage_/_melee_damage+critical_chance+critical_damage|-impact_damage",
+    "comparableListings": 7,
+    "pricePercentile": 0.143,
+    "signature": "+base_damage_/_melee_damage+critical_chance+multishot|-zoom",
     "positives": [
       "base_damage_/_melee_damage",
       "critical_chance",
-      "critical_damage"
+      "multishot"
     ],
     "negatives": [
-      "impact_damage"
+      "zoom"
     ],
     "reasons": [
       "same stat signature comparables",
-      "buy 5000p vs median 7000p / p75 9250p",
+      "buy 1500p vs median 4000p / p75 4500p",
       "seller ingame",
+      "lowest visible direct listing",
       "strong liquidity and recency"
     ],
-    "updated": "2026-07-03T23:10:46.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=mutalist_cernos&sort_by=price_asc"
+    "updated": "2026-07-02T07:14:56.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a4a16e0de1e9a044304a2df",
+    "weaponSlug": "dual_decurion",
+    "weaponName": "Dual Decurion",
+    "imageName": "DualDecurion.png",
+    "rivenName": "igni-zetinok",
+    "buyPrice": 72,
+    "targetSellPrice": 1175,
+    "conservativeSellPrice": 600,
+    "expectedProfit": 528,
+    "roi": 7.333,
+    "buyToSellRatio": 16.319,
+    "confidence": 0.942,
+    "score": 100,
+    "seller": {
+      "id": "66c9b80394543227f15a094f",
+      "ingameName": "dashayu666",
+      "slug": "dashayu666",
+      "reputation": 9,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T05:19:39.492+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 389,
+    "pricePercentile": 0,
+    "signature": "+heat_damage+punch_through+recoil|-",
+    "positives": [
+      "heat_damage",
+      "punch_through",
+      "recoil"
+    ],
+    "negatives": [],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 72p vs median 600p / p75 1175p",
+      "seller ingame",
+      "lowest visible direct listing",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-07-05T08:33:36.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
   },
   {
     "auctionId": "6a49dc2799b979045553fb2a",
@@ -52,11 +98,11 @@
     "imageName": "DualDecurion.png",
     "rivenName": "deciata",
     "buyPrice": 75,
-    "targetSellPrice": 1200,
+    "targetSellPrice": 1175,
     "conservativeSellPrice": 600,
     "expectedProfit": 525,
     "roi": 7,
-    "buyToSellRatio": 16,
+    "buyToSellRatio": 15.667,
     "confidence": 0.942,
     "score": 100,
     "seller": {
@@ -71,8 +117,8 @@
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 396,
-    "pricePercentile": 0.008,
+    "comparableListings": 389,
+    "pricePercentile": 0.011,
     "signature": "+base_damage_/_melee_damage+status_duration|-",
     "positives": [
       "base_damage_/_melee_damage",
@@ -81,7 +127,7 @@
     "negatives": [],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 75p vs median 600p / p75 1200p",
+      "buy 75p vs median 600p / p75 1175p",
       "seller ingame",
       "lowest visible direct listing",
       "strong liquidity and recency"
@@ -90,46 +136,231 @@
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
   },
   {
-    "auctionId": "6a3f54ac99b979017a66d44b",
+    "auctionId": "6a48702f99b97903faac0bf5",
     "weaponSlug": "dual_decurion",
     "weaponName": "Dual Decurion",
     "imageName": "DualDecurion.png",
-    "rivenName": "satido",
-    "buyPrice": 80,
-    "targetSellPrice": 1200,
+    "rivenName": "vexi-ampides",
+    "buyPrice": 75,
+    "targetSellPrice": 1175,
     "conservativeSellPrice": 600,
-    "expectedProfit": 520,
-    "roi": 6.5,
-    "buyToSellRatio": 15,
-    "confidence": 0.915,
+    "expectedProfit": 525,
+    "roi": 7,
+    "buyToSellRatio": 15.667,
+    "confidence": 0.942,
     "score": 100,
     "seller": {
-      "id": "63e844e40d83a30d5fe27fe2",
-      "ingameName": "PS4MasterRace",
-      "slug": "ps4masterrace",
-      "reputation": 28,
+      "id": "6984c81e7d3045009df2e25c",
+      "ingameName": "AHtto",
+      "slug": "ahtto",
+      "reputation": 15,
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-04T19:16:17.254+00:00"
+      "lastSeen": "2026-07-05T06:27:01.649+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 396,
-    "pricePercentile": 0.05,
-    "signature": "+cold_damage+multishot|-",
+    "comparableListings": 389,
+    "pricePercentile": 0.011,
+    "signature": "+ammo_maximum+electric_damage+status_duration|-puncture_damage",
     "positives": [
-      "cold_damage",
-      "multishot"
+      "ammo_maximum",
+      "electric_damage",
+      "status_duration"
+    ],
+    "negatives": [
+      "puncture_damage"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 75p vs median 600p / p75 1175p",
+      "seller ingame",
+      "lowest visible direct listing",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-07-04T02:30:07.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a486fe01dbb3d03c564f9be",
+    "weaponSlug": "dual_decurion",
+    "weaponName": "Dual Decurion",
+    "imageName": "DualDecurion.png",
+    "rivenName": "acri-zetinok",
+    "buyPrice": 75,
+    "targetSellPrice": 1175,
+    "conservativeSellPrice": 600,
+    "expectedProfit": 525,
+    "roi": 7,
+    "buyToSellRatio": 15.667,
+    "confidence": 0.942,
+    "score": 100,
+    "seller": {
+      "id": "6984c81e7d3045009df2e25c",
+      "ingameName": "AHtto",
+      "slug": "ahtto",
+      "reputation": 15,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T06:27:01.649+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 389,
+    "pricePercentile": 0.011,
+    "signature": "+critical_damage+punch_through+recoil|-impact_damage",
+    "positives": [
+      "critical_damage",
+      "punch_through",
+      "recoil"
+    ],
+    "negatives": [
+      "impact_damage"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 75p vs median 600p / p75 1175p",
+      "seller ingame",
+      "lowest visible direct listing",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-07-04T02:28:48.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a486f6d1dbb3d03e1ab8348",
+    "weaponSlug": "dual_decurion",
+    "weaponName": "Dual Decurion",
+    "imageName": "DualDecurion.png",
+    "rivenName": "magnadra",
+    "buyPrice": 75,
+    "targetSellPrice": 1175,
+    "conservativeSellPrice": 600,
+    "expectedProfit": 525,
+    "roi": 7,
+    "buyToSellRatio": 15.667,
+    "confidence": 0.942,
+    "score": 100,
+    "seller": {
+      "id": "6984c81e7d3045009df2e25c",
+      "ingameName": "AHtto",
+      "slug": "ahtto",
+      "reputation": 15,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T06:27:01.649+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 389,
+    "pricePercentile": 0.011,
+    "signature": "+fire_rate_/_attack_speed+impact_damage|-",
+    "positives": [
+      "fire_rate_/_attack_speed",
+      "impact_damage"
     ],
     "negatives": [],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 80p vs median 600p / p75 1200p",
+      "buy 75p vs median 600p / p75 1175p",
+      "seller ingame",
+      "lowest visible direct listing",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-07-04T02:26:53.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a39d3eede1e9a002942df26",
+    "weaponSlug": "dual_decurion",
+    "weaponName": "Dual Decurion",
+    "imageName": "DualDecurion.png",
+    "rivenName": "croni-hexalis",
+    "buyPrice": 75,
+    "targetSellPrice": 1175,
+    "conservativeSellPrice": 600,
+    "expectedProfit": 525,
+    "roi": 7,
+    "buyToSellRatio": 15.667,
+    "confidence": 0.942,
+    "score": 100,
+    "seller": {
+      "id": "6984c81e7d3045009df2e25c",
+      "ingameName": "AHtto",
+      "slug": "ahtto",
+      "reputation": 15,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T06:27:01.649+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 389,
+    "pricePercentile": 0.011,
+    "signature": "+fire_rate_/_attack_speed+status_chance+zoom|-",
+    "positives": [
+      "fire_rate_/_attack_speed",
+      "status_chance",
+      "zoom"
+    ],
+    "negatives": [],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 75p vs median 600p / p75 1175p",
+      "seller ingame",
+      "lowest visible direct listing",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-07-04T02:24:48.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a1d6217580ed500c012738f",
+    "weaponSlug": "dual_decurion",
+    "weaponName": "Dual Decurion",
+    "imageName": "DualDecurion.png",
+    "rivenName": "acritin",
+    "buyPrice": 80,
+    "targetSellPrice": 1175,
+    "conservativeSellPrice": 600,
+    "expectedProfit": 520,
+    "roi": 6.5,
+    "buyToSellRatio": 14.688,
+    "confidence": 0.915,
+    "score": 88.5,
+    "seller": {
+      "id": "6590be72d558712d84e83a65",
+      "ingameName": "JiaoXiaoloriPrime",
+      "slug": "jiaoxiaoloriprime",
+      "reputation": 34,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:18:12.534+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 389,
+    "pricePercentile": 0.054,
+    "signature": "+critical_damage+magazine_capacity|-critical_chance",
+    "positives": [
+      "critical_damage",
+      "magazine_capacity"
+    ],
+    "negatives": [
+      "critical_chance"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 80p vs median 600p / p75 1175p",
       "seller ingame",
       "strong liquidity and recency"
     ],
-    "updated": "2026-06-27T04:42:20.000+00:00",
+    "updated": "2026-06-15T02:13:57.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
   },
   {
@@ -139,27 +370,27 @@
     "imageName": "DualDecurion.png",
     "rivenName": "sci-ampipha",
     "buyPrice": 90,
-    "targetSellPrice": 1200,
+    "targetSellPrice": 1175,
     "conservativeSellPrice": 600,
     "expectedProfit": 510,
     "roi": 5.667,
-    "buyToSellRatio": 13.333,
+    "buyToSellRatio": 13.056,
     "confidence": 0.942,
     "score": 89,
     "seller": {
       "id": "69cf5f41dd25210228d4a351",
       "ingameName": "CNomo",
       "slug": "cnomo",
-      "reputation": 3,
+      "reputation": 4,
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T04:43:32.338+00:00"
+      "lastSeen": "2026-07-05T08:19:44.148+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 396,
-    "pricePercentile": 0.075,
+    "comparableListings": 389,
+    "pricePercentile": 0.08,
     "signature": "+ammo_maximum+heat_damage+slash_damage|-multishot",
     "positives": [
       "ammo_maximum",
@@ -171,101 +402,11 @@
     ],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 90p vs median 600p / p75 1200p",
+      "buy 90p vs median 600p / p75 1175p",
       "seller ingame",
       "strong liquidity and recency"
     ],
     "updated": "2026-07-05T05:35:13.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a483580de1e9a03cca97df3",
-    "weaponSlug": "dual_decurion",
-    "weaponName": "Dual Decurion",
-    "imageName": "DualDecurion.png",
-    "rivenName": "crita-fevatox",
-    "buyPrice": 100,
-    "targetSellPrice": 1200,
-    "conservativeSellPrice": 600,
-    "expectedProfit": 500,
-    "roi": 5,
-    "buyToSellRatio": 12,
-    "confidence": 0.942,
-    "score": 100,
-    "seller": {
-      "id": "58096584d3ffb6476c1d2ace",
-      "ingameName": "NaruZkurai",
-      "slug": "naruzkurai",
-      "reputation": 12,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T02:15:59.511+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 396,
-    "pricePercentile": 0.14,
-    "signature": "+critical_chance+reload_speed+toxin_damage|-",
-    "positives": [
-      "critical_chance",
-      "reload_speed",
-      "toxin_damage"
-    ],
-    "negatives": [],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 100p vs median 600p / p75 1200p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-03T22:19:44.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a345e58663c5602143b90d6",
-    "weaponSlug": "dual_decurion",
-    "weaponName": "Dual Decurion",
-    "imageName": "DualDecurion.png",
-    "rivenName": "manti-toxican",
-    "buyPrice": 100,
-    "targetSellPrice": 1200,
-    "conservativeSellPrice": 600,
-    "expectedProfit": 500,
-    "roi": 5,
-    "buyToSellRatio": 12,
-    "confidence": 0.915,
-    "score": 96.3,
-    "seller": {
-      "id": "625f1f982e4ccc02eb4725b3",
-      "ingameName": "ElZaii",
-      "slug": "elzaii",
-      "reputation": 4,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T03:05:34.677+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 396,
-    "pricePercentile": 0.14,
-    "signature": "+damage_vs_corpus+multishot+toxin_damage|-critical_damage",
-    "positives": [
-      "damage_vs_corpus",
-      "multishot",
-      "toxin_damage"
-    ],
-    "negatives": [
-      "critical_damage"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 100p vs median 600p / p75 1200p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-06-18T21:08:40.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
   },
   {
@@ -275,11 +416,11 @@
     "imageName": "DualDecurion.png",
     "rivenName": "insicon",
     "buyPrice": 100,
-    "targetSellPrice": 1200,
+    "targetSellPrice": 1175,
     "conservativeSellPrice": 600,
     "expectedProfit": 500,
     "roi": 5,
-    "buyToSellRatio": 12,
+    "buyToSellRatio": 11.75,
     "confidence": 0.942,
     "score": 81.1,
     "seller": {
@@ -294,7 +435,7 @@
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 396,
+    "comparableListings": 389,
     "pricePercentile": 0.14,
     "signature": "+damage_vs_grineer+puncture_damage|-status_duration",
     "positives": [
@@ -306,7 +447,7 @@
     ],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 100p vs median 600p / p75 1200p",
+      "buy 100p vs median 600p / p75 1175p",
       "seller ingame",
       "strong liquidity and recency"
     ],
@@ -314,33 +455,33 @@
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
   },
   {
-    "auctionId": "6a42e5d11dbb3d027c719462",
-    "weaponSlug": "dual_coda_torxica",
-    "weaponName": "Dual Coda Torxica",
-    "imageName": "1999InfSporePistolWeapon.png",
-    "rivenName": "crita-satitis",
-    "buyPrice": 1000,
-    "targetSellPrice": 1750,
-    "conservativeSellPrice": 1499,
-    "expectedProfit": 499,
-    "roi": 0.499,
-    "buyToSellRatio": 1.75,
-    "confidence": 0.903,
-    "score": 84.2,
+    "auctionId": "6a467adf99b979036761dd32",
+    "weaponSlug": "vasto",
+    "weaponName": "Vasto",
+    "imageName": "Vasto.png",
+    "rivenName": "crita-acrican",
+    "buyPrice": 780,
+    "targetSellPrice": 1832,
+    "conservativeSellPrice": 1278,
+    "expectedProfit": 498,
+    "roi": 0.638,
+    "buyToSellRatio": 2.349,
+    "confidence": 0.827,
+    "score": 82,
     "seller": {
-      "id": "67f4ebdcac7a93000a9a4fd4",
-      "ingameName": "Ninjajamesy",
-      "slug": "ninjajamesy",
+      "id": "6a2fd9026efa7600852e0dd2",
+      "ingameName": "XIAODADAA",
+      "slug": "xiaodadaa",
       "reputation": 0,
-      "status": "ingame",
+      "status": "online",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T03:12:01.372+00:00"
+      "lastSeen": "2026-07-05T06:44:39.594+00:00"
     },
-    "status": "ingame",
+    "status": "online",
     "groupType": "exact-stats",
-    "comparableListings": 7,
-    "pricePercentile": 0.429,
+    "comparableListings": 4,
+    "pricePercentile": 0.5,
     "signature": "+critical_chance+critical_damage+multishot|-",
     "positives": [
       "critical_chance",
@@ -350,12 +491,57 @@
     "negatives": [],
     "reasons": [
       "same stat signature comparables",
-      "buy 1000p vs median 1499p / p75 1750p",
-      "seller ingame",
+      "buy 780p vs median 1278p / p75 1832p",
+      "seller online",
       "strong liquidity and recency"
     ],
-    "updated": "2026-06-30T22:35:15.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_coda_torxica&sort_by=price_asc"
+    "updated": "2026-07-05T07:09:29.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=vasto&sort_by=price_asc"
+  },
+  {
+    "auctionId": "69f2eac81e9a6c0538967595",
+    "weaponSlug": "velocitus",
+    "weaponName": "Velocitus",
+    "imageName": "Velocitus.png",
+    "rivenName": "lexi-argidex",
+    "buyPrice": 34,
+    "targetSellPrice": 1000,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 466,
+    "roi": 13.706,
+    "buyToSellRatio": 29.412,
+    "confidence": 0.944,
+    "score": 100,
+    "seller": {
+      "id": "5b40e0610bb57601c90a1e0b",
+      "ingameName": "CuddlesForDays",
+      "slug": "cuddlesfordays",
+      "reputation": 26,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:01:20.066+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 500,
+    "pricePercentile": 0,
+    "signature": "+damage_vs_grineer+punch_through+status_chance|-",
+    "positives": [
+      "damage_vs_grineer",
+      "punch_through",
+      "status_chance"
+    ],
+    "negatives": [],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 34p vs median 500p / p75 1000p",
+      "seller ingame",
+      "lowest visible direct listing",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-07-05T07:56:52.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
   },
   {
     "auctionId": "6a48874e99b97903faac0c75",
@@ -364,24 +550,24 @@
     "imageName": "Velocitus.png",
     "rivenName": "toxi-armapha",
     "buyPrice": 35,
-    "targetSellPrice": 900,
+    "targetSellPrice": 1000,
     "conservativeSellPrice": 500,
     "expectedProfit": 465,
     "roi": 13.286,
-    "buyToSellRatio": 25.714,
-    "confidence": 0.944,
-    "score": 94.2,
+    "buyToSellRatio": 28.571,
+    "confidence": 0.899,
+    "score": 93.3,
     "seller": {
       "id": "6697e23ec405f621cdc510e6",
       "ingameName": "Prime_Maverick",
       "slug": "prime-maverick",
       "reputation": 14,
-      "status": "ingame",
+      "status": "online",
       "platform": "pc",
       "crossplay": true,
       "lastSeen": "2026-07-05T03:17:04.517+00:00"
     },
-    "status": "ingame",
+    "status": "online",
     "groupType": "weapon-market",
     "comparableListings": 500,
     "pricePercentile": 0,
@@ -396,12 +582,102 @@
     ],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 35p vs median 500p / p75 900p",
-      "seller ingame",
+      "buy 35p vs median 500p / p75 1000p",
+      "seller online",
       "lowest visible direct listing",
       "strong liquidity and recency"
     ],
     "updated": "2026-07-04T04:47:32.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
+  },
+  {
+    "auctionId": "68e1fe0352fd890009593a1a",
+    "weaponSlug": "velocitus",
+    "weaponName": "Velocitus",
+    "imageName": "Velocitus.png",
+    "rivenName": "visican",
+    "buyPrice": 40,
+    "targetSellPrice": 1000,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 460,
+    "roi": 11.5,
+    "buyToSellRatio": 25,
+    "confidence": 0.857,
+    "score": 100,
+    "seller": {
+      "id": "63234a5f955420033f09dfb3",
+      "ingameName": "Pyrke",
+      "slug": "pyrke",
+      "reputation": 24,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T07:19:10.558+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 500,
+    "pricePercentile": 0.022,
+    "signature": "+base_damage_/_melee_damage+multishot|-damage_vs_grineer",
+    "positives": [
+      "base_damage_/_melee_damage",
+      "multishot"
+    ],
+    "negatives": [
+      "damage_vs_grineer"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 40p vs median 500p / p75 1000p",
+      "seller ingame",
+      "lowest visible direct listing",
+      "strong liquidity and recency"
+    ],
+    "updated": "2025-10-16T13:37:46.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a0dd618dcc123006165e180",
+    "weaponSlug": "velocitus",
+    "weaponName": "Velocitus",
+    "imageName": "Velocitus.png",
+    "rivenName": "arma-critamag",
+    "buyPrice": 45,
+    "targetSellPrice": 1000,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 455,
+    "roi": 10.111,
+    "buyToSellRatio": 22.222,
+    "confidence": 0.887,
+    "score": 100,
+    "seller": {
+      "id": "6923d561d3b604001f8e94b6",
+      "ingameName": "CappuccinO1",
+      "slug": "cappuccino1",
+      "reputation": 20,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T06:30:50.815+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 500,
+    "pricePercentile": 0.024,
+    "signature": "+critical_chance+magazine_capacity+recoil|-",
+    "positives": [
+      "critical_chance",
+      "magazine_capacity",
+      "recoil"
+    ],
+    "negatives": [],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 45p vs median 500p / p75 1000p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-05-20T15:41:12.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
   },
   {
@@ -410,13 +686,13 @@
     "weaponName": "Corvas",
     "imageName": "Corvas.png",
     "rivenName": "croni-decido",
-    "buyPrice": 55,
+    "buyPrice": 50,
     "targetSellPrice": 1000,
     "conservativeSellPrice": 500,
-    "expectedProfit": 445,
-    "roi": 8.091,
-    "buyToSellRatio": 18.182,
-    "confidence": 0.916,
+    "expectedProfit": 450,
+    "roi": 9,
+    "buyToSellRatio": 20,
+    "confidence": 0.943,
     "score": 100,
     "seller": {
       "id": "66c9b80394543227f15a094f",
@@ -430,8 +706,8 @@
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 402,
-    "pricePercentile": 0.05,
+    "comparableListings": 398,
+    "pricePercentile": 0.047,
     "signature": "+cold_damage+fire_rate_/_attack_speed+status_duration|-magazine_capacity",
     "positives": [
       "cold_damage",
@@ -443,12 +719,101 @@
     ],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 55p vs median 500p / p75 1000p",
+      "buy 50p vs median 500p / p75 1000p",
       "seller ingame",
       "strong liquidity and recency"
     ],
-    "updated": "2026-06-30T11:41:42.000+00:00",
+    "updated": "2026-07-05T07:11:26.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=corvas&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a314dbb663c56015e42e475",
+    "weaponSlug": "velocitus",
+    "weaponName": "Velocitus",
+    "imageName": "Velocitus.png",
+    "rivenName": "arma-mantitox",
+    "buyPrice": 50,
+    "targetSellPrice": 1000,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 450,
+    "roi": 9,
+    "buyToSellRatio": 20,
+    "confidence": 0.917,
+    "score": 100,
+    "seller": {
+      "id": "62aaa65dffa44c07fb506045",
+      "ingameName": "rurcurl",
+      "slug": "rurcurl",
+      "reputation": 38,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:06:46.398+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 500,
+    "pricePercentile": 0.044,
+    "signature": "+damage_vs_corpus+magazine_capacity+toxin_damage|-",
+    "positives": [
+      "damage_vs_corpus",
+      "magazine_capacity",
+      "toxin_damage"
+    ],
+    "negatives": [],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 50p vs median 500p / p75 1000p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-06-30T20:45:48.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a489d17de1e9a03d3adeedc",
+    "weaponSlug": "grattler",
+    "weaponName": "Grattler",
+    "imageName": "Grattler.png",
+    "rivenName": "sati-toxitis",
+    "buyPrice": 300,
+    "targetSellPrice": 850,
+    "conservativeSellPrice": 750,
+    "expectedProfit": 450,
+    "roi": 1.5,
+    "buyToSellRatio": 2.833,
+    "confidence": 0.874,
+    "score": 91.1,
+    "seller": {
+      "id": "65f920cc8e3a27000746c543",
+      "ingameName": "Suo-ji",
+      "slug": "suo-ji",
+      "reputation": 13,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:01:59.459+00:00"
+    },
+    "status": "ingame",
+    "groupType": "exact-stats",
+    "comparableListings": 4,
+    "pricePercentile": 0.25,
+    "signature": "+critical_damage+multishot+toxin_damage|-",
+    "positives": [
+      "critical_damage",
+      "multishot",
+      "toxin_damage"
+    ],
+    "negatives": [],
+    "reasons": [
+      "same stat signature comparables",
+      "buy 300p vs median 750p / p75 850p",
+      "seller ingame",
+      "lowest visible direct listing",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-07-04T05:41:43.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=grattler&sort_by=price_asc"
   },
   {
     "auctionId": "6a4863a999b97903ec5762b7",
@@ -457,11 +822,11 @@
     "imageName": "Velocitus.png",
     "rivenName": "argitak",
     "buyPrice": 70,
-    "targetSellPrice": 900,
+    "targetSellPrice": 1000,
     "conservativeSellPrice": 500,
     "expectedProfit": 430,
     "roi": 6.143,
-    "buyToSellRatio": 12.857,
+    "buyToSellRatio": 14.286,
     "confidence": 0.944,
     "score": 76.5,
     "seller": {
@@ -472,12 +837,12 @@
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T05:26:31.596+00:00"
+      "lastSeen": "2026-07-05T07:50:16.323+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
     "comparableListings": 500,
-    "pricePercentile": 0.071,
+    "pricePercentile": 0.06,
     "signature": "+damage_vs_grineer+reload_speed|-status_chance",
     "positives": [
       "damage_vs_grineer",
@@ -488,57 +853,12 @@
     ],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 70p vs median 500p / p75 900p",
+      "buy 70p vs median 500p / p75 1000p",
       "seller ingame",
       "strong liquidity and recency"
     ],
     "updated": "2026-07-04T01:36:41.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a0bdb10bba403001b36a5b8",
-    "weaponSlug": "corvas",
-    "weaponName": "Corvas",
-    "imageName": "Corvas.png",
-    "rivenName": "lexitis",
-    "buyPrice": 75,
-    "targetSellPrice": 1000,
-    "conservativeSellPrice": 500,
-    "expectedProfit": 425,
-    "roi": 5.667,
-    "buyToSellRatio": 13.333,
-    "confidence": 0.886,
-    "score": 100,
-    "seller": {
-      "id": "5730d2090f31391c48b33a1f",
-      "ingameName": "ZekromBehemoth",
-      "slug": "zekrombehemoth",
-      "reputation": 12,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T01:41:57.155+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 402,
-    "pricePercentile": 0.086,
-    "signature": "+critical_damage+punch_through|-zoom",
-    "positives": [
-      "critical_damage",
-      "punch_through"
-    ],
-    "negatives": [
-      "zoom"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 75p vs median 500p / p75 1000p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-05-19T03:37:52.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=corvas&sort_by=price_asc"
   },
   {
     "auctionId": "6a49020d1dbb3d040b161d63",
@@ -562,12 +882,12 @@
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T05:26:31.596+00:00"
+      "lastSeen": "2026-07-05T07:50:16.323+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 402,
-    "pricePercentile": 0.105,
+    "comparableListings": 398,
+    "pricePercentile": 0.106,
     "signature": "+magazine_capacity+multishot+status_duration|-recoil",
     "positives": [
       "magazine_capacity",
@@ -608,12 +928,12 @@
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T05:26:31.596+00:00"
+      "lastSeen": "2026-07-05T07:50:16.323+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 402,
-    "pricePercentile": 0.105,
+    "comparableListings": 398,
+    "pricePercentile": 0.106,
     "signature": "+multishot+status_chance|-",
     "positives": [
       "multishot",
@@ -636,11 +956,11 @@
     "imageName": "Velocitus.png",
     "rivenName": "cronican",
     "buyPrice": 80,
-    "targetSellPrice": 900,
+    "targetSellPrice": 1000,
     "conservativeSellPrice": 500,
     "expectedProfit": 420,
     "roi": 5.25,
-    "buyToSellRatio": 11.25,
+    "buyToSellRatio": 12.5,
     "confidence": 0.944,
     "score": 100,
     "seller": {
@@ -651,12 +971,12 @@
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T05:26:31.596+00:00"
+      "lastSeen": "2026-07-05T07:50:16.323+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
     "comparableListings": 500,
-    "pricePercentile": 0.091,
+    "pricePercentile": 0.08,
     "signature": "+fire_rate_/_attack_speed+multishot|-",
     "positives": [
       "fire_rate_/_attack_speed",
@@ -665,7 +985,7 @@
     "negatives": [],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 80p vs median 500p / p75 900p",
+      "buy 80p vs median 500p / p75 1000p",
       "seller ingame",
       "strong liquidity and recency"
     ],
@@ -673,93 +993,274 @@
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
   },
   {
-    "auctionId": "6a065c92c7bcef0165500dc9",
+    "auctionId": "6a4a0e8099b9790447b70f3d",
     "weaponSlug": "corvas",
     "weaponName": "Corvas",
     "imageName": "Corvas.png",
-    "rivenName": "manti-visitox",
-    "buyPrice": 90,
+    "rivenName": "igni-fevalis",
+    "buyPrice": 80,
     "targetSellPrice": 1000,
     "conservativeSellPrice": 500,
-    "expectedProfit": 410,
-    "roi": 4.556,
-    "buyToSellRatio": 11.111,
-    "confidence": 0.886,
-    "score": 100,
+    "expectedProfit": 420,
+    "roi": 5.25,
+    "buyToSellRatio": 12.5,
+    "confidence": 0.943,
+    "score": 99.9,
     "seller": {
-      "id": "69f68032f8d01101d38e461f",
-      "ingameName": "null0913",
-      "slug": "null0913",
-      "reputation": 1,
+      "id": "62693c1dc984ac047c5874b7",
+      "ingameName": "Sapphire",
+      "slug": "sapphire-3747",
+      "reputation": 36,
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-04T22:55:03.764+00:00"
+      "lastSeen": "2026-07-05T05:48:31.628+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 402,
-    "pricePercentile": 0.11,
-    "signature": "+base_damage_/_melee_damage+damage_vs_corpus+toxin_damage|-",
+    "comparableListings": 398,
+    "pricePercentile": 0.106,
+    "signature": "+heat_damage+reload_speed+zoom|-recoil",
     "positives": [
-      "base_damage_/_melee_damage",
-      "damage_vs_corpus",
-      "toxin_damage"
+      "heat_damage",
+      "reload_speed",
+      "zoom"
     ],
-    "negatives": [],
+    "negatives": [
+      "recoil"
+    ],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 90p vs median 500p / p75 1000p",
+      "buy 80p vs median 500p / p75 1000p",
       "seller ingame",
       "strong liquidity and recency"
     ],
-    "updated": "2026-05-14T23:36:50.000+00:00",
+    "updated": "2026-07-05T07:57:52.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=corvas&sort_by=price_asc"
   },
   {
-    "auctionId": "68622ec41546b800090db93d",
+    "auctionId": "6a37eea4c7bf3f02e123613b",
     "weaponSlug": "velocitus",
     "weaponName": "Velocitus",
     "imageName": "Velocitus.png",
-    "rivenName": "acri-vexidra",
+    "rivenName": "hexadra",
     "buyPrice": 100,
-    "targetSellPrice": 900,
+    "targetSellPrice": 1000,
     "conservativeSellPrice": 500,
     "expectedProfit": 400,
     "roi": 4,
-    "buyToSellRatio": 9,
-    "confidence": 0.944,
+    "buyToSellRatio": 10,
+    "confidence": 0.917,
     "score": 100,
     "seller": {
-      "id": "6381e9d471a5c50810546a39",
-      "ingameName": "kamsb",
-      "slug": "kamsb",
-      "reputation": 11,
+      "id": "68cd979ca537190009bf3116",
+      "ingameName": "Peachesthepeachh",
+      "slug": "peachesthepeachh",
+      "reputation": 62,
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T04:52:35.245+00:00"
+      "lastSeen": "2026-07-05T08:42:32.111+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
     "comparableListings": 500,
-    "pricePercentile": 0.151,
-    "signature": "+critical_damage+electric_damage+fire_rate_/_attack_speed|-damage_vs_grineer",
+    "pricePercentile": 0.14,
+    "signature": "+fire_rate_/_attack_speed+status_chance|-magazine_capacity",
     "positives": [
-      "critical_damage",
-      "electric_damage",
-      "fire_rate_/_attack_speed"
+      "fire_rate_/_attack_speed",
+      "status_chance"
+    ],
+    "negatives": [
+      "magazine_capacity"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 100p vs median 500p / p75 1000p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-06-21T14:01:49.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a305f6953147701184ad555",
+    "weaponSlug": "velocitus",
+    "weaponName": "Velocitus",
+    "imageName": "Velocitus.png",
+    "rivenName": "crita-heratox",
+    "buyPrice": 100,
+    "targetSellPrice": 1000,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 400,
+    "roi": 4,
+    "buyToSellRatio": 10,
+    "confidence": 0.917,
+    "score": 100,
+    "seller": {
+      "id": "637e4997df441407ada486a1",
+      "ingameName": "ClosedLifer",
+      "slug": "closedlifer",
+      "reputation": 102,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:35:29.321+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 500,
+    "pricePercentile": 0.14,
+    "signature": "+critical_chance+toxin_damage+zoom|-damage_vs_grineer",
+    "positives": [
+      "critical_chance",
+      "toxin_damage",
+      "zoom"
     ],
     "negatives": [
       "damage_vs_grineer"
     ],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 100p vs median 500p / p75 900p",
+      "buy 100p vs median 500p / p75 1000p",
       "seller ingame",
       "strong liquidity and recency"
     ],
-    "updated": "2026-07-04T09:53:05.000+00:00",
+    "updated": "2026-06-15T20:24:09.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
+  },
+  {
+    "auctionId": "674d422dd8eba400075be14d",
+    "weaponSlug": "velocitus",
+    "weaponName": "Velocitus",
+    "imageName": "Velocitus.png",
+    "rivenName": "critacan",
+    "buyPrice": 100,
+    "targetSellPrice": 1000,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 400,
+    "roi": 4,
+    "buyToSellRatio": 10,
+    "confidence": 0.917,
+    "score": 100,
+    "seller": {
+      "id": "651fdbd256256c01ed2e2760",
+      "ingameName": "lIIXIIl",
+      "slug": "liixiil",
+      "reputation": 2,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:28:59.893+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 500,
+    "pricePercentile": 0.14,
+    "signature": "+critical_chance+multishot|-",
+    "positives": [
+      "critical_chance",
+      "multishot"
+    ],
+    "negatives": [],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 100p vs median 500p / p75 1000p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-06-29T02:11:19.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a18aa7ef16047000ab7220b",
+    "weaponSlug": "velocitus",
+    "weaponName": "Velocitus",
+    "imageName": "Velocitus.png",
+    "rivenName": "arma-satitis",
+    "buyPrice": 100,
+    "targetSellPrice": 1000,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 400,
+    "roi": 4,
+    "buyToSellRatio": 10,
+    "confidence": 0.887,
+    "score": 87.9,
+    "seller": {
+      "id": "5be7bbfb1fd5cd0324ff9039",
+      "ingameName": "EnddyFlowers",
+      "slug": "enddyflowers",
+      "reputation": 0,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:42:49.958+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 500,
+    "pricePercentile": 0.14,
+    "signature": "+critical_damage+magazine_capacity+multishot|-status_chance",
+    "positives": [
+      "critical_damage",
+      "magazine_capacity",
+      "multishot"
+    ],
+    "negatives": [
+      "status_chance"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 100p vs median 500p / p75 1000p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-05-28T20:50:06.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
+  },
+  {
+    "auctionId": "69467db3133a4e0007cbb385",
+    "weaponSlug": "velocitus",
+    "weaponName": "Velocitus",
+    "imageName": "Velocitus.png",
+    "rivenName": "manticron",
+    "buyPrice": 100,
+    "targetSellPrice": 1000,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 400,
+    "roi": 4,
+    "buyToSellRatio": 10,
+    "confidence": 0.917,
+    "score": 81.3,
+    "seller": {
+      "id": "6252d93b9a66e9014cd6fb4b",
+      "ingameName": "KyL1N666",
+      "slug": "kyl1n666",
+      "reputation": 8,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:43:36.310+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 500,
+    "pricePercentile": 0.14,
+    "signature": "+critical_chance+damage_vs_corpus|-status_duration",
+    "positives": [
+      "critical_chance",
+      "damage_vs_corpus"
+    ],
+    "negatives": [
+      "status_duration"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 100p vs median 500p / p75 1000p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-06-27T23:08:28.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
   },
   {
@@ -784,7 +1285,7 @@
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T02:41:55.111+00:00"
+      "lastSeen": "2026-07-05T08:12:37.722+00:00"
     },
     "status": "ingame",
     "groupType": "exact-stats",
@@ -808,396 +1309,351 @@
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
   },
   {
-    "auctionId": "6a316d41663c56015e42e50c",
-    "weaponSlug": "corvas",
-    "weaponName": "Corvas",
-    "imageName": "Corvas.png",
-    "rivenName": "manti-decican",
+    "auctionId": "6a3f7efc99b979017a66d510",
+    "weaponSlug": "velocitus",
+    "weaponName": "Velocitus",
+    "imageName": "Velocitus.png",
+    "rivenName": "acrican",
     "buyPrice": 120,
     "targetSellPrice": 1000,
     "conservativeSellPrice": 500,
     "expectedProfit": 380,
     "roi": 3.167,
     "buyToSellRatio": 8.333,
-    "confidence": 0.916,
+    "confidence": 0.917,
     "score": 100,
     "seller": {
-      "id": "681ac958353ea1024111f2ab",
-      "ingameName": "AntsFriend",
-      "slug": "antsfriend",
-      "reputation": 74,
+      "id": "695255e724b7900009910d83",
+      "ingameName": "Null_Anonymous",
+      "slug": "null_anonymous",
+      "reputation": 14,
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T04:45:51.859+00:00"
+      "lastSeen": "2026-07-05T08:15:07.662+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 402,
-    "pricePercentile": 0.163,
-    "signature": "+damage_vs_corpus+multishot+status_duration|-damage_vs_grineer",
+    "comparableListings": 500,
+    "pricePercentile": 0.153,
+    "signature": "+critical_damage+multishot|-",
     "positives": [
-      "damage_vs_corpus",
-      "multishot",
-      "status_duration"
+      "critical_damage",
+      "multishot"
     ],
-    "negatives": [
-      "damage_vs_grineer"
-    ],
+    "negatives": [],
     "reasons": [
       "weapon-market comparable fallback",
       "buy 120p vs median 500p / p75 1000p",
       "seller ingame",
       "strong liquidity and recency"
     ],
-    "updated": "2026-07-01T08:06:11.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=corvas&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a45251a1dbb3d0301614067",
-    "weaponSlug": "velocitus",
-    "weaponName": "Velocitus",
-    "imageName": "Velocitus.png",
-    "rivenName": "cronicron",
-    "buyPrice": 149,
-    "targetSellPrice": 900,
-    "conservativeSellPrice": 500,
-    "expectedProfit": 351,
-    "roi": 2.356,
-    "buyToSellRatio": 6.04,
-    "confidence": 0.872,
-    "score": 98.4,
-    "seller": {
-      "id": "68c7bcc9ae32fe0006c03318",
-      "ingameName": "bL1TZ-007",
-      "slug": "bl1tz-007",
-      "reputation": 186,
-      "status": "online",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T01:55:10.638+00:00"
-    },
-    "status": "online",
-    "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0.178,
-    "signature": "+critical_chance+fire_rate_/_attack_speed|-",
-    "positives": [
-      "critical_chance",
-      "fire_rate_/_attack_speed"
-    ],
-    "negatives": [],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 149p vs median 500p / p75 900p",
-      "seller online",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-01T14:32:58.000+00:00",
+    "updated": "2026-06-27T07:42:52.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
   },
   {
-    "auctionId": "66551d9bc405f61657e4cdcf",
+    "auctionId": "6a305f6bc7bf3f012d371bfc",
     "weaponSlug": "velocitus",
     "weaponName": "Velocitus",
     "imageName": "Velocitus.png",
-    "rivenName": "satiata",
-    "buyPrice": 150,
-    "targetSellPrice": 900,
-    "conservativeSellPrice": 500,
-    "expectedProfit": 350,
-    "roi": 2.333,
-    "buyToSellRatio": 6,
-    "confidence": 0.944,
-    "score": 99.9,
-    "seller": {
-      "id": "5c4e131fa0ffbe0389282821",
-      "ingameName": "Draven985",
-      "slug": "draven985",
-      "reputation": 1,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-04T16:24:50.270+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0.218,
-    "signature": "+base_damage_/_melee_damage+multishot|-",
-    "positives": [
-      "base_damage_/_melee_damage",
-      "multishot"
-    ],
-    "negatives": [],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 150p vs median 500p / p75 900p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-03T02:59:38.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
-  },
-  {
-    "auctionId": "67f9ddb5ff9016000703b31d",
-    "weaponSlug": "velocitus",
-    "weaponName": "Velocitus",
-    "imageName": "Velocitus.png",
-    "rivenName": "croni-visican",
-    "buyPrice": 150,
-    "targetSellPrice": 900,
-    "conservativeSellPrice": 500,
-    "expectedProfit": 350,
-    "roi": 2.333,
-    "buyToSellRatio": 6,
-    "confidence": 0.917,
-    "score": 99.3,
-    "seller": {
-      "id": "5cdfb38daf75ea15613ae9d5",
-      "ingameName": "I_Like_Trousers",
-      "slug": "i-like-trousers",
-      "reputation": 91,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-04T07:22:05.507+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0.218,
-    "signature": "+base_damage_/_melee_damage+fire_rate_/_attack_speed+multishot|-damage_vs_grineer",
-    "positives": [
-      "base_damage_/_melee_damage",
-      "fire_rate_/_attack_speed",
-      "multishot"
-    ],
-    "negatives": [
-      "damage_vs_grineer"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 150p vs median 500p / p75 900p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-06-29T04:54:36.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a2f57e4c7bf3f00e7a08ae7",
-    "weaponSlug": "corvas",
-    "weaponName": "Corvas",
-    "imageName": "Corvas.png",
-    "rivenName": "critacan",
+    "rivenName": "toxi-critatio",
     "buyPrice": 150,
     "targetSellPrice": 1000,
     "conservativeSellPrice": 500,
     "expectedProfit": 350,
     "roi": 2.333,
     "buyToSellRatio": 6.667,
-    "confidence": 0.943,
-    "score": 85.1,
+    "confidence": 0.917,
+    "score": 99.3,
     "seller": {
-      "id": "680dbc32fde1ef00858ba6a0",
-      "ingameName": "iProvis",
-      "slug": "iprovis",
-      "reputation": 116,
+      "id": "637e4997df441407ada486a1",
+      "ingameName": "ClosedLifer",
+      "slug": "closedlifer",
+      "reputation": 102,
       "status": "ingame",
-      "platform": "xbox",
+      "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T05:39:06.868+00:00"
+      "lastSeen": "2026-07-05T08:35:29.321+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 402,
-    "pricePercentile": 0.215,
-    "signature": "+critical_chance+multishot|-status_duration",
+    "comparableListings": 500,
+    "pricePercentile": 0.204,
+    "signature": "+critical_chance+electric_damage+toxin_damage|-",
     "positives": [
       "critical_chance",
-      "multishot"
+      "electric_damage",
+      "toxin_damage"
     ],
-    "negatives": [
-      "status_duration"
-    ],
+    "negatives": [],
     "reasons": [
       "weapon-market comparable fallback",
       "buy 150p vs median 500p / p75 1000p",
       "seller ingame",
       "strong liquidity and recency"
     ],
-    "updated": "2026-07-04T04:14:20.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=corvas&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a4005ef1dbb3d01b286a359",
-    "weaponSlug": "corvas",
-    "weaponName": "Corvas",
-    "imageName": "Corvas.png",
-    "rivenName": "acri-gelitin",
-    "buyPrice": 160,
-    "targetSellPrice": 1000,
-    "conservativeSellPrice": 500,
-    "expectedProfit": 340,
-    "roi": 2.125,
-    "buyToSellRatio": 6.25,
-    "confidence": 0.916,
-    "score": 98.4,
-    "seller": {
-      "id": "627fed8f4670ac0151bf67ec",
-      "ingameName": "AzearPrime",
-      "slug": "azearprime",
-      "reputation": 12,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T05:36:28.322+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 402,
-    "pricePercentile": 0.221,
-    "signature": "+cold_damage+critical_damage+magazine_capacity|-reload_speed",
-    "positives": [
-      "cold_damage",
-      "critical_damage",
-      "magazine_capacity"
-    ],
-    "negatives": [
-      "reload_speed"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 160p vs median 500p / p75 1000p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-06-27T17:18:39.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=corvas&sort_by=price_asc"
-  },
-  {
-    "auctionId": "612ae42f4a6265007997db07",
-    "weaponSlug": "velocitus",
-    "weaponName": "Velocitus",
-    "imageName": "Velocitus.png",
-    "rivenName": "critatis",
-    "buyPrice": 197,
-    "targetSellPrice": 900,
-    "conservativeSellPrice": 500,
-    "expectedProfit": 303,
-    "roi": 1.538,
-    "buyToSellRatio": 4.569,
-    "confidence": 0.917,
-    "score": 88.3,
-    "seller": {
-      "id": "5a7b8e6a49ef000528317595",
-      "ingameName": "RainbowRAINer",
-      "slug": "rainbowrainer",
-      "reputation": 50,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T05:39:09.562+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0.242,
-    "signature": "+critical_chance+critical_damage|-damage_vs_corpus",
-    "positives": [
-      "critical_chance",
-      "critical_damage"
-    ],
-    "negatives": [
-      "damage_vs_corpus"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 197p vs median 500p / p75 900p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-06-28T11:09:04.000+00:00",
+    "updated": "2026-06-15T20:24:11.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
   },
   {
-    "auctionId": "6a474d8ade1e9a037fe78de8",
-    "weaponSlug": "obex",
-    "weaponName": "Obex",
-    "imageName": "Obex.png",
-    "rivenName": "visi-tempidex",
-    "buyPrice": 100,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 400,
-    "expectedProfit": 300,
-    "roi": 3,
-    "buyToSellRatio": 6,
-    "confidence": 0.942,
-    "score": 95.3,
+    "auctionId": "69f9d26134493d06515c5634",
+    "weaponSlug": "dual_decurion",
+    "weaponName": "Dual Decurion",
+    "imageName": "DualDecurion.png",
+    "rivenName": "crita-satides",
+    "buyPrice": 250,
+    "targetSellPrice": 1175,
+    "conservativeSellPrice": 600,
+    "expectedProfit": 350,
+    "roi": 1.4,
+    "buyToSellRatio": 4.7,
+    "confidence": 0.855,
+    "score": 89.2,
     "seller": {
-      "id": "661cd9ea0826060214425c6e",
-      "ingameName": "oxytrys",
-      "slug": "oxytrys",
-      "reputation": 4,
+      "id": "688e37f6388ac8003744b80d",
+      "ingameName": "IlIlllIlIIlIIIlI",
+      "slug": "ilillliliiliiili",
+      "reputation": 5,
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T05:23:49.502+00:00"
+      "lastSeen": "2026-07-05T07:25:10.480+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0,
-    "signature": "+base_damage_/_melee_damage+combo_duration+status_chance|-",
+    "comparableListings": 389,
+    "pricePercentile": 0.291,
+    "signature": "+critical_chance+multishot+status_duration|-",
     "positives": [
-      "base_damage_/_melee_damage",
-      "combo_duration",
-      "status_chance"
+      "critical_chance",
+      "multishot",
+      "status_duration"
     ],
     "negatives": [],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 100p vs median 400p / p75 600p",
+      "buy 250p vs median 600p / p75 1175p",
       "seller ingame",
-      "lowest visible direct listing",
       "strong liquidity and recency"
     ],
-    "updated": "2026-07-05T05:20:32.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
+    "updated": "2026-05-05T11:20:01.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
   },
   {
-    "auctionId": "6a1a77e5580ed5004d8f9085",
+    "auctionId": "695ced2224b7900007523829",
+    "weaponSlug": "velocitus",
+    "weaponName": "Velocitus",
+    "imageName": "Velocitus.png",
+    "rivenName": "ignicron",
+    "buyPrice": 150,
+    "targetSellPrice": 1000,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 350,
+    "roi": 2.333,
+    "buyToSellRatio": 6.667,
+    "confidence": 0.812,
+    "score": 82.6,
+    "seller": {
+      "id": "6562422f85339a1255b22679",
+      "ingameName": "MEHTOJIKA",
+      "slug": "mehtojika",
+      "reputation": 6,
+      "status": "online",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:19:48.537+00:00"
+    },
+    "status": "online",
+    "groupType": "weapon-market",
+    "comparableListings": 500,
+    "pricePercentile": 0.204,
+    "signature": "+critical_chance+heat_damage|-status_chance",
+    "positives": [
+      "critical_chance",
+      "heat_damage"
+    ],
+    "negatives": [
+      "status_chance"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 150p vs median 500p / p75 1000p",
+      "seller online",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-04-07T01:19:19.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a02323ef8ec2d00b171481d",
     "weaponSlug": "corvas",
     "weaponName": "Corvas",
     "imageName": "Corvas.png",
-    "rivenName": "visican",
+    "rivenName": "manti-igniton",
+    "buyPrice": 150,
+    "targetSellPrice": 1000,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 350,
+    "roi": 2.333,
+    "buyToSellRatio": 6.667,
+    "confidence": 0.841,
+    "score": 76.3,
+    "seller": {
+      "id": "5c9e3af9caeeae0ca1fe936d",
+      "ingameName": "IceEarl",
+      "slug": "iceearl",
+      "reputation": 7,
+      "status": "online",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T04:05:17.060+00:00"
+    },
+    "status": "online",
+    "groupType": "weapon-market",
+    "comparableListings": 398,
+    "pricePercentile": 0.217,
+    "signature": "+damage_vs_corpus+heat_damage+impact_damage|-status_chance",
+    "positives": [
+      "damage_vs_corpus",
+      "heat_damage",
+      "impact_damage"
+    ],
+    "negatives": [
+      "status_chance"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 150p vs median 500p / p75 1000p",
+      "seller online",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-05-11T19:47:10.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=corvas&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a343d76663c5601f1432944",
+    "weaponSlug": "velocitus",
+    "weaponName": "Velocitus",
+    "imageName": "Velocitus.png",
+    "rivenName": "crita-hexadra",
     "buyPrice": 200,
     "targetSellPrice": 1000,
     "conservativeSellPrice": 500,
     "expectedProfit": 300,
     "roi": 1.5,
     "buyToSellRatio": 5,
-    "confidence": 0.886,
-    "score": 86.8,
+    "confidence": 0.944,
+    "score": 88.1,
     "seller": {
-      "id": "676639e799f7de002b148d6f",
-      "ingameName": "CaneB00",
-      "slug": "caneb00",
-      "reputation": 5,
+      "id": "6928a1932d39f800cdce81cb",
+      "ingameName": "wuzhou111",
+      "slug": "wuzhou111",
+      "reputation": 2,
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T03:00:46.084+00:00"
+      "lastSeen": "2026-07-05T07:16:50.829+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 402,
-    "pricePercentile": 0.287,
-    "signature": "+base_damage_/_melee_damage+multishot|-reload_speed",
+    "comparableListings": 500,
+    "pricePercentile": 0.284,
+    "signature": "+critical_chance+fire_rate_/_attack_speed+status_chance|-recoil",
+    "positives": [
+      "critical_chance",
+      "fire_rate_/_attack_speed",
+      "status_chance"
+    ],
+    "negatives": [
+      "recoil"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 200p vs median 500p / p75 1000p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-07-04T13:58:34.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6968bcd8635d45000a4a51e3",
+    "weaponSlug": "corvas",
+    "weaponName": "Corvas",
+    "imageName": "Corvas.png",
+    "rivenName": "critado",
+    "buyPrice": 200,
+    "targetSellPrice": 1000,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 300,
+    "roi": 1.5,
+    "buyToSellRatio": 5,
+    "confidence": 0.856,
+    "score": 86.1,
+    "seller": {
+      "id": "62b05ec34670ac08eb64ea22",
+      "ingameName": "Eternal-Redeemer",
+      "slug": "eternal-redeemer",
+      "reputation": 181,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:41:20.023+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 398,
+    "pricePercentile": 0.289,
+    "signature": "+cold_damage+critical_chance|-recoil",
+    "positives": [
+      "cold_damage",
+      "critical_chance"
+    ],
+    "negatives": [
+      "recoil"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 200p vs median 500p / p75 1000p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-01-22T09:40:32.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=corvas&sort_by=price_asc"
+  },
+  {
+    "auctionId": "69d06e6eeed4980396f5f2d0",
+    "weaponSlug": "velocitus",
+    "weaponName": "Velocitus",
+    "imageName": "Velocitus.png",
+    "rivenName": "acri-visitio",
+    "buyPrice": 200,
+    "targetSellPrice": 1000,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 300,
+    "roi": 1.5,
+    "buyToSellRatio": 5,
+    "confidence": 0.857,
+    "score": 86.1,
+    "seller": {
+      "id": "62b05ec34670ac08eb64ea22",
+      "ingameName": "Eternal-Redeemer",
+      "slug": "eternal-redeemer",
+      "reputation": 181,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:41:20.023+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 500,
+    "pricePercentile": 0.284,
+    "signature": "+base_damage_/_melee_damage+critical_damage+electric_damage|-reload_speed",
     "positives": [
       "base_damage_/_melee_damage",
-      "multishot"
+      "critical_damage",
+      "electric_damage"
     ],
     "negatives": [
       "reload_speed"
@@ -1208,235 +1664,235 @@
       "seller ingame",
       "strong liquidity and recency"
     ],
-    "updated": "2026-06-06T22:48:59.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=corvas&sort_by=price_asc"
+    "updated": "2026-04-15T23:25:38.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
   },
   {
-    "auctionId": "6a484e0199b97903d02c187d",
-    "weaponSlug": "obex",
-    "weaponName": "Obex",
-    "imageName": "Obex.png",
-    "rivenName": "locticron",
-    "buyPrice": 100,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 400,
+    "auctionId": "68fd54b60d1e04000832cdb4",
+    "weaponSlug": "dual_decurion",
+    "weaponName": "Dual Decurion",
+    "imageName": "DualDecurion.png",
+    "rivenName": "toxi-acriata",
+    "buyPrice": 300,
+    "targetSellPrice": 1175,
+    "conservativeSellPrice": 600,
     "expectedProfit": 300,
-    "roi": 3,
-    "buyToSellRatio": 6,
-    "confidence": 0.942,
-    "score": 81.2,
+    "roi": 1,
+    "buyToSellRatio": 3.917,
+    "confidence": 0.855,
+    "score": 78.9,
     "seller": {
-      "id": "661cd9ea0826060214425c6e",
-      "ingameName": "oxytrys",
-      "slug": "oxytrys",
-      "reputation": 4,
+      "id": "63ecfe32101254116aa452c6",
+      "ingameName": "Taio-Cruz",
+      "slug": "taio-cruz",
+      "reputation": 100,
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T05:23:49.502+00:00"
+      "lastSeen": "2026-07-05T08:30:37.867+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0,
-    "signature": "+critical_chance+range|-status_duration",
+    "comparableListings": 389,
+    "pricePercentile": 0.348,
+    "signature": "+base_damage_/_melee_damage+critical_damage+toxin_damage|-damage_vs_corpus",
+    "positives": [
+      "base_damage_/_melee_damage",
+      "critical_damage",
+      "toxin_damage"
+    ],
+    "negatives": [
+      "damage_vs_corpus"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 300p vs median 600p / p75 1175p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-04-18T10:04:02.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a437d0999b97902b10927b4",
+    "weaponSlug": "dual_decurion",
+    "weaponName": "Dual Decurion",
+    "imageName": "DualDecurion.png",
+    "rivenName": "manticron",
+    "buyPrice": 300,
+    "targetSellPrice": 1175,
+    "conservativeSellPrice": 600,
+    "expectedProfit": 300,
+    "roi": 1,
+    "buyToSellRatio": 3.917,
+    "confidence": 0.915,
+    "score": 75.4,
+    "seller": {
+      "id": "69ac2d105734ba0a7bb89707",
+      "ingameName": "ajkloer",
+      "slug": "ajkloer",
+      "reputation": 18,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T03:14:37.269+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 389,
+    "pricePercentile": 0.348,
+    "signature": "+critical_chance+damage_vs_corpus|-impact_damage",
     "positives": [
       "critical_chance",
-      "range"
+      "damage_vs_corpus"
+    ],
+    "negatives": [
+      "impact_damage"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 300p vs median 600p / p75 1175p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-06-30T08:23:37.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a3ad8da1dbb3d0070f0a011",
+    "weaponSlug": "dual_decurion",
+    "weaponName": "Dual Decurion",
+    "imageName": "DualDecurion.png",
+    "rivenName": "manti-insido",
+    "buyPrice": 300,
+    "targetSellPrice": 1175,
+    "conservativeSellPrice": 600,
+    "expectedProfit": 300,
+    "roi": 1,
+    "buyToSellRatio": 3.917,
+    "confidence": 0.915,
+    "score": 75.4,
+    "seller": {
+      "id": "67c506e34257670085e6a57e",
+      "ingameName": "False_Dyeda",
+      "slug": "false_dyeda",
+      "reputation": 13,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T06:51:40.741+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 389,
+    "pricePercentile": 0.348,
+    "signature": "+cold_damage+damage_vs_corpus+puncture_damage|-",
+    "positives": [
+      "cold_damage",
+      "damage_vs_corpus",
+      "puncture_damage"
+    ],
+    "negatives": [],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 300p vs median 600p / p75 1175p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-06-23T19:04:58.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6968bc05a8a273000a37d758",
+    "weaponSlug": "corvas",
+    "weaponName": "Corvas",
+    "imageName": "Corvas.png",
+    "rivenName": "vexicron",
+    "buyPrice": 200,
+    "targetSellPrice": 1000,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 300,
+    "roi": 1.5,
+    "buyToSellRatio": 5,
+    "confidence": 0.856,
+    "score": 73.4,
+    "seller": {
+      "id": "62b05ec34670ac08eb64ea22",
+      "ingameName": "Eternal-Redeemer",
+      "slug": "eternal-redeemer",
+      "reputation": 181,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:41:20.023+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 398,
+    "pricePercentile": 0.289,
+    "signature": "+critical_chance+electric_damage|-status_duration",
+    "positives": [
+      "critical_chance",
+      "electric_damage"
     ],
     "negatives": [
       "status_duration"
     ],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 100p vs median 400p / p75 600p",
+      "buy 200p vs median 500p / p75 1000p",
       "seller ingame",
-      "lowest visible direct listing",
       "strong liquidity and recency"
     ],
-    "updated": "2026-07-05T05:20:43.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
+    "updated": "2026-04-06T15:44:48.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=corvas&sort_by=price_asc"
   },
   {
-    "auctionId": "6a10864e4b304900cabb6206",
-    "weaponSlug": "velocitus",
-    "weaponName": "Velocitus",
-    "imageName": "Velocitus.png",
-    "rivenName": "igni-critaata",
-    "buyPrice": 200,
-    "targetSellPrice": 900,
-    "conservativeSellPrice": 500,
-    "expectedProfit": 300,
-    "roi": 1.5,
-    "buyToSellRatio": 4.5,
-    "confidence": 0.917,
-    "score": 80.7,
+    "auctionId": "6a48fd08de1e9a040415fda3",
+    "weaponSlug": "grattler",
+    "weaponName": "Grattler",
+    "imageName": "Grattler.png",
+    "rivenName": "argi-armaata",
+    "buyPrice": 69,
+    "targetSellPrice": 800,
+    "conservativeSellPrice": 350,
+    "expectedProfit": 281,
+    "roi": 4.072,
+    "buyToSellRatio": 11.594,
+    "confidence": 0.944,
+    "score": 73.2,
     "seller": {
-      "id": "6734a48f63a29701d5f35934",
-      "ingameName": "Endless......",
-      "slug": "endless-1597",
-      "reputation": 4,
+      "id": "627c2fecf26d8800c4fc4a6c",
+      "ingameName": "keyonuui",
+      "slug": "keyonuui",
+      "reputation": 3,
       "status": "ingame",
-      "platform": "pc",
+      "platform": "mobile",
       "crossplay": true,
-      "lastSeen": "2026-07-05T00:38:40.886+00:00"
+      "lastSeen": "2026-07-05T06:53:30.753+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0.304,
-    "signature": "+base_damage_/_melee_damage+critical_chance+heat_damage|-multishot",
+    "comparableListings": 247,
+    "pricePercentile": 0,
+    "signature": "+base_damage_/_melee_damage+damage_vs_grineer+magazine_capacity|-status_duration",
     "positives": [
       "base_damage_/_melee_damage",
-      "critical_chance",
-      "heat_damage"
-    ],
-    "negatives": [
-      "multishot"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 200p vs median 500p / p75 900p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-06-21T14:04:08.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
-  },
-  {
-    "auctionId": "69f6f6c51e9a6c05cee9ac23",
-    "weaponSlug": "dual_decurion",
-    "weaponName": "Dual Decurion",
-    "imageName": "DualDecurion.png",
-    "rivenName": "geli-ampitin",
-    "buyPrice": 300,
-    "targetSellPrice": 1200,
-    "conservativeSellPrice": 600,
-    "expectedProfit": 300,
-    "roi": 1,
-    "buyToSellRatio": 4,
-    "confidence": 0.855,
-    "score": 74.1,
-    "seller": {
-      "id": "69317c47754ac0002ba169ea",
-      "ingameName": "CJackie-9725",
-      "slug": "cjackie-9725",
-      "reputation": 11,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T02:34:23.861+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 396,
-    "pricePercentile": 0.346,
-    "signature": "+ammo_maximum+cold_damage+magazine_capacity|-",
-    "positives": [
-      "ammo_maximum",
-      "cold_damage",
+      "damage_vs_grineer",
       "magazine_capacity"
     ],
-    "negatives": [],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 300p vs median 600p / p75 1200p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-05-03T07:18:47.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a48dcb0de1e9a03da5f3984",
-    "weaponSlug": "obex",
-    "weaponName": "Obex",
-    "imageName": "Obex.png",
-    "rivenName": "fortitox",
-    "buyPrice": 110,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 400,
-    "expectedProfit": 290,
-    "roi": 2.636,
-    "buyToSellRatio": 5.455,
-    "confidence": 0.942,
-    "score": 88.6,
-    "seller": {
-      "id": "6554a53dd558710b5261e347",
-      "ingameName": "Fineing",
-      "slug": "fineing",
-      "reputation": 47,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T04:15:28.538+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0,
-    "signature": "+channeling_efficiency+toxin_damage|-",
-    "positives": [
-      "channeling_efficiency",
-      "toxin_damage"
-    ],
-    "negatives": [],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 110p vs median 400p / p75 600p",
-      "seller ingame",
-      "lowest visible direct listing",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-05T05:20:35.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a498741de1e9a04208239f1",
-    "weaponSlug": "obex",
-    "weaponName": "Obex",
-    "imageName": "Obex.png",
-    "rivenName": "visi-plecidex",
-    "buyPrice": 117,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 400,
-    "expectedProfit": 283,
-    "roi": 2.419,
-    "buyToSellRatio": 5.128,
-    "confidence": 0.942,
-    "score": 93.7,
-    "seller": {
-      "id": "5f8cb8c84eda1b04370f0a77",
-      "ingameName": "excalibrat",
-      "slug": "excalibrat",
-      "reputation": 61,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T01:22:04.507+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0,
-    "signature": "+base_damage_/_melee_damage+critical_chance_on_slide_attack+status_chance|-finisher_damage",
-    "positives": [
-      "base_damage_/_melee_damage",
-      "critical_chance_on_slide_attack",
-      "status_chance"
-    ],
     "negatives": [
-      "finisher_damage"
+      "status_duration"
     ],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 117p vs median 400p / p75 600p",
+      "buy 69p vs median 350p / p75 800p",
       "seller ingame",
       "lowest visible direct listing",
       "strong liquidity and recency"
     ],
-    "updated": "2026-07-05T04:35:53.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
+    "updated": "2026-07-05T06:40:37.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=grattler&sort_by=price_asc"
   },
   {
     "auctionId": "6a490ab91dbb3d0403239cf1",
@@ -1460,12 +1916,12 @@
       "status": "ingame",
       "platform": "ps4",
       "crossplay": true,
-      "lastSeen": "2026-07-05T04:16:41.262+00:00"
+      "lastSeen": "2026-07-05T07:25:50.989+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 250,
-    "pricePercentile": 0.018,
+    "comparableListings": 247,
+    "pricePercentile": 0.027,
     "signature": "+cold_damage+electric_damage|-",
     "positives": [
       "cold_damage",
@@ -1481,50 +1937,6 @@
     ],
     "updated": "2026-07-04T13:29:29.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=grattler&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a48ca83de1e9a03e8c0f92c",
-    "weaponSlug": "obex",
-    "weaponName": "Obex",
-    "imageName": "Obex.png",
-    "rivenName": "critado",
-    "buyPrice": 120,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 400,
-    "expectedProfit": 280,
-    "roi": 2.333,
-    "buyToSellRatio": 5,
-    "confidence": 0.942,
-    "score": 93.4,
-    "seller": {
-      "id": "6a3cd6f91dbb3d00d2f70d98",
-      "ingameName": "Kyasu0_0",
-      "slug": "kyasu0_0",
-      "reputation": 1,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T03:56:08.091+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0,
-    "signature": "+cold_damage+critical_chance|-",
-    "positives": [
-      "cold_damage",
-      "critical_chance"
-    ],
-    "negatives": [],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 120p vs median 400p / p75 600p",
-      "seller ingame",
-      "lowest visible direct listing",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-05T04:30:53.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
   },
   {
     "auctionId": "6a490a0ede1e9a03f66c007e",
@@ -1548,12 +1960,12 @@
       "status": "ingame",
       "platform": "ps4",
       "crossplay": true,
-      "lastSeen": "2026-07-05T04:16:41.262+00:00"
+      "lastSeen": "2026-07-05T07:25:50.989+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 250,
-    "pricePercentile": 0.018,
+    "comparableListings": 247,
+    "pricePercentile": 0.027,
     "signature": "+cold_damage+damage_vs_grineer+toxin_damage|-base_damage_/_melee_damage",
     "positives": [
       "cold_damage",
@@ -1574,171 +1986,217 @@
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=grattler&sort_by=price_asc"
   },
   {
-    "auctionId": "6a48cabcde1e9a03e8c0f92d",
-    "weaponSlug": "obex",
-    "weaponName": "Obex",
-    "imageName": "Obex.png",
-    "rivenName": "visido",
-    "buyPrice": 120,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 400,
-    "expectedProfit": 280,
-    "roi": 2.333,
-    "buyToSellRatio": 5,
-    "confidence": 0.942,
-    "score": 79.6,
-    "seller": {
-      "id": "6a3cd6f91dbb3d00d2f70d98",
-      "ingameName": "Kyasu0_0",
-      "slug": "kyasu0_0",
-      "reputation": 1,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T03:56:08.091+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0,
-    "signature": "+base_damage_/_melee_damage+cold_damage|-range",
-    "positives": [
-      "base_damage_/_melee_damage",
-      "cold_damage"
-    ],
-    "negatives": [
-      "range"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 120p vs median 400p / p75 600p",
-      "seller ingame",
-      "lowest visible direct listing",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-05T04:31:00.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a49d83699b979045553fb18",
-    "weaponSlug": "obex",
-    "weaponName": "Obex",
-    "imageName": "Obex.png",
-    "rivenName": "fortido",
-    "buyPrice": 125,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 400,
-    "expectedProfit": 275,
-    "roi": 2.2,
-    "buyToSellRatio": 4.8,
-    "confidence": 0.942,
-    "score": 87.3,
-    "seller": {
-      "id": "6a257b77fcf2f900d427212d",
-      "ingameName": "NiKopoto",
-      "slug": "nikopoto",
-      "reputation": 1,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T04:57:30.532+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0,
-    "signature": "+channeling_efficiency+cold_damage|-impact_damage",
-    "positives": [
-      "channeling_efficiency",
-      "cold_damage"
-    ],
-    "negatives": [
-      "impact_damage"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 125p vs median 400p / p75 600p",
-      "seller ingame",
-      "lowest visible direct listing",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-05T04:06:14.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
-  },
-  {
-    "auctionId": "694b839bbbe8290025864f35",
+    "auctionId": "6a3f231d99b979016c9322bd",
     "weaponSlug": "grattler",
     "weaponName": "Grattler",
     "imageName": "Grattler.png",
-    "rivenName": "mantipha",
-    "buyPrice": 80,
+    "rivenName": "toxidex",
+    "buyPrice": 75,
     "targetSellPrice": 800,
     "conservativeSellPrice": 350,
-    "expectedProfit": 270,
-    "roi": 3.375,
-    "buyToSellRatio": 10,
+    "expectedProfit": 275,
+    "roi": 3.667,
+    "buyToSellRatio": 10.667,
     "confidence": 0.917,
-    "score": 86.3,
+    "score": 92.4,
     "seller": {
-      "id": "5a16f2d310bc4003dc61b031",
-      "ingameName": "Haudegen666",
-      "slug": "haudegen666",
-      "reputation": 46,
+      "id": "6984c81e7d3045009df2e25c",
+      "ingameName": "AHtto",
+      "slug": "ahtto",
+      "reputation": 15,
       "status": "ingame",
-      "platform": "xbox",
+      "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T05:20:54.616+00:00"
+      "lastSeen": "2026-07-05T06:27:01.649+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 250,
-    "pricePercentile": 0.102,
-    "signature": "+damage_vs_corpus+heat_damage|-",
+    "comparableListings": 247,
+    "pricePercentile": 0.054,
+    "signature": "+status_chance+toxin_damage|-puncture_damage",
     "positives": [
-      "damage_vs_corpus",
-      "heat_damage"
+      "status_chance",
+      "toxin_damage"
+    ],
+    "negatives": [
+      "puncture_damage"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 75p vs median 350p / p75 800p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-06-27T01:10:53.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=grattler&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a3284b6663c5601a45ab3d9",
+    "weaponSlug": "grattler",
+    "weaponName": "Grattler",
+    "imageName": "Grattler.png",
+    "rivenName": "sati-visicak",
+    "buyPrice": 75,
+    "targetSellPrice": 800,
+    "conservativeSellPrice": 350,
+    "expectedProfit": 275,
+    "roi": 3.667,
+    "buyToSellRatio": 10.667,
+    "confidence": 0.917,
+    "score": 92.4,
+    "seller": {
+      "id": "6984c81e7d3045009df2e25c",
+      "ingameName": "AHtto",
+      "slug": "ahtto",
+      "reputation": 15,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T06:27:01.649+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 247,
+    "pricePercentile": 0.054,
+    "signature": "+base_damage_/_melee_damage+multishot+puncture_damage|-damage_vs_corpus",
+    "positives": [
+      "base_damage_/_melee_damage",
+      "multishot",
+      "puncture_damage"
+    ],
+    "negatives": [
+      "damage_vs_corpus"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 75p vs median 350p / p75 800p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-06-27T01:08:48.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=grattler&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a49d2dcde1e9a043c2a5645",
+    "weaponSlug": "obex",
+    "weaponName": "Obex",
+    "imageName": "Obex.png",
+    "rivenName": "argiata",
+    "buyPrice": 125,
+    "targetSellPrice": 700,
+    "conservativeSellPrice": 400,
+    "expectedProfit": 275,
+    "roi": 2.2,
+    "buyToSellRatio": 5.6,
+    "confidence": 0.942,
+    "score": 87.3,
+    "seller": {
+      "id": "698467a35734ba068b925dd5",
+      "ingameName": "Cook1e_D",
+      "slug": "cook1e_d",
+      "reputation": 2,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:22:28.586+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 500,
+    "pricePercentile": 0,
+    "signature": "+base_damage_/_melee_damage+damage_vs_grineer|-",
+    "positives": [
+      "base_damage_/_melee_damage",
+      "damage_vs_grineer"
     ],
     "negatives": [],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 80p vs median 350p / p75 800p",
+      "buy 125p vs median 400p / p75 700p",
       "seller ingame",
+      "lowest visible direct listing",
       "strong liquidity and recency"
     ],
-    "updated": "2026-06-30T08:07:58.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=grattler&sort_by=price_asc"
+    "updated": "2026-07-05T03:43:24.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
   },
   {
-    "auctionId": "6a428e1ade1e9a0252ab9a46",
+    "auctionId": "6a3284ebc7bf3f01a4e51089",
     "weaponSlug": "grattler",
     "weaponName": "Grattler",
     "imageName": "Grattler.png",
-    "rivenName": "lexilis",
+    "rivenName": "insicon",
+    "buyPrice": 75,
+    "targetSellPrice": 800,
+    "conservativeSellPrice": 350,
+    "expectedProfit": 275,
+    "roi": 3.667,
+    "buyToSellRatio": 10.667,
+    "confidence": 0.917,
+    "score": 80.3,
+    "seller": {
+      "id": "6984c81e7d3045009df2e25c",
+      "ingameName": "AHtto",
+      "slug": "ahtto",
+      "reputation": 15,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T06:27:01.649+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 247,
+    "pricePercentile": 0.054,
+    "signature": "+damage_vs_grineer+puncture_damage|-reload_speed",
+    "positives": [
+      "damage_vs_grineer",
+      "puncture_damage"
+    ],
+    "negatives": [
+      "reload_speed"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 75p vs median 350p / p75 800p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-06-27T01:08:42.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=grattler&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a491e4699b9790416d2494d",
+    "weaponSlug": "grattler",
+    "weaponName": "Grattler",
+    "imageName": "Grattler.png",
+    "rivenName": "hera-cronitis",
     "buyPrice": 80,
     "targetSellPrice": 800,
     "conservativeSellPrice": 350,
     "expectedProfit": 270,
     "roi": 3.375,
     "buyToSellRatio": 10,
-    "confidence": 0.917,
-    "score": 79.9,
+    "confidence": 0.944,
+    "score": 92.6,
     "seller": {
-      "id": "69bfbda6dd252100a71ec7a9",
-      "ingameName": "xinsuiman",
-      "slug": "xinsuiman",
-      "reputation": 28,
+      "id": "62818b59f26d8801880fbebc",
+      "ingameName": "Felix.k",
+      "slug": "felix-k-0710",
+      "reputation": 7,
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T04:40:33.149+00:00"
+      "lastSeen": "2026-07-05T07:55:32.529+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 250,
-    "pricePercentile": 0.102,
-    "signature": "+punch_through+zoom|-",
+    "comparableListings": 247,
+    "pricePercentile": 0.112,
+    "signature": "+critical_damage+fire_rate_/_attack_speed+zoom|-",
     "positives": [
-      "punch_through",
+      "critical_damage",
+      "fire_rate_/_attack_speed",
       "zoom"
     ],
     "negatives": [],
@@ -1748,99 +2206,186 @@
       "seller ingame",
       "strong liquidity and recency"
     ],
-    "updated": "2026-06-29T15:24:10.000+00:00",
+    "updated": "2026-07-04T14:52:54.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=grattler&sort_by=price_asc"
   },
   {
-    "auctionId": "6a49299b99b9790416d249a0",
+    "auctionId": "6a333d3c53147701c0c89cf9",
     "weaponSlug": "thalys",
     "weaponName": "Thalys",
     "imageName": "ZarimanHeavyScythe.png",
-    "rivenName": "visi-exinus",
-    "buyPrice": 18,
+    "rivenName": "deci-igninem",
+    "buyPrice": 30,
     "targetSellPrice": 600,
-    "conservativeSellPrice": 279,
-    "expectedProfit": 261,
-    "roi": 14.5,
-    "buyToSellRatio": 33.333,
-    "confidence": 0.949,
-    "score": 86.2,
+    "conservativeSellPrice": 300,
+    "expectedProfit": 270,
+    "roi": 9,
+    "buyToSellRatio": 20,
+    "confidence": 0.922,
+    "score": 84.8,
     "seller": {
-      "id": "6a44f9cd99b97903131b41fd",
-      "ingameName": "faihong88",
-      "slug": "faihong88",
-      "reputation": 0,
+      "id": "6836fd0f3ab365005b8eeb57",
+      "ingameName": "Chudo_1112",
+      "slug": "chudo_1112",
+      "reputation": 13,
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T05:24:42.276+00:00"
+      "lastSeen": "2026-07-05T08:38:46.501+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 456,
+    "comparableListings": 450,
     "pricePercentile": 0,
-    "signature": "+base_damage_/_melee_damage+chance_to_gain_extra_combo_count+finisher_damage|-channeling_efficiency",
+    "signature": "+combo_duration+heat_damage+status_duration|-critical_damage",
     "positives": [
-      "base_damage_/_melee_damage",
-      "chance_to_gain_extra_combo_count",
-      "finisher_damage"
+      "combo_duration",
+      "heat_damage",
+      "status_duration"
     ],
     "negatives": [
-      "channeling_efficiency"
+      "critical_damage"
     ],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 18p vs median 279p / p75 600p",
+      "buy 30p vs median 300p / p75 600p",
       "seller ingame",
       "lowest visible direct listing",
       "strong liquidity and recency"
     ],
-    "updated": "2026-07-05T02:37:55.000+00:00",
+    "updated": "2026-06-18T00:35:08.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=thalys&sort_by=price_asc"
   },
   {
-    "auctionId": "6a49c66699b9790447b70d5d",
-    "weaponSlug": "obex",
-    "weaponName": "Obex",
-    "imageName": "Obex.png",
-    "rivenName": "tempiata",
-    "buyPrice": 140,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 400,
-    "expectedProfit": 260,
-    "roi": 1.857,
-    "buyToSellRatio": 4.286,
-    "confidence": 0.942,
-    "score": 89.5,
+    "auctionId": "68e8dd0b1c2cfa005a326ef1",
+    "weaponSlug": "grattler",
+    "weaponName": "Grattler",
+    "imageName": "Grattler.png",
+    "rivenName": "mantitin",
+    "buyPrice": 80,
+    "targetSellPrice": 800,
+    "conservativeSellPrice": 350,
+    "expectedProfit": 270,
+    "roi": 3.375,
+    "buyToSellRatio": 10,
+    "confidence": 0.857,
+    "score": 78.7,
     "seller": {
-      "id": "69bf7aa5dd252100a2e9e01b",
-      "ingameName": "ms7.1",
-      "slug": "ms7-1",
-      "reputation": 3,
+      "id": "63234a5f955420033f09dfb3",
+      "ingameName": "Pyrke",
+      "slug": "pyrke",
+      "reputation": 24,
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T00:23:44.865+00:00"
+      "lastSeen": "2026-07-05T07:19:10.558+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0.009,
-    "signature": "+base_damage_/_melee_damage+combo_duration|-",
+    "comparableListings": 247,
+    "pricePercentile": 0.112,
+    "signature": "+damage_vs_corpus+magazine_capacity|-",
     "positives": [
-      "base_damage_/_melee_damage",
-      "combo_duration"
+      "damage_vs_corpus",
+      "magazine_capacity"
     ],
     "negatives": [],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 140p vs median 400p / p75 600p",
+      "buy 80p vs median 350p / p75 800p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2025-10-18T10:14:39.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=grattler&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a40fc1a1dbb3d01ea410f69",
+    "weaponSlug": "cestra",
+    "weaponName": "Cestra",
+    "imageName": "Cestra.png",
+    "rivenName": "critacan",
+    "buyPrice": 100,
+    "targetSellPrice": 463,
+    "conservativeSellPrice": 365,
+    "expectedProfit": 265,
+    "roi": 2.65,
+    "buyToSellRatio": 4.63,
+    "confidence": 0.87,
+    "score": 81.2,
+    "seller": {
+      "id": "69e0a4971e9a6c0222bb3695",
+      "ingameName": "MaximusZhuk",
+      "slug": "maximuszhuk",
+      "reputation": 11,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:04:56.410+00:00"
+    },
+    "status": "ingame",
+    "groupType": "exact-stats",
+    "comparableListings": 4,
+    "pricePercentile": 0.25,
+    "signature": "+critical_chance+multishot|-",
+    "positives": [
+      "critical_chance",
+      "multishot"
+    ],
+    "negatives": [],
+    "reasons": [
+      "same stat signature comparables",
+      "buy 100p vs median 365p / p75 463p",
       "seller ingame",
       "lowest visible direct listing",
       "strong liquidity and recency"
     ],
-    "updated": "2026-07-05T02:50:14.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
+    "updated": "2026-07-03T08:43:15.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=cestra&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a49eaf0de1e9a0427d835c3",
+    "weaponSlug": "thalys",
+    "weaponName": "Thalys",
+    "imageName": "ZarimanHeavyScythe.png",
+    "rivenName": "manti-argisus",
+    "buyPrice": 38,
+    "targetSellPrice": 600,
+    "conservativeSellPrice": 300,
+    "expectedProfit": 262,
+    "roi": 6.895,
+    "buyToSellRatio": 15.789,
+    "confidence": 0.949,
+    "score": 79.9,
+    "seller": {
+      "id": "693e23876fa0040009b45290",
+      "ingameName": "Divine_634",
+      "slug": "divine_634",
+      "reputation": 44,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:02:46.329+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 450,
+    "pricePercentile": 0.034,
+    "signature": "+damage_vs_corpus+damage_vs_grineer+slash_damage|-",
+    "positives": [
+      "damage_vs_corpus",
+      "damage_vs_grineer",
+      "slash_damage"
+    ],
+    "negatives": [],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 38p vs median 300p / p75 600p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-07-05T05:26:08.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=thalys&sort_by=price_asc"
   },
   {
     "auctionId": "6a476f44de1e9a0394eaab5e",
@@ -1849,11 +2394,11 @@
     "imageName": "Obex.png",
     "rivenName": "gelitox",
     "buyPrice": 140,
-    "targetSellPrice": 600,
+    "targetSellPrice": 700,
     "conservativeSellPrice": 400,
     "expectedProfit": 260,
     "roi": 1.857,
-    "buyToSellRatio": 4.286,
+    "buyToSellRatio": 5,
     "confidence": 0.942,
     "score": 89.5,
     "seller": {
@@ -1864,12 +2409,12 @@
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T04:01:52.780+00:00"
+      "lastSeen": "2026-07-05T06:03:53.826+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
     "comparableListings": 500,
-    "pricePercentile": 0.009,
+    "pricePercentile": 0,
     "signature": "+cold_damage+toxin_damage|-",
     "positives": [
       "cold_damage",
@@ -1878,146 +2423,190 @@
     "negatives": [],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 140p vs median 400p / p75 600p",
+      "buy 140p vs median 400p / p75 700p",
       "seller ingame",
       "lowest visible direct listing",
       "strong liquidity and recency"
     ],
-    "updated": "2026-07-04T14:51:48.000+00:00",
+    "updated": "2026-07-05T06:04:01.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
   },
   {
-    "auctionId": "6a489bab99b97903f3dd8b4e",
-    "weaponSlug": "obex",
-    "weaponName": "Obex",
-    "imageName": "Obex.png",
-    "rivenName": "argi-mantiata",
-    "buyPrice": 140,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 400,
+    "auctionId": "6a48aaa599b97903f3dd8b86",
+    "weaponSlug": "proboscis_cernos",
+    "weaponName": "Proboscis Cernos",
+    "imageName": "DerelictCernos.png",
+    "rivenName": "satitis",
+    "buyPrice": 40,
+    "targetSellPrice": 300,
+    "conservativeSellPrice": 300,
     "expectedProfit": 260,
-    "roi": 1.857,
-    "buyToSellRatio": 4.286,
-    "confidence": 0.942,
-    "score": 84.1,
+    "roi": 6.5,
+    "buyToSellRatio": 7.5,
+    "confidence": 0.912,
+    "score": 83.3,
     "seller": {
-      "id": "69bf7aa5dd252100a2e9e01b",
-      "ingameName": "ms7.1",
-      "slug": "ms7-1",
-      "reputation": 3,
+      "id": "681e6c74affd48028cc03b7d",
+      "ingameName": "Kennything",
+      "slug": "kennything",
+      "reputation": 17,
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T00:23:44.865+00:00"
+      "lastSeen": "2026-07-05T05:54:54.826+00:00"
     },
     "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0.009,
-    "signature": "+base_damage_/_melee_damage+damage_vs_corpus+damage_vs_grineer|-",
+    "groupType": "exact-stats",
+    "comparableListings": 6,
+    "pricePercentile": 0.333,
+    "signature": "+critical_damage+multishot|-",
     "positives": [
-      "base_damage_/_melee_damage",
-      "damage_vs_corpus",
-      "damage_vs_grineer"
+      "critical_damage",
+      "multishot"
     ],
     "negatives": [],
     "reasons": [
-      "weapon-market comparable fallback",
-      "buy 140p vs median 400p / p75 600p",
+      "same stat signature comparables",
+      "buy 40p vs median 300p / p75 300p",
       "seller ingame",
       "lowest visible direct listing",
       "strong liquidity and recency"
     ],
-    "updated": "2026-07-05T00:25:24.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
+    "updated": "2026-07-04T06:39:33.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=proboscis_cernos&sort_by=price_asc"
   },
   {
-    "auctionId": "6a4912421dbb3d0403239d23",
-    "weaponSlug": "obex",
-    "weaponName": "Obex",
-    "imageName": "Obex.png",
-    "rivenName": "critacta",
-    "buyPrice": 140,
+    "auctionId": "68e6059a8a7959000bd0236c",
+    "weaponSlug": "thalys",
+    "weaponName": "Thalys",
+    "imageName": "ZarimanHeavyScythe.png",
+    "rivenName": "para-fortisus",
+    "buyPrice": 40,
     "targetSellPrice": 600,
-    "conservativeSellPrice": 400,
+    "conservativeSellPrice": 300,
     "expectedProfit": 260,
-    "roi": 1.857,
-    "buyToSellRatio": 4.286,
-    "confidence": 0.897,
-    "score": 83.1,
+    "roi": 6.5,
+    "buyToSellRatio": 15,
+    "confidence": 0.949,
+    "score": 79.8,
     "seller": {
-      "id": "6986d744d8b8b000eb899235",
-      "ingameName": "ZenithOne",
-      "slug": "zenithone",
-      "reputation": 0,
-      "status": "online",
+      "id": "687a611d44f594000a425c04",
+      "ingameName": "burninSsky",
+      "slug": "burninssky",
+      "reputation": 16,
+      "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T04:07:48.436+00:00"
+      "lastSeen": "2026-07-05T08:22:20.793+00:00"
     },
-    "status": "online",
+    "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0.009,
-    "signature": "+critical_chance+finisher_damage|-",
+    "comparableListings": 450,
+    "pricePercentile": 0.067,
+    "signature": "+channeling_damage+channeling_efficiency+slash_damage|-",
     "positives": [
-      "critical_chance",
-      "finisher_damage"
+      "channeling_damage",
+      "channeling_efficiency",
+      "slash_damage"
     ],
     "negatives": [],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 140p vs median 400p / p75 600p",
-      "seller online",
-      "lowest visible direct listing",
+      "buy 40p vs median 300p / p75 600p",
+      "seller ingame",
       "strong liquidity and recency"
     ],
-    "updated": "2026-07-04T14:44:58.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
+    "updated": "2026-07-02T13:10:31.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=thalys&sort_by=price_asc"
   },
   {
-    "auctionId": "6a4911ec1dbb3d041295838a",
+    "auctionId": "6a442a7b99b97902db02e328",
     "weaponSlug": "ballistica",
     "weaponName": "Ballistica",
     "imageName": "Ballistica.png",
-    "rivenName": "arma-satitak",
+    "rivenName": "satilis",
     "buyPrice": 240,
     "targetSellPrice": 600,
     "conservativeSellPrice": 500,
     "expectedProfit": 260,
     "roi": 1.083,
     "buyToSellRatio": 2.5,
-    "confidence": 0.898,
-    "score": 72.7,
+    "confidence": 0.943,
+    "score": 77.1,
     "seller": {
-      "id": "6986d744d8b8b000eb899235",
-      "ingameName": "ZenithOne",
-      "slug": "zenithone",
-      "reputation": 0,
-      "status": "online",
+      "id": "698f2998ba3768077be08f5f",
+      "ingameName": "R4ain",
+      "slug": "r4ain",
+      "reputation": 8,
+      "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T04:07:48.436+00:00"
+      "lastSeen": "2026-07-05T08:22:14.533+00:00"
     },
-    "status": "online",
+    "status": "ingame",
     "groupType": "weapon-market",
     "comparableListings": 499,
     "pricePercentile": 0,
-    "signature": "+magazine_capacity+multishot+reload_speed|-",
+    "signature": "+multishot+zoom|-damage_vs_infested",
     "positives": [
-      "magazine_capacity",
       "multishot",
-      "reload_speed"
+      "zoom"
+    ],
+    "negatives": [
+      "damage_vs_infested"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 240p vs median 500p / p75 600p",
+      "seller ingame",
+      "lowest visible direct listing",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-07-04T11:10:29.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=ballistica&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a441efc1dbb3d02c96e4e11",
+    "weaponSlug": "ballistica",
+    "weaponName": "Ballistica",
+    "imageName": "Ballistica.png",
+    "rivenName": "vexibin",
+    "buyPrice": 240,
+    "targetSellPrice": 600,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 260,
+    "roi": 1.083,
+    "buyToSellRatio": 2.5,
+    "confidence": 0.943,
+    "score": 73.7,
+    "seller": {
+      "id": "698f2998ba3768077be08f5f",
+      "ingameName": "R4ain",
+      "slug": "r4ain",
+      "reputation": 8,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:22:14.533+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 499,
+    "pricePercentile": 0,
+    "signature": "+ammo_maximum+electric_damage|-",
+    "positives": [
+      "ammo_maximum",
+      "electric_damage"
     ],
     "negatives": [],
     "reasons": [
       "weapon-market comparable fallback",
       "buy 240p vs median 500p / p75 600p",
-      "seller online",
+      "seller ingame",
       "lowest visible direct listing",
       "strong liquidity and recency"
     ],
-    "updated": "2026-07-04T14:00:12.000+00:00",
+    "updated": "2026-07-04T11:10:33.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=ballistica&sort_by=price_asc"
   },
   {
@@ -2027,11 +2616,11 @@
     "imageName": "Obex.png",
     "rivenName": "exi-pleciada",
     "buyPrice": 140,
-    "targetSellPrice": 600,
+    "targetSellPrice": 700,
     "conservativeSellPrice": 400,
     "expectedProfit": 260,
     "roi": 1.857,
-    "buyToSellRatio": 4.286,
+    "buyToSellRatio": 5,
     "confidence": 0.942,
     "score": 63.8,
     "seller": {
@@ -2047,7 +2636,7 @@
     "status": "ingame",
     "groupType": "weapon-market",
     "comparableListings": 500,
-    "pricePercentile": 0.009,
+    "pricePercentile": 0,
     "signature": "+critical_chance_on_slide_attack+damage_vs_infested+finisher_damage|-fire_rate_/_attack_speed",
     "positives": [
       "critical_chance_on_slide_attack",
@@ -2059,103 +2648,13 @@
     ],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 140p vs median 400p / p75 600p",
+      "buy 140p vs median 400p / p75 700p",
       "seller ingame",
       "lowest visible direct listing",
       "strong liquidity and recency"
     ],
     "updated": "2026-07-03T14:42:57.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a49ce64de1e9a043c2a5629",
-    "weaponSlug": "ballistica",
-    "weaponName": "Ballistica",
-    "imageName": "Ballistica.png",
-    "rivenName": "critatin",
-    "buyPrice": 244,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 500,
-    "expectedProfit": 256,
-    "roi": 1.049,
-    "buyToSellRatio": 2.459,
-    "confidence": 0.943,
-    "score": 76.2,
-    "seller": {
-      "id": "661cd9ea0826060214425c6e",
-      "ingameName": "oxytrys",
-      "slug": "oxytrys",
-      "reputation": 4,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T05:12:50.087+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 499,
-    "pricePercentile": 0,
-    "signature": "+critical_chance+magazine_capacity|-damage_vs_infested",
-    "positives": [
-      "critical_chance",
-      "magazine_capacity"
-    ],
-    "negatives": [
-      "damage_vs_infested"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 244p vs median 500p / p75 600p",
-      "seller ingame",
-      "lowest visible direct listing",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-05T05:12:11.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=ballistica&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a49ce6f1dbb3d043516015b",
-    "weaponSlug": "ballistica",
-    "weaponName": "Ballistica",
-    "imageName": "Ballistica.png",
-    "rivenName": "heraada",
-    "buyPrice": 244,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 500,
-    "expectedProfit": 256,
-    "roi": 1.049,
-    "buyToSellRatio": 2.459,
-    "confidence": 0.943,
-    "score": 67.4,
-    "seller": {
-      "id": "661cd9ea0826060214425c6e",
-      "ingameName": "oxytrys",
-      "slug": "oxytrys",
-      "reputation": 4,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T05:12:50.087+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 499,
-    "pricePercentile": 0,
-    "signature": "+damage_vs_infested+zoom|-",
-    "positives": [
-      "damage_vs_infested",
-      "zoom"
-    ],
-    "negatives": [],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 244p vs median 500p / p75 600p",
-      "seller ingame",
-      "lowest visible direct listing",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-05T05:12:16.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=ballistica&sort_by=price_asc"
   },
   {
     "auctionId": "6a377017663c5602bc59e35e",
@@ -2183,8 +2682,8 @@
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 250,
-    "pricePercentile": 0.128,
+    "comparableListings": 247,
+    "pricePercentile": 0.139,
     "signature": "+critical_chance+damage_vs_corpus+magazine_capacity|-zoom",
     "positives": [
       "critical_chance",
@@ -2202,51 +2701,6 @@
     ],
     "updated": "2026-06-21T05:01:11.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=grattler&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a2fc0d153147701118b3cba",
-    "weaponSlug": "rabvee",
-    "weaponName": "Rabvee",
-    "imageName": "TipTen.png",
-    "rivenName": "loctius",
-    "buyPrice": 45,
-    "targetSellPrice": 789,
-    "conservativeSellPrice": 300,
-    "expectedProfit": 255,
-    "roi": 5.667,
-    "buyToSellRatio": 17.533,
-    "confidence": 0.915,
-    "score": 85,
-    "seller": {
-      "id": "674a7285d8eba40009762251",
-      "ingameName": "mukenuse",
-      "slug": "mukenuse",
-      "reputation": 0,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T04:54:42.238+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 335,
-    "pricePercentile": 0.063,
-    "signature": "+channeling_efficiency+range|-impact_damage",
-    "positives": [
-      "channeling_efficiency",
-      "range"
-    ],
-    "negatives": [
-      "impact_damage"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 45p vs median 300p / p75 789p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-06-15T09:07:29.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=rabvee&sort_by=price_asc"
   },
   {
     "auctionId": "6a36dbf153147702ae21e800",
@@ -2274,8 +2728,8 @@
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 250,
-    "pricePercentile": 0.128,
+    "comparableListings": 247,
+    "pricePercentile": 0.139,
     "signature": "+critical_chance+magazine_capacity|-",
     "positives": [
       "critical_chance",
@@ -2298,11 +2752,11 @@
     "imageName": "Obex.png",
     "rivenName": "exinem",
     "buyPrice": 145,
-    "targetSellPrice": 600,
+    "targetSellPrice": 700,
     "conservativeSellPrice": 400,
     "expectedProfit": 255,
     "roi": 1.759,
-    "buyToSellRatio": 4.138,
+    "buyToSellRatio": 4.828,
     "confidence": 0.942,
     "score": 82.3,
     "seller": {
@@ -2313,12 +2767,12 @@
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T02:59:41.531+00:00"
+      "lastSeen": "2026-07-05T05:40:10.734+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
     "comparableListings": 500,
-    "pricePercentile": 0.011,
+    "pricePercentile": 0,
     "signature": "+combo_duration+finisher_damage|-",
     "positives": [
       "combo_duration",
@@ -2327,108 +2781,63 @@
     "negatives": [],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 145p vs median 400p / p75 600p",
+      "buy 145p vs median 400p / p75 700p",
       "seller ingame",
+      "lowest visible direct listing",
       "strong liquidity and recency"
     ],
     "updated": "2026-07-05T01:51:33.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
   },
   {
-    "auctionId": "6a49ba5099b9790432112199",
-    "weaponSlug": "hystrix",
-    "weaponName": "Hystrix",
-    "imageName": "Hystrix.png",
-    "rivenName": "critatis",
-    "buyPrice": 25,
-    "targetSellPrice": 300,
-    "conservativeSellPrice": 280,
+    "auctionId": "6a487ced1dbb3d03e83cfc07",
+    "weaponSlug": "thalys",
+    "weaponName": "Thalys",
+    "imageName": "ZarimanHeavyScythe.png",
+    "rivenName": "mantiada",
+    "buyPrice": 45,
+    "targetSellPrice": 600,
+    "conservativeSellPrice": 300,
     "expectedProfit": 255,
-    "roi": 10.2,
-    "buyToSellRatio": 12,
-    "confidence": 0.893,
-    "score": 81.7,
+    "roi": 5.667,
+    "buyToSellRatio": 13.333,
+    "confidence": 0.949,
+    "score": 79.4,
     "seller": {
-      "id": "6a002058c7bcef00610d0aa7",
-      "ingameName": "PrimsCafe",
-      "slug": "primscafe",
-      "reputation": 13,
+      "id": "69cca28e4a1f6502ff459661",
+      "ingameName": "quezi18",
+      "slug": "quezi18",
+      "reputation": 8,
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T04:54:13.702+00:00"
+      "lastSeen": "2026-07-05T08:37:32.301+00:00"
     },
     "status": "ingame",
-    "groupType": "exact-stats",
-    "comparableListings": 5,
-    "pricePercentile": 0.4,
-    "signature": "+critical_chance+critical_damage|-",
+    "groupType": "weapon-market",
+    "comparableListings": 450,
+    "pricePercentile": 0.071,
+    "signature": "+damage_vs_corpus+damage_vs_infested|-",
     "positives": [
-      "critical_chance",
-      "critical_damage"
+      "damage_vs_corpus",
+      "damage_vs_infested"
     ],
     "negatives": [],
     "reasons": [
-      "same stat signature comparables",
-      "buy 25p vs median 280p / p75 300p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-05T01:58:40.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=hystrix&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a48915599b97903e50b893f",
-    "weaponSlug": "ballistica",
-    "weaponName": "Ballistica",
-    "imageName": "Ballistica.png",
-    "rivenName": "satidex",
-    "buyPrice": 245,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 500,
-    "expectedProfit": 255,
-    "roi": 1.041,
-    "buyToSellRatio": 2.449,
-    "confidence": 0.943,
-    "score": 77.4,
-    "seller": {
-      "id": "66fe99e9218f7f000977f2bd",
-      "ingameName": "Karnijj",
-      "slug": "karnijj",
-      "reputation": 23,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T04:48:49.379+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 499,
-    "pricePercentile": 0,
-    "signature": "+multishot+status_chance|-reload_speed",
-    "positives": [
-      "multishot",
-      "status_chance"
-    ],
-    "negatives": [
-      "reload_speed"
-    ],
-    "reasons": [
       "weapon-market comparable fallback",
-      "buy 245p vs median 500p / p75 600p",
+      "buy 45p vs median 300p / p75 600p",
       "seller ingame",
-      "lowest visible direct listing",
       "strong liquidity and recency"
     ],
-    "updated": "2026-07-04T04:51:33.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=ballistica&sort_by=price_asc"
+    "updated": "2026-07-04T03:24:29.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=thalys&sort_by=price_asc"
   },
   {
-    "auctionId": "6a48914fde1e9a03d3adeea2",
+    "auctionId": "6a436a4799b979029cc3115a",
     "weaponSlug": "ballistica",
     "weaponName": "Ballistica",
     "imageName": "Ballistica.png",
-    "rivenName": "igni-satitak",
+    "rivenName": "concipha",
     "buyPrice": 245,
     "targetSellPrice": 600,
     "conservativeSellPrice": 500,
@@ -2436,26 +2845,25 @@
     "roi": 1.041,
     "buyToSellRatio": 2.449,
     "confidence": 0.943,
-    "score": 77.4,
+    "score": 72.6,
     "seller": {
-      "id": "66fe99e9218f7f000977f2bd",
-      "ingameName": "Karnijj",
-      "slug": "karnijj",
-      "reputation": 23,
+      "id": "690e9f54e5207500a3e2b87e",
+      "ingameName": "MoonRightTheSun",
+      "slug": "moonrightthesun",
+      "reputation": 4,
       "status": "ingame",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-05T04:48:49.379+00:00"
+      "lastSeen": "2026-07-05T06:58:30.116+00:00"
     },
     "status": "ingame",
     "groupType": "weapon-market",
     "comparableListings": 499,
     "pricePercentile": 0,
-    "signature": "+heat_damage+multishot+reload_speed|-",
+    "signature": "+heat_damage+projectile_speed|-",
     "positives": [
       "heat_damage",
-      "multishot",
-      "reload_speed"
+      "projectile_speed"
     ],
     "negatives": [],
     "reasons": [
@@ -2465,8 +2873,52 @@
       "lowest visible direct listing",
       "strong liquidity and recency"
     ],
-    "updated": "2026-07-04T04:51:27.000+00:00",
+    "updated": "2026-07-04T11:32:49.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=ballistica&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a2792b2f16047024123e627",
+    "weaponSlug": "amanata",
+    "weaponName": "Amanata",
+    "imageName": "NaginataWeapon.png",
+    "rivenName": "magnado",
+    "buyPrice": 35,
+    "targetSellPrice": 694,
+    "conservativeSellPrice": 288,
+    "expectedProfit": 253,
+    "roi": 7.229,
+    "buyToSellRatio": 19.829,
+    "confidence": 0.919,
+    "score": 84.9,
+    "seller": {
+      "id": "6808e63793b3380007e95205",
+      "ingameName": "Klaytheism",
+      "slug": "klaytheism",
+      "reputation": 7,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:41:23.068+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 425,
+    "pricePercentile": 0,
+    "signature": "+cold_damage+impact_damage|-",
+    "positives": [
+      "cold_damage",
+      "impact_damage"
+    ],
+    "negatives": [],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 35p vs median 288p / p75 694p",
+      "seller ingame",
+      "lowest visible direct listing",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-06-27T09:50:50.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=amanata&sort_by=price_asc"
   },
   {
     "auctionId": "6a49387bde1e9a040415ff23",
@@ -2475,11 +2927,11 @@
     "imageName": "Obex.png",
     "rivenName": "hexa-visium",
     "buyPrice": 149,
-    "targetSellPrice": 600,
+    "targetSellPrice": 700,
     "conservativeSellPrice": 400,
     "expectedProfit": 251,
     "roi": 1.685,
-    "buyToSellRatio": 4.027,
+    "buyToSellRatio": 4.698,
     "confidence": 0.942,
     "score": 86.2,
     "seller": {
@@ -2495,7 +2947,7 @@
     "status": "ingame",
     "groupType": "weapon-market",
     "comparableListings": 500,
-    "pricePercentile": 0.013,
+    "pricePercentile": 0.002,
     "signature": "+base_damage_/_melee_damage+channeling_damage+status_chance|-",
     "positives": [
       "base_damage_/_melee_damage",
@@ -2505,774 +2957,13 @@
     "negatives": [],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 149p vs median 400p / p75 600p",
+      "buy 149p vs median 400p / p75 700p",
       "seller ingame",
+      "lowest visible direct listing",
       "strong liquidity and recency"
     ],
     "updated": "2026-07-04T19:51:07.000+00:00",
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a2d7fd3c7bf3f009a56b11c",
-    "weaponSlug": "mausolon",
-    "weaponName": "Mausolon",
-    "imageName": "ThanotechLongGun.png",
-    "rivenName": "scitio",
-    "buyPrice": 49,
-    "targetSellPrice": 800,
-    "conservativeSellPrice": 300,
-    "expectedProfit": 251,
-    "roi": 5.122,
-    "buyToSellRatio": 16.327,
-    "confidence": 0.878,
-    "score": 83.8,
-    "seller": {
-      "id": "59d3d566d3ffb6259413d24b",
-      "ingameName": "AlphaLegionXX",
-      "slug": "alphalegionxx",
-      "reputation": 8,
-      "status": "online",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T02:13:30.451+00:00"
-    },
-    "status": "online",
-    "groupType": "weapon-market",
-    "comparableListings": 323,
-    "pricePercentile": 0.01,
-    "signature": "+electric_damage+slash_damage|-",
-    "positives": [
-      "electric_damage",
-      "slash_damage"
-    ],
-    "negatives": [],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 49p vs median 300p / p75 800p",
-      "seller online",
-      "lowest visible direct listing",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-06-26T14:42:52.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=mausolon&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a3e905099b979013b84d65a",
-    "weaponSlug": "mausolon",
-    "weaponName": "Mausolon",
-    "imageName": "ThanotechLongGun.png",
-    "rivenName": "feva-heracon",
-    "buyPrice": 49,
-    "targetSellPrice": 800,
-    "conservativeSellPrice": 300,
-    "expectedProfit": 251,
-    "roi": 5.122,
-    "buyToSellRatio": 16.327,
-    "confidence": 0.878,
-    "score": 77.6,
-    "seller": {
-      "id": "59d3d566d3ffb6259413d24b",
-      "ingameName": "AlphaLegionXX",
-      "slug": "alphalegionxx",
-      "reputation": 8,
-      "status": "online",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T02:13:30.451+00:00"
-    },
-    "status": "online",
-    "groupType": "weapon-market",
-    "comparableListings": 323,
-    "pricePercentile": 0.01,
-    "signature": "+damage_vs_grineer+reload_speed+zoom|-puncture_damage",
-    "positives": [
-      "damage_vs_grineer",
-      "reload_speed",
-      "zoom"
-    ],
-    "negatives": [
-      "puncture_damage"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 49p vs median 300p / p75 800p",
-      "seller online",
-      "lowest visible direct listing",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-06-26T14:44:32.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=mausolon&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a49be631dbb3d044a01aa0f",
-    "weaponSlug": "mausolon",
-    "weaponName": "Mausolon",
-    "imageName": "ThanotechLongGun.png",
-    "rivenName": "vexi-argidex",
-    "buyPrice": 49,
-    "targetSellPrice": 800,
-    "conservativeSellPrice": 300,
-    "expectedProfit": 251,
-    "roi": 5.122,
-    "buyToSellRatio": 16.327,
-    "confidence": 0.905,
-    "score": 76.6,
-    "seller": {
-      "id": "59d3d566d3ffb6259413d24b",
-      "ingameName": "AlphaLegionXX",
-      "slug": "alphalegionxx",
-      "reputation": 8,
-      "status": "online",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T02:13:30.451+00:00"
-    },
-    "status": "online",
-    "groupType": "weapon-market",
-    "comparableListings": 323,
-    "pricePercentile": 0.01,
-    "signature": "+damage_vs_grineer+electric_damage+status_chance|-fire_rate_/_attack_speed",
-    "positives": [
-      "damage_vs_grineer",
-      "electric_damage",
-      "status_chance"
-    ],
-    "negatives": [
-      "fire_rate_/_attack_speed"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 49p vs median 300p / p75 800p",
-      "seller online",
-      "lowest visible direct listing",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-05T02:16:03.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=mausolon&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a436941de1e9a027cb298d8",
-    "weaponSlug": "rabvee",
-    "weaponName": "Rabvee",
-    "imageName": "TipTen.png",
-    "rivenName": "pleci-cronides",
-    "buyPrice": 50,
-    "targetSellPrice": 789,
-    "conservativeSellPrice": 300,
-    "expectedProfit": 250,
-    "roi": 5,
-    "buyToSellRatio": 15.78,
-    "confidence": 0.942,
-    "score": 90.7,
-    "seller": {
-      "id": "680b5bc86c6de2005be217bb",
-      "ingameName": "SvetaGorPrime",
-      "slug": "svetagorprime",
-      "reputation": 2,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T04:43:00.107+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 335,
-    "pricePercentile": 0.125,
-    "signature": "+critical_chance_on_slide_attack+fire_rate_/_attack_speed+status_duration|-",
-    "positives": [
-      "critical_chance_on_slide_attack",
-      "fire_rate_/_attack_speed",
-      "status_duration"
-    ],
-    "negatives": [],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 50p vs median 300p / p75 789p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-05T05:22:45.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=rabvee&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a488cf01dbb3d03e1ab83da",
-    "weaponSlug": "obex",
-    "weaponName": "Obex",
-    "imageName": "Obex.png",
-    "rivenName": "hexanem",
-    "buyPrice": 150,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 400,
-    "expectedProfit": 250,
-    "roi": 1.667,
-    "buyToSellRatio": 4,
-    "confidence": 0.942,
-    "score": 85.9,
-    "seller": {
-      "id": "682adaf79d883600550f51c0",
-      "ingameName": "gandi28",
-      "slug": "gandi28",
-      "reputation": 7,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T03:25:46.095+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0.047,
-    "signature": "+combo_duration+status_chance|-",
-    "positives": [
-      "combo_duration",
-      "status_chance"
-    ],
-    "negatives": [],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 150p vs median 400p / p75 600p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-04T04:32:48.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a483fab1dbb3d03c564f8f9",
-    "weaponSlug": "obex",
-    "weaponName": "Obex",
-    "imageName": "Obex.png",
-    "rivenName": "manticron",
-    "buyPrice": 150,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 400,
-    "expectedProfit": 250,
-    "roi": 1.667,
-    "buyToSellRatio": 4,
-    "confidence": 0.942,
-    "score": 80.7,
-    "seller": {
-      "id": "69e249c26889bf005c419852",
-      "ingameName": "Alestoria",
-      "slug": "alestoria",
-      "reputation": 0,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T04:45:32.167+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0.047,
-    "signature": "+critical_chance+damage_vs_corpus|-",
-    "positives": [
-      "critical_chance",
-      "damage_vs_corpus"
-    ],
-    "negatives": [],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 150p vs median 400p / p75 600p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-03T23:03:07.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a483ed91dbb3d03dae59dd2",
-    "weaponSlug": "obex",
-    "weaponName": "Obex",
-    "imageName": "Obex.png",
-    "rivenName": "critaus",
-    "buyPrice": 150,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 400,
-    "expectedProfit": 250,
-    "roi": 1.667,
-    "buyToSellRatio": 4,
-    "confidence": 0.942,
-    "score": 80.7,
-    "seller": {
-      "id": "69e249c26889bf005c419852",
-      "ingameName": "Alestoria",
-      "slug": "alestoria",
-      "reputation": 0,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T04:45:32.167+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0.047,
-    "signature": "+channeling_efficiency+critical_chance|-",
-    "positives": [
-      "channeling_efficiency",
-      "critical_chance"
-    ],
-    "negatives": [],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 150p vs median 400p / p75 600p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-03T22:59:37.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a49b99d1dbb3d04351600ec",
-    "weaponSlug": "ballistica",
-    "weaponName": "Ballistica",
-    "imageName": "Ballistica.png",
-    "rivenName": "gelidex",
-    "buyPrice": 250,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 500,
-    "expectedProfit": 250,
-    "roi": 1,
-    "buyToSellRatio": 2.4,
-    "confidence": 0.943,
-    "score": 76.3,
-    "seller": {
-      "id": "69c1e0ca4a1f65016af83dd7",
-      "ingameName": "DA_MONSTA",
-      "slug": "da_monsta",
-      "reputation": 23,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T00:51:59.034+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 499,
-    "pricePercentile": 0.018,
-    "signature": "+cold_damage+status_chance|-magazine_capacity",
-    "positives": [
-      "cold_damage",
-      "status_chance"
-    ],
-    "negatives": [
-      "magazine_capacity"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 250p vs median 500p / p75 600p",
-      "seller ingame",
-      "lowest visible direct listing",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-05T01:55:41.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=ballistica&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a38d8ba663c560317b1770e",
-    "weaponSlug": "rabvee",
-    "weaponName": "Rabvee",
-    "imageName": "TipTen.png",
-    "rivenName": "manti-argicak",
-    "buyPrice": 50,
-    "targetSellPrice": 789,
-    "conservativeSellPrice": 300,
-    "expectedProfit": 250,
-    "roi": 5,
-    "buyToSellRatio": 15.78,
-    "confidence": 0.915,
-    "score": 64.2,
-    "seller": {
-      "id": "69214dcf0ded1c000ae9c40f",
-      "ingameName": "aoiDESUWA",
-      "slug": "aoidesuwa",
-      "reputation": 2,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T04:40:57.593+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 335,
-    "pricePercentile": 0.125,
-    "signature": "+damage_vs_corpus+damage_vs_grineer+puncture_damage|-fire_rate_/_attack_speed",
-    "positives": [
-      "damage_vs_corpus",
-      "damage_vs_grineer",
-      "puncture_damage"
-    ],
-    "negatives": [
-      "fire_rate_/_attack_speed"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 50p vs median 300p / p75 789p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-06-22T06:39:54.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=rabvee&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a333d3c53147701c0c89cf9",
-    "weaponSlug": "thalys",
-    "weaponName": "Thalys",
-    "imageName": "ZarimanHeavyScythe.png",
-    "rivenName": "deci-igninem",
-    "buyPrice": 30,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 279,
-    "expectedProfit": 249,
-    "roi": 8.3,
-    "buyToSellRatio": 20,
-    "confidence": 0.922,
-    "score": 83.1,
-    "seller": {
-      "id": "6836fd0f3ab365005b8eeb57",
-      "ingameName": "Chudo_1112",
-      "slug": "chudo_1112",
-      "reputation": 13,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T05:57:46.451+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 456,
-    "pricePercentile": 0,
-    "signature": "+combo_duration+heat_damage+status_duration|-critical_damage",
-    "positives": [
-      "combo_duration",
-      "heat_damage",
-      "status_duration"
-    ],
-    "negatives": [
-      "critical_damage"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 30p vs median 279p / p75 600p",
-      "seller ingame",
-      "lowest visible direct listing",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-06-18T00:35:08.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=thalys&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a2ecf9cc7bf3f00d208dff8",
-    "weaponSlug": "rabvee",
-    "weaponName": "Rabvee",
-    "imageName": "TipTen.png",
-    "rivenName": "cronipha",
-    "buyPrice": 60,
-    "targetSellPrice": 789,
-    "conservativeSellPrice": 300,
-    "expectedProfit": 240,
-    "roi": 4,
-    "buyToSellRatio": 13.15,
-    "confidence": 0.915,
-    "score": 89.1,
-    "seller": {
-      "id": "69e8ee9a34493d038695d44b",
-      "ingameName": "Bipolar_Disorders",
-      "slug": "bipolar_disorders",
-      "reputation": 0,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-04T19:28:27.827+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 335,
-    "pricePercentile": 0.158,
-    "signature": "+fire_rate_/_attack_speed+heat_damage|-damage_vs_grineer",
-    "positives": [
-      "fire_rate_/_attack_speed",
-      "heat_damage"
-    ],
-    "negatives": [
-      "damage_vs_grineer"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 60p vs median 300p / p75 789p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-06-14T15:58:20.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=rabvee&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a44b0ea99b97902e9d502ab",
-    "weaponSlug": "thalys",
-    "weaponName": "Thalys",
-    "imageName": "ZarimanHeavyScythe.png",
-    "rivenName": "argi-acridex",
-    "buyPrice": 40,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 279,
-    "expectedProfit": 239,
-    "roi": 5.975,
-    "buyToSellRatio": 15,
-    "confidence": 0.922,
-    "score": 89.2,
-    "seller": {
-      "id": "69faa9af34493d06836fb12e",
-      "ingameName": "NikoPilot",
-      "slug": "nikopilot",
-      "reputation": 0,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T05:45:22.575+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 456,
-    "pricePercentile": 0.068,
-    "signature": "+critical_damage+damage_vs_grineer+status_chance|-",
-    "positives": [
-      "critical_damage",
-      "damage_vs_grineer",
-      "status_chance"
-    ],
-    "negatives": [],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 40p vs median 279p / p75 600p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-01T06:17:14.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=thalys&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a45c60099b97903447bdfdd",
-    "weaponSlug": "obex",
-    "weaponName": "Obex",
-    "imageName": "Obex.png",
-    "rivenName": "acrinem",
-    "buyPrice": 167,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 400,
-    "expectedProfit": 233,
-    "roi": 1.395,
-    "buyToSellRatio": 3.593,
-    "confidence": 0.942,
-    "score": 80.4,
-    "seller": {
-      "id": "6a0c0159310c5e0025895b1e",
-      "ingameName": "kastratka",
-      "slug": "kastratka",
-      "reputation": 6,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T04:37:11.027+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0.056,
-    "signature": "+combo_duration+critical_damage|-",
-    "positives": [
-      "combo_duration",
-      "critical_damage"
-    ],
-    "negatives": [],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 167p vs median 400p / p75 600p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-04T07:57:24.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a48467999b97903d7103f0e",
-    "weaponSlug": "obex",
-    "weaponName": "Obex",
-    "imageName": "Obex.png",
-    "rivenName": "visi-loctiton",
-    "buyPrice": 170,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 400,
-    "expectedProfit": 230,
-    "roi": 1.353,
-    "buyToSellRatio": 3.529,
-    "confidence": 0.897,
-    "score": 78.5,
-    "seller": {
-      "id": "671b42f1e2a9050498bba947",
-      "ingameName": "Nanana070303",
-      "slug": "nanana070303",
-      "reputation": 12,
-      "status": "online",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T04:53:51.897+00:00"
-    },
-    "status": "online",
-    "groupType": "weapon-market",
-    "comparableListings": 500,
-    "pricePercentile": 0.062,
-    "signature": "+base_damage_/_melee_damage+impact_damage+range|-",
-    "positives": [
-      "base_damage_/_melee_damage",
-      "impact_damage",
-      "range"
-    ],
-    "negatives": [],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 170p vs median 400p / p75 600p",
-      "seller online",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-05T04:21:14.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=obex&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a4987a1de1e9a04208239f6",
-    "weaponSlug": "ballistica",
-    "weaponName": "Ballistica",
-    "imageName": "Ballistica.png",
-    "rivenName": "vexi-hexapha",
-    "buyPrice": 270,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 500,
-    "expectedProfit": 230,
-    "roi": 0.852,
-    "buyToSellRatio": 2.222,
-    "confidence": 0.943,
-    "score": 72.3,
-    "seller": {
-      "id": "66f83306adc83a3422c2bc98",
-      "ingameName": "muZZle_ee",
-      "slug": "muzzle-ee",
-      "reputation": 50,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T04:04:06.699+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 499,
-    "pricePercentile": 0.055,
-    "signature": "+electric_damage+heat_damage+status_chance|-",
-    "positives": [
-      "electric_damage",
-      "heat_damage",
-      "status_chance"
-    ],
-    "negatives": [],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 270p vs median 500p / p75 600p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-04T22:22:25.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=ballistica&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a47f6941dbb3d03be4289c7",
-    "weaponSlug": "ballistica",
-    "weaponName": "Ballistica",
-    "imageName": "Ballistica.png",
-    "rivenName": "pura-cronitis",
-    "buyPrice": 270,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 500,
-    "expectedProfit": 230,
-    "roi": 0.852,
-    "buyToSellRatio": 2.222,
-    "confidence": 0.943,
-    "score": 72.3,
-    "seller": {
-      "id": "68de78a809b0e10020b6d2a7",
-      "ingameName": "Aries-WJD",
-      "slug": "aries-wjd",
-      "reputation": 17,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T05:04:37.748+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 499,
-    "pricePercentile": 0.055,
-    "signature": "+critical_damage+damage_vs_infested+fire_rate_/_attack_speed|-ammo_maximum",
-    "positives": [
-      "critical_damage",
-      "damage_vs_infested",
-      "fire_rate_/_attack_speed"
-    ],
-    "negatives": [
-      "ammo_maximum"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 270p vs median 500p / p75 600p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-04T14:52:49.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=ballistica&sort_by=price_asc"
-  },
-  {
-    "auctionId": "6a488a4699b97903ec576358",
-    "weaponSlug": "ballistica",
-    "weaponName": "Ballistica",
-    "imageName": "Ballistica.png",
-    "rivenName": "argi-insitak",
-    "buyPrice": 270,
-    "targetSellPrice": 600,
-    "conservativeSellPrice": 500,
-    "expectedProfit": 230,
-    "roi": 0.852,
-    "buyToSellRatio": 2.222,
-    "confidence": 0.943,
-    "score": 51.6,
-    "seller": {
-      "id": "682adaf79d883600550f51c0",
-      "ingameName": "gandi28",
-      "slug": "gandi28",
-      "reputation": 7,
-      "status": "ingame",
-      "platform": "pc",
-      "crossplay": true,
-      "lastSeen": "2026-07-05T03:25:46.095+00:00"
-    },
-    "status": "ingame",
-    "groupType": "weapon-market",
-    "comparableListings": 499,
-    "pricePercentile": 0.055,
-    "signature": "+damage_vs_grineer+puncture_damage+reload_speed|-status_duration",
-    "positives": [
-      "damage_vs_grineer",
-      "puncture_damage",
-      "reload_speed"
-    ],
-    "negatives": [
-      "status_duration"
-    ],
-    "reasons": [
-      "weapon-market comparable fallback",
-      "buy 270p vs median 500p / p75 600p",
-      "seller ingame",
-      "strong liquidity and recency"
-    ],
-    "updated": "2026-07-04T04:21:26.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=ballistica&sort_by=price_asc"
   },
   {
     "auctionId": "6a331c5e663c5601c02a7a31",
@@ -3282,12 +2973,12 @@
     "rivenName": "scium",
     "buyPrice": 50,
     "targetSellPrice": 600,
-    "conservativeSellPrice": 279,
-    "expectedProfit": 229,
-    "roi": 4.58,
+    "conservativeSellPrice": 300,
+    "expectedProfit": 250,
+    "roi": 5,
     "buyToSellRatio": 12,
     "confidence": 0.922,
-    "score": 76.8,
+    "score": 78.4,
     "seller": {
       "id": "5fe8108f6db57b02fb99a4d3",
       "ingameName": "DisasterStrikes504",
@@ -3300,8 +2991,8 @@
     },
     "status": "ingame",
     "groupType": "weapon-market",
-    "comparableListings": 456,
-    "pricePercentile": 0.121,
+    "comparableListings": 450,
+    "pricePercentile": 0.118,
     "signature": "+channeling_damage+slash_damage|-",
     "positives": [
       "channeling_damage",
@@ -3310,7 +3001,7 @@
     "negatives": [],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 50p vs median 279p / p75 600p",
+      "buy 50p vs median 300p / p75 600p",
       "seller ingame",
       "strong liquidity and recency"
     ],
@@ -3318,49 +3009,364 @@
     "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=thalys&sort_by=price_asc"
   },
   {
-    "auctionId": "6a3d6fb31dbb3d00f5490f77",
-    "weaponSlug": "rabvee",
-    "weaponName": "Rabvee",
-    "imageName": "TipTen.png",
-    "rivenName": "vexi-acrinem",
-    "buyPrice": 75,
-    "targetSellPrice": 789,
-    "conservativeSellPrice": 300,
-    "expectedProfit": 225,
-    "roi": 3,
-    "buyToSellRatio": 10.52,
-    "confidence": 0.87,
-    "score": 86.7,
+    "auctionId": "6a4a0443de1e9a0427d83633",
+    "weaponSlug": "dual_decurion",
+    "weaponName": "Dual Decurion",
+    "imageName": "DualDecurion.png",
+    "rivenName": "acrican",
+    "buyPrice": 350,
+    "targetSellPrice": 1175,
+    "conservativeSellPrice": 600,
+    "expectedProfit": 250,
+    "roi": 0.714,
+    "buyToSellRatio": 3.357,
+    "confidence": 0.942,
+    "score": 72.2,
     "seller": {
-      "id": "5b687e1857e50201051a0431",
-      "ingameName": "HeSSuGrim",
-      "slug": "hessugrim",
+      "id": "69da879caed20400e3acfa39",
+      "ingameName": "GFT12138",
+      "slug": "gft12138",
+      "reputation": 0,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T07:09:31.485+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 389,
+    "pricePercentile": 0.365,
+    "signature": "+critical_damage+multishot|-",
+    "positives": [
+      "critical_damage",
+      "multishot"
+    ],
+    "negatives": [],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 350p vs median 600p / p75 1175p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-07-05T07:14:11.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a4a13a399b9790440687e06",
+    "weaponSlug": "ballistica",
+    "weaponName": "Ballistica",
+    "imageName": "Ballistica.png",
+    "rivenName": "geli-lexitin",
+    "buyPrice": 250,
+    "targetSellPrice": 600,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 250,
+    "roi": 1,
+    "buyToSellRatio": 2.4,
+    "confidence": 0.943,
+    "score": 71.7,
+    "seller": {
+      "id": "62960e5b4670ac04cab02af6",
+      "ingameName": "SanQi_37",
+      "slug": "sanqi_37",
+      "reputation": 5,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T02:56:56.909+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 499,
+    "pricePercentile": 0.016,
+    "signature": "+cold_damage+magazine_capacity+punch_through|-",
+    "positives": [
+      "cold_damage",
+      "magazine_capacity",
+      "punch_through"
+    ],
+    "negatives": [],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 250p vs median 500p / p75 600p",
+      "seller ingame",
+      "lowest visible direct listing",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-07-05T08:19:47.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=ballistica&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a49b87d99b9790440687cbc",
+    "weaponSlug": "ballistica",
+    "weaponName": "Ballistica",
+    "imageName": "Ballistica.png",
+    "rivenName": "hexa-lexitin",
+    "buyPrice": 250,
+    "targetSellPrice": 600,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 250,
+    "roi": 1,
+    "buyToSellRatio": 2.4,
+    "confidence": 0.943,
+    "score": 71.7,
+    "seller": {
+      "id": "62499bcb9045ba007ce7768e",
+      "ingameName": "Ziki",
+      "slug": "ziki",
+      "reputation": 18,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:23:09.093+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 499,
+    "pricePercentile": 0.016,
+    "signature": "+magazine_capacity+punch_through+status_chance|-",
+    "positives": [
+      "magazine_capacity",
+      "punch_through",
+      "status_chance"
+    ],
+    "negatives": [],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 250p vs median 500p / p75 600p",
+      "seller ingame",
+      "lowest visible direct listing",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-07-05T01:50:53.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=ballistica&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a40e7e199b97901dc6eda0a",
+    "weaponSlug": "ballistica",
+    "weaponName": "Ballistica",
+    "imageName": "Ballistica.png",
+    "rivenName": "zeti-croninok",
+    "buyPrice": 250,
+    "targetSellPrice": 600,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 250,
+    "roi": 1,
+    "buyToSellRatio": 2.4,
+    "confidence": 0.916,
+    "score": 71.1,
+    "seller": {
+      "id": "696dd926a8a2730008dd4068",
+      "ingameName": "JHGHGD",
+      "slug": "jhghgd",
+      "reputation": 4,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T07:42:18.120+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 499,
+    "pricePercentile": 0.016,
+    "signature": "+fire_rate_/_attack_speed+punch_through+recoil|-",
+    "positives": [
+      "fire_rate_/_attack_speed",
+      "punch_through",
+      "recoil"
+    ],
+    "negatives": [],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 250p vs median 500p / p75 600p",
+      "seller ingame",
+      "lowest visible direct listing",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-06-30T13:19:12.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=ballistica&sort_by=price_asc"
+  },
+  {
+    "auctionId": "69b3a12c7d3045070944a6c3",
+    "weaponSlug": "dual_decurion",
+    "weaponName": "Dual Decurion",
+    "imageName": "DualDecurion.png",
+    "rivenName": "geli-visitis",
+    "buyPrice": 350,
+    "targetSellPrice": 1175,
+    "conservativeSellPrice": 600,
+    "expectedProfit": 250,
+    "roi": 0.714,
+    "buyToSellRatio": 3.357,
+    "confidence": 0.855,
+    "score": 70.2,
+    "seller": {
+      "id": "66d0295f218f7f000a673382",
+      "ingameName": "Repzyw",
+      "slug": "repzyw",
+      "reputation": 49,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:39:44.195+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 389,
+    "pricePercentile": 0.365,
+    "signature": "+base_damage_/_melee_damage+cold_damage+critical_damage|-magazine_capacity",
+    "positives": [
+      "base_damage_/_melee_damage",
+      "cold_damage",
+      "critical_damage"
+    ],
+    "negatives": [
+      "magazine_capacity"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 350p vs median 600p / p75 1175p",
+      "seller ingame",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-03-13T05:31:24.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=dual_decurion&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a43172999b9790295573304",
+    "weaponSlug": "thalys",
+    "weaponName": "Thalys",
+    "imageName": "ZarimanHeavyScythe.png",
+    "rivenName": "tempicta",
+    "buyPrice": 50,
+    "targetSellPrice": 600,
+    "conservativeSellPrice": 300,
+    "expectedProfit": 250,
+    "roi": 5,
+    "buyToSellRatio": 12,
+    "confidence": 0.877,
+    "score": 69.8,
+    "seller": {
+      "id": "69e8a24834493d03723f829c",
+      "ingameName": "SMduw",
+      "slug": "smduw",
       "reputation": 5,
       "status": "online",
       "platform": "pc",
       "crossplay": true,
-      "lastSeen": "2026-07-04T11:52:42.578+00:00"
+      "lastSeen": "2026-07-05T06:19:04.004+00:00"
     },
     "status": "online",
     "groupType": "weapon-market",
-    "comparableListings": 335,
-    "pricePercentile": 0.201,
-    "signature": "+combo_duration+critical_damage+electric_damage|-chance_to_gain_combo_count",
+    "comparableListings": 450,
+    "pricePercentile": 0.118,
+    "signature": "+combo_duration+finisher_damage|-fire_rate_/_attack_speed",
     "positives": [
       "combo_duration",
-      "critical_damage",
-      "electric_damage"
+      "finisher_damage"
     ],
     "negatives": [
-      "chance_to_gain_combo_count"
+      "fire_rate_/_attack_speed"
     ],
     "reasons": [
       "weapon-market comparable fallback",
-      "buy 75p vs median 300p / p75 789p",
+      "buy 50p vs median 300p / p75 600p",
       "seller online",
       "strong liquidity and recency"
     ],
-    "updated": "2026-06-25T18:13:07.000+00:00",
-    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=rabvee&sort_by=price_asc"
+    "updated": "2026-06-30T01:08:57.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=thalys&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a452e0299b979030c4b21a2",
+    "weaponSlug": "velocitus",
+    "weaponName": "Velocitus",
+    "imageName": "Velocitus.png",
+    "rivenName": "acri-visidra",
+    "buyPrice": 250,
+    "targetSellPrice": 1000,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 250,
+    "roi": 1,
+    "buyToSellRatio": 4,
+    "confidence": 0.872,
+    "score": 68.8,
+    "seller": {
+      "id": "64bb704cefb05e0242cb98c7",
+      "ingameName": "kaibailanie",
+      "slug": "kaibailanie",
+      "reputation": 5,
+      "status": "online",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T00:40:04.134+00:00"
+    },
+    "status": "online",
+    "groupType": "weapon-market",
+    "comparableListings": 500,
+    "pricePercentile": 0.324,
+    "signature": "+base_damage_/_melee_damage+critical_damage+fire_rate_/_attack_speed|-status_duration",
+    "positives": [
+      "base_damage_/_melee_damage",
+      "critical_damage",
+      "fire_rate_/_attack_speed"
+    ],
+    "negatives": [
+      "status_duration"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 250p vs median 500p / p75 1000p",
+      "seller online",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-07-01T15:10:58.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=velocitus&sort_by=price_asc"
+  },
+  {
+    "auctionId": "6a49b8881dbb3d043c25d76f",
+    "weaponSlug": "ballistica",
+    "weaponName": "Ballistica",
+    "imageName": "Ballistica.png",
+    "rivenName": "armacon",
+    "buyPrice": 250,
+    "targetSellPrice": 600,
+    "conservativeSellPrice": 500,
+    "expectedProfit": 250,
+    "roi": 1,
+    "buyToSellRatio": 2.4,
+    "confidence": 0.943,
+    "score": 66.4,
+    "seller": {
+      "id": "62499bcb9045ba007ce7768e",
+      "ingameName": "Ziki",
+      "slug": "ziki",
+      "reputation": 18,
+      "status": "ingame",
+      "platform": "pc",
+      "crossplay": true,
+      "lastSeen": "2026-07-05T08:23:09.093+00:00"
+    },
+    "status": "ingame",
+    "groupType": "weapon-market",
+    "comparableListings": 499,
+    "pricePercentile": 0.016,
+    "signature": "+damage_vs_grineer+magazine_capacity|-recoil",
+    "positives": [
+      "damage_vs_grineer",
+      "magazine_capacity"
+    ],
+    "negatives": [
+      "recoil"
+    ],
+    "reasons": [
+      "weapon-market comparable fallback",
+      "buy 250p vs median 500p / p75 600p",
+      "seller ingame",
+      "lowest visible direct listing",
+      "strong liquidity and recency"
+    ],
+    "updated": "2026-07-05T01:51:04.000+00:00",
+    "url": "https://warframe.market/auctions/search?type=riven&weapon_url_name=ballistica&sort_by=price_asc"
   }
 ]
