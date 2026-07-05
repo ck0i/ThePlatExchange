@@ -22,6 +22,15 @@ It reads public Warframe.market riven data, enriches weapons with warframestat.u
 
 ## Quick start
 
+### Double-click launchers
+
+- Windows: double-click `run.bat`.
+- Linux: double-click `run-linux.desktop`, or run `./run.sh` from a terminal. Some desktop environments require right-clicking the launcher and selecting **Allow Launching** first.
+
+The launchers check for Node.js/npm, run `npm install`, and start the dashboard with `npm run start`. The app opens the dashboard in your browser automatically by default.
+
+### Manual start
+
 ```bash
 npm install
 npm run dev
