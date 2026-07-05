@@ -567,39 +567,43 @@ function moveSpotlightSelection(delta) {
 }
 
 function openSpotlightOverlay() {
-  if (elements.spotlightOverlay) {
-    elements.spotlightOverlay.hidden = false;
-    document.body.classList.add("spotlight-active");
-    requestAnimationFrame(() => {
-      elements.spotlightInput?.focus();
-      if (!elements.spotlightInput || elements.spotlightInput.value.trim() === "") {
-        renderSpotlightHints();
-      }
-    });
-  }
+  if (!elements.spotlightOverlay) return;
+  elements.spotlightOverlay.removeAttribute("hidden");
+  document.body.classList.add("spotlight-active");
+  // Render hints immediately so the dropdown paints on the same frame as the overlay,
+  // before requestAnimationFrame or focus events have a chance to reorder things.
+  const value = (elements.spotlightInput?.value ?? "").trim();
+  if (value === "") renderSpotlightHints();
+  else if (value.length > 0) updateSpotlight(value);
+  // Focus after a microtask so the overlay is fully attached to the DOM
+  Promise.resolve().then(() => elements.spotlightInput?.focus());
 }
 
 function renderSpotlightHints() {
-  if (!elements.spotlightResults) return;
+  const results = elements.spotlightResults;
+  if (!results) return;
   spotlightItems = [
     { type: "hint", title: "Search any weapon", sub: "Type a name — e.g. bramma, war, kuva karak" },
-    { type: "hint", title: "Filter table by price", sub: "e.g. dark sword < 100p · > 500p · = 250p" },
+    { type: "hint", title: "Filter table by price", sub: "e.g. dark sword < 100p, > 500p, = 250p" },
     { type: "hint", title: "Click a weapon anywhere", sub: "Opens the full detail: live listings, price stats, common combos" },
   ];
   spotlightIndex = -1;
-  elements.spotlightResults.hidden = false;
-  elements.spotlightResults.innerHTML = `
-    <div class="spotlight-section-label">Try this</div>
-    ${spotlightItems.map((item, index) => `
-      <div class="spotlight-item spotlight-hint" data-index="${index}">
-        <span class="spotlight-glyph">${index === 0 ? "🔎" : index === 1 ? "≡" : "⌕"}</span>
-        <div class="spotlight-body">
-          <div class="spotlight-title">${escapeHtml(item.title)}</div>
-          <div class="spotlight-sub">${escapeHtml(item.sub)}</div>
-        </div>
-      </div>
-    `).join("")}
-  `;
+  results.removeAttribute("hidden");
+  const glyphs = ["🔎", "≡", "⌕"];
+  const html = ['<div class="spotlight-section-label">Try this</div>'];
+  for (let i = 0; i < spotlightItems.length; i += 1) {
+    const item = spotlightItems[i];
+    html.push(
+      `<div class="spotlight-item spotlight-hint" data-index="${i}">` +
+        `<span class="spotlight-glyph">${glyphs[i] ?? "•"}</span>` +
+        `<div class="spotlight-body">` +
+          `<div class="spotlight-title">${escapeHtml(item.title)}</div>` +
+          `<div class="spotlight-sub">${escapeHtml(item.sub)}</div>` +
+        `</div>` +
+      `</div>`,
+    );
+  }
+  results.innerHTML = html.join("");
 }
 
 function closeSpotlightOverlay() {

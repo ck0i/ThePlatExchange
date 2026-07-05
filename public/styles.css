@@ -110,6 +110,7 @@ main {
   z-index: 200;
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   padding-top: 22vh;
 }
 .spotlight-overlay[hidden] { display: none; }
