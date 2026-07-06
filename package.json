@@ -9,7 +9,7 @@
     "start": "tsx src/main.ts",
     "start:bun": "bun src/main.ts",
     "check": "tsc --noEmit",
-    "test": "tsx test/opportunities.test.ts && tsx test/cache.test.ts && tsx test/history.test.ts && tsx test/envelope.test.ts && tsx test/arcanes.test.ts"
+    "test": "tsx test/opportunities.test.ts && tsx test/cache.test.ts && tsx test/history.test.ts && tsx test/envelope.test.ts && tsx test/arcanes.test.ts && tsx test/cold-shard-merge.test.ts"
   },
   "engines": {
     "node": ">=22.0.0"

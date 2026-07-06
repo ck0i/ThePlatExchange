@@ -6,9 +6,11 @@
  *               cached reference, refetch weapons + attributes, diff
  *               dispositions, and write reference/current.json + events.
  *               ~1-2 API calls when nothing changed.
- *   --tier cold: full 417-weapon price scan. Publishes state.json,
+ *   --tier cold: full cold price scan. In default mode it publishes state.json,
  *                opportunities.json, samples/*.jsonl, signatures/*.jsonl,
  *                and rolls up 30-day valuations into valuations/latest.json.
+ *                In shard mode it writes one partial JSON file; merge mode
+ *                combines all shard partials and publishes the final files once.
  *   --tier reference: same as hot (kept for backward-compat with the old
  *                     reference-scan workflow).
  */
@@ -22,10 +24,15 @@ import type { ArcaneDashboardState, ArcaneItem, ArcaneOrder, ArcaneReferenceSnap
 import { enrichWeaponsWithImageNames, fetchWarframestatImageMap } from "../src/wfm/warframestat.js";
 
 type Tier = "hot" | "cold" | "reference";
+type ColdMode = "scan" | "shard" | "merge";
 
 interface Args {
   tier: Tier;
+  coldMode: ColdMode;
   dataDir: string;
+  partialDir: string;
+  shardId: number;
+  shardCount: number;
   ratePerSecond: number;
   burst: number;
   concurrency: number;
@@ -53,6 +60,59 @@ interface CiStateExtras {
   scannedWeaponSlugs: string[];
 }
 
+interface ScanFailure {
+  slug: string;
+  message: string;
+}
+
+interface RivenShardEntry {
+  slug: string;
+  scannedAt: string;
+  auctions: RivenAuction[];
+}
+
+interface ArcaneShardEntry {
+  slug: string;
+  scannedAt: string;
+  orders: ArcaneOrder[];
+}
+
+interface ColdShardPartial {
+  schemaVersion: 1;
+  tier: "cold";
+  generatedAt: string;
+  shard: { id: number; count: number };
+  reference: {
+    fingerprint: string;
+    rivens: ReferenceSnapshot;
+    arcanes: ArcaneReferenceSnapshot;
+  };
+  rivens: {
+    total: number;
+    assignedSlugs: string[];
+    scanned: RivenShardEntry[];
+    failures: ScanFailure[];
+  };
+  arcanes: {
+    total: number;
+    assignedSlugs: string[];
+    scanned: ArcaneShardEntry[];
+    failures: ScanFailure[];
+  };
+}
+
+interface RivenScanResult {
+  auctionsByWeapon: Map<string, RivenAuction[]>;
+  scannedAtByWeapon: Map<string, string>;
+  failures: ScanFailure[];
+}
+
+interface ArcaneScanResult {
+  ordersByArcane: Map<string, ArcaneOrder[]>;
+  scannedAtByArcane: Map<string, string>;
+  failures: ScanFailure[];
+}
+
 function parseArgs(argv: string[], env: NodeJS.ProcessEnv): Args {
   const arg = (name: string): string | undefined => {
     const idx = argv.indexOf(name);
@@ -60,12 +120,17 @@ function parseArgs(argv: string[], env: NodeJS.ProcessEnv): Args {
   };
   const tierRaw = (arg("--tier") ?? env.WFM_TIER ?? "hot").toLowerCase();
   const tier: Tier = tierRaw === "cold" ? "cold" : tierRaw === "reference" ? "reference" : "hot";
+  const coldMode = parseColdMode(arg("--cold-mode") ?? env.WFM_COLD_MODE ?? "scan");
   return {
     tier,
+    coldMode,
     dataDir: arg("--data-dir") ?? env.WFM_DATA_DIR ?? "data",
+    partialDir: arg("--partial-dir") ?? env.WFM_PARTIAL_DIR ?? "partials",
+    shardId: integerOption(arg("--shard-id") ?? env.WFM_SHARD_ID, 0, "shard id"),
+    shardCount: integerOption(arg("--shard-count") ?? env.WFM_SHARD_COUNT, 1, "shard count"),
     ratePerSecond: numberOr(env.WFM_RATE_PER_SEC, 2),
     burst: numberOr(env.WFM_BURST, 10),
-    concurrency: numberOr(env.WFM_CONCURRENCY, 3),
+    concurrency: positiveIntegerOption(env.WFM_CONCURRENCY, 3, "concurrency"),
     userAgent: env.WFM_USER_AGENT ?? "the-plat-exchange-ci/0.1 (+https://github.com/ck0i/ThePlatExchange)",
     valuationWindowDays: numberOr(env.WFM_VALUATION_WINDOW_DAYS, 30),
     vanishThresholdDays: numberOr(env.WFM_VELOCITY_VANISH_DAYS, 3),
@@ -77,6 +142,66 @@ function numberOr(value: string | undefined, fallback: number): number {
   if (value === undefined) return fallback;
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+function parseColdMode(value: string): ColdMode {
+  const normalized = value.toLowerCase();
+  if (normalized === "scan" || normalized === "shard" || normalized === "merge") return normalized;
+  throw new Error(`unknown cold mode: ${value}`);
+}
+
+function integerOption(value: string | undefined, fallback: number, label: string): number {
+  if (value === undefined) return fallback;
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed)) throw new Error(`${label} must be an integer`);
+  return parsed;
+}
+
+function positiveIntegerOption(value: string | undefined, fallback: number, label: string): number {
+  const parsed = integerOption(value, fallback, label);
+  if (parsed < 1) throw new Error(`${label} must be at least 1`);
+  return parsed;
+}
+
+function validateShardArgs(args: Args): void {
+  if (args.shardCount < 1) throw new Error("shard count must be at least 1");
+  if (args.shardId < 0 || args.shardId >= args.shardCount) {
+    throw new Error(`shard id ${args.shardId} must be between 0 and ${args.shardCount - 1}`);
+  }
+}
+
+
+function shardSlice<T>(items: readonly T[], shardId: number, shardCount: number): T[] {
+  const start = Math.floor((items.length * shardId) / shardCount);
+  const end = Math.floor((items.length * (shardId + 1)) / shardCount);
+  return items.slice(start, end);
+}
+
+
+function referenceFingerprint(reference: ReferenceSnapshot, arcanes: ArcaneReferenceSnapshot): string {
+  const rivenVersions = Object.fromEntries(Object.entries(reference.versions).sort(([left], [right]) => left.localeCompare(right)));
+  const arcaneVersions = Object.fromEntries(Object.entries(arcanes.versions).sort(([left], [right]) => left.localeCompare(right)));
+  return JSON.stringify({
+    rivenVersions,
+    rivenWeapons: reference.rivenWeapons.map((weapon) => ({
+      slug: weapon.slug,
+      name: weapon.name,
+      group: weapon.group,
+      disposition: weapon.disposition,
+      imageName: weapon.imageName ?? null,
+    })),
+    rivenAttributes: reference.rivenAttributes.map((attribute) => ({ slug: attribute.slug, group: attribute.group, name: attribute.name })),
+    arcaneVersions,
+    arcaneItems: arcanes.items.map((item) => ({
+      slug: item.slug,
+      name: item.name,
+      rarity: item.rarity,
+      maxRank: item.maxRank,
+      dissolutionVosfor: item.dissolutionVosfor ?? null,
+      cannotDissolve: item.cannotDissolve ?? false,
+    })),
+    arcanePacks: arcanes.packs.map((pack) => ({ id: pack.id, drops: pack.drops.map((drop) => drop.arcaneSlug) })),
+  });
 }
 
 async function ensureDir(dir: string): Promise<void> {
@@ -217,42 +342,37 @@ async function loadOrFetchArcaneReference(args: Args, client: WarframeMarketClie
   }
 }
 
+function buildArcaneDashboard(
+  reference: ArcaneReferenceSnapshot,
+  ordersByArcane: ReadonlyMap<string, readonly ArcaneOrder[]>,
+  scannedAtByArcane: ReadonlyMap<string, string>,
+  tier: Tier,
+  generatedAt: string,
+  totalTargets: number,
+): ArcaneDashboardState {
+  const arcanes = analyzeArcaneMarket(reference.items, ordersByArcane, scannedAtByArcane, reference.packs);
+  arcanes.generatedAt = generatedAt;
+  arcanes.status = {
+    initialized: true,
+    running: false,
+    reason: `ci-${tier}-arcanes`,
+    startedAt: generatedAt,
+    finishedAt: generatedAt,
+    scannedWeapons: ordersByArcane.size,
+    totalWeapons: totalTargets,
+    lastMessage: `CI ${tier} arcane scan wrote ${ordersByArcane.size}/${totalTargets} arcane order books`,
+  };
+  if (reference.versionsUpdatedAt) arcanes.reference.versionsUpdatedAt = reference.versionsUpdatedAt;
+  return arcanes;
+}
+
 async function runArcaneScan(args: Args, client: WarframeMarketClient, tier: Tier): Promise<ArcaneDashboardState> {
   const reference = await loadOrFetchArcaneReference(args, client);
   const targets = tier === "hot" ? reference.items.slice(0, Math.min(args.arcaneHotSize, reference.items.length)) : reference.items;
   console.log(`${tier === "hot" ? "Hot" : "Cold"} arcane scan: ${targets.length}/${reference.items.length} arcanes.`);
 
-  const ordersByArcane = new Map<string, ArcaneOrder[]>();
-  const scannedAtByArcane = new Map<string, string>();
-  let scannedOk = 0;
-  await runInParallel(targets, args.concurrency, async (item: ArcaneItem) => {
-    try {
-      const orders = await client.searchArcaneOrders(item);
-      ordersByArcane.set(item.slug, orders);
-      scannedAtByArcane.set(item.slug, new Date().toISOString());
-      scannedOk += 1;
-      if (scannedOk % 25 === 0) console.log(`  ${scannedOk}/${targets.length} arcanes scanned`);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      console.warn(`skip arcane ${item.slug}: ${message}`);
-    }
-  });
-
-  const nowIso = new Date().toISOString();
-  const arcanes = analyzeArcaneMarket(reference.items, ordersByArcane, scannedAtByArcane, reference.packs);
-  arcanes.generatedAt = nowIso;
-  arcanes.status = {
-    initialized: true,
-    running: false,
-    reason: `ci-${tier}-arcanes`,
-    startedAt: nowIso,
-    finishedAt: nowIso,
-    scannedWeapons: ordersByArcane.size,
-    totalWeapons: targets.length,
-    lastMessage: `CI ${tier} arcane scan wrote ${ordersByArcane.size}/${targets.length} arcane order books`,
-  };
-  if (reference.versionsUpdatedAt) arcanes.reference.versionsUpdatedAt = reference.versionsUpdatedAt;
-  return arcanes;
+  const scan = await scanArcaneTargets(client, targets, args.concurrency, false);
+  return buildArcaneDashboard(reference, scan.ordersByArcane, scan.scannedAtByArcane, tier, new Date().toISOString(), targets.length);
 }
 
 async function writeArcaneArtifacts(args: Args, tier: Tier, arcanes: ArcaneDashboardState): Promise<void> {
@@ -309,6 +429,196 @@ async function runInParallel<T>(items: T[], concurrency: number, worker: (item: 
     }
   });
   await Promise.all(workers);
+}
+
+async function scanRivenTargets(
+  client: WarframeMarketClient,
+  targets: readonly RivenWeapon[],
+  concurrency: number,
+  strict: boolean,
+): Promise<RivenScanResult> {
+  const auctionsByWeapon = new Map<string, RivenAuction[]>();
+  const scannedAtByWeapon = new Map<string, string>();
+  const failures: ScanFailure[] = [];
+  let scannedOk = 0;
+  await runInParallel([...targets], concurrency, async (weapon) => {
+    try {
+      const auctions = await client.searchRivenAuctions(weapon.slug);
+      auctionsByWeapon.set(weapon.slug, auctions);
+      scannedAtByWeapon.set(weapon.slug, new Date().toISOString());
+      scannedOk += 1;
+      if (scannedOk % 25 === 0) console.log(`  ${scannedOk}/${targets.length} weapons scanned`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      failures.push({ slug: weapon.slug, message });
+      console.warn(`failed ${weapon.slug}: ${message}`);
+    }
+  });
+  if (strict && failures.length > 0) throw new Error(`failed ${failures.length} riven scans: ${formatFailures(failures)}`);
+  return { auctionsByWeapon, scannedAtByWeapon, failures };
+}
+
+async function scanArcaneTargets(
+  client: WarframeMarketClient,
+  targets: readonly ArcaneItem[],
+  concurrency: number,
+  strict: boolean,
+): Promise<ArcaneScanResult> {
+  const ordersByArcane = new Map<string, ArcaneOrder[]>();
+  const scannedAtByArcane = new Map<string, string>();
+  const failures: ScanFailure[] = [];
+  let scannedOk = 0;
+  await runInParallel([...targets], concurrency, async (item) => {
+    try {
+      const orders = await client.searchArcaneOrders(item);
+      ordersByArcane.set(item.slug, orders);
+      scannedAtByArcane.set(item.slug, new Date().toISOString());
+      scannedOk += 1;
+      if (scannedOk % 25 === 0) console.log(`  ${scannedOk}/${targets.length} arcanes scanned`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      failures.push({ slug: item.slug, message });
+      console.warn(`failed arcane ${item.slug}: ${message}`);
+    }
+  });
+  if (strict && failures.length > 0) throw new Error(`failed ${failures.length} arcane scans: ${formatFailures(failures)}`);
+  return { ordersByArcane, scannedAtByArcane, failures };
+}
+
+function formatFailures(failures: readonly ScanFailure[]): string {
+  return failures.slice(0, 5).map((failure) => `${failure.slug} (${failure.message})`).join("; ");
+}
+
+async function writeReferenceSnapshots(dataDir: string, reference: ReferenceSnapshot, arcanes: ArcaneReferenceSnapshot): Promise<void> {
+  await ensureDir(join(dataDir, "reference"));
+  await writeFile(join(dataDir, "reference", "current.json"), JSON.stringify(reference, null, 2));
+  await ensureDir(join(dataDir, "arcane", "reference"));
+  await writeFile(join(dataDir, "arcane", "reference", "current.json"), JSON.stringify(arcanes, null, 2));
+}
+
+async function writeColdShardPartial(args: Args, partial: ColdShardPartial): Promise<void> {
+  await ensureDir(args.partialDir);
+  const path = join(args.partialDir, `cold-shard-${partial.shard.id}.json`);
+  await writeFile(path, JSON.stringify(partial, null, 2));
+  console.log(`Wrote cold shard partial ${path}`);
+}
+
+async function collectJsonFiles(dir: string): Promise<string[]> {
+  const entries = await readdir(dir, { withFileTypes: true });
+  const files: string[] = [];
+  for (const entry of entries) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...await collectJsonFiles(path));
+    } else if (entry.isFile() && entry.name.endsWith(".json")) {
+      files.push(path);
+    }
+  }
+  return files.sort();
+}
+
+
+async function readColdShardPartials(args: Args): Promise<ColdShardPartial[]> {
+  if (args.shardCount < 1) throw new Error("shard count must be at least 1");
+  const files = await collectJsonFiles(args.partialDir);
+  const partials = await Promise.all(files.map(async (path) => JSON.parse(await readFile(path, "utf8")) as ColdShardPartial));
+  const coldPartials = partials.filter((partial) => partial.schemaVersion === 1 && partial.tier === "cold");
+  if (coldPartials.length !== args.shardCount) {
+    throw new Error(`expected ${args.shardCount} cold shard partials, found ${coldPartials.length}`);
+  }
+  coldPartials.sort((left, right) => left.shard.id - right.shard.id);
+  for (let id = 0; id < args.shardCount; id += 1) {
+    const partial = coldPartials[id];
+    if (!partial || partial.shard.id !== id) throw new Error(`missing cold shard partial ${id}`);
+    if (partial.shard.count !== args.shardCount) {
+      throw new Error(`cold shard ${id} expected ${partial.shard.count} shards, merge expected ${args.shardCount}`);
+    }
+  }
+  return coldPartials;
+}
+
+function assertSetMatches(name: string, actual: ReadonlySet<string>, expectedValues: readonly string[]): void {
+  const expected = new Set(expectedValues);
+  const missing = [...expected].filter((slug) => !actual.has(slug));
+  const extra = [...actual].filter((slug) => !expected.has(slug));
+  if (missing.length > 0 || extra.length > 0 || actual.size !== expected.size) {
+    throw new Error(`${name} mismatch: missing [${missing.slice(0, 5).join(", ")}], extra [${extra.slice(0, 5).join(", ")}]`);
+  }
+}
+
+interface ColdMergeInput {
+  reference: ReferenceSnapshot;
+  arcaneReference: ArcaneReferenceSnapshot;
+  auctionsByWeapon: Map<string, RivenAuction[]>;
+  scannedAtByWeapon: Map<string, string>;
+  ordersByArcane: Map<string, ArcaneOrder[]>;
+  scannedAtByArcane: Map<string, string>;
+}
+
+async function loadColdShardMergeInput(args: Args): Promise<ColdMergeInput> {
+  const partials = await readColdShardPartials(args);
+  const first = partials[0];
+  if (!first) throw new Error("no cold shard partials found");
+
+  const auctionsByWeapon = new Map<string, RivenAuction[]>();
+  const scannedAtByWeapon = new Map<string, string>();
+  const ordersByArcane = new Map<string, ArcaneOrder[]>();
+  const scannedAtByArcane = new Map<string, string>();
+  const assignedRivens = new Set<string>();
+  const assignedArcanes = new Set<string>();
+
+  for (const partial of partials) {
+    if (partial.reference.fingerprint !== first.reference.fingerprint) {
+      throw new Error(`cold shard ${partial.shard.id} used a different reference snapshot`);
+    }
+    if (partial.rivens.total !== first.reference.rivens.rivenWeapons.length) {
+      throw new Error(`cold shard ${partial.shard.id} expected ${partial.rivens.total} riven weapons, reference has ${first.reference.rivens.rivenWeapons.length}`);
+    }
+    if (partial.arcanes.total !== first.reference.arcanes.items.length) {
+      throw new Error(`cold shard ${partial.shard.id} expected ${partial.arcanes.total} arcanes, reference has ${first.reference.arcanes.items.length}`);
+    }
+    if (partial.rivens.failures.length > 0) {
+      throw new Error(`cold shard ${partial.shard.id} contains riven failures: ${formatFailures(partial.rivens.failures)}`);
+    }
+    if (partial.arcanes.failures.length > 0) {
+      throw new Error(`cold shard ${partial.shard.id} contains arcane failures: ${formatFailures(partial.arcanes.failures)}`);
+    }
+
+    assertSetMatches(`cold shard ${partial.shard.id} riven scans`, new Set(partial.rivens.scanned.map((entry) => entry.slug)), partial.rivens.assignedSlugs);
+    assertSetMatches(`cold shard ${partial.shard.id} arcane scans`, new Set(partial.arcanes.scanned.map((entry) => entry.slug)), partial.arcanes.assignedSlugs);
+
+    for (const slug of partial.rivens.assignedSlugs) {
+      if (assignedRivens.has(slug)) throw new Error(`duplicate riven assignment ${slug}`);
+      assignedRivens.add(slug);
+    }
+    for (const entry of partial.rivens.scanned) {
+      if (auctionsByWeapon.has(entry.slug)) throw new Error(`duplicate riven scan ${entry.slug}`);
+      auctionsByWeapon.set(entry.slug, entry.auctions);
+      scannedAtByWeapon.set(entry.slug, entry.scannedAt);
+    }
+
+    for (const slug of partial.arcanes.assignedSlugs) {
+      if (assignedArcanes.has(slug)) throw new Error(`duplicate arcane assignment ${slug}`);
+      assignedArcanes.add(slug);
+    }
+    for (const entry of partial.arcanes.scanned) {
+      if (ordersByArcane.has(entry.slug)) throw new Error(`duplicate arcane scan ${entry.slug}`);
+      ordersByArcane.set(entry.slug, entry.orders);
+      scannedAtByArcane.set(entry.slug, entry.scannedAt);
+    }
+  }
+
+  assertSetMatches("riven shard coverage", assignedRivens, first.reference.rivens.rivenWeapons.map((weapon) => weapon.slug));
+  assertSetMatches("arcane shard coverage", assignedArcanes, first.reference.arcanes.items.map((item) => item.slug));
+
+  return {
+    reference: first.reference.rivens,
+    arcaneReference: first.reference.arcanes,
+    auctionsByWeapon,
+    scannedAtByWeapon,
+    ordersByArcane,
+    scannedAtByArcane,
+  };
 }
 
 function computePriceSample(slug: string, auctions: readonly RivenAuction[], disposition: number | undefined, tsIso: string): Record<string, unknown> {
@@ -518,6 +828,137 @@ async function rollupValuations(dataDir: string, windowDays: number, vanishThres
   return { valuations: bySignature.size };
 }
 
+async function runColdShard(args: Args, client: WarframeMarketClient): Promise<void> {
+  validateShardArgs(args);
+  const reference = await loadOrFetchReference(args, client);
+  const arcaneReference = await loadOrFetchArcaneReference(args, client);
+  const rivenTargets = shardSlice(reference.rivenWeapons, args.shardId, args.shardCount);
+  const arcaneTargets = shardSlice(arcaneReference.items, args.shardId, args.shardCount);
+  console.log(
+    `Cold shard ${args.shardId}/${args.shardCount}: ${rivenTargets.length}/${reference.rivenWeapons.length} riven weapons, ` +
+    `${arcaneTargets.length}/${arcaneReference.items.length} arcanes.`,
+  );
+
+  const rivenScan = await scanRivenTargets(client, rivenTargets, args.concurrency, true);
+  const arcaneScan = await scanArcaneTargets(client, arcaneTargets, args.concurrency, true);
+  const generatedAt = new Date().toISOString();
+  await writeColdShardPartial(args, {
+    schemaVersion: 1,
+    tier: "cold",
+    generatedAt,
+    shard: { id: args.shardId, count: args.shardCount },
+    reference: {
+      fingerprint: referenceFingerprint(reference, arcaneReference),
+      rivens: reference,
+      arcanes: arcaneReference,
+    },
+    rivens: {
+      total: reference.rivenWeapons.length,
+      assignedSlugs: rivenTargets.map((weapon) => weapon.slug),
+      scanned: rivenTargets.map((weapon) => ({
+        slug: weapon.slug,
+        scannedAt: rivenScan.scannedAtByWeapon.get(weapon.slug) ?? generatedAt,
+        auctions: rivenScan.auctionsByWeapon.get(weapon.slug) ?? [],
+      })),
+      failures: rivenScan.failures,
+    },
+    arcanes: {
+      total: arcaneReference.items.length,
+      assignedSlugs: arcaneTargets.map((item) => item.slug),
+      scanned: arcaneTargets.map((item) => ({
+        slug: item.slug,
+        scannedAt: arcaneScan.scannedAtByArcane.get(item.slug) ?? generatedAt,
+        orders: arcaneScan.ordersByArcane.get(item.slug) ?? [],
+      })),
+      failures: arcaneScan.failures,
+    },
+  });
+}
+
+async function runColdMerge(args: Args): Promise<void> {
+  const input = await loadColdShardMergeInput(args);
+  await writeReferenceSnapshots(args.dataDir, input.reference, input.arcaneReference);
+
+  const config = normalizeConfig(DEFAULT_CONFIG);
+  const analysis = analyzeMarket(input.reference.rivenWeapons, input.auctionsByWeapon, config, input.scannedAtByWeapon);
+  const nowIso = new Date().toISOString();
+  const arcanes = buildArcaneDashboard(input.arcaneReference, input.ordersByArcane, input.scannedAtByArcane, "cold", nowIso, input.arcaneReference.items.length);
+  const status: ScanStatus = {
+    initialized: true,
+    running: false,
+    reason: "ci-cold",
+    startedAt: nowIso,
+    finishedAt: nowIso,
+    scannedWeapons: input.auctionsByWeapon.size,
+    totalWeapons: input.reference.rivenWeapons.length,
+    lastMessage: `CI cold scan merged ${args.shardCount} shards with ${input.auctionsByWeapon.size}/${input.reference.rivenWeapons.length} weapons`,
+  };
+  const dashboardReference: DashboardState["reference"] = {
+    weapons: input.reference.rivenWeapons.length,
+    attributes: input.reference.rivenAttributes.length,
+  };
+  if (input.reference.versionsUpdatedAt) dashboardReference.versionsUpdatedAt = input.reference.versionsUpdatedAt;
+  const state: DashboardState & CiStateExtras = {
+    schemaVersion: 1,
+    tier: "cold",
+    scannedWeaponSlugs: [...input.auctionsByWeapon.keys()],
+    generatedAt: nowIso,
+    refreshMs: 60 * 60_000,
+    apiBase: "https://api.warframe.market",
+    config,
+    status,
+    reference: dashboardReference,
+    totals: {
+      weaponsWithAuctions: input.auctionsByWeapon.size,
+      auctions: Array.from(input.auctionsByWeapon.values()).reduce((sum, entries) => sum + entries.length, 0),
+      opportunities: analysis.opportunities.length,
+    },
+    opportunities: analysis.opportunities,
+    weaponSummaries: analysis.weaponSummaries,
+    arcanes,
+  };
+
+  await ensureDir(join(args.dataDir, "latest"));
+  await writeFile(join(args.dataDir, "latest", "state.json"), JSON.stringify(state, null, 2));
+  await writeFile(join(args.dataDir, "latest", "opportunities.json"), JSON.stringify(analysis.opportunities, null, 2));
+  await writeArcaneArtifacts(args, "cold", arcanes);
+
+  await ensureDir(join(args.dataDir, "samples"));
+  const dispositionBySlug = new Map(input.reference.rivenWeapons.map((weapon) => [weapon.slug, weapon.disposition]));
+  const samples: string[] = [];
+  const signatures: string[] = [];
+  for (const [slug, auctions] of input.auctionsByWeapon) {
+    samples.push(JSON.stringify(computePriceSample(slug, auctions, dispositionBySlug.get(slug), nowIso)));
+    for (const row of computeSignatureSamples(slug, auctions, nowIso)) signatures.push(JSON.stringify(row));
+  }
+  if (samples.length > 0) {
+    const date = nowIso.slice(0, 10);
+    await appendFile(join(args.dataDir, "samples", `${date}.jsonl`), samples.join("\n") + "\n", "utf8");
+    await ensureDir(join(args.dataDir, "signatures"));
+    if (signatures.length > 0) {
+      await appendFile(join(args.dataDir, "signatures", `${date}.jsonl`), signatures.join("\n") + "\n", "utf8");
+    }
+  }
+
+  const rollup = await rollupValuations(args.dataDir, args.valuationWindowDays, args.vanishThresholdDays);
+  console.log(`Wrote valuations for ${rollup.valuations} signatures.`);
+
+  await updateIndex(args.dataDir, {
+    cold: {
+      last_run_at: nowIso,
+      scanned_slugs: [...input.auctionsByWeapon.keys()],
+      opportunity_count: analysis.opportunities.length,
+    },
+    valuations: {
+      last_run_at: nowIso,
+      signature_count: rollup.valuations,
+      window_days: args.valuationWindowDays,
+    },
+  });
+
+  console.log(`Cold merge finished: ${input.auctionsByWeapon.size} weapons, ${analysis.opportunities.length} opportunities.`);
+}
+
 async function runCold(args: Args, client: WarframeMarketClient): Promise<void> {
   const reference = await loadOrFetchReference(args, client);
   const targets = reference.rivenWeapons;
@@ -648,6 +1089,15 @@ async function main(): Promise<void> {
     await runVersionCheck(args, client);
     const arcanes = await runArcaneScan(args, client, "hot");
     await writeArcaneArtifacts(args, "hot", arcanes);
+    return;
+  }
+
+  if (args.coldMode === "shard") {
+    await runColdShard(args, client);
+    return;
+  }
+  if (args.coldMode === "merge") {
+    await runColdMerge(args);
     return;
   }
 

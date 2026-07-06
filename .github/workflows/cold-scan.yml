@@ -10,8 +10,67 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  scan:
+  scan-shard:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        shard_id: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Run cold shard scan with retries
+        env:
+          SHARD_ID: ${{ matrix.shard_id }}
+          SHARD_COUNT: "20"
+          WFM_USER_AGENT: "the-plat-exchange-ci/0.1 (+https://github.com/${{ github.repository }})"
+          WFM_CACHE_DIR: /tmp/wfm-cache-${{ matrix.shard_id }}
+          WFM_RATE_PER_SEC: "0.5"
+          WFM_BURST: "1"
+          WFM_CONCURRENCY: "1"
+        run: |
+          mkdir -p partials /tmp/wfm-shard-data-${SHARD_ID}
+          for attempt in 1 2 3; do
+            echo "::group::Shard ${SHARD_ID} attempt ${attempt}"
+            rm -f "partials/cold-shard-${SHARD_ID}.json"
+            if timeout 35m npx tsx scripts/scan-and-write.ts --tier cold --cold-mode shard --shard-id "${SHARD_ID}" --shard-count "${SHARD_COUNT}" --data-dir "/tmp/wfm-shard-data-${SHARD_ID}" --partial-dir partials; then
+              echo "::endgroup::"
+              exit 0
+            else
+              status=$?
+              echo "Shard ${SHARD_ID} attempt ${attempt} failed with status ${status}"
+              echo "::endgroup::"
+              if [ "${attempt}" = "3" ]; then
+                exit "${status}"
+              fi
+              sleep $((attempt * 20))
+            fi
+          done
+
+      - name: Upload cold shard artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cold-shard-${{ matrix.shard_id }}
+          path: partials/cold-shard-${{ matrix.shard_id }}.json
+          if-no-files-found: error
+          retention-days: 1
+
+  merge:
+    runs-on: ubuntu-latest
+    needs: scan-shard
     permissions:
       contents: write
     steps:
@@ -60,12 +119,21 @@ jobs:
           git lfs track "data/valuations/*.json"
           git lfs track "data/signatures/*.jsonl"
 
-      - name: Run cold scan
+      - name: Download cold shard artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cold-shard-*
+          path: partials
+          merge-multiple: true
+
+      - name: Merge cold shard artifacts
         env:
           WFM_USER_AGENT: "the-plat-exchange-ci/0.1 (+https://github.com/${{ github.repository }})"
-          WFM_CACHE_DIR: /tmp/wfm-cache
-          WFM_RATE_PER_SEC: "2"
-        run: npx tsx scripts/scan-and-write.ts --tier cold --data-dir data-tree/data
+          WFM_CACHE_DIR: /tmp/wfm-cache-merge
+          WFM_RATE_PER_SEC: "1"
+          WFM_BURST: "1"
+          WFM_CONCURRENCY: "1"
+        run: npx tsx scripts/scan-and-write.ts --tier cold --cold-mode merge --shard-count 20 --data-dir data-tree/data --partial-dir partials
 
       - name: Commit and push data
         run: |
