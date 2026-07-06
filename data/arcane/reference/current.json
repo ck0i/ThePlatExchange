@@ -1,0 +1,4207 @@
+{
+  "versions": {
+    "items": "MjAyNi0wNi0yM1QxMToyNTozNA==",
+    "rivens": "MjAyNi0wNi0xOVQwMzo0MjozNw==",
+    "liches": "MjAyNi0wNC0xOFQxNzo0Nzo1MA==",
+    "sisters": "MjAyNi0wNC0xOFQxNzo0Nzo1MA==",
+    "missions": "MjAyNi0wMy0yNlQxMjo1MDo0NA==",
+    "npcs": "MjAyNi0wNi0xN1QyMToxNjo0OA==",
+    "locations": "MjAyNi0wNi0xN1QyMToxNjo0OA=="
+  },
+  "items": [
+    {
+      "id": "551085aee77989729e1416d0",
+      "slug": "arcane_barrier",
+      "name": "Arcane Barrier",
+      "tags": [
+        "legendary",
+        "arcane_enhancement"
+      ],
+      "rarity": "legendary",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/InstantShieldOnDamage",
+      "icon": "items/images/en/arcane_barrier.c4b3b25fcc9c874a4bfc0f8998b9f5bd.png",
+      "thumb": "items/images/en/thumbs/arcane_barrier.c4b3b25fcc9c874a4bfc0f8998b9f5bd.128x128.png",
+      "dissolutionVosfor": 98,
+      "imageName": "ArcaneBarrier.png"
+    },
+    {
+      "id": "551085c9e7798972b4a2b206",
+      "slug": "arcane_ice",
+      "name": "Arcane Ice",
+      "tags": [
+        "common",
+        "arcane_enhancement"
+      ],
+      "rarity": "common",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/FireProcResist",
+      "icon": "items/images/en/arcane_ice.d3cb62ba9923dcf396c854fb857e5718.png",
+      "thumb": "items/images/en/thumbs/arcane_ice.d3cb62ba9923dcf396c854fb857e5718.128x128.png",
+      "dissolutionVosfor": 14,
+      "imageName": "ArcaneIce.png"
+    },
+    {
+      "id": "5a04750c6c4655012038ddcb",
+      "slug": "virtuos_strike",
+      "name": "Virtuos Strike",
+      "tags": [
+        "operator",
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorAmps/IncreasedCriticalDamageOnCriticalStrike",
+      "icon": "items/images/en/virtuos_strike.9bb469736054bb8b5c4d55628d49e83e.png",
+      "thumb": "items/images/en/thumbs/virtuos_strike.9bb469736054bb8b5c4d55628d49e83e.128x128.png",
+      "dissolutionVosfor": 18,
+      "imageName": "VirtuosStrike.png"
+    },
+    {
+      "id": "5bf54b483ffcc7066e7eb856",
+      "slug": "pax_soar",
+      "name": "Pax Soar",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/EyeInTheSky",
+      "icon": "items/images/en/pax_soar.b1cec46096b57bd8c82c974fbd376baa.png",
+      "thumb": "items/images/en/thumbs/pax_soar.b1cec46096b57bd8c82c974fbd376baa.128x128.png",
+      "dissolutionVosfor": 36,
+      "imageName": "PaxSoar.png"
+    },
+    {
+      "id": "551085ece7798972cb579c3e",
+      "slug": "arcane_trickery",
+      "name": "Arcane Trickery",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/InvisibilityOnFinisher",
+      "icon": "items/images/en/arcane_trickery.bec8b43aaa7a5ec1cb152f017516a69c.png",
+      "thumb": "items/images/en/thumbs/arcane_trickery.bec8b43aaa7a5ec1cb152f017516a69c.128x128.png",
+      "dissolutionVosfor": 21,
+      "imageName": "ArcaneTrickery.png"
+    },
+    {
+      "id": "566751d35dcbc186f0536bd6",
+      "slug": "arcane_velocity",
+      "name": "Arcane Velocity",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/GolemArcanePistolSpeedOnCrit",
+      "icon": "items/images/en/arcane_velocity.ea37edd24f8212ce4bb283205658829b.png",
+      "thumb": "items/images/en/thumbs/arcane_velocity.ea37edd24f8212ce4bb283205658829b.128x128.png",
+      "dissolutionVosfor": 21,
+      "imageName": "ArcaneVelocity.png"
+    },
+    {
+      "id": "55a46c61e779890338bfadd8",
+      "slug": "arcane_resistance",
+      "name": "Arcane Resistance",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/ElectricityProcResist",
+      "icon": "items/images/en/arcane_resistance.4ca1f093ba47158b7f2641f3508e9b99.png",
+      "thumb": "items/images/en/thumbs/arcane_resistance.4ca1f093ba47158b7f2641f3508e9b99.128x128.png",
+      "dissolutionVosfor": 21,
+      "imageName": "ArcaneResistance.png"
+    },
+    {
+      "id": "56153e9bb66f837074af99c5",
+      "slug": "arcane_pulse",
+      "name": "Arcane Pulse",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/RadialHealOnHealthPickup",
+      "icon": "items/images/en/arcane_pulse.9f9a959b60addb3377fec907f8c5d35b.png",
+      "thumb": "items/images/en/thumbs/arcane_pulse.9f9a959b60addb3377fec907f8c5d35b.128x128.png",
+      "dissolutionVosfor": 28,
+      "imageName": "ArcanePulse.png"
+    },
+    {
+      "id": "5a0475086c4655012038ddbf",
+      "slug": "magus_vigor",
+      "name": "Magus Vigor",
+      "tags": [
+        "common",
+        "arcane_enhancement"
+      ],
+      "rarity": "common",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/HealthOnOperatorMode",
+      "icon": "items/images/en/magus_vigor.473998d768bd420877df79cdd55c6188.png",
+      "thumb": "items/images/en/thumbs/magus_vigor.473998d768bd420877df79cdd55c6188.128x128.png",
+      "dissolutionVosfor": 12,
+      "imageName": "MagusVigor.png"
+    },
+    {
+      "id": "5c1bda1b14a8e4006b1dad92",
+      "slug": "magus_repair",
+      "name": "Magus Repair",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/HealOnVoidMode",
+      "icon": "items/images/en/magus_repair.476b8fa90aceb37cf1b07e223f1669fb.png",
+      "thumb": "items/images/en/thumbs/magus_repair.476b8fa90aceb37cf1b07e223f1669fb.128x128.png",
+      "dissolutionVosfor": 18,
+      "imageName": "MagusRepair.png"
+    },
+    {
+      "id": "5c1bda1e14a8e4006b1dad95",
+      "slug": "magus_glitch",
+      "name": "Magus Glitch",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/NoPenaltyOnDeath",
+      "icon": "items/images/en/magus_glitch.280ca4675b8d1d36f742493903bf7c3c.png",
+      "thumb": "items/images/en/thumbs/magus_glitch.280ca4675b8d1d36f742493903bf7c3c.128x128.png",
+      "dissolutionVosfor": 18,
+      "imageName": "MagusGlitch.png"
+    },
+    {
+      "id": "5c1bda0814a8e4006b1dad63",
+      "slug": "magus_overload",
+      "name": "Magus Overload",
+      "tags": [
+        "common",
+        "arcane_enhancement"
+      ],
+      "rarity": "common",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/RobotStunOnBlast",
+      "icon": "items/images/en/magus_overload.c575b29c15d999083923ee609dcda264.png",
+      "thumb": "items/images/en/thumbs/magus_overload.c575b29c15d999083923ee609dcda264.128x128.png",
+      "dissolutionVosfor": 12,
+      "imageName": "MagusOverload.png"
+    },
+    {
+      "id": "56463c24b66f8358acce4451",
+      "slug": "arcane_fury",
+      "name": "Arcane Fury",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/GolemArcaneMeleeDamageOnCrit",
+      "icon": "items/images/en/arcane_fury.221e1166ea44c6d2473f59b7cfa4396a.png",
+      "thumb": "items/images/en/thumbs/arcane_fury.221e1166ea44c6d2473f59b7cfa4396a.128x128.png",
+      "dissolutionVosfor": 28,
+      "imageName": "ArcaneFury.png"
+    },
+    {
+      "id": "566750375dcbc186f0536bce",
+      "slug": "arcane_aegis",
+      "name": "Arcane Aegis",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/GolemArcaneShieldRegenOnDamage",
+      "icon": "items/images/en/arcane_aegis.05226d37b29123fba267f5f131a9dcd8.png",
+      "thumb": "items/images/en/thumbs/arcane_aegis.05226d37b29123fba267f5f131a9dcd8.128x128.png",
+      "dissolutionVosfor": 28,
+      "imageName": "ArcaneAegis.png"
+    },
+    {
+      "id": "5667510e5dcbc186f0536bd0",
+      "slug": "arcane_consequence",
+      "name": "Arcane Consequence",
+      "tags": [
+        "arcane_enhancement"
+      ],
+      "rarity": "common",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/GolemArcaneAimGlideOnHeadshot",
+      "icon": "items/images/en/arcane_consequence.f4e12b34a7b31c72f5fa1b042f6ae6e9.png",
+      "thumb": "items/images/en/thumbs/arcane_consequence.f4e12b34a7b31c72f5fa1b042f6ae6e9.128x128.png",
+      "dissolutionVosfor": 14,
+      "imageName": "ArcaneConsequence.png"
+    },
+    {
+      "id": "566751295dcbc186f0536bd1",
+      "slug": "arcane_energize",
+      "name": "Arcane Energize",
+      "tags": [
+        "legendary",
+        "arcane_enhancement"
+      ],
+      "rarity": "legendary",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/GolemArcaneRadialEnergyOnEnergyPickup",
+      "icon": "items/images/en/arcane_energize.e5f85590ceb29db89c6753dfdf823485.png",
+      "thumb": "items/images/en/thumbs/arcane_energize.e5f85590ceb29db89c6753dfdf823485.128x128.png",
+      "dissolutionVosfor": 98,
+      "imageName": "ArcaneEnergize.png"
+    },
+    {
+      "id": "551085e4e7798972c7353fb0",
+      "slug": "arcane_strike",
+      "name": "Arcane Strike",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/MeleeSpeedOnHit",
+      "icon": "items/images/en/arcane_strike.27c40994b55f506fe736175c9cebbf0e.png",
+      "thumb": "items/images/en/thumbs/arcane_strike.27c40994b55f506fe736175c9cebbf0e.128x128.png",
+      "dissolutionVosfor": 21,
+      "imageName": "ArcaneStrike.png"
+    },
+    {
+      "id": "56153e78b66f83706f01716f",
+      "slug": "arcane_nullifier",
+      "name": "Arcane Nullifier",
+      "tags": [
+        "arcane_enhancement"
+      ],
+      "rarity": "common",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/MagneticProcResist",
+      "icon": "items/images/en/arcane_nullifier.2fa3bc7cd7e902ae797f175896f10f97.png",
+      "thumb": "items/images/en/thumbs/arcane_nullifier.2fa3bc7cd7e902ae797f175896f10f97.128x128.png",
+      "dissolutionVosfor": 14,
+      "imageName": "ArcaneNullifier.png"
+    },
+    {
+      "id": "55a46ad5e77989029d9706ee",
+      "slug": "arcane_victory",
+      "name": "Arcane Victory",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/HealthRegenOnHeadshot",
+      "icon": "items/images/en/arcane_victory.2e3e7da2e7600a0e376eae98c3fd80a9.png",
+      "thumb": "items/images/en/thumbs/arcane_victory.2e3e7da2e7600a0e376eae98c3fd80a9.128x128.png",
+      "dissolutionVosfor": 21,
+      "imageName": "ArcaneVictory.png"
+    },
+    {
+      "id": "551085b5e7798972a3b857aa",
+      "slug": "arcane_eruption",
+      "name": "Arcane Eruption",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/RadialKnockdownOnEnergyPickup",
+      "icon": "items/images/en/arcane_eruption.96e2b7f03322df6295089a9dd442df86.png",
+      "thumb": "items/images/en/thumbs/arcane_eruption.96e2b7f03322df6295089a9dd442df86.128x128.png",
+      "dissolutionVosfor": 21,
+      "imageName": "ArcaneEruption.png"
+    },
+    {
+      "id": "551085a6e77989729ab10a35",
+      "slug": "arcane_awakening",
+      "name": "Arcane Awakening",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/PistolDamageOnReload",
+      "icon": "items/images/en/arcane_awakening.5d194d91360b233f4226fd02af5d7d1d.png",
+      "thumb": "items/images/en/thumbs/arcane_awakening.5d194d91360b233f4226fd02af5d7d1d.128x128.png",
+      "dissolutionVosfor": 21,
+      "imageName": "ArcaneAwakening.png"
+    },
+    {
+      "id": "566751b75dcbc186f0536bd5",
+      "slug": "arcane_ultimatum",
+      "name": "Arcane Ultimatum",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/GolemArcaneArmorOnFinisher",
+      "icon": "items/images/en/arcane_ultimatum.6f19f5350ebf251e2c2375bbd667f537.png",
+      "thumb": "items/images/en/thumbs/arcane_ultimatum.6f19f5350ebf251e2c2375bbd667f537.128x128.png",
+      "dissolutionVosfor": 28,
+      "imageName": "ArcaneUltimatum.png"
+    },
+    {
+      "id": "5c1bda1314a8e4006b1dad81",
+      "slug": "magus_anomaly",
+      "name": "Magus Anomaly",
+      "tags": [
+        "common",
+        "arcane_enhancement"
+      ],
+      "rarity": "common",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/PullOnTransferenceIn",
+      "icon": "items/images/en/magus_anomaly.3f06b6fc67779e08e0f55c9d04db0da2.png",
+      "thumb": "items/images/en/thumbs/magus_anomaly.3f06b6fc67779e08e0f55c9d04db0da2.128x128.png",
+      "dissolutionVosfor": 12,
+      "imageName": "MagusAnomaly.png"
+    },
+    {
+      "id": "5c1bda1414a8e4006b1dad83",
+      "slug": "virtuos_surge",
+      "name": "Virtuos Surge",
+      "tags": [
+        "common",
+        "arcane_enhancement",
+        "operator"
+      ],
+      "rarity": "common",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorAmps/VoidToElectricDamage",
+      "icon": "items/images/en/virtuos_surge.1047626f95c989bdd5ee977d1eca05d5.png",
+      "thumb": "items/images/en/thumbs/virtuos_surge.1047626f95c989bdd5ee977d1eca05d5.128x128.png",
+      "dissolutionVosfor": 12,
+      "imageName": "VirtuosSurge.png"
+    },
+    {
+      "id": "55a46c43e77989032fa38f11",
+      "slug": "arcane_deflection",
+      "name": "Arcane Deflection",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/SlashProcResist",
+      "icon": "items/images/en/arcane_deflection.6ee1147da81f3a9f705621012c560832.png",
+      "thumb": "items/images/en/thumbs/arcane_deflection.6ee1147da81f3a9f705621012c560832.128x128.png",
+      "dissolutionVosfor": 21,
+      "imageName": "ArcaneDeflection.png"
+    },
+    {
+      "id": "5a0475086c4655012038ddc0",
+      "slug": "exodia_valor",
+      "name": "Exodia Valor",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/CritChannelingDamage",
+      "icon": "items/images/en/exodia_valor.6944e42105fc09e60c8a843acedfd7cf.png",
+      "thumb": "items/images/en/thumbs/exodia_valor.6944e42105fc09e60c8a843acedfd7cf.128x128.png",
+      "dissolutionVosfor": 18,
+      "imageName": "ExodiaValor.png"
+    },
+    {
+      "id": "55a46a58e77989027c23b89c",
+      "slug": "arcane_grace",
+      "name": "Arcane Grace",
+      "tags": [
+        "legendary",
+        "arcane_enhancement"
+      ],
+      "rarity": "legendary",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/HealthRegenOnDamage",
+      "icon": "items/images/en/arcane_grace.3e4f746417d977c6ac5f2c9edd71ada0.png",
+      "thumb": "items/images/en/thumbs/arcane_grace.3e4f746417d977c6ac5f2c9edd71ada0.128x128.png",
+      "dissolutionVosfor": 98,
+      "imageName": "ArcaneGrace.png"
+    },
+    {
+      "id": "5a04750a6c4655012038ddc6",
+      "slug": "virtuos_fury",
+      "name": "Virtuos Fury",
+      "tags": [
+        "operator",
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorAmps/IncreasedDamageOnStatusProc",
+      "icon": "items/images/en/virtuos_fury.f71902bf678d290ad03b625dc35834ca.png",
+      "thumb": "items/images/en/thumbs/virtuos_fury.f71902bf678d290ad03b625dc35834ca.128x128.png",
+      "dissolutionVosfor": 18,
+      "imageName": "VirtuosFury.png"
+    },
+    {
+      "id": "5a04750a6c4655012038ddc7",
+      "slug": "virtuos_null",
+      "name": "Virtuos Null",
+      "tags": [
+        "common",
+        "arcane_enhancement",
+        "operator"
+      ],
+      "rarity": "common",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorAmps/OperatorAmmoRegenOnKill",
+      "icon": "items/images/en/virtuos_null.e3f5a968f4b41d236acad8c9efb8cfef.png",
+      "thumb": "items/images/en/thumbs/virtuos_null.e3f5a968f4b41d236acad8c9efb8cfef.128x128.png",
+      "dissolutionVosfor": 12,
+      "imageName": "VirtuosNull.png"
+    },
+    {
+      "id": "5a04750b6c4655012038ddc8",
+      "slug": "virtuos_tempo",
+      "name": "Virtuos Tempo",
+      "tags": [
+        "common",
+        "arcane_enhancement",
+        "operator"
+      ],
+      "rarity": "common",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorAmps/AttackSpeedOnKill",
+      "icon": "items/images/en/virtuos_tempo.6e63273510b1ba372aa7eaccfce695e2.png",
+      "thumb": "items/images/en/thumbs/virtuos_tempo.6e63273510b1ba372aa7eaccfce695e2.128x128.png",
+      "dissolutionVosfor": 12,
+      "imageName": "VirtuosTempo.png"
+    },
+    {
+      "id": "5a04750b6c4655012038ddc9",
+      "slug": "exodia_force",
+      "name": "Exodia Force",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusTriggerRadialDamage",
+      "icon": "items/images/en/exodia_force.3777cf3132503f972624ac56c1731743.png",
+      "thumb": "items/images/en/thumbs/exodia_force.3777cf3132503f972624ac56c1731743.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "ExodiaForce.png"
+    },
+    {
+      "id": "5a04750e6c4655012038ddd0",
+      "slug": "virtuos_ghost",
+      "name": "Virtuos Ghost",
+      "tags": [
+        "operator",
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorAmps/StatusChanceOnHeadshot",
+      "icon": "items/images/en/virtuos_ghost.1bf1c1292e89b66f607c9955ea78b1cb.png",
+      "thumb": "items/images/en/thumbs/virtuos_ghost.1bf1c1292e89b66f607c9955ea78b1cb.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "VirtuosGhost.png"
+    },
+    {
+      "id": "5b00231cac0f7e006fd6f7b5",
+      "slug": "peculiar_growth",
+      "name": "Peculiar Growth",
+      "tags": [
+        "mod",
+        "peculiar",
+        "arcane_enhancement",
+        "warframe"
+      ],
+      "rarity": "unknown",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/InflationMod",
+      "icon": "items/images/en/peculiar_growth.5300b360bad6d7c97e3700baa3451a51.png",
+      "thumb": "items/images/en/thumbs/peculiar_growth.5300b360bad6d7c97e3700baa3451a51.128x128.png"
+    },
+    {
+      "id": "5c1bda1914a8e4006b1dad8c",
+      "slug": "virtuos_forge",
+      "name": "Virtuos Forge",
+      "tags": [
+        "operator",
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorAmps/VoidToHeatDamage",
+      "icon": "items/images/en/virtuos_forge.51355a12fdc05c779f027af6caa6f157.png",
+      "thumb": "items/images/en/thumbs/virtuos_forge.51355a12fdc05c779f027af6caa6f157.128x128.png",
+      "dissolutionVosfor": 18,
+      "imageName": "VirtuosForge.png"
+    },
+    {
+      "id": "5bf54b483ffcc7066e7eb855",
+      "slug": "pax_seeker",
+      "name": "Pax Seeker",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SeekerProjOnHeadshotKill",
+      "icon": "items/images/en/pax_seeker.8e3a7fb880c0e047f9a7d60ca4fbfb84.png",
+      "thumb": "items/images/en/thumbs/pax_seeker.8e3a7fb880c0e047f9a7d60ca4fbfb84.128x128.png",
+      "dissolutionVosfor": 36,
+      "imageName": "PaxSeeker.png"
+    },
+    {
+      "id": "5c1bda0d14a8e4006b1dad6e",
+      "slug": "virtuos_spike",
+      "name": "Virtuos Spike",
+      "tags": [
+        "common",
+        "arcane_enhancement",
+        "operator"
+      ],
+      "rarity": "common",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorAmps/VoidToPunctureDamage",
+      "icon": "items/images/en/virtuos_spike.8e4996323b5d41abf0354b39741c0dad.png",
+      "thumb": "items/images/en/thumbs/virtuos_spike.8e4996323b5d41abf0354b39741c0dad.128x128.png",
+      "dissolutionVosfor": 12,
+      "imageName": "VirtuosSpike.png"
+    },
+    {
+      "id": "5667519a5dcbc186f0536bd4",
+      "slug": "arcane_tempo",
+      "name": "Arcane Tempo",
+      "tags": [
+        "arcane_enhancement"
+      ],
+      "rarity": "common",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/GolemArcaneShotgunSpeedOnCrit",
+      "icon": "items/images/en/arcane_tempo.8e5a0c4378df14ffdb5597ff8da8b828.png",
+      "thumb": "items/images/en/thumbs/arcane_tempo.8e5a0c4378df14ffdb5597ff8da8b828.128x128.png",
+      "dissolutionVosfor": 14,
+      "imageName": "ArcaneTempo.png"
+    },
+    {
+      "id": "55108594e77989728d5100c6",
+      "slug": "arcane_agility",
+      "name": "Arcane Agility",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/SpeedOnDamage",
+      "icon": "items/images/en/arcane_agility.2274fd115d389b990a55f5a4ff864773.png",
+      "thumb": "items/images/en/thumbs/arcane_agility.2274fd115d389b990a55f5a4ff864773.128x128.png",
+      "dissolutionVosfor": 21,
+      "imageName": "ArcaneAgility.png"
+    },
+    {
+      "id": "5d8765de7ea27b08950c13b8",
+      "slug": "arcane_bodyguard",
+      "name": "Arcane Bodyguard",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/HealCompanionOnSixMeleeKills",
+      "icon": "items/images/en/arcane_bodyguard.bedeb0f2ceb9e91f99f682b990c09648.png",
+      "thumb": "items/images/en/thumbs/arcane_bodyguard.bedeb0f2ceb9e91f99f682b990c09648.128x128.png",
+      "dissolutionVosfor": 20,
+      "imageName": "ArcaneBodyguard.png"
+    },
+    {
+      "id": "5d8765de7ea27b08950c13bf",
+      "slug": "arcane_primary_charger",
+      "name": "Arcane Primary Charger",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryDmgOnMeleeKill",
+      "icon": "items/images/en/arcane_primary_charger.bedeb0f2ceb9e91f99f682b990c09648.png",
+      "thumb": "items/images/en/thumbs/arcane_primary_charger.bedeb0f2ceb9e91f99f682b990c09648.128x128.png",
+      "dissolutionVosfor": 20,
+      "imageName": "ArcanePrimaryCharger.png"
+    },
+    {
+      "id": "5d8765de7ea27b08950c13c4",
+      "slug": "arcane_blade_charger",
+      "name": "Arcane Blade Charger",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/MeleeDmgOnRifleKill",
+      "icon": "items/images/en/arcane_blade_charger.bedeb0f2ceb9e91f99f682b990c09648.png",
+      "thumb": "items/images/en/thumbs/arcane_blade_charger.bedeb0f2ceb9e91f99f682b990c09648.128x128.png",
+      "dissolutionVosfor": 20,
+      "imageName": "ArcaneBladeCharger.png"
+    },
+    {
+      "id": "5c1bda2014a8e4006b1dad98",
+      "slug": "magus_drive",
+      "name": "Magus Drive",
+      "tags": [
+        "common",
+        "arcane_enhancement"
+      ],
+      "rarity": "common",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/HoverboardSpeedOnTransferenceIn",
+      "icon": "items/images/en/magus_drive.618edddcaa1b6d427526a4fe89063deb.png",
+      "thumb": "items/images/en/thumbs/magus_drive.618edddcaa1b6d427526a4fe89063deb.128x128.png",
+      "dissolutionVosfor": 12,
+      "imageName": "MagusDrive.png"
+    },
+    {
+      "id": "5a0475076c4655012038ddbe",
+      "slug": "magus_cadence",
+      "name": "Magus Cadence",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/SpeedOnVoidDash",
+      "icon": "items/images/en/magus_cadence.c86f261fe3644b1eb27e22d4a53fa318.png",
+      "thumb": "items/images/en/thumbs/magus_cadence.c86f261fe3644b1eb27e22d4a53fa318.128x128.png",
+      "dissolutionVosfor": 18,
+      "imageName": "MagusCadence.png"
+    },
+    {
+      "id": "5a0475086c4655012038ddc1",
+      "slug": "exodia_brave",
+      "name": "Exodia Brave",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/ChannelKillEnergyRate",
+      "icon": "items/images/en/exodia_brave.46667ed53d81bf2cc9aacde46019c7e9.png",
+      "thumb": "items/images/en/thumbs/exodia_brave.46667ed53d81bf2cc9aacde46019c7e9.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "ExodiaBrave.png"
+    },
+    {
+      "id": "5a0475096c4655012038ddc2",
+      "slug": "exodia_hunt",
+      "name": "Exodia Hunt",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/GroundSlamPull",
+      "icon": "items/images/en/exodia_hunt.991da5e49a00e69755b5c7948f5448f6.png",
+      "thumb": "items/images/en/thumbs/exodia_hunt.991da5e49a00e69755b5c7948f5448f6.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "ExodiaHunt.png"
+    },
+    {
+      "id": "5a0475096c4655012038ddc3",
+      "slug": "exodia_triumph",
+      "name": "Exodia Triumph",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusChannelingDamage",
+      "icon": "items/images/en/exodia_triumph.fe6f1256127be984a80deb48afd26faa.png",
+      "thumb": "items/images/en/thumbs/exodia_triumph.fe6f1256127be984a80deb48afd26faa.128x128.png",
+      "dissolutionVosfor": 18,
+      "imageName": "ExodiaTriumph.png"
+    },
+    {
+      "id": "5a0475096c4655012038ddc4",
+      "slug": "magus_nourish",
+      "name": "Magus Nourish",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/HealOnTransferenceOut",
+      "icon": "items/images/en/magus_nourish.a33f07304a72500072d20d13258e119b.png",
+      "thumb": "items/images/en/thumbs/magus_nourish.a33f07304a72500072d20d13258e119b.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "MagusNourish.png"
+    },
+    {
+      "id": "5a04750a6c4655012038ddc5",
+      "slug": "virtuos_shadow",
+      "name": "Virtuos Shadow",
+      "tags": [
+        "operator",
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorAmps/CriticalChanceOnHeadshot",
+      "icon": "items/images/en/virtuos_shadow.b6be77f2f40f28d66c86674233faea4d.png",
+      "thumb": "items/images/en/thumbs/virtuos_shadow.b6be77f2f40f28d66c86674233faea4d.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "VirtuosShadow.png"
+    },
+    {
+      "id": "551085bce7798972a9b2fc6e",
+      "slug": "arcane_guardian",
+      "name": "Arcane Guardian",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/ArmourOnDamage",
+      "icon": "items/images/en/arcane_guardian.5d8874dfd06eaaf9aaceef59d99213b3.png",
+      "thumb": "items/images/en/thumbs/arcane_guardian.5d8874dfd06eaaf9aaceef59d99213b3.128x128.png",
+      "dissolutionVosfor": 21,
+      "imageName": "ArcaneGuardian.png"
+    },
+    {
+      "id": "5c1bda1114a8e4006b1dad78",
+      "slug": "magus_accelerant",
+      "name": "Magus Accelerant",
+      "tags": [
+        "common",
+        "arcane_enhancement"
+      ],
+      "rarity": "common",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/HeatResistOnBlast",
+      "icon": "items/images/en/magus_accelerant.3d50149a79c8ec5ab2a2499da47244e2.png",
+      "thumb": "items/images/en/thumbs/magus_accelerant.3d50149a79c8ec5ab2a2499da47244e2.128x128.png",
+      "dissolutionVosfor": 12,
+      "imageName": "MagusAccelerant.png"
+    },
+    {
+      "id": "551085c3e7798972ae2819db",
+      "slug": "arcane_healing",
+      "name": "Arcane Healing",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/RadiationProcResist",
+      "icon": "items/images/en/arcane_healing.acadb2bf20e9dad0e620e8641110a928.png",
+      "thumb": "items/images/en/thumbs/arcane_healing.acadb2bf20e9dad0e620e8641110a928.128x128.png",
+      "dissolutionVosfor": 21,
+      "imageName": "ArcaneHealing.png"
+    },
+    {
+      "id": "551085f4e7798972d0eaf1ad",
+      "slug": "arcane_warmth",
+      "name": "Arcane Warmth",
+      "tags": [
+        "arcane_enhancement"
+      ],
+      "rarity": "common",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/FreezeProcResist",
+      "icon": "items/images/en/arcane_warmth.2cc54a97fdce903163669b1e57e998ad.png",
+      "thumb": "items/images/en/thumbs/arcane_warmth.2cc54a97fdce903163669b1e57e998ad.128x128.png",
+      "dissolutionVosfor": 14,
+      "imageName": "ArcaneWarmth.png"
+    },
+    {
+      "id": "5c1bd9fd14a8e4006b1dad51",
+      "slug": "virtuos_trojan",
+      "name": "Virtuos Trojan",
+      "tags": [
+        "operator",
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorAmps/VoidToViralDamage",
+      "icon": "items/images/en/virtuos_trojan.9273040f27641c3064a2ad5933bbfe75.png",
+      "thumb": "items/images/en/thumbs/virtuos_trojan.9273040f27641c3064a2ad5933bbfe75.128x128.png",
+      "dissolutionVosfor": 18,
+      "imageName": "VirtuosTrojan.png"
+    },
+    {
+      "id": "5a26c31dc2c9e903a8381330",
+      "slug": "exodia_contagion",
+      "name": "Exodia Contagion",
+      "tags": [
+        "legendary",
+        "arcane_enhancement"
+      ],
+      "rarity": "legendary",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/MeleeArcaneProjectileOnJump",
+      "icon": "items/images/en/exodia_contagion.f1cb19151ee32fa1ee23a778cba612a2.png",
+      "thumb": "items/images/en/thumbs/exodia_contagion.f1cb19151ee32fa1ee23a778cba612a2.128x128.png",
+      "cannotDissolve": true,
+      "imageName": "ExodiaContagion.png"
+    },
+    {
+      "id": "5a26c320c2c9e903a8381331",
+      "slug": "exodia_epidemic",
+      "name": "Exodia Epidemic",
+      "tags": [
+        "legendary",
+        "arcane_enhancement"
+      ],
+      "rarity": "legendary",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/MeleeArcaneShockwaveOnJump",
+      "icon": "items/images/en/exodia_epidemic.3807403ba71019a6186468b251bc1d3a.png",
+      "thumb": "items/images/en/thumbs/exodia_epidemic.3807403ba71019a6186468b251bc1d3a.128x128.png",
+      "cannotDissolve": true,
+      "imageName": "ExodiaEpidemic.png"
+    },
+    {
+      "id": "5fb84767c34da3004797d53b",
+      "slug": "theorem_demulcent",
+      "name": "Theorem Demulcent",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/WeaponDamageOnResidualContact",
+      "icon": "items/images/en/theorem_demulcent.463239df295fca00049643a7b4b0ff8b.png",
+      "thumb": "items/images/en/thumbs/theorem_demulcent.463239df295fca00049643a7b4b0ff8b.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "TheoremDemulcent.png"
+    },
+    {
+      "id": "5fb84767c34da3004797d540",
+      "slug": "theorem_infection",
+      "name": "Theorem Infection",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/CompanionDamageOnResidualContact",
+      "icon": "items/images/en/theorem_infection.1b72a86a16929c0a3c0848ca448e8783.png",
+      "thumb": "items/images/en/thumbs/theorem_infection.1b72a86a16929c0a3c0848ca448e8783.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "TheoremInfection.png"
+    },
+    {
+      "id": "5fb84768c34da3004797d54b",
+      "slug": "residual_shock",
+      "name": "Residual Shock",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/LightningStrikeOnKill",
+      "icon": "items/images/en/residual_shock.931038e226263ca655a8e3e4eeb76cf6.png",
+      "thumb": "items/images/en/thumbs/residual_shock.931038e226263ca655a8e3e4eeb76cf6.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "ResidualShock.png"
+    },
+    {
+      "id": "5a04750d6c4655012038ddcc",
+      "slug": "magus_replenish",
+      "name": "Magus Replenish",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/HealOnVoidDash",
+      "icon": "items/images/en/magus_replenish.b65658da1b4a7e7090c6439e28476d39.png",
+      "thumb": "items/images/en/thumbs/magus_replenish.b65658da1b4a7e7090c6439e28476d39.128x128.png",
+      "dissolutionVosfor": 18,
+      "imageName": "MagusReplenish.png"
+    },
+    {
+      "id": "5adf872a931bcf00574adc14",
+      "slug": "peculiar_bloom",
+      "name": "Peculiar Bloom",
+      "tags": [
+        "mod",
+        "peculiar",
+        "arcane_enhancement",
+        "warframe"
+      ],
+      "rarity": "unknown",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/FlowerPowerMod",
+      "icon": "items/images/en/peculiar_bloom.835675287908be4212f4765014b2f6bd.png",
+      "thumb": "items/images/en/thumbs/peculiar_bloom.835675287908be4212f4765014b2f6bd.128x128.png"
+    },
+    {
+      "id": "5a04750e6c4655012038ddcf",
+      "slug": "magus_cloud",
+      "name": "Magus Cloud",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/ImmunityFallDamageOnVoidDash",
+      "icon": "items/images/en/magus_cloud.911f21546c5c95ceb5e23bb5127fd9e4.png",
+      "thumb": "items/images/en/thumbs/magus_cloud.911f21546c5c95ceb5e23bb5127fd9e4.128x128.png",
+      "dissolutionVosfor": 18,
+      "imageName": "MagusCloud.png"
+    },
+    {
+      "id": "5510858ae779897288827a4b",
+      "slug": "arcane_acceleration",
+      "name": "Arcane Acceleration",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/LongGunSpeedOnCrit",
+      "icon": "items/images/en/arcane_acceleration.452ae9fb49a9a6f7a1207133be620b42.png",
+      "thumb": "items/images/en/thumbs/arcane_acceleration.452ae9fb49a9a6f7a1207133be620b42.128x128.png",
+      "dissolutionVosfor": 21,
+      "imageName": "ArcaneAcceleration.png"
+    },
+    {
+      "id": "566750e45dcbc186f0536bcf",
+      "slug": "arcane_arachne",
+      "name": "Arcane Arachne",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/GolemArcaneBonusDamageOnWallLatch",
+      "icon": "items/images/en/arcane_arachne.6e3fe6374d5b710e6e55ccc70b395bc8.png",
+      "thumb": "items/images/en/thumbs/arcane_arachne.6e3fe6374d5b710e6e55ccc70b395bc8.128x128.png",
+      "dissolutionVosfor": 28,
+      "imageName": "ArcaneArachne.png"
+    },
+    {
+      "id": "5667516b5dcbc186f0536bd2",
+      "slug": "arcane_momentum",
+      "name": "Arcane Momentum",
+      "tags": [
+        "arcane_enhancement"
+      ],
+      "rarity": "common",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/GolemArcaneSniperSpeedOnCrit",
+      "icon": "items/images/en/arcane_momentum.f551dd91689f3169160aafecddeede24.png",
+      "thumb": "items/images/en/thumbs/arcane_momentum.f551dd91689f3169160aafecddeede24.128x128.png",
+      "dissolutionVosfor": 14,
+      "imageName": "ArcaneMomentum.png"
+    },
+    {
+      "id": "566751815dcbc186f0536bd3",
+      "slug": "arcane_precision",
+      "name": "Arcane Precision",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/GolemArcanePistolDamageOnHeadshot",
+      "icon": "items/images/en/arcane_precision.9947891b2c40889b5ae96ea6987df9c1.png",
+      "thumb": "items/images/en/thumbs/arcane_precision.9947891b2c40889b5ae96ea6987df9c1.128x128.png",
+      "dissolutionVosfor": 28,
+      "imageName": "ArcanePrecision.png"
+    },
+    {
+      "id": "5a04750d6c4655012038ddcd",
+      "slug": "exodia_might",
+      "name": "Exodia Might",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/FinisherLifesteal",
+      "icon": "items/images/en/exodia_might.255cbe521efd3aa7312e90e523b3c9ed.png",
+      "thumb": "items/images/en/thumbs/exodia_might.255cbe521efd3aa7312e90e523b3c9ed.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "ExodiaMight.png"
+    },
+    {
+      "id": "5bf54b483ffcc7066e7eb854",
+      "slug": "pax_bolt",
+      "name": "Pax Bolt",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/EnergyEfficiencyOnHeadshot",
+      "icon": "items/images/en/pax_bolt.c2a3984cf53e69467a87424c1ca2acd4.png",
+      "thumb": "items/images/en/thumbs/pax_bolt.c2a3984cf53e69467a87424c1ca2acd4.128x128.png",
+      "dissolutionVosfor": 36,
+      "imageName": "PaxBolt.png"
+    },
+    {
+      "id": "5c1bd9f814a8e4006b1dad48",
+      "slug": "magus_melt",
+      "name": "Magus Melt",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/HeatDamageOnDash",
+      "icon": "items/images/en/magus_melt.4b9f09f76e8d5c38d170209ecfda3481.png",
+      "thumb": "items/images/en/thumbs/magus_melt.4b9f09f76e8d5c38d170209ecfda3481.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "MagusMelt.png"
+    },
+    {
+      "id": "5c1bda1014a8e4006b1dad75",
+      "slug": "magus_firewall",
+      "name": "Magus Firewall",
+      "tags": [
+        "common",
+        "arcane_enhancement"
+      ],
+      "rarity": "common",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/DamageReductionOnVoidMode",
+      "icon": "items/images/en/magus_firewall.76ccbdc51cd207a32782be2bebe3b849.png",
+      "thumb": "items/images/en/thumbs/magus_firewall.76ccbdc51cd207a32782be2bebe3b849.128x128.png",
+      "dissolutionVosfor": 12,
+      "imageName": "MagusFirewall.png"
+    },
+    {
+      "id": "5c1bda2414a8e4006b1dada6",
+      "slug": "magus_destruct",
+      "name": "Magus Destruct",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/ProcResistOnBlast",
+      "icon": "items/images/en/magus_destruct.5d566d3caf8a4d577f3316224757d24f.png",
+      "thumb": "items/images/en/thumbs/magus_destruct.5d566d3caf8a4d577f3316224757d24f.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "MagusDestruct.png"
+    },
+    {
+      "id": "5a04750c6c4655012038ddca",
+      "slug": "magus_husk",
+      "name": "Magus Husk",
+      "tags": [
+        "common",
+        "arcane_enhancement"
+      ],
+      "rarity": "common",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/ArmourOnOperatorMode",
+      "icon": "items/images/en/magus_husk.e06a95548913c871fb0bd03a1691f917.png",
+      "thumb": "items/images/en/thumbs/magus_husk.e06a95548913c871fb0bd03a1691f917.128x128.png",
+      "dissolutionVosfor": 12,
+      "imageName": "MagusHusk.png"
+    },
+    {
+      "id": "5a04750e6c4655012038ddce",
+      "slug": "magus_elevate",
+      "name": "Magus Elevate",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/HealOnTransferenceIn",
+      "icon": "items/images/en/magus_elevate.c2f5a10648687f0c0fc4f66f5df6b76f.png",
+      "thumb": "items/images/en/thumbs/magus_elevate.c2f5a10648687f0c0fc4f66f5df6b76f.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "MagusElevate.png"
+    },
+    {
+      "id": "5fb84767c34da3004797d53e",
+      "slug": "residual_boils",
+      "name": "Residual Boils",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/BurningCystOnKill",
+      "icon": "items/images/en/residual_boils.93e9e7547e47068d710a638a90529a79.png",
+      "thumb": "items/images/en/thumbs/residual_boils.93e9e7547e47068d710a638a90529a79.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "ResidualBoils.png"
+    },
+    {
+      "id": "5fb84768c34da3004797d54e",
+      "slug": "residual_viremia",
+      "name": "Residual Viremia",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/ToxicBloodOnKill",
+      "icon": "items/images/en/residual_viremia.e6aabdd66ee9c050d79913a2b0eee1d2.png",
+      "thumb": "items/images/en/thumbs/residual_viremia.e6aabdd66ee9c050d79913a2b0eee1d2.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "ResidualViremia.png"
+    },
+    {
+      "id": "5fb84768c34da3004797d54f",
+      "slug": "residual_malodor",
+      "name": "Residual Malodor",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/IceMistOnKill",
+      "icon": "items/images/en/residual_malodor.86abb352aa3a2557d982719f96f5b3f6.png",
+      "thumb": "items/images/en/thumbs/residual_malodor.86abb352aa3a2557d982719f96f5b3f6.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "ResidualMalodor.png"
+    },
+    {
+      "id": "5fb84769c34da3004797d554",
+      "slug": "theorem_contagion",
+      "name": "Theorem Contagion",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OrbsOnResidualContact",
+      "icon": "items/images/en/theorem_contagion.6c5d76f8b64896bd889ae8154e04d50f.png",
+      "thumb": "items/images/en/thumbs/theorem_contagion.6c5d76f8b64896bd889ae8154e04d50f.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "TheoremContagion.png"
+    },
+    {
+      "id": "5d8765df7ea27b08950c13ca",
+      "slug": "arcane_tanker",
+      "name": "Arcane Tanker",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/ArmorOnHeavyGunEquipped",
+      "icon": "items/images/en/arcane_tanker.bedeb0f2ceb9e91f99f682b990c09648.png",
+      "thumb": "items/images/en/thumbs/arcane_tanker.bedeb0f2ceb9e91f99f682b990c09648.128x128.png",
+      "dissolutionVosfor": 20,
+      "imageName": "ArcaneTanker.png"
+    },
+    {
+      "id": "5d8765df7ea27b08950c13cc",
+      "slug": "arcane_pistoleer",
+      "name": "Arcane Pistoleer",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/AmmoEfficiencyOnPistolHeadshot",
+      "icon": "items/images/en/arcane_pistoleer.bedeb0f2ceb9e91f99f682b990c09648.png",
+      "thumb": "items/images/en/thumbs/arcane_pistoleer.bedeb0f2ceb9e91f99f682b990c09648.128x128.png",
+      "dissolutionVosfor": 20,
+      "imageName": "ArcanePistoleer.png"
+    },
+    {
+      "id": "5bf54b473ffcc7066e7eb853",
+      "slug": "pax_charge",
+      "name": "Pax Charge",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 3,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/BulletToBattery",
+      "icon": "items/images/en/pax_charge.99b9e313690e8366285d0585c5da5926.png",
+      "thumb": "items/images/en/thumbs/pax_charge.99b9e313690e8366285d0585c5da5926.128x128.png",
+      "dissolutionVosfor": 36,
+      "imageName": "PaxCharge.png"
+    },
+    {
+      "id": "5c1bd9fe14a8e4006b1dad53",
+      "slug": "magus_revert",
+      "name": "Magus Revert",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/ReverseOnDash",
+      "icon": "items/images/en/magus_revert.5265627e260f59579d8073a749956ce5.png",
+      "thumb": "items/images/en/thumbs/magus_revert.5265627e260f59579d8073a749956ce5.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "MagusRevert.png"
+    },
+    {
+      "id": "5510859ce779897292ba1efc",
+      "slug": "arcane_avenger",
+      "name": "Arcane Avenger",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/CritChanceOnDamage",
+      "icon": "items/images/en/arcane_avenger.181b3606583aa0b904a1ebf0b6864e82.png",
+      "thumb": "items/images/en/thumbs/arcane_avenger.181b3606583aa0b904a1ebf0b6864e82.128x128.png",
+      "dissolutionVosfor": 28,
+      "imageName": "ArcaneAvenger.png"
+    },
+    {
+      "id": "551085d6e7798972bcb28132",
+      "slug": "arcane_phantasm",
+      "name": "Arcane Phantasm",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/SpeedOnParry",
+      "icon": "items/images/en/arcane_phantasm.78366e4d487988a78d128a4822b4f824.png",
+      "thumb": "items/images/en/thumbs/arcane_phantasm.78366e4d487988a78d128a4822b4f824.128x128.png",
+      "dissolutionVosfor": 21,
+      "imageName": "ArcanePhantasm.png"
+    },
+    {
+      "id": "551085dde7798972c228aed9",
+      "slug": "arcane_rage",
+      "name": "Arcane Rage",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/LongGunDamageOnHeadshot",
+      "icon": "items/images/en/arcane_rage.5a83a065bab0b881f7b2d1c8a2dbd7a9.png",
+      "thumb": "items/images/en/thumbs/arcane_rage.5a83a065bab0b881f7b2d1c8a2dbd7a9.128x128.png",
+      "dissolutionVosfor": 28,
+      "imageName": "ArcaneRage.png"
+    },
+    {
+      "id": "5c1bda0f14a8e4006b1dad72",
+      "slug": "magus_lockdown",
+      "name": "Magus Lockdown",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/TetherMineOnDash",
+      "icon": "items/images/en/magus_lockdown.db5242eedb9db87b7e8638c3a2aa4cce.png",
+      "thumb": "items/images/en/thumbs/magus_lockdown.db5242eedb9db87b7e8638c3a2aa4cce.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "MagusLockdown.png"
+    },
+    {
+      "id": "60e70f79479445008f272572",
+      "slug": "secondary_merciless",
+      "name": "Secondary Merciless",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnKill",
+      "icon": "items/images/en/secondary_merciless.3269867879aabaa2cb4c47af6302ea4e.png",
+      "thumb": "items/images/en/thumbs/secondary_merciless.3269867879aabaa2cb4c47af6302ea4e.128x128.png",
+      "dissolutionVosfor": 20,
+      "imageName": "SecondaryMerciless.png"
+    },
+    {
+      "id": "60e70f79479445008f272573",
+      "slug": "primary_merciless",
+      "name": "Primary Merciless",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryDamageOnKill",
+      "icon": "items/images/en/primary_merciless.baca700cca91762be6465c5f52584fa7.png",
+      "thumb": "items/images/en/thumbs/primary_merciless.baca700cca91762be6465c5f52584fa7.128x128.png",
+      "dissolutionVosfor": 20,
+      "imageName": "PrimaryMerciless.png"
+    },
+    {
+      "id": "60e70f7a479445008f27257d",
+      "slug": "secondary_dexterity",
+      "name": "Secondary Dexterity",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnMeleeKill",
+      "icon": "items/images/en/secondary_dexterity.8fa0cf692f8f0e2f900e4175c5613460.png",
+      "thumb": "items/images/en/thumbs/secondary_dexterity.8fa0cf692f8f0e2f900e4175c5613460.128x128.png",
+      "dissolutionVosfor": 20,
+      "imageName": "SecondaryDexterity.png"
+    },
+    {
+      "id": "60e70f7f479445008f27259d",
+      "slug": "secondary_deadhead",
+      "name": "Secondary Deadhead",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnNoMelee",
+      "icon": "items/images/en/secondary_deadhead.c688ab21ab8b336bce4bc4467a3e7010.png",
+      "thumb": "items/images/en/thumbs/secondary_deadhead.c688ab21ab8b336bce4bc4467a3e7010.128x128.png",
+      "dissolutionVosfor": 20,
+      "imageName": "SecondaryDeadhead.png"
+    },
+    {
+      "id": "60e70f80479445008f2725a4",
+      "slug": "primary_deadhead",
+      "name": "Primary Deadhead",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryDamageOnNoMelee",
+      "icon": "items/images/en/primary_deadhead.75738d3c111067da8e673bf8000a6710.png",
+      "thumb": "items/images/en/thumbs/primary_deadhead.75738d3c111067da8e673bf8000a6710.128x128.png",
+      "dissolutionVosfor": 20,
+      "imageName": "PrimaryDeadhead.png"
+    },
+    {
+      "id": "60e70f80479445008f2725a6",
+      "slug": "primary_dexterity",
+      "name": "Primary Dexterity",
+      "tags": [
+        "arcane_enhancement",
+        "rare"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryDamageOnMeleeKill",
+      "icon": "items/images/en/primary_dexterity.accc2c9a2780152f354696b2549814bc.png",
+      "thumb": "items/images/en/thumbs/primary_dexterity.accc2c9a2780152f354696b2549814bc.128x128.png",
+      "dissolutionVosfor": 20,
+      "imageName": "PrimaryDexterity.png"
+    },
+    {
+      "id": "626a1978f40db600660a1d7a",
+      "slug": "emergence_dissipate",
+      "name": "Emergence Dissipate",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/EnergyOnGhostDissipate",
+      "icon": "items/images/en/emergence_dissipate.83218167b319a330d85249791386f866.png",
+      "thumb": "items/images/en/thumbs/emergence_dissipate.83218167b319a330d85249791386f866.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "EmergenceDissipate.png"
+    },
+    {
+      "id": "626a1978f40db600660a1d7b",
+      "slug": "molt_vigor",
+      "name": "Molt Vigor",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/WarframeOnOperatorAbilityPowerStrength",
+      "icon": "items/images/en/molt_vigor.51b7ce183f508eb27c3df9efa59c1341.png",
+      "thumb": "items/images/en/thumbs/molt_vigor.51b7ce183f508eb27c3df9efa59c1341.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "MoltVigor.png"
+    },
+    {
+      "id": "626a1979f40db600660a1d81",
+      "slug": "emergence_renewed",
+      "name": "Emergence Renewed",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/OperatorOnEnergyDepletedRegenEnergy",
+      "icon": "items/images/en/emergence_renewed.a5f55caadd8f27ff5acbe25bbd9b00a7.png",
+      "thumb": "items/images/en/thumbs/emergence_renewed.a5f55caadd8f27ff5acbe25bbd9b00a7.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "EmergenceRenewed.png"
+    },
+    {
+      "id": "626a197af40db600660a1d83",
+      "slug": "eternal_eradicate",
+      "name": "Eternal Eradicate",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/OperatorOnOperatorAbilityIncreaseDamage",
+      "icon": "items/images/en/eternal_eradicate.75f8c32b70d1fa1fc211942ce7c3119e.png",
+      "thumb": "items/images/en/thumbs/eternal_eradicate.75f8c32b70d1fa1fc211942ce7c3119e.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "EternalEradicate.png"
+    },
+    {
+      "id": "626a197af40db600660a1d87",
+      "slug": "molt_efficiency",
+      "name": "Molt Efficiency",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/WarframeOnShieldUptimePowerDuration",
+      "icon": "items/images/en/molt_efficiency.c76d07229a6c7e12bff54ac2f56f47b5.png",
+      "thumb": "items/images/en/thumbs/molt_efficiency.c76d07229a6c7e12bff54ac2f56f47b5.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "MoltEfficiency.png"
+    },
+    {
+      "id": "626a197bf40db600660a1d88",
+      "slug": "emergence_savior",
+      "name": "Emergence Savior",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/OperatorOnDeathInvulnerability",
+      "icon": "items/images/en/emergence_savior.d3cab5acf5703d92987d92188478d65d.png",
+      "thumb": "items/images/en/thumbs/emergence_savior.d3cab5acf5703d92987d92188478d65d.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "EmergenceSavior.png"
+    },
+    {
+      "id": "626a197bf40db600660a1d8b",
+      "slug": "cascadia_overcharge",
+      "name": "Cascadia Overcharge",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/SecondaryOnOvershieldCritChance",
+      "icon": "items/images/en/cascadia_overcharge.d5f7bf0949071f325145d596e35b3087.png",
+      "thumb": "items/images/en/thumbs/cascadia_overcharge.d5f7bf0949071f325145d596e35b3087.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "CascadiaOvercharge.png"
+    },
+    {
+      "id": "62a2b833a554aa00a86de35c",
+      "slug": "eternal_onslaught",
+      "name": "Eternal Onslaught",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/AmpOnEnergyDepletedCritChance",
+      "icon": "items/images/en/eternal_onslaught.d9c808039b68dd997cc6dee543c8b0ab.png",
+      "thumb": "items/images/en/thumbs/eternal_onslaught.d9c808039b68dd997cc6dee543c8b0ab.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "EternalOnslaught.png"
+    },
+    {
+      "id": "62a2baebfbd62c00450b71d8",
+      "slug": "molt_reconstruct",
+      "name": "Molt Reconstruct",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/HealAlliesOnEnergySpent",
+      "icon": "items/images/en/molt_reconstruct.3c470837973134be1c9db91e0bdceeb0.png",
+      "thumb": "items/images/en/thumbs/molt_reconstruct.3c470837973134be1c9db91e0bdceeb0.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "MoltReconstruct.png"
+    },
+    {
+      "id": "62a2baebfbd62c00450b71d9",
+      "slug": "molt_augmented",
+      "name": "Molt Augmented",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PowerStrengthOnKill",
+      "icon": "items/images/en/molt_augmented.9def654a0d24b7f085940dfc8ef843b5.png",
+      "thumb": "items/images/en/thumbs/molt_augmented.9def654a0d24b7f085940dfc8ef843b5.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "MoltAugmented.png"
+    },
+    {
+      "id": "62a2baebfbd62c00450b71db",
+      "slug": "eternal_logistics",
+      "name": "Eternal Logistics",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/AmpOnVoidSlingAmpAmmoEfficiency",
+      "icon": "items/images/en/eternal_logistics.f12227878bbb95901bd6aba5aa902acf.png",
+      "thumb": "items/images/en/thumbs/eternal_logistics.f12227878bbb95901bd6aba5aa902acf.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "EternalLogistics.png"
+    },
+    {
+      "id": "62af145c5d2dab0054229038",
+      "slug": "cascadia_empowered",
+      "name": "Cascadia Empowered",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/SecondaryOnStatusProcBonusDamage",
+      "icon": "items/images/en/cascadia_empowered.677ddc0966a5d8662883735fb42d2ec3.png",
+      "thumb": "items/images/en/thumbs/cascadia_empowered.677ddc0966a5d8662883735fb42d2ec3.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "CascadiaEmpowered.png"
+    },
+    {
+      "id": "62af145c5d2dab005422903a",
+      "slug": "fractalized_reset",
+      "name": "Fractalized Reset",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/PrimaryOnAbilityReloadSpeed",
+      "icon": "items/images/en/fractalized_reset.234df692ab2ebf6bd1e73f1f115547fa.png",
+      "thumb": "items/images/en/thumbs/fractalized_reset.234df692ab2ebf6bd1e73f1f115547fa.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "FractalizedReset.png"
+    },
+    {
+      "id": "62af145d5d2dab005422903c",
+      "slug": "cascadia_flare",
+      "name": "Cascadia Flare",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnHeatProc",
+      "icon": "items/images/en/cascadia_flare.256fbbf670c8acdcc8468ed035cc6efe.png",
+      "thumb": "items/images/en/thumbs/cascadia_flare.256fbbf670c8acdcc8468ed035cc6efe.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "CascadiaFlare.png"
+    },
+    {
+      "id": "62af145e5d2dab0054229040",
+      "slug": "cascadia_accuracy",
+      "name": "Cascadia Accuracy",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Zariman/SecondaryOnRollCritChanceOnHeadshot",
+      "icon": "items/images/en/cascadia_accuracy.51f25b4bd629c3c34226da11b9831d57.png",
+      "thumb": "items/images/en/thumbs/cascadia_accuracy.51f25b4bd629c3c34226da11b9831d57.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "CascadiaAccuracy.png"
+    },
+    {
+      "id": "62fd5d36b8a9cc00378321bc",
+      "slug": "peculiar_audience",
+      "name": "Peculiar Audience",
+      "tags": [
+        "mod",
+        "peculiar",
+        "arcane_enhancement",
+        "warframe"
+      ],
+      "rarity": "unknown",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/EvilSpiritMod",
+      "icon": "items/images/en/peculiar_audience.18fabc6c0ba194e71fdb7e8cc4c7f253.png",
+      "thumb": "items/images/en/thumbs/peculiar_audience.18fabc6c0ba194e71fdb7e8cc4c7f253.128x128.png"
+    },
+    {
+      "id": "63886516e7c988007b5bd509",
+      "slug": "conjunction_voltage",
+      "name": "Conjunction Voltage",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryReloadSpeedAndMultishotOnElectricProc",
+      "icon": "items/images/en/conjunction_voltage.d7ac26c466e1d189eaa0f1eab81b6b4b.png",
+      "thumb": "items/images/en/thumbs/conjunction_voltage.d7ac26c466e1d189eaa0f1eab81b6b4b.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "ConjunctionVoltage.png"
+    },
+    {
+      "id": "63886516e7c988007b5bd50a",
+      "slug": "primary_frostbite",
+      "name": "Primary Frostbite",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryCritDmgAndMultishotOnColdProc",
+      "icon": "items/images/en/primary_frostbite.3aba98f1779bfc69c3139e83dbda1463.png",
+      "thumb": "items/images/en/thumbs/primary_frostbite.3aba98f1779bfc69c3139e83dbda1463.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "PrimaryFrostbite.png"
+    },
+    {
+      "id": "63886516e7c988007b5bd50b",
+      "slug": "arcane_rise",
+      "name": "Arcane Rise",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/LongGunDamageOnReload",
+      "icon": "items/images/en/arcane_rise.dd639f42f0235bd00abea150d1666f89.png",
+      "thumb": "items/images/en/thumbs/arcane_rise.dd639f42f0235bd00abea150d1666f89.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "ArcaneRise.png"
+    },
+    {
+      "id": "63886517e7c988007b5bd512",
+      "slug": "arcane_blessing",
+      "name": "Arcane Blessing",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/IncreaseMaxHealthOnHealthPickup",
+      "icon": "items/images/en/arcane_blessing.aec88d7b4b3482f59c6c1a3b87185042.png",
+      "thumb": "items/images/en/thumbs/arcane_blessing.aec88d7b4b3482f59c6c1a3b87185042.128x128.png",
+      "dissolutionVosfor": 22,
+      "imageName": "ArcaneBlessing.png"
+    },
+    {
+      "id": "63ee00fc10125411da49e6e7",
+      "slug": "primary_plated_round",
+      "name": "Primary Plated Round",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryDamagePerAmmoOnReload",
+      "icon": "items/images/en/primary_plated_round.db83727f4a2cc66deac96ae09ab0299f.png",
+      "thumb": "items/images/en/thumbs/primary_plated_round.db83727f4a2cc66deac96ae09ab0299f.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "PrimaryPlatedRound.png"
+    },
+    {
+      "id": "63ee00fd10125411da49e6ea",
+      "slug": "arcane_steadfast",
+      "name": "Arcane Steadfast",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/NoCostCastChanceOnCast",
+      "icon": "items/images/en/arcane_steadfast.ccf77e85d0ff32f127e1a71d38ea8c0e.png",
+      "thumb": "items/images/en/thumbs/arcane_steadfast.ccf77e85d0ff32f127e1a71d38ea8c0e.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "ArcaneSteadfast.png"
+    },
+    {
+      "id": "63ee00fe10125411da49e6f4",
+      "slug": "arcane_double_back",
+      "name": "Arcane Double Back",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/DamageResistanceStacksOverTime",
+      "icon": "items/images/en/arcane_double_back.1ed9a591a41ea6c610f532f30b31ae22.png",
+      "thumb": "items/images/en/thumbs/arcane_double_back.1ed9a591a41ea6c610f532f30b31ae22.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "ArcaneDoubleBack.png"
+    },
+    {
+      "id": "63ee00fe10125411da49e6f5",
+      "slug": "secondary_kinship",
+      "name": "Secondary Kinship",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritChancePerBuff",
+      "icon": "items/images/en/secondary_kinship.43ae6eafe467db9484220ac71028362d.png",
+      "thumb": "items/images/en/thumbs/secondary_kinship.43ae6eafe467db9484220ac71028362d.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "SecondaryKinship.png"
+    },
+    {
+      "id": "63ee00ff10125411da49e6fa",
+      "slug": "secondary_encumber",
+      "name": "Secondary Encumber",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/ExtraProcOnProc",
+      "icon": "items/images/en/secondary_encumber.0e6c3bb15956e965b63a16c90ea70a9d.png",
+      "thumb": "items/images/en/thumbs/secondary_encumber.0e6c3bb15956e965b63a16c90ea70a9d.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "SecondaryEncumber.png"
+    },
+    {
+      "id": "644b00217ec1900044b97722",
+      "slug": "primary_obstruct",
+      "name": "Primary Obstruct",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryJamEnemyWeaponsOnMagneticProc",
+      "icon": "items/images/en/primary_obstruct.fdedb1774329c76fa8083cf43fa76a06.png",
+      "thumb": "items/images/en/thumbs/primary_obstruct.fdedb1774329c76fa8083cf43fa76a06.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "PrimaryObstruct.png"
+    },
+    {
+      "id": "644b00227ec1900044b97723",
+      "slug": "arcane_intention",
+      "name": "Arcane Intention",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/HealthWhileUsingChanneledAbilities",
+      "icon": "items/images/en/arcane_intention.2d412880c8134b5078de0b9debf2a9e7.png",
+      "thumb": "items/images/en/thumbs/arcane_intention.2d412880c8134b5078de0b9debf2a9e7.128x128.png",
+      "dissolutionVosfor": 18,
+      "imageName": "ArcaneIntention.png"
+    },
+    {
+      "id": "644b00227ec1900044b97724",
+      "slug": "secondary_shiver",
+      "name": "Secondary Shiver",
+      "tags": [
+        "legendary",
+        "arcane_enhancement"
+      ],
+      "rarity": "legendary",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryExtraDamagePerFreezeStack",
+      "icon": "items/images/en/secondary_shiver.e169db6259133538ca86090ac481840a.png",
+      "thumb": "items/images/en/thumbs/secondary_shiver.e169db6259133538ca86090ac481840a.128x128.png",
+      "dissolutionVosfor": 84,
+      "imageName": "SecondaryShiver.png"
+    },
+    {
+      "id": "644b00227ec1900044b97727",
+      "slug": "longbow_sharpshot",
+      "name": "Longbow Sharpshot",
+      "tags": [
+        "legendary",
+        "arcane_enhancement"
+      ],
+      "rarity": "legendary",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/LongbowDamageOnHeadshot",
+      "icon": "items/images/en/longbow_sharpshot.1edd43d82c3b61da2555a2ccb9ba9332.png",
+      "thumb": "items/images/en/thumbs/longbow_sharpshot.1edd43d82c3b61da2555a2ccb9ba9332.128x128.png",
+      "dissolutionVosfor": 84,
+      "imageName": "LongbowSharpshot.png"
+    },
+    {
+      "id": "644b00227ec1900044b97729",
+      "slug": "shotgun_vendetta",
+      "name": "Shotgun Vendetta",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/ShotgunMultishotAndReloadSpeedOnCloseKill",
+      "icon": "items/images/en/shotgun_vendetta.219b0d47d26345b989decc3a56326c54.png",
+      "thumb": "items/images/en/thumbs/shotgun_vendetta.219b0d47d26345b989decc3a56326c54.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "ShotgunVendetta.png"
+    },
+    {
+      "id": "644b00237ec1900044b9772e",
+      "slug": "magus_aggress",
+      "name": "Magus Aggress",
+      "tags": [
+        "uncommon",
+        "arcane_enhancement"
+      ],
+      "rarity": "uncommon",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OperatorHeavyMeleeDamageOnTransference",
+      "icon": "items/images/en/magus_aggress.03f6a273fe2e6e2b3720957cf32c2adf.png",
+      "thumb": "items/images/en/thumbs/magus_aggress.03f6a273fe2e6e2b3720957cf32c2adf.128x128.png",
+      "dissolutionVosfor": 18,
+      "imageName": "MagusAggress.png"
+    },
+    {
+      "id": "644b00247ec1900044b97733",
+      "slug": "arcane_reaper",
+      "name": "Arcane Reaper",
+      "tags": [
+        "legendary",
+        "arcane_enhancement"
+      ],
+      "rarity": "legendary",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/HealthRegenAndArmorOnMeleeKill",
+      "icon": "items/images/en/arcane_reaper.5eaac187d816d010ec44ee1a05979564.png",
+      "thumb": "items/images/en/thumbs/arcane_reaper.5eaac187d816d010ec44ee1a05979564.128x128.png",
+      "dissolutionVosfor": 84,
+      "imageName": "ArcaneReaper.png"
+    },
+    {
+      "id": "644b00257ec1900044b97737",
+      "slug": "primary_exhilarate",
+      "name": "Primary Exhilarate",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryEnergyRegenOnImpactProc",
+      "icon": "items/images/en/primary_exhilarate.faf6786dd12bc3e40a3c88a6b5bfac22.png",
+      "thumb": "items/images/en/thumbs/primary_exhilarate.faf6786dd12bc3e40a3c88a6b5bfac22.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "PrimaryExhilarate.png"
+    },
+    {
+      "id": "649322af7ec190215a693091",
+      "slug": "arcane_power_ramp",
+      "name": "Arcane Power Ramp",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/AbilityStrengthOnCast",
+      "icon": "items/images/en/arcane_power_ramp.3acad1eaec440c1505c01661a7228664.png",
+      "thumb": "items/images/en/thumbs/arcane_power_ramp.3acad1eaec440c1505c01661a7228664.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "ArcanePowerRamp.png"
+    },
+    {
+      "id": "649322af7ec190215a693092",
+      "slug": "primary_blight",
+      "name": "Primary Blight",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PrimaryHeadshotCritMultOnHeadshot",
+      "icon": "items/images/en/primary_blight.7dc9243c44441b2b46f7e1dc55eae1d0.png",
+      "thumb": "items/images/en/thumbs/primary_blight.7dc9243c44441b2b46f7e1dc55eae1d0.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "PrimaryBlight.png"
+    },
+    {
+      "id": "649322b07ec190215a693093",
+      "slug": "secondary_outburst",
+      "name": "Secondary Outburst",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/MultishotForCombo",
+      "icon": "items/images/en/secondary_outburst.01c8242b80d987650c8e240454b93249.png",
+      "thumb": "items/images/en/thumbs/secondary_outburst.01c8242b80d987650c8e240454b93249.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "SecondaryOutburst.png"
+    },
+    {
+      "id": "649322b07ec190215a693094",
+      "slug": "akimbo_slip_shot",
+      "name": "Akimbo Slip Shot",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/AmmoEfficiencyOnSliding",
+      "icon": "items/images/en/akimbo_slip_shot.9cb48cdcc739b5306bb4e2a8b3868e72.png",
+      "thumb": "items/images/en/thumbs/akimbo_slip_shot.9cb48cdcc739b5306bb4e2a8b3868e72.128x128.png",
+      "dissolutionVosfor": 24,
+      "imageName": "AkimboSlipShot.png"
+    },
+    {
+      "id": "657f2efd8820fb8f3c5f465d",
+      "slug": "melee_influence",
+      "name": "Melee Influence",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "icon": "items/images/en/melee_influence.b22232a58406e5feeb8bbe94c07c18d2.webp",
+      "thumb": "items/images/en/thumbs/melee_influence.b22232a58406e5feeb8bbe94c07c18d2.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "MeleeInfluence.png"
+    },
+    {
+      "id": "657f2efd8820fb8f3c5f465e",
+      "slug": "melee_retaliation",
+      "name": "Melee Retaliation",
+      "tags": [
+        "common",
+        "arcane_enhancement"
+      ],
+      "rarity": "common",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "icon": "items/images/en/melee_retaliation.bb1d89feb4393d3681c495372d8c3531.webp",
+      "thumb": "items/images/en/thumbs/melee_retaliation.bb1d89feb4393d3681c495372d8c3531.128x128.webp",
+      "dissolutionVosfor": 18,
+      "imageName": "MeleeRetaliation.png"
+    },
+    {
+      "id": "657f2efd8820fb8f3c5f465f",
+      "slug": "melee_crescendo",
+      "name": "Melee Crescendo",
+      "tags": [
+        "legendary",
+        "arcane_enhancement"
+      ],
+      "rarity": "legendary",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "icon": "items/images/en/melee_crescendo.fec1a875c68b84f3282a21a82aabdb20.webp",
+      "thumb": "items/images/en/thumbs/melee_crescendo.fec1a875c68b84f3282a21a82aabdb20.128x128.webp",
+      "dissolutionVosfor": 84,
+      "imageName": "MeleeCrescendo.png"
+    },
+    {
+      "id": "657f2efd8820fb8f3c5f4660",
+      "slug": "melee_vortex",
+      "name": "Melee Vortex",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/PullEnemiesOnMeleeKill",
+      "icon": "items/images/en/melee_vortex.08bdba930b9fbc44559336cb61b564f1.webp",
+      "thumb": "items/images/en/thumbs/melee_vortex.08bdba930b9fbc44559336cb61b564f1.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "MeleeVortex.png"
+    },
+    {
+      "id": "657f2efd8820fb8f3c5f4661",
+      "slug": "melee_animosity",
+      "name": "Melee Animosity",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/HeavyCritOnRegularMelee",
+      "icon": "items/images/en/melee_animosity.f6ee3ff6153769c4686cf53940546609.webp",
+      "thumb": "items/images/en/thumbs/melee_animosity.f6ee3ff6153769c4686cf53940546609.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "MeleeAnimosity.png"
+    },
+    {
+      "id": "657f2efd8820fb8f3c5f4662",
+      "slug": "melee_exposure",
+      "name": "Melee Exposure",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "icon": "items/images/en/melee_exposure.8f640378cd4d4ca4758da310524b90c6.webp",
+      "thumb": "items/images/en/thumbs/melee_exposure.8f640378cd4d4ca4758da310524b90c6.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "MeleeExposure.png"
+    },
+    {
+      "id": "657f2efd8820fb8f3c5f4663",
+      "slug": "melee_duplicate",
+      "name": "Melee Duplicate",
+      "tags": [
+        "legendary",
+        "arcane_enhancement"
+      ],
+      "rarity": "legendary",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "icon": "items/images/en/melee_duplicate.0ac0137e555cde39902706e96853dff9.webp",
+      "thumb": "items/images/en/thumbs/melee_duplicate.0ac0137e555cde39902706e96853dff9.128x128.webp",
+      "dissolutionVosfor": 84,
+      "imageName": "MeleeDuplicate.png"
+    },
+    {
+      "id": "657f2efd8820fb8f3c5f4664",
+      "slug": "melee_fortification",
+      "name": "Melee Fortification",
+      "tags": [
+        "common",
+        "arcane_enhancement"
+      ],
+      "rarity": "common",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "icon": "items/images/en/melee_fortification.546e560aff6676bf550b0de38f14f280.webp",
+      "thumb": "items/images/en/thumbs/melee_fortification.546e560aff6676bf550b0de38f14f280.128x128.webp",
+      "dissolutionVosfor": 18,
+      "imageName": "MeleeFortification.png"
+    },
+    {
+      "id": "667236b88ba7c81b70d02c90",
+      "slug": "arcane_ice_storm",
+      "name": "Arcane Ice Storm",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/AbilityPowerOnFreeze",
+      "icon": "items/images/en/arcane_ice_storm.1d3a88fec2c4d415bf8156e2ec9caeeb.webp",
+      "thumb": "items/images/en/thumbs/arcane_ice_storm.1d3a88fec2c4d415bf8156e2ec9caeeb.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "ArcaneIceStorm.png"
+    },
+    {
+      "id": "667236dd8ba7c81b70d02c92",
+      "slug": "secondary_surge",
+      "name": "Secondary Surge",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/BonusDamageNextShotForCurEnergy",
+      "icon": "items/images/en/secondary_surge.911b99fe452eaf250ae01c041639a2be.webp",
+      "thumb": "items/images/en/thumbs/secondary_surge.911b99fe452eaf250ae01c041639a2be.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "SecondarySurge.png"
+    },
+    {
+      "id": "6672373e8ba7c81b70d02c94",
+      "slug": "arcane_battery",
+      "name": "Arcane Battery",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/MaxEnergyForArmor",
+      "icon": "items/images/en/arcane_battery.2a7148e4cd7466c1e52d821a479d3e4e.webp",
+      "thumb": "items/images/en/thumbs/arcane_battery.2a7148e4cd7466c1e52d821a479d3e4e.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "ArcaneBattery.png"
+    },
+    {
+      "id": "667237598ba7c81b70d02c96",
+      "slug": "secondary_fortifier",
+      "name": "Secondary Fortifier",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/OverguardSteal",
+      "icon": "items/images/en/secondary_fortifier.4fb942e2930716dcbf608764f313c8cf.webp",
+      "thumb": "items/images/en/thumbs/secondary_fortifier.4fb942e2930716dcbf608764f313c8cf.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "SecondaryFortifier.png"
+    },
+    {
+      "id": "667c25a207a5007fadf3ecaa",
+      "slug": "melee_afflictions",
+      "name": "Melee Afflictions",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/DuplicateStatusOnKnock",
+      "icon": "items/images/en/melee_afflictions.36f6811228a70719f5ce96ebce22a926.webp",
+      "thumb": "items/images/en/thumbs/melee_afflictions.36f6811228a70719f5ce96ebce22a926.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "MeleeAfflictions.png"
+    },
+    {
+      "id": "675c59247b18977f6e6453e8",
+      "slug": "arcane_crepuscular",
+      "name": "Arcane Crepuscular",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityStrengthAndCritDamageWhenInvisible",
+      "icon": "items/images/en/arcane_crepuscular.8e34ad3ac57362158d9ec6d642364427.webp",
+      "thumb": "items/images/en/thumbs/arcane_crepuscular.8e34ad3ac57362158d9ec6d642364427.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "ArcaneCrepuscular.png"
+    },
+    {
+      "id": "675c59297b18977f6e6453ea",
+      "slug": "arcane_impetus",
+      "name": "Arcane Impetus",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityStatusProcsGiveAbilityStrengthAndEfficiency",
+      "icon": "items/images/en/arcane_impetus.eaa1ea005d4f154f48f97f0989e7f848.webp",
+      "thumb": "items/images/en/thumbs/arcane_impetus.eaa1ea005d4f154f48f97f0989e7f848.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "ArcaneImpetus.png"
+    },
+    {
+      "id": "675c59347b18977f6e6453ec",
+      "slug": "primary_crux",
+      "name": "Primary Crux",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusAndAmmoEfficiencyOnWeakpointHit",
+      "icon": "items/images/en/primary_crux.be6cbbeead671dca1aa908113441d814.webp",
+      "thumb": "items/images/en/thumbs/primary_crux.be6cbbeead671dca1aa908113441d814.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "PrimaryCrux.png"
+    },
+    {
+      "id": "675c5cd07b18977f6e6453ee",
+      "slug": "secondary_enervate",
+      "name": "Secondary Enervate",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryCritOnHit",
+      "icon": "items/images/en/secondary_enervate.ad8d69119b058ad12c196bcf33352bd2.webp",
+      "thumb": "items/images/en/thumbs/secondary_enervate.ad8d69119b058ad12c196bcf33352bd2.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "SecondaryEnervate.png"
+    },
+    {
+      "id": "675c5cd97b18977f6e6453f0",
+      "slug": "melee_doughty",
+      "name": "Melee Doughty",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/CritDamageForPunctureStatus",
+      "icon": "items/images/en/melee_doughty.642bb1ab3c5d3e2b5bca70f4c2e50f39.webp",
+      "thumb": "items/images/en/thumbs/melee_doughty.642bb1ab3c5d3e2b5bca70f4c2e50f39.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "MeleeDoughty.png"
+    },
+    {
+      "id": "675c5ed17b18977f6e6453f2",
+      "slug": "arcane_camisado",
+      "name": "Arcane Camisado",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/AbilityStrengthOnSummonAttack",
+      "icon": "items/images/en/arcane_camisado.49bb15acacdfe7a2782b56151d0a8a3f.webp",
+      "thumb": "items/images/en/thumbs/arcane_camisado.49bb15acacdfe7a2782b56151d0a8a3f.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "ArcaneCamisado.png"
+    },
+    {
+      "id": "675c5edc7b18977f6e6453f4",
+      "slug": "arcane_bellicose",
+      "name": "Arcane Bellicose",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/AbilityStrengthForMaxHealth",
+      "icon": "items/images/en/arcane_bellicose.cba86d2bfb1b20b4a512b6913e79ba0c.webp",
+      "thumb": "items/images/en/thumbs/arcane_bellicose.cba86d2bfb1b20b4a512b6913e79ba0c.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "ArcaneBellicose.png"
+    },
+    {
+      "id": "675c5ee47b18977f6e6453f6",
+      "slug": "arcane_truculence",
+      "name": "Arcane Truculence",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/RadialViralAttackOnOverguardGain",
+      "icon": "items/images/en/arcane_truculence.1a7e80d9006d376a28883af0ca96cbdf.webp",
+      "thumb": "items/images/en/thumbs/arcane_truculence.1a7e80d9006d376a28883af0ca96cbdf.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "ArcaneTruculence.png"
+    },
+    {
+      "id": "67db60869cec3e52e62523f4",
+      "slug": "arcane_escapist",
+      "name": "Arcane Escapist",
+      "tags": [
+        "legendary",
+        "arcane_enhancement"
+      ],
+      "rarity": "legendary",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/InvulnerabilityOnDeathOnMercyKill",
+      "icon": "items/images/en/arcane_escapist.6cb2df04a06f551dc77235e17ee3d685.webp",
+      "thumb": "items/images/en/thumbs/arcane_escapist.6cb2df04a06f551dc77235e17ee3d685.128x128.webp",
+      "dissolutionVosfor": 84,
+      "imageName": "ArcaneEscapist.png"
+    },
+    {
+      "id": "67db60889cec3e52e62523f5",
+      "slug": "arcane_hot_shot",
+      "name": "Arcane Hot Shot",
+      "tags": [
+        "legendary",
+        "arcane_enhancement"
+      ],
+      "rarity": "legendary",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/AbilityHeatProcsGiveCritChance",
+      "icon": "items/images/en/arcane_hot_shot.b488affbc34321e8b1dba284f889d634.webp",
+      "thumb": "items/images/en/thumbs/arcane_hot_shot.b488affbc34321e8b1dba284f889d634.128x128.webp",
+      "dissolutionVosfor": 84,
+      "imageName": "ArcaneHotShot.png"
+    },
+    {
+      "id": "67db60899cec3e52e62523f6",
+      "slug": "arcane_universal_fallout",
+      "name": "Arcane Universal Fallout",
+      "tags": [
+        "legendary",
+        "arcane_enhancement"
+      ],
+      "rarity": "legendary",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityRadiationProcsCreateUniversalOrbsOnKill",
+      "icon": "items/images/en/arcane_universal_fallout.a2684caa30e88e5ef81c183acefe3354.webp",
+      "thumb": "items/images/en/thumbs/arcane_universal_fallout.a2684caa30e88e5ef81c183acefe3354.128x128.webp",
+      "dissolutionVosfor": 84,
+      "imageName": "ArcaneUniversalFallout.png"
+    },
+    {
+      "id": "690dfe83f88bae2d5b1f5598",
+      "slug": "peculiar_end",
+      "name": "Peculiar End",
+      "tags": [
+        "mod",
+        "peculiar",
+        "arcane_enhancement",
+        "warframe"
+      ],
+      "rarity": "unknown",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/DissolveEnemyMod",
+      "icon": "items/images/en/peculiar_end.5e2329cb6585a408da98343edb2884fb.webp",
+      "thumb": "items/images/en/thumbs/peculiar_end.5e2329cb6585a408da98343edb2884fb.128x128.webp"
+    },
+    {
+      "id": "6939d5d8d6a357b81964f85f",
+      "slug": "arcane_persistence",
+      "name": "Arcane Persistence",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/MaxDPSTakenForArmour",
+      "icon": "items/images/en/arcane_persistence.0af23174a3ef891081096a5fb3d15967.webp",
+      "thumb": "items/images/en/thumbs/arcane_persistence.0af23174a3ef891081096a5fb3d15967.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "ArcanePersistence.png"
+    },
+    {
+      "id": "6939d5d9d6a357b81964f860",
+      "slug": "arcane_expertise",
+      "name": "Arcane Expertise",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/ShieldMaxForAbilityStrength",
+      "icon": "items/images/en/arcane_expertise.2af40ec68fa1c088e680d32727c186fc.webp",
+      "thumb": "items/images/en/thumbs/arcane_expertise.2af40ec68fa1c088e680d32727c186fc.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "ArcaneExpertise.png"
+    },
+    {
+      "id": "6939d5dad6a357b81964f861",
+      "slug": "arcane_circumvent",
+      "name": "Arcane Circumvent",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/StealDefensiveStatsOnRoll",
+      "icon": "items/images/en/arcane_circumvent.961100ef755581993133c15d34f04f53.webp",
+      "thumb": "items/images/en/thumbs/arcane_circumvent.961100ef755581993133c15d34f04f53.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "ArcaneCircumvent.png"
+    },
+    {
+      "id": "6939d5dcd6a357b81964f862",
+      "slug": "primary_bulwark",
+      "name": "Primary Bulwark",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/DamageForBonusArmour",
+      "icon": "items/images/en/primary_bulwark.d2e2aba41f3bd3ae701e3cf3530fe510.webp",
+      "thumb": "items/images/en/thumbs/primary_bulwark.d2e2aba41f3bd3ae701e3cf3530fe510.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "PrimaryBulwark.png"
+    },
+    {
+      "id": "6939d5ddd6a357b81964f863",
+      "slug": "primary_overcharge",
+      "name": "Primary Overcharge",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/MultishotForMaxEnergy",
+      "icon": "items/images/en/primary_overcharge.069849f8d95a4cd0622f80103e8bdccc.webp",
+      "thumb": "items/images/en/thumbs/primary_overcharge.069849f8d95a4cd0622f80103e8bdccc.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "PrimaryOvercharge.png"
+    },
+    {
+      "id": "6939d5ded6a357b81964f864",
+      "slug": "secondary_irradiate",
+      "name": "Secondary Irradiate",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/RadialDamageOnMaxRadiationStackHit",
+      "icon": "items/images/en/secondary_irradiate.a2db94825da26ca2ba5e5b9e3350bf6d.webp",
+      "thumb": "items/images/en/thumbs/secondary_irradiate.a2db94825da26ca2ba5e5b9e3350bf6d.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "SecondaryIrradiate.png"
+    },
+    {
+      "id": "6939d5e0d6a357b81964f865",
+      "slug": "primary_debilitate",
+      "name": "Primary Debilitate",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SplitStatusProcsOnStackedStatusHit",
+      "icon": "items/images/en/primary_debilitate.4c0642227aae65cbd63dee27d8fafa48.webp",
+      "thumb": "items/images/en/thumbs/primary_debilitate.4c0642227aae65cbd63dee27d8fafa48.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "PrimaryDebilitate.png"
+    },
+    {
+      "id": "6939d5e1d6a357b81964f866",
+      "slug": "arcane_concentration",
+      "name": "Arcane Concentration",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityDurationOnCast",
+      "icon": "items/images/en/arcane_concentration.8241161cbae0706e313693aef592b971.webp",
+      "thumb": "items/images/en/thumbs/arcane_concentration.8241161cbae0706e313693aef592b971.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "ArcaneConcentration.png"
+    },
+    {
+      "id": "6939d5e3d6a357b81964f867",
+      "slug": "melee_careen",
+      "name": "Melee Careen",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/FreezeEnemiesOnRoll",
+      "icon": "items/images/en/melee_careen.14f866446993248fb049236b3437963b.webp",
+      "thumb": "items/images/en/thumbs/melee_careen.14f866446993248fb049236b3437963b.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "MeleeCareen.png"
+    },
+    {
+      "id": "69765a057b65a4e83d4ab4ae",
+      "slug": "zid-an-sek-eel",
+      "name": "Zid-an Sek-eel",
+      "tags": [
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Antiques/UltimateInvisibilty",
+      "icon": "items/images/en/zid-an-sek-eel.8bc9e9fa897d0231cdeca3f6d8645e66.webp",
+      "thumb": "items/images/en/thumbs/zid-an-sek-eel.8bc9e9fa897d0231cdeca3f6d8645e66.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "Zid-AnSek-Eel.png"
+    },
+    {
+      "id": "69765a057b65a4e83d4ab4af",
+      "slug": "zid-an-asheir",
+      "name": "Zid-an Asheir",
+      "tags": [
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Antiques/StatusChanceOnUltimateHit",
+      "icon": "items/images/en/zid-an-asheir.7b04215b7593ec4aca12d32ef276ef3c.webp",
+      "thumb": "items/images/en/thumbs/zid-an-asheir.7b04215b7593ec4aca12d32ef276ef3c.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "Zid-AnAsheir.png"
+    },
+    {
+      "id": "69765a057b65a4e83d4ab4b0",
+      "slug": "zid-an-uskos",
+      "name": "Zid-an Uskos",
+      "tags": [
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Antiques/HeatStatusProcOnUltimateKill",
+      "icon": "items/images/en/zid-an-uskos.818fb0745c38781db3fa7319dcb0729a.webp",
+      "thumb": "items/images/en/thumbs/zid-an-uskos.818fb0745c38781db3fa7319dcb0729a.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "Zid-AnUskos.png"
+    },
+    {
+      "id": "69765a067b65a4e83d4ab4b1",
+      "slug": "zid-an-haras",
+      "name": "Zid-an Haras",
+      "tags": [
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Antiques/AmmoEfficencyDuringUltimate",
+      "icon": "items/images/en/zid-an-haras.56d691fea4cbd08f4dc35ac85d8fd1fb.webp",
+      "thumb": "items/images/en/thumbs/zid-an-haras.56d691fea4cbd08f4dc35ac85d8fd1fb.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "Zid-AnHaras.png"
+    },
+    {
+      "id": "69765a067b65a4e83d4ab4b2",
+      "slug": "zid-an-osbok",
+      "name": "Zid-an Osbok",
+      "tags": [
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Antiques/VoidSlingsOverguardStrip",
+      "icon": "items/images/en/zid-an-osbok.bea2033c8ac9089bcff1ea005cdff694.webp",
+      "thumb": "items/images/en/thumbs/zid-an-osbok.bea2033c8ac9089bcff1ea005cdff694.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "Zid-AnOsbok.png"
+    },
+    {
+      "id": "6a33103258b60af8cd1a0d18",
+      "slug": "primary_compression",
+      "name": "Primary Compression",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/ConvergeRadialAttackOnAim",
+      "icon": "items/images/en/primary_compression.4c7b696553acb6a8cb573aa0d9990b2b.webp",
+      "thumb": "items/images/en/thumbs/primary_compression.4c7b696553acb6a8cb573aa0d9990b2b.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "PrimaryCompression.png"
+    },
+    {
+      "id": "6a33106858b60af8cd1a0d1a",
+      "slug": "arcane_sculptor",
+      "name": "Arcane Sculptor",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/AbilityEfficiencyOnAbilityObjectCreation",
+      "icon": "items/images/en/arcane_sculptor.c585312d90bbedba54bd156a47489c7c.webp",
+      "thumb": "items/images/en/thumbs/arcane_sculptor.c585312d90bbedba54bd156a47489c7c.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "ArcaneSculptor.png"
+    },
+    {
+      "id": "6a33109658b60af8cd1a0d1c",
+      "slug": "secondary_cryogenic",
+      "name": "Secondary Cryogenic",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/SecondaryColdOnPuncture",
+      "icon": "items/images/en/secondary_cryogenic.4e2a2b57bf830696a8ed87eccdc6b3d6.webp",
+      "thumb": "items/images/en/thumbs/secondary_cryogenic.4e2a2b57bf830696a8ed87eccdc6b3d6.128x128.webp",
+      "dissolutionVosfor": 20,
+      "imageName": "SecondaryCryogenic.png"
+    },
+    {
+      "id": "6a3310be58b60af8cd1a0d1e",
+      "slug": "melee_assimilation",
+      "name": "Melee Assimilation",
+      "tags": [
+        "rare",
+        "arcane_enhancement"
+      ],
+      "rarity": "rare",
+      "maxRank": 5,
+      "tradable": true,
+      "bulkTradable": true,
+      "tradingTax": 0,
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Offensive/HeavyAttackDamageAndShieldOnShieldBreak",
+      "icon": "items/images/en/melee_assimilation.a8b52f8201ebde22732ab0737998bcbf.webp",
+      "thumb": "items/images/en/thumbs/melee_assimilation.a8b52f8201ebde22732ab0737998bcbf.128x128.webp",
+      "dissolutionVosfor": 24,
+      "imageName": "MeleeAssimilation.png"
+    }
+  ],
+  "packs": [
+    {
+      "id": "cavia",
+      "name": "Cavia",
+      "costVosfor": 200,
+      "creditCost": 50000,
+      "rewardsPerPack": 3,
+      "source": "https://wiki.warframe.com/w/Loid_(Original)#Arcane_Dissolution",
+      "drops": [
+        {
+          "arcaneSlug": "melee_fortification",
+          "arcaneName": "Melee Fortification",
+          "rarity": "uncommon",
+          "chance": 0.225
+        },
+        {
+          "arcaneSlug": "melee_retaliation",
+          "arcaneName": "Melee Retaliation",
+          "rarity": "uncommon",
+          "chance": 0.225
+        },
+        {
+          "arcaneSlug": "arcane_battery",
+          "arcaneName": "Arcane Battery",
+          "rarity": "rare",
+          "chance": 0.05555556
+        },
+        {
+          "arcaneSlug": "arcane_ice_storm",
+          "arcaneName": "Arcane Ice Storm",
+          "rarity": "rare",
+          "chance": 0.05555556
+        },
+        {
+          "arcaneSlug": "melee_afflictions",
+          "arcaneName": "Melee Afflictions",
+          "rarity": "rare",
+          "chance": 0.05555556
+        },
+        {
+          "arcaneSlug": "melee_animosity",
+          "arcaneName": "Melee Animosity",
+          "rarity": "rare",
+          "chance": 0.05555556
+        },
+        {
+          "arcaneSlug": "melee_exposure",
+          "arcaneName": "Melee Exposure",
+          "rarity": "rare",
+          "chance": 0.05555556
+        },
+        {
+          "arcaneSlug": "melee_influence",
+          "arcaneName": "Melee Influence",
+          "rarity": "rare",
+          "chance": 0.05555556
+        },
+        {
+          "arcaneSlug": "melee_vortex",
+          "arcaneName": "Melee Vortex",
+          "rarity": "rare",
+          "chance": 0.05555556
+        },
+        {
+          "arcaneSlug": "secondary_fortifier",
+          "arcaneName": "Secondary Fortifier",
+          "rarity": "rare",
+          "chance": 0.05555556
+        },
+        {
+          "arcaneSlug": "secondary_surge",
+          "arcaneName": "Secondary Surge",
+          "rarity": "rare",
+          "chance": 0.05555556
+        },
+        {
+          "arcaneSlug": "melee_crescendo",
+          "arcaneName": "Melee Crescendo",
+          "rarity": "legendary",
+          "chance": 0.025
+        },
+        {
+          "arcaneSlug": "melee_duplicate",
+          "arcaneName": "Melee Duplicate",
+          "rarity": "legendary",
+          "chance": 0.025
+        }
+      ]
+    },
+    {
+      "id": "duviri",
+      "name": "Duviri",
+      "costVosfor": 200,
+      "creditCost": 50000,
+      "rewardsPerPack": 3,
+      "source": "https://wiki.warframe.com/w/Loid_(Original)#Arcane_Dissolution",
+      "drops": [
+        {
+          "arcaneSlug": "arcane_intention",
+          "arcaneName": "Arcane Intention",
+          "rarity": "uncommon",
+          "chance": 0.225
+        },
+        {
+          "arcaneSlug": "magus_aggress",
+          "arcaneName": "Magus Aggress",
+          "rarity": "uncommon",
+          "chance": 0.225
+        },
+        {
+          "arcaneSlug": "arcane_power_ramp",
+          "arcaneName": "Arcane Power Ramp",
+          "rarity": "rare",
+          "chance": 0.07142857
+        },
+        {
+          "arcaneSlug": "primary_blight",
+          "arcaneName": "Primary Blight",
+          "rarity": "rare",
+          "chance": 0.07142857
+        },
+        {
+          "arcaneSlug": "primary_exhilarate",
+          "arcaneName": "Primary Exhilarate",
+          "rarity": "rare",
+          "chance": 0.07142857
+        },
+        {
+          "arcaneSlug": "primary_obstruct",
+          "arcaneName": "Primary Obstruct",
+          "rarity": "rare",
+          "chance": 0.07142857
+        },
+        {
+          "arcaneSlug": "shotgun_vendetta",
+          "arcaneName": "Shotgun Vendetta",
+          "rarity": "rare",
+          "chance": 0.07142857
+        },
+        {
+          "arcaneSlug": "akimbo_slip_shot",
+          "arcaneName": "Akimbo Slip Shot",
+          "rarity": "rare",
+          "chance": 0.07142857
+        },
+        {
+          "arcaneSlug": "secondary_outburst",
+          "arcaneName": "Secondary Outburst",
+          "rarity": "rare",
+          "chance": 0.07142857
+        },
+        {
+          "arcaneSlug": "arcane_reaper",
+          "arcaneName": "Arcane Reaper",
+          "rarity": "legendary",
+          "chance": 0.01666667
+        },
+        {
+          "arcaneSlug": "longbow_sharpshot",
+          "arcaneName": "Longbow Sharpshot",
+          "rarity": "legendary",
+          "chance": 0.01666667
+        },
+        {
+          "arcaneSlug": "secondary_shiver",
+          "arcaneName": "Secondary Shiver",
+          "rarity": "legendary",
+          "chance": 0.01666667
+        }
+      ]
+    },
+    {
+      "id": "eidolon",
+      "name": "Eidolon",
+      "costVosfor": 200,
+      "creditCost": 50000,
+      "rewardsPerPack": 3,
+      "source": "https://wiki.warframe.com/w/Loid_(Original)#Arcane_Dissolution",
+      "drops": [
+        {
+          "arcaneSlug": "arcane_consequence",
+          "arcaneName": "Arcane Consequence",
+          "rarity": "common",
+          "chance": 0.06666667
+        },
+        {
+          "arcaneSlug": "arcane_ice",
+          "arcaneName": "Arcane Ice",
+          "rarity": "common",
+          "chance": 0.06666667
+        },
+        {
+          "arcaneSlug": "arcane_momentum",
+          "arcaneName": "Arcane Momentum",
+          "rarity": "common",
+          "chance": 0.06666667
+        },
+        {
+          "arcaneSlug": "arcane_nullifier",
+          "arcaneName": "Arcane Nullifier",
+          "rarity": "common",
+          "chance": 0.06666667
+        },
+        {
+          "arcaneSlug": "arcane_tempo",
+          "arcaneName": "Arcane Tempo",
+          "rarity": "common",
+          "chance": 0.06666667
+        },
+        {
+          "arcaneSlug": "arcane_warmth",
+          "arcaneName": "Arcane Warmth",
+          "rarity": "common",
+          "chance": 0.06666667
+        },
+        {
+          "arcaneSlug": "arcane_acceleration",
+          "arcaneName": "Arcane Acceleration",
+          "rarity": "uncommon",
+          "chance": 0.02692308
+        },
+        {
+          "arcaneSlug": "arcane_agility",
+          "arcaneName": "Arcane Agility",
+          "rarity": "uncommon",
+          "chance": 0.02692308
+        },
+        {
+          "arcaneSlug": "arcane_awakening",
+          "arcaneName": "Arcane Awakening",
+          "rarity": "uncommon",
+          "chance": 0.02692308
+        },
+        {
+          "arcaneSlug": "arcane_deflection",
+          "arcaneName": "Arcane Deflection",
+          "rarity": "uncommon",
+          "chance": 0.02692308
+        },
+        {
+          "arcaneSlug": "arcane_eruption",
+          "arcaneName": "Arcane Eruption",
+          "rarity": "uncommon",
+          "chance": 0.02692308
+        },
+        {
+          "arcaneSlug": "arcane_guardian",
+          "arcaneName": "Arcane Guardian",
+          "rarity": "uncommon",
+          "chance": 0.02692308
+        },
+        {
+          "arcaneSlug": "arcane_healing",
+          "arcaneName": "Arcane Healing",
+          "rarity": "uncommon",
+          "chance": 0.02692308
+        },
+        {
+          "arcaneSlug": "arcane_phantasm",
+          "arcaneName": "Arcane Phantasm",
+          "rarity": "uncommon",
+          "chance": 0.02692308
+        },
+        {
+          "arcaneSlug": "arcane_resistance",
+          "arcaneName": "Arcane Resistance",
+          "rarity": "uncommon",
+          "chance": 0.02692308
+        },
+        {
+          "arcaneSlug": "arcane_strike",
+          "arcaneName": "Arcane Strike",
+          "rarity": "uncommon",
+          "chance": 0.02692308
+        },
+        {
+          "arcaneSlug": "arcane_trickery",
+          "arcaneName": "Arcane Trickery",
+          "rarity": "uncommon",
+          "chance": 0.02692308
+        },
+        {
+          "arcaneSlug": "arcane_velocity",
+          "arcaneName": "Arcane Velocity",
+          "rarity": "uncommon",
+          "chance": 0.02692308
+        },
+        {
+          "arcaneSlug": "arcane_victory",
+          "arcaneName": "Arcane Victory",
+          "rarity": "uncommon",
+          "chance": 0.02692308
+        },
+        {
+          "arcaneSlug": "arcane_aegis",
+          "arcaneName": "Arcane Aegis",
+          "rarity": "rare",
+          "chance": 0.025
+        },
+        {
+          "arcaneSlug": "arcane_arachne",
+          "arcaneName": "Arcane Arachne",
+          "rarity": "rare",
+          "chance": 0.025
+        },
+        {
+          "arcaneSlug": "arcane_avenger",
+          "arcaneName": "Arcane Avenger",
+          "rarity": "rare",
+          "chance": 0.025
+        },
+        {
+          "arcaneSlug": "arcane_fury",
+          "arcaneName": "Arcane Fury",
+          "rarity": "rare",
+          "chance": 0.025
+        },
+        {
+          "arcaneSlug": "arcane_precision",
+          "arcaneName": "Arcane Precision",
+          "rarity": "rare",
+          "chance": 0.025
+        },
+        {
+          "arcaneSlug": "arcane_pulse",
+          "arcaneName": "Arcane Pulse",
+          "rarity": "rare",
+          "chance": 0.025
+        },
+        {
+          "arcaneSlug": "arcane_rage",
+          "arcaneName": "Arcane Rage",
+          "rarity": "rare",
+          "chance": 0.025
+        },
+        {
+          "arcaneSlug": "arcane_ultimatum",
+          "arcaneName": "Arcane Ultimatum",
+          "rarity": "rare",
+          "chance": 0.025
+        },
+        {
+          "arcaneSlug": "arcane_barrier",
+          "arcaneName": "Arcane Barrier",
+          "rarity": "legendary",
+          "chance": 0.01666667
+        },
+        {
+          "arcaneSlug": "arcane_energize",
+          "arcaneName": "Arcane Energize",
+          "rarity": "legendary",
+          "chance": 0.01666667
+        },
+        {
+          "arcaneSlug": "arcane_grace",
+          "arcaneName": "Arcane Grace",
+          "rarity": "legendary",
+          "chance": 0.01666667
+        }
+      ]
+    },
+    {
+      "id": "holdfasts",
+      "name": "Holdfasts",
+      "costVosfor": 200,
+      "creditCost": 50000,
+      "rewardsPerPack": 3,
+      "source": "https://wiki.warframe.com/w/Loid_(Original)#Arcane_Dissolution",
+      "drops": [
+        {
+          "arcaneSlug": "arcane_blessing",
+          "arcaneName": "Arcane Blessing",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "arcane_rise",
+          "arcaneName": "Arcane Rise",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "molt_augmented",
+          "arcaneName": "Molt Augmented",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "molt_efficiency",
+          "arcaneName": "Molt Efficiency",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "molt_reconstruct",
+          "arcaneName": "Molt Reconstruct",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "molt_vigor",
+          "arcaneName": "Molt Vigor",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "fractalized_reset",
+          "arcaneName": "Fractalized Reset",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "primary_frostbite",
+          "arcaneName": "Primary Frostbite",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "cascadia_accuracy",
+          "arcaneName": "Cascadia Accuracy",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "cascadia_empowered",
+          "arcaneName": "Cascadia Empowered",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "cascadia_flare",
+          "arcaneName": "Cascadia Flare",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "cascadia_overcharge",
+          "arcaneName": "Cascadia Overcharge",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "conjunction_voltage",
+          "arcaneName": "Conjunction Voltage",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "emergence_dissipate",
+          "arcaneName": "Emergence Dissipate",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "emergence_renewed",
+          "arcaneName": "Emergence Renewed",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "emergence_savior",
+          "arcaneName": "Emergence Savior",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "eternal_eradicate",
+          "arcaneName": "Eternal Eradicate",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "eternal_logistics",
+          "arcaneName": "Eternal Logistics",
+          "rarity": "rare",
+          "chance": 0.05263158
+        },
+        {
+          "arcaneSlug": "eternal_onslaught",
+          "arcaneName": "Eternal Onslaught",
+          "rarity": "rare",
+          "chance": 0.05263158
+        }
+      ]
+    },
+    {
+      "id": "hollvania",
+      "name": "Höllvania",
+      "costVosfor": 200,
+      "creditCost": 50000,
+      "rewardsPerPack": 3,
+      "source": "https://wiki.warframe.com/w/Loid_(Original)#Arcane_Dissolution",
+      "drops": [
+        {
+          "arcaneSlug": "arcane_bellicose",
+          "arcaneName": "Arcane Bellicose",
+          "rarity": "rare",
+          "chance": 0.11875
+        },
+        {
+          "arcaneSlug": "arcane_camisado",
+          "arcaneName": "Arcane Camisado",
+          "rarity": "rare",
+          "chance": 0.11875
+        },
+        {
+          "arcaneSlug": "arcane_crepuscular",
+          "arcaneName": "Arcane Crepuscular",
+          "rarity": "rare",
+          "chance": 0.11875
+        },
+        {
+          "arcaneSlug": "arcane_impetus",
+          "arcaneName": "Arcane Impetus",
+          "rarity": "rare",
+          "chance": 0.11875
+        },
+        {
+          "arcaneSlug": "arcane_truculence",
+          "arcaneName": "Arcane Truculence",
+          "rarity": "rare",
+          "chance": 0.11875
+        },
+        {
+          "arcaneSlug": "melee_doughty",
+          "arcaneName": "Melee Doughty",
+          "rarity": "rare",
+          "chance": 0.11875
+        },
+        {
+          "arcaneSlug": "primary_crux",
+          "arcaneName": "Primary Crux",
+          "rarity": "rare",
+          "chance": 0.11875
+        },
+        {
+          "arcaneSlug": "secondary_enervate",
+          "arcaneName": "Secondary Enervate",
+          "rarity": "rare",
+          "chance": 0.11875
+        },
+        {
+          "arcaneSlug": "arcane_escapist",
+          "arcaneName": "Arcane Escapist",
+          "rarity": "legendary",
+          "chance": 0.01666667
+        },
+        {
+          "arcaneSlug": "arcane_hot_shot",
+          "arcaneName": "Arcane Hot Shot",
+          "rarity": "legendary",
+          "chance": 0.01666667
+        },
+        {
+          "arcaneSlug": "arcane_universal_fallout",
+          "arcaneName": "Arcane Universal Fallout",
+          "rarity": "legendary",
+          "chance": 0.01666667
+        }
+      ]
+    },
+    {
+      "id": "necralisk",
+      "name": "Necralisk",
+      "costVosfor": 200,
+      "creditCost": 50000,
+      "rewardsPerPack": 3,
+      "source": "https://wiki.warframe.com/w/Loid_(Original)#Arcane_Dissolution",
+      "drops": [
+        {
+          "arcaneSlug": "arcane_double_back",
+          "arcaneName": "Arcane Double Back",
+          "rarity": "rare",
+          "chance": 0.08333333
+        },
+        {
+          "arcaneSlug": "arcane_steadfast",
+          "arcaneName": "Arcane Steadfast",
+          "rarity": "rare",
+          "chance": 0.08333333
+        },
+        {
+          "arcaneSlug": "theorem_contagion",
+          "arcaneName": "Theorem Contagion",
+          "rarity": "rare",
+          "chance": 0.08333333
+        },
+        {
+          "arcaneSlug": "theorem_demulcent",
+          "arcaneName": "Theorem Demulcent",
+          "rarity": "rare",
+          "chance": 0.08333333
+        },
+        {
+          "arcaneSlug": "theorem_infection",
+          "arcaneName": "Theorem Infection",
+          "rarity": "rare",
+          "chance": 0.08333333
+        },
+        {
+          "arcaneSlug": "primary_plated_round",
+          "arcaneName": "Primary Plated Round",
+          "rarity": "rare",
+          "chance": 0.08333333
+        },
+        {
+          "arcaneSlug": "secondary_encumber",
+          "arcaneName": "Secondary Encumber",
+          "rarity": "rare",
+          "chance": 0.08333333
+        },
+        {
+          "arcaneSlug": "secondary_kinship",
+          "arcaneName": "Secondary Kinship",
+          "rarity": "rare",
+          "chance": 0.08333333
+        },
+        {
+          "arcaneSlug": "residual_boils",
+          "arcaneName": "Residual Boils",
+          "rarity": "rare",
+          "chance": 0.08333333
+        },
+        {
+          "arcaneSlug": "residual_malodor",
+          "arcaneName": "Residual Malodor",
+          "rarity": "rare",
+          "chance": 0.08333333
+        },
+        {
+          "arcaneSlug": "residual_shock",
+          "arcaneName": "Residual Shock",
+          "rarity": "rare",
+          "chance": 0.08333333
+        },
+        {
+          "arcaneSlug": "residual_viremia",
+          "arcaneName": "Residual Viremia",
+          "rarity": "rare",
+          "chance": 0.08333333
+        }
+      ]
+    },
+    {
+      "id": "ostron",
+      "name": "Ostron",
+      "costVosfor": 200,
+      "creditCost": 50000,
+      "rewardsPerPack": 3,
+      "source": "https://wiki.warframe.com/w/Loid_(Original)#Arcane_Dissolution",
+      "drops": [
+        {
+          "arcaneSlug": "magus_husk",
+          "arcaneName": "Magus Husk",
+          "rarity": "common",
+          "chance": 0.15
+        },
+        {
+          "arcaneSlug": "magus_vigor",
+          "arcaneName": "Magus Vigor",
+          "rarity": "common",
+          "chance": 0.15
+        },
+        {
+          "arcaneSlug": "virtuos_null",
+          "arcaneName": "Virtuos Null",
+          "rarity": "common",
+          "chance": 0.15
+        },
+        {
+          "arcaneSlug": "virtuos_tempo",
+          "arcaneName": "Virtuos Tempo",
+          "rarity": "common",
+          "chance": 0.15
+        },
+        {
+          "arcaneSlug": "exodia_triumph",
+          "arcaneName": "Exodia Triumph",
+          "rarity": "uncommon",
+          "chance": 0.04285714
+        },
+        {
+          "arcaneSlug": "exodia_valor",
+          "arcaneName": "Exodia Valor",
+          "rarity": "uncommon",
+          "chance": 0.04285714
+        },
+        {
+          "arcaneSlug": "magus_cadence",
+          "arcaneName": "Magus Cadence",
+          "rarity": "uncommon",
+          "chance": 0.04285714
+        },
+        {
+          "arcaneSlug": "magus_cloud",
+          "arcaneName": "Magus Cloud",
+          "rarity": "uncommon",
+          "chance": 0.04285714
+        },
+        {
+          "arcaneSlug": "magus_replenish",
+          "arcaneName": "Magus Replenish",
+          "rarity": "uncommon",
+          "chance": 0.04285714
+        },
+        {
+          "arcaneSlug": "virtuos_fury",
+          "arcaneName": "Virtuos Fury",
+          "rarity": "uncommon",
+          "chance": 0.04285714
+        },
+        {
+          "arcaneSlug": "virtuos_strike",
+          "arcaneName": "Virtuos Strike",
+          "rarity": "uncommon",
+          "chance": 0.04285714
+        },
+        {
+          "arcaneSlug": "exodia_brave",
+          "arcaneName": "Exodia Brave",
+          "rarity": "rare",
+          "chance": 0.0125
+        },
+        {
+          "arcaneSlug": "exodia_force",
+          "arcaneName": "Exodia Force",
+          "rarity": "rare",
+          "chance": 0.0125
+        },
+        {
+          "arcaneSlug": "exodia_hunt",
+          "arcaneName": "Exodia Hunt",
+          "rarity": "rare",
+          "chance": 0.0125
+        },
+        {
+          "arcaneSlug": "exodia_might",
+          "arcaneName": "Exodia Might",
+          "rarity": "rare",
+          "chance": 0.0125
+        },
+        {
+          "arcaneSlug": "magus_elevate",
+          "arcaneName": "Magus Elevate",
+          "rarity": "rare",
+          "chance": 0.0125
+        },
+        {
+          "arcaneSlug": "magus_nourish",
+          "arcaneName": "Magus Nourish",
+          "rarity": "rare",
+          "chance": 0.0125
+        },
+        {
+          "arcaneSlug": "virtuos_ghost",
+          "arcaneName": "Virtuos Ghost",
+          "rarity": "rare",
+          "chance": 0.0125
+        },
+        {
+          "arcaneSlug": "virtuos_shadow",
+          "arcaneName": "Virtuos Shadow",
+          "rarity": "rare",
+          "chance": 0.0125
+        }
+      ]
+    },
+    {
+      "id": "solaris",
+      "name": "Solaris",
+      "costVosfor": 200,
+      "creditCost": 50000,
+      "rewardsPerPack": 3,
+      "source": "https://wiki.warframe.com/w/Loid_(Original)#Arcane_Dissolution",
+      "drops": [
+        {
+          "arcaneSlug": "magus_accelerant",
+          "arcaneName": "Magus Accelerant",
+          "rarity": "common",
+          "chance": 0.08571429
+        },
+        {
+          "arcaneSlug": "magus_anomaly",
+          "arcaneName": "Magus Anomaly",
+          "rarity": "common",
+          "chance": 0.08571429
+        },
+        {
+          "arcaneSlug": "magus_drive",
+          "arcaneName": "Magus Drive",
+          "rarity": "common",
+          "chance": 0.08571429
+        },
+        {
+          "arcaneSlug": "magus_firewall",
+          "arcaneName": "Magus Firewall",
+          "rarity": "common",
+          "chance": 0.08571429
+        },
+        {
+          "arcaneSlug": "magus_overload",
+          "arcaneName": "Magus Overload",
+          "rarity": "common",
+          "chance": 0.08571429
+        },
+        {
+          "arcaneSlug": "virtuos_spike",
+          "arcaneName": "Virtuos Spike",
+          "rarity": "common",
+          "chance": 0.08571429
+        },
+        {
+          "arcaneSlug": "virtuos_surge",
+          "arcaneName": "Virtuos Surge",
+          "rarity": "common",
+          "chance": 0.08571429
+        },
+        {
+          "arcaneSlug": "magus_glitch",
+          "arcaneName": "Magus Glitch",
+          "rarity": "uncommon",
+          "chance": 0.075
+        },
+        {
+          "arcaneSlug": "magus_repair",
+          "arcaneName": "Magus Repair",
+          "rarity": "uncommon",
+          "chance": 0.075
+        },
+        {
+          "arcaneSlug": "virtuos_forge",
+          "arcaneName": "Virtuos Forge",
+          "rarity": "uncommon",
+          "chance": 0.075
+        },
+        {
+          "arcaneSlug": "virtuos_trojan",
+          "arcaneName": "Virtuos Trojan",
+          "rarity": "uncommon",
+          "chance": 0.075
+        },
+        {
+          "arcaneSlug": "pax_bolt",
+          "arcaneName": "Pax Bolt",
+          "rarity": "rare",
+          "chance": 0.0125
+        },
+        {
+          "arcaneSlug": "pax_charge",
+          "arcaneName": "Pax Charge",
+          "rarity": "rare",
+          "chance": 0.0125
+        },
+        {
+          "arcaneSlug": "pax_seeker",
+          "arcaneName": "Pax Seeker",
+          "rarity": "rare",
+          "chance": 0.0125
+        },
+        {
+          "arcaneSlug": "pax_soar",
+          "arcaneName": "Pax Soar",
+          "rarity": "rare",
+          "chance": 0.0125
+        },
+        {
+          "arcaneSlug": "magus_destruct",
+          "arcaneName": "Magus Destruct",
+          "rarity": "rare",
+          "chance": 0.0125
+        },
+        {
+          "arcaneSlug": "magus_lockdown",
+          "arcaneName": "Magus Lockdown",
+          "rarity": "rare",
+          "chance": 0.0125
+        },
+        {
+          "arcaneSlug": "magus_melt",
+          "arcaneName": "Magus Melt",
+          "rarity": "rare",
+          "chance": 0.0125
+        },
+        {
+          "arcaneSlug": "magus_revert",
+          "arcaneName": "Magus Revert",
+          "rarity": "rare",
+          "chance": 0.0125
+        }
+      ]
+    },
+    {
+      "id": "steel",
+      "name": "Steel",
+      "costVosfor": 200,
+      "creditCost": 50000,
+      "rewardsPerPack": 3,
+      "source": "https://wiki.warframe.com/w/Loid_(Original)#Arcane_Dissolution",
+      "drops": [
+        {
+          "arcaneSlug": "arcane_blade_charger",
+          "arcaneName": "Arcane Blade Charger",
+          "rarity": "rare",
+          "chance": 0.09090909
+        },
+        {
+          "arcaneSlug": "arcane_bodyguard",
+          "arcaneName": "Arcane Bodyguard",
+          "rarity": "rare",
+          "chance": 0.09090909
+        },
+        {
+          "arcaneSlug": "arcane_pistoleer",
+          "arcaneName": "Arcane Pistoleer",
+          "rarity": "rare",
+          "chance": 0.09090909
+        },
+        {
+          "arcaneSlug": "arcane_primary_charger",
+          "arcaneName": "Arcane Primary Charger",
+          "rarity": "rare",
+          "chance": 0.09090909
+        },
+        {
+          "arcaneSlug": "arcane_tanker",
+          "arcaneName": "Arcane Tanker",
+          "rarity": "rare",
+          "chance": 0.09090909
+        },
+        {
+          "arcaneSlug": "primary_deadhead",
+          "arcaneName": "Primary Deadhead",
+          "rarity": "rare",
+          "chance": 0.09090909
+        },
+        {
+          "arcaneSlug": "primary_dexterity",
+          "arcaneName": "Primary Dexterity",
+          "rarity": "rare",
+          "chance": 0.09090909
+        },
+        {
+          "arcaneSlug": "primary_merciless",
+          "arcaneName": "Primary Merciless",
+          "rarity": "rare",
+          "chance": 0.09090909
+        },
+        {
+          "arcaneSlug": "secondary_deadhead",
+          "arcaneName": "Secondary Deadhead",
+          "rarity": "rare",
+          "chance": 0.09090909
+        },
+        {
+          "arcaneSlug": "secondary_dexterity",
+          "arcaneName": "Secondary Dexterity",
+          "rarity": "rare",
+          "chance": 0.09090909
+        },
+        {
+          "arcaneSlug": "secondary_merciless",
+          "arcaneName": "Secondary Merciless",
+          "rarity": "rare",
+          "chance": 0.09090909
+        }
+      ]
+    }
+  ],
+  "loadedAt": "2026-07-06T04:11:47.311Z",
+  "versionsUpdatedAt": "2026-06-23T11:25:34Z"
+}
