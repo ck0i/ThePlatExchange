@@ -1,8 +1,10 @@
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { compact, isRecord, readArray, readBooleanWithDefault, readNullableNumber, readNumberWithDefault, readRecord, readString, readStringWithDefault } from "./guards.js";
+import { compact, isRecord, readArray, readBoolean, readBooleanWithDefault, readNullableNumber, readNumber, readNumberWithDefault, readRecord, readString, readStringArray, readStringWithDefault } from "./guards.js";
 import { delay, TokenBucket } from "./rateLimit.js";
-import type { AuctionAttribute, AuctionOwner, ReferenceSnapshot, RivenAttribute, RivenAuction, RivenWeapon, SellerStatus } from "./types.js";
+import { ARCANE_DISSOLUTION_SOURCE_URL, arcanePackDefinitions, mergeArcaneWikiData, parseArcaneWikiData } from "./arcanes.js";
+import type { ParsedArcaneWikiEntry } from "./arcanes.js";
+import type { ArcaneItem, ArcaneOrder, ArcaneReferenceSnapshot, AuctionAttribute, AuctionOwner, ReferenceSnapshot, RivenAttribute, RivenAuction, RivenWeapon, SellerStatus } from "./types.js";
 import { enrichWeaponsWithImageNames, fetchWarframestatImageMap } from "./warframestat.js";
 
 type Fetcher = (input: URL, init: RequestInit) => Promise<Response>;
@@ -137,6 +139,73 @@ export class WarframeMarketClient {
     return compact(readArray(payload, "auctions").map(parseRivenAuction));
   }
 
+  async loadArcaneReference(): Promise<ArcaneReferenceSnapshot> {
+    const cached = await this.readArcaneReferenceCache();
+    let versionInfo: VersionInfo;
+    try {
+      versionInfo = await this.versions();
+    } catch (error) {
+      if (cached && isUsableArcaneReferenceCache(cached)) return cached;
+      throw error;
+    }
+
+    if (cached && arcaneReferenceCacheMatches(cached, versionInfo)) return cached;
+
+    const items = await this.arcaneItems();
+    if (items.length === 0) {
+      if (cached && isUsableArcaneReferenceCache(cached)) return cached;
+      throw new Error("refusing to overwrite arcane reference cache with an empty Warframe.market item payload");
+    }
+
+    let enrichedItems = items;
+    try {
+      const wikiEntries = await this.fetchArcaneWikiData();
+      enrichedItems = mergeArcaneWikiData(items, wikiEntries);
+    } catch {
+      if (cached && cached.items.some((item) => item.dissolutionVosfor !== undefined)) {
+        const cachedBySlug = new Map(cached.items.map((item) => [item.slug, item]));
+        enrichedItems = items.map((item) => {
+          const prior = cachedBySlug.get(item.slug);
+          if (!prior) return item;
+          return {
+            ...item,
+            ...(prior.dissolutionVosfor !== undefined ? { dissolutionVosfor: prior.dissolutionVosfor } : {}),
+            ...(prior.cannotDissolve ? { cannotDissolve: true } : {}),
+            ...(prior.imageName ? { imageName: prior.imageName } : {}),
+          };
+        });
+      }
+    }
+
+    const snapshot: ArcaneReferenceSnapshot = {
+      versions: versionInfo.collections,
+      items: enrichedItems,
+      packs: arcanePackDefinitions(),
+      loadedAt: new Date().toISOString(),
+    };
+    if (versionInfo.updatedAt) snapshot.versionsUpdatedAt = versionInfo.updatedAt;
+    await this.writeArcaneReferenceCache(snapshot);
+    return snapshot;
+  }
+
+  async arcaneItems(): Promise<ArcaneItem[]> {
+    const payload = await this.getV2("/v2/items");
+    if (!Array.isArray(payload)) return [];
+    return compact(payload.map(parseArcaneItem)).filter((item) => item.tags.includes("arcane_enhancement") && (item.tradable || item.bulkTradable));
+  }
+
+  async searchArcaneOrders(item: ArcaneItem): Promise<ArcaneOrder[]> {
+    const ranks = item.maxRank > 0 ? [0, item.maxRank] : [0];
+    const orders: ArcaneOrder[] = [];
+    for (const rank of ranks) {
+      const payload = await this.getV2(`/v2/orders/item/${encodeURIComponent(item.slug)}/top`, { rank });
+      if (!isRecord(payload)) continue;
+      orders.push(...compact(readArray(payload, "sell").map(parseArcaneOrder)));
+      orders.push(...compact(readArray(payload, "buy").map(parseArcaneOrder)));
+    }
+    return orders;
+  }
+
   private async backfillImageNames(snapshot: ReferenceSnapshot): Promise<void> {
     if (!snapshot.rivenWeapons.some((weapon) => !weapon.imageName)) return;
     try {
@@ -165,6 +234,38 @@ export class WarframeMarketClient {
     const tempPath = join(this.cacheDir, `reference.${process.pid}.${Date.now()}.tmp`);
     await writeFile(tempPath, JSON.stringify(snapshot, null, 2), "utf8");
     await rename(tempPath, cachePath);
+  }
+
+  private async readArcaneReferenceCache(): Promise<ArcaneReferenceSnapshot | null> {
+    try {
+      const raw = await readFile(join(this.cacheDir, "arcane-reference.json"), "utf8");
+      const parsed: unknown = JSON.parse(raw);
+      return parseArcaneReferenceSnapshot(parsed);
+    } catch (error) {
+      if (isRecord(error) && error.code === "ENOENT") return null;
+      return null;
+    }
+  }
+
+  private async writeArcaneReferenceCache(snapshot: ArcaneReferenceSnapshot): Promise<void> {
+    await mkdir(this.cacheDir, { recursive: true });
+    const cachePath = join(this.cacheDir, "arcane-reference.json");
+    const tempPath = join(this.cacheDir, `arcane-reference.${process.pid}.${Date.now()}.tmp`);
+    await writeFile(tempPath, JSON.stringify(snapshot, null, 2), "utf8");
+    await rename(tempPath, cachePath);
+  }
+
+  private async fetchArcaneWikiData(): Promise<Map<string, ParsedArcaneWikiEntry>> {
+    const url = new URL(`${ARCANE_DISSOLUTION_SOURCE_URL}?action=raw`);
+    await this.bucket.take();
+    const response = await this.fetcher(url, {
+      headers: {
+        "User-Agent": this.headers["User-Agent"] ?? "the-plat-exchange-ts/0.1",
+        Accept: "text/plain, text/x-wiki;q=0.9, */*;q=0.1",
+      },
+    });
+    if (!response.ok) throw new Error(`Arcane wiki data ${response.status}`);
+    return parseArcaneWikiData(await response.text());
   }
 
   private async getV2(path: string, params?: Record<string, string | number | boolean>): Promise<unknown> {
@@ -236,6 +337,33 @@ function parseReferenceSnapshot(value: unknown): ReferenceSnapshot | null {
   return snapshot;
 }
 
+function parseArcaneReferenceSnapshot(value: unknown): ArcaneReferenceSnapshot | null {
+  if (!isRecord(value)) return null;
+  const versionsRecord = readRecord(value, "versions") ?? {};
+  const versions: Record<string, string> = {};
+  for (const [key, entry] of Object.entries(versionsRecord)) {
+    if (typeof entry === "string") versions[key] = entry;
+  }
+  const items = compact(readArray(value, "items").map(parseArcaneItem));
+  const loadedAt = readStringWithDefault(value, "loadedAt", new Date(0).toISOString());
+  const packs = readArray(value, "packs").length > 0 ? value.packs as ArcaneReferenceSnapshot["packs"] : arcanePackDefinitions();
+  const snapshot: ArcaneReferenceSnapshot = { versions, items, packs, loadedAt };
+  const versionsUpdatedAt = readString(value, "versionsUpdatedAt");
+  if (versionsUpdatedAt) snapshot.versionsUpdatedAt = versionsUpdatedAt;
+  return snapshot;
+}
+
+function isUsableArcaneReferenceCache(cache: ArcaneReferenceSnapshot): boolean {
+  return cache.items.length > 0 && cache.packs.length > 0;
+}
+
+function arcaneReferenceCacheMatches(cache: ArcaneReferenceSnapshot, versionInfo: VersionInfo): boolean {
+  const liveItemHash = versionInfo.collections.items;
+  if (!liveItemHash) return isUsableArcaneReferenceCache(cache);
+  return isUsableArcaneReferenceCache(cache) && cache.versions.items === liveItemHash;
+}
+
+
 function isUsableReferenceCache(cache: ReferenceSnapshot): boolean {
   return cache.rivenWeapons.length > 0 && cache.rivenAttributes.length > 0;
 }
@@ -285,6 +413,92 @@ function parseRivenAttribute(value: unknown): RivenAttribute | null {
     suffix: readStringWithDefault(value, "suffix", ""),
     name: readString(value, "name") ?? (en ? readStringWithDefault(en, "name", titleFromSlug(slug)) : titleFromSlug(slug)),
   };
+}
+
+function parseArcaneItem(value: unknown): ArcaneItem | null {
+  if (!isRecord(value)) return null;
+  const slug = readString(value, "slug");
+  if (!slug) return null;
+  const tags = readStringArray(value, "tags");
+  if (!tags.includes("arcane_enhancement")) return null;
+  const i18n = readRecord(value, "i18n");
+  const en = i18n ? readRecord(i18n, "en") : undefined;
+  const name = readString(value, "name") ?? (en ? readStringWithDefault(en, "name", titleFromSlug(slug)) : titleFromSlug(slug));
+  const tradable = readBoolean(value, "tradable");
+  const bulkTradable = readBoolean(value, "bulkTradable");
+  const item: ArcaneItem = {
+    id: readStringWithDefault(value, "id", slug),
+    slug,
+    name,
+    tags,
+    rarity: parseArcaneRarity(readString(value, "rarity"), tags),
+    maxRank: Math.max(0, Math.floor(readNumberWithDefault(value, "maxRank", 5))),
+    tradable: tradable ?? true,
+    bulkTradable: bulkTradable ?? true,
+    tradingTax: readNumberWithDefault(value, "tradingTax", 0),
+  };
+  const gameRef = readString(value, "gameRef");
+  const icon = readString(value, "icon") ?? (en ? readString(en, "icon") : undefined);
+  const thumb = readString(value, "thumb") ?? (en ? readString(en, "thumb") : undefined);
+  const imageName = readString(value, "imageName");
+  const wikiLink = en ? readString(en, "wikiLink") : undefined;
+  const dissolutionVosfor = readNumber(value, "dissolutionVosfor");
+  if (gameRef) item.gameRef = gameRef;
+  if (icon) item.icon = icon;
+  if (thumb) item.thumb = thumb;
+  if (imageName) item.imageName = imageName;
+  if (wikiLink) item.wikiLink = wikiLink;
+  if (dissolutionVosfor !== undefined) item.dissolutionVosfor = dissolutionVosfor;
+  return item;
+}
+
+function parseArcaneOrder(value: unknown): ArcaneOrder | null {
+  if (!isRecord(value)) return null;
+  const id = readString(value, "id");
+  const rawType = readString(value, "type");
+  const userRecord = readRecord(value, "user");
+  const platinum = readNumberWithDefault(value, "platinum", Number.NaN);
+  if (!id || !userRecord || (rawType !== "sell" && rawType !== "buy") || !Number.isFinite(platinum) || platinum <= 0) return null;
+  const perTrade = Math.max(1, Math.floor(readNumberWithDefault(value, "perTrade", 1)));
+  return {
+    id,
+    type: rawType,
+    platinum,
+    unitPrice: Math.round((platinum / perTrade) * 1000) / 1000,
+    quantity: Math.max(1, Math.floor(readNumberWithDefault(value, "quantity", 1))),
+    perTrade,
+    rank: Math.max(0, Math.floor(readNumberWithDefault(value, "rank", 0))),
+    visible: readBooleanWithDefault(value, "visible", true),
+    createdAt: readStringWithDefault(value, "createdAt", ""),
+    updatedAt: readStringWithDefault(value, "updatedAt", ""),
+    itemId: readStringWithDefault(value, "itemId", ""),
+    user: parseArcaneOwner(userRecord),
+  };
+}
+
+function parseArcaneOwner(record: Record<string, unknown>): AuctionOwner {
+  const rawStatus = readString(record, "status");
+  const owner: AuctionOwner = {
+    id: readStringWithDefault(record, "id", ""),
+    ingameName: readString(record, "ingameName") ?? readStringWithDefault(record, "ingame_name", "unknown"),
+    slug: readStringWithDefault(record, "slug", "unknown"),
+    reputation: readNumberWithDefault(record, "reputation", 0),
+    status: parseSellerStatus(rawStatus),
+    platform: readStringWithDefault(record, "platform", "pc"),
+    crossplay: readBooleanWithDefault(record, "crossplay", true),
+  };
+  const lastSeen = readString(record, "lastSeen") ?? readString(record, "last_seen");
+  if (lastSeen) owner.lastSeen = lastSeen;
+  return owner;
+}
+
+function parseArcaneRarity(value: string | undefined, tags: readonly string[]): ArcaneItem["rarity"] {
+  const normalized = value?.trim().toLowerCase();
+  if (normalized === "common" || normalized === "uncommon" || normalized === "rare" || normalized === "legendary") return normalized;
+  for (const tag of tags) {
+    if (tag === "common" || tag === "uncommon" || tag === "rare" || tag === "legendary") return tag;
+  }
+  return "unknown";
 }
 
 function parseRivenAuction(value: unknown): RivenAuction | null {

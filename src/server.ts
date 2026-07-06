@@ -181,6 +181,24 @@ export function createAppServer(service: ThePlatExchangeService, options: AppSer
         sendJson(response, 200, computeInstantWins(service, url));
         return;
       }
+      if (request.method === "GET" && url.pathname === "/api/arcanes") {
+        sendJson(response, 200, service.getState().arcanes?.summaries ?? []);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/arcanes/recommendations") {
+        sendJson(response, 200, service.getState().arcanes?.dissolveRecommendations ?? []);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/vosfor-packs") {
+        sendJson(response, 200, service.getState().arcanes?.packs ?? []);
+        return;
+      }
+      if (request.method === "GET" && url.pathname.startsWith("/api/arcane/")) {
+        const slug = decodeURIComponent(url.pathname.slice("/api/arcane/".length));
+        const detail = computeArcaneDetail(service, slug);
+        sendJson(response, detail ? 200 : 404, detail ?? { error: `unknown arcane: ${slug}` });
+        return;
+      }
       if (request.method === "GET" && url.pathname === "/api/signature-value") {
         const result = computeSignatureValue(service, url);
         sendJson(response, result ? 200 : 400, result ?? { error: "weapon_slug required" });
@@ -282,6 +300,35 @@ function computeInstantWins(service: ThePlatExchangeService, url: URL): Array<{ 
   }
   hits.sort((left, right) => right.expected_uplift - left.expected_uplift);
   return hits.slice(0, limit);
+}
+
+function computeArcaneDetail(service: ThePlatExchangeService, slug: string): Record<string, unknown> | null {
+  const arcanes = service.getState().arcanes;
+  if (!arcanes) return null;
+  const summary = arcanes.summaries.find((entry) => entry.slug === slug);
+  if (!summary) return null;
+  const topPackDrops = arcanes.packs
+    .map((pack) => {
+      const drop = pack.topDrops.find((entry) => entry.arcaneSlug === slug);
+      if (!drop) return null;
+      return {
+        packId: pack.packId,
+        packName: pack.packName,
+        chance: drop.chance,
+        expectedCopies: drop.expectedCopies,
+        expectedPlat: drop.expectedPlat,
+        priceUsed: drop.priceUsed,
+        confidence: pack.confidence,
+      };
+    })
+    .filter((entry): entry is NonNullable<typeof entry> => entry !== null);
+  const recommendation = arcanes.dissolveRecommendations.find((entry) => entry.slug === slug) ?? null;
+  return {
+    summary,
+    recommendation,
+    topPackDrops,
+    ordersUrl: summary.url,
+  };
 }
 
 function listWeapons(service: ThePlatExchangeService, url: URL): Array<Record<string, unknown>> {

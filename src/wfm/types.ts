@@ -72,6 +72,179 @@ export interface PriceStats {
   max: number;
 }
 
+export type ArcaneRarity = "common" | "uncommon" | "rare" | "legendary" | "unknown";
+
+export interface ArcaneItem {
+  id: string;
+  slug: string;
+  name: string;
+  tags: string[];
+  rarity: ArcaneRarity;
+  maxRank: number;
+  tradable: boolean;
+  bulkTradable: boolean;
+  tradingTax: number;
+  gameRef?: string;
+  icon?: string;
+  thumb?: string;
+  imageName?: string;
+  wikiLink?: string;
+  dissolutionVosfor?: number;
+  cannotDissolve?: boolean;
+}
+
+export interface ArcaneOrder {
+  id: string;
+  type: "sell" | "buy";
+  platinum: number;
+  unitPrice: number;
+  quantity: number;
+  perTrade: number;
+  rank: number;
+  visible: boolean;
+  createdAt: string;
+  updatedAt: string;
+  itemId: string;
+  user: AuctionOwner;
+}
+
+export interface ArcaneRankMarket {
+  rank: number;
+  sell: PriceStats | null;
+  buy: PriceStats | null;
+  sellOrderCount: number;
+  buyOrderCount: number;
+  onlineSellOrderCount: number;
+  onlineBuyOrderCount: number;
+  totalSellQuantity: number;
+  totalBuyQuantity: number;
+}
+
+export interface ArcaneMarketSummary {
+  slug: string;
+  name: string;
+  rarity: ArcaneRarity;
+  maxRank: number;
+  listings: number;
+  sellListings: number;
+  buyListings: number;
+  onlineSellListings: number;
+  onlineBuyListings: number;
+  rank0: ArcaneRankMarket;
+  rankMax?: ArcaneRankMarket;
+  dissolutionVosfor?: number;
+  icon?: string;
+  thumb?: string;
+  imageName?: string;
+  lastScannedAt?: string;
+  priceVsVosfor?: {
+    rank: number;
+    sellPrice: number;
+    platinumPerVosfor: number;
+  };
+  url: string;
+}
+
+export interface ArcanePackDrop {
+  arcaneSlug: string;
+  arcaneName: string;
+  rarity: Exclude<ArcaneRarity, "unknown">;
+  chance: number;
+}
+
+export interface ArcanePackDefinition {
+  id: string;
+  name: string;
+  costVosfor: number;
+  creditCost: number;
+  rewardsPerPack: number;
+  source: string;
+  drops: ArcanePackDrop[];
+}
+
+export interface ArcanePackValuationDrop extends ArcanePackDrop {
+  rank: number;
+  priceUsed: number | null;
+  dissolutionVosfor?: number;
+  expectedCopies: number;
+  expectedPlat: number;
+  expectedVosfor: number | null;
+  sourcePrice: "missing" | `rank${number}_sell_${string}`;
+}
+
+export interface ArcanePackValuation {
+  packId: string;
+  packName: string;
+  costVosfor: number;
+  creditCost: number;
+  rewardsPerPack: number;
+  expectedPlat: number;
+  expectedPlatPerVosfor: number;
+  expectedVosforReturn: number;
+  netVosforBurn: number;
+  coveragePct: number;
+  confidence: number;
+  missingPriceCount: number;
+  pricedDropCount: number;
+  topDrops: ArcanePackValuationDrop[];
+  source: string;
+  notes: string[];
+}
+
+export interface ArcaneDissolveRecommendation {
+  slug: string;
+  name: string;
+  rank: number;
+  sellPrice: number;
+  dissolutionVosfor: number;
+  bestPackId: string;
+  bestPackName: string;
+  estimatedRollValue: number;
+  sellValuePerVosfor: number;
+  rollValuePerVosfor: number;
+  deltaPlat: number;
+  action: "dissolve" | "sell" | "hold";
+  confidence: number;
+  reasons: string[];
+  url: string;
+  imageName?: string;
+}
+
+export interface ArcaneDashboardState {
+  generatedAt: string;
+  reference: {
+    items: number;
+    packs: number;
+    withDissolution: number;
+    versionsUpdatedAt?: string;
+  };
+  totals: {
+    itemsWithOrders: number;
+    orders: number;
+    packs: number;
+    recommendations: number;
+  };
+  status?: ScanStatus;
+  summaries: ArcaneMarketSummary[];
+  packs: ArcanePackValuation[];
+  dissolveRecommendations: ArcaneDissolveRecommendation[];
+  mechanics: {
+    packCostVosfor: number;
+    rewardsPerPack: number;
+    priceRank: number;
+    priceStatistic: string;
+    sources: string[];
+  };
+}
+
+export interface ArcaneReferenceSnapshot {
+  versions: Record<string, string>;
+  versionsUpdatedAt?: string;
+  items: ArcaneItem[];
+  packs: ArcanePackDefinition[];
+  loadedAt: string;
+}
+
 export interface WeaponSummary {
   slug: string;
   name: string;
@@ -158,6 +331,7 @@ export interface DashboardState {
   };
   opportunities: Opportunity[];
   weaponSummaries: WeaponSummary[];
+  arcanes?: ArcaneDashboardState;
 }
 
 export interface ReferenceSnapshot {

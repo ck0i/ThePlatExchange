@@ -70,6 +70,7 @@
           <button class="rail-item active" data-page="home" type="button"><span class="rail-icon">⌂</span><span class="rail-label">Home</span></button>
           <button class="rail-item" data-page="opportunities" type="button"><span class="rail-icon">◎</span><span class="rail-label">Opportunities</span></button>
           <button class="rail-item" data-page="instant" type="button"><span class="rail-icon">ϟ</span><span class="rail-label">Instant Wins</span></button>
+          <button class="rail-item" data-page="arcanes" type="button"><span class="rail-icon">✦</span><span class="rail-label">Arcanes</span></button>
           <button class="rail-item" data-page="markets" type="button"><span class="rail-icon">▦</span><span class="rail-label">Riven Markets</span></button>
           <button class="rail-item" data-page="settings" type="button"><span class="rail-icon">⚙</span><span class="rail-label">Settings</span></button>
         </nav>
@@ -197,6 +198,41 @@
             </div>
             <section id="instantWinsPanel" class="instant-wins-feed">
               <div id="instantList" class="instant-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="page" data-page-panel="arcanes" aria-labelledby="arcanesTitle">
+          <div class="page-inner arcane-layout">
+            <div class="page-heading">
+              <div>
+                <h1 id="arcanesTitle">Arcane Vosfor exchange</h1>
+                <p id="arcaneSummary">Expected value for dissolving low-value Arcanes into Vosfor, then rolling 200 Vosfor packs.</p>
+              </div>
+              <button id="arcaneRefresh" class="ghost-button" type="button">Refresh</button>
+            </div>
+
+            <section class="kpi-grid arcane-kpis" aria-label="Arcane statistics">
+              <article class="kpi-card"><span>Best pack EV</span><strong id="arcaneBestPack">—</strong><small id="arcaneBestPackSub">No pack scan yet</small></article>
+              <article class="kpi-card"><span>Dissolve candidates</span><strong id="arcaneDissolveCount">0</strong><small>Better as Vosfor</small></article>
+              <article class="kpi-card"><span>Arcane coverage</span><strong id="arcaneCoverage">0/0</strong><small id="arcaneCoverageSub">Scanned market books</small></article>
+              <article class="kpi-card"><span>Vosfor floor</span><strong id="arcaneVosforRate">—</strong><small>Plat per Vosfor from candidate dissolves</small></article>
+            </section>
+
+            <div class="arcane-grid">
+              <section class="panel arcane-packs-panel">
+                <div class="section-head"><div><h2>Best 200 Vosfor packs</h2><span>EV uses rank-0 and max-rank sell books, rarity weights, and scan confidence.</span></div></div>
+                <div id="arcanePacks" class="arcane-packs"></div>
+              </section>
+              <section class="panel arcane-dissolve-panel">
+                <div class="section-head"><div><h2>Dissolve instead of sell</h2><span>Low direct-sale value compared with the current best pack EV.</span></div></div>
+                <div id="arcaneDissolves" class="arcane-dissolves"></div>
+              </section>
+            </div>
+
+            <section class="panel arcane-market-panel">
+              <div class="section-head"><div><h2>Arcane market board</h2><span>Sell-side rank prices and market depth for every scanned Arcane.</span></div></div>
+              <div id="arcaneMarket" class="arcane-market"></div>
             </section>
           </div>
         </section>

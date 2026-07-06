@@ -1,7 +1,8 @@
 import { WarframeMarketClient } from "./client.js";
 import type { PriceHistoryStore, SignatureValuation as SignatureValuationResult, SignatureVelocity as SignatureVelocityResult } from "./history.js";
+import { analyzeArcaneMarket } from "./arcanes.js";
 import { analyzeMarket, DEFAULT_CONFIG, normalizeConfig, slugify, type MarketAnalysis } from "./opportunities.js";
-import type { DashboardState, ReferenceSnapshot, RivenAuction, RivenWeapon, ScanStatus, TraderConfig } from "./types.js";
+import type { ArcaneDashboardState, ArcaneItem, ArcaneOrder, ArcaneReferenceSnapshot, DashboardState, ReferenceSnapshot, RivenAuction, RivenWeapon, ScanStatus, TraderConfig } from "./types.js";
 
 export type ScanTier = "hot" | "cold" | "full";
 export type ScanMode = "tiered" | "full" | "remote";
@@ -53,6 +54,21 @@ interface RemoteVelocityEntry {
 type StateListener = (state: DashboardState) => void;
 
 const HOT_SCORE_MIN_HOURS_BETWEEN_RESCANS = 3;
+const ARCANE_HOT_TARGET_PRIORITY: Record<string, number> = {
+  arcane_hot_shot: 100,
+  arcane_steadfast: 95,
+  arcane_energize: 90,
+  arcane_grace: 85,
+  arcane_barrier: 84,
+  arcane_reaper: 80,
+  arcane_universal_fallout: 79,
+  longbow_sharpshot: 78,
+  melee_duplicate: 77,
+  melee_crescendo: 76,
+  molt_augmented: 72,
+  secondary_encumber: 70,
+};
+
 
 export class ThePlatExchangeService {
   private readonly client: WarframeMarketClient;
@@ -60,15 +76,22 @@ export class ThePlatExchangeService {
   private readonly listeners = new Set<StateListener>();
   private readonly auctionsByWeapon = new Map<string, RivenAuction[]>();
   private readonly scannedAtByWeapon = new Map<string, string>();
+  private readonly arcaneOrdersByItem = new Map<string, ArcaneOrder[]>();
+  private readonly arcaneScannedAtByItem = new Map<string, string>();
   private reference: ReferenceSnapshot | null = null;
+  private arcaneReference: ArcaneReferenceSnapshot | null = null;
   private config: TraderConfig;
   private timers: NodeJS.Timeout[] = [];
   private emitTimer: NodeJS.Timeout | undefined;
   private activeRefresh: Promise<void> | null = null;
+  private activeArcaneRefresh: Promise<void> | null = null;
   private cachedAnalysis: { key: string; analysis: MarketAnalysis } | null = null;
+  private cachedArcaneAnalysis: { key: string; analysis: ArcaneDashboardState } | null = null;
   private auctionsRevision = 0;
+  private arcaneRevision = 0;
   private configRevision = 0;
   private coldCursor = 0;
+  private arcaneColdCursor = 0;
   private status: ScanStatus = {
     initialized: false,
     running: false,
@@ -76,6 +99,14 @@ export class ThePlatExchangeService {
     scannedWeapons: 0,
     totalWeapons: 0,
     lastMessage: "Waiting for launch",
+  };
+  private arcaneStatus: ScanStatus = {
+    initialized: false,
+    running: false,
+    reason: "startup",
+    scannedWeapons: 0,
+    totalWeapons: 0,
+    lastMessage: "Waiting for arcane scan",
   };
 
   readonly refreshMs: number;
@@ -135,6 +166,7 @@ export class ThePlatExchangeService {
     if (next === "remote" && !this.remoteUrl("state")) throw new Error("remote mode requires WFM_DATA_URL or WFM_DATA_BASE to be set");
     this.stop();
     this.activeRefresh = null;
+    this.activeArcaneRefresh = null;
     this.scanGeneration += 1;
     this.mode = next;
     this.remoteState = null;
@@ -190,18 +222,23 @@ export class ThePlatExchangeService {
       this.timers.push(setInterval(() => {
         this.scheduleNextRefreshAt();
         void this.refresh("hot-scheduled", "hot");
+        void this.refreshArcanes("arcane-hot-scheduled", "hot");
       }, this.hotIntervalMs));
       this.timers.push(setInterval(() => {
         void this.refresh("cold-scheduled", "cold");
+        void this.refreshArcanes("arcane-cold-scheduled", "cold");
       }, this.coldIntervalMs));
       void this.refresh("startup-hot", "hot");
+      void this.refreshArcanes("arcane-startup-hot", "hot");
     } else {
       this.scheduleNextRefreshAt();
       this.timers.push(setInterval(() => {
         this.scheduleNextRefreshAt();
         void this.refresh("scheduled", "full");
+        void this.refreshArcanes("arcane-scheduled", "full");
       }, this.refreshMs));
       void this.refresh("startup", "full");
+      void this.refreshArcanes("arcane-startup", "full");
     }
   }
 
@@ -343,6 +380,20 @@ export class ThePlatExchangeService {
       await this.activeRefresh;
     } finally {
       this.activeRefresh = null;
+    }
+  }
+
+  async refreshArcanes(reason: string, tier: ScanTier = "full"): Promise<void> {
+    if (this.activeArcaneRefresh) {
+      this.arcaneStatus.lastMessage = `Skipped overlapping ${reason} refresh; current ${this.arcaneStatus.reason} scan is still running`;
+      this.emitStateImmediate();
+      return this.activeArcaneRefresh;
+    }
+    this.activeArcaneRefresh = this.runArcaneRefresh(reason, tier);
+    try {
+      await this.activeArcaneRefresh;
+    } finally {
+      this.activeArcaneRefresh = null;
     }
   }
 
@@ -504,7 +555,34 @@ export class ThePlatExchangeService {
       },
       opportunities: analysis.opportunities,
       weaponSummaries: analysis.weaponSummaries,
+      arcanes: this.getArcaneState(),
     };
+  }
+
+  private getArcaneState(): ArcaneDashboardState {
+    const key = this.arcaneAnalysisKey();
+    let analysis = this.cachedArcaneAnalysis && this.cachedArcaneAnalysis.key === key ? this.cachedArcaneAnalysis.analysis : null;
+    if (!analysis) {
+      analysis = analyzeArcaneMarket(
+        this.arcaneReference?.items ?? [],
+        this.arcaneOrdersByItem,
+        this.arcaneScannedAtByItem,
+        this.arcaneReference?.packs,
+      );
+      this.cachedArcaneAnalysis = { key, analysis };
+    }
+    const reference = { ...analysis.reference };
+    if (this.arcaneReference?.versionsUpdatedAt) reference.versionsUpdatedAt = this.arcaneReference.versionsUpdatedAt;
+    return {
+      ...analysis,
+      generatedAt: new Date().toISOString(),
+      reference,
+      status: { ...this.arcaneStatus },
+    };
+  }
+
+  private arcaneAnalysisKey(): string {
+    return `${this.arcaneRevision}|${this.arcaneStatus.running ? "running" : "idle"}`;
   }
 
   private analysisKey(): string {
@@ -576,6 +654,67 @@ export class ThePlatExchangeService {
       this.status.finishedAt = new Date().toISOString();
       this.status.lastError = error instanceof Error ? error.message : String(error);
       this.status.lastMessage = `Refresh failed: ${this.status.lastError}`;
+      this.emitStateImmediate();
+    }
+  }
+
+  private async runArcaneRefresh(reason: string, tier: ScanTier): Promise<void> {
+    const myGeneration = this.scanGeneration;
+    const stillCurrent = () => this.scanGeneration === myGeneration && this.mode !== "remote";
+    const startedAt = new Date().toISOString();
+    this.arcaneStatus = {
+      initialized: this.arcaneStatus.initialized,
+      running: true,
+      reason,
+      startedAt,
+      scannedWeapons: 0,
+      totalWeapons: 0,
+      lastMessage: "Loading Warframe.market arcane reference data",
+    };
+    this.emitStateImmediate();
+
+    try {
+      if (!this.arcaneReference) {
+        this.arcaneReference = await this.client.loadArcaneReference();
+        if (!stillCurrent()) return;
+        this.arcaneStatus.initialized = true;
+        this.arcaneRevision += 1;
+      }
+
+      const targets = this.arcaneScanTargets(this.arcaneReference.items, tier);
+      if (!stillCurrent()) return;
+      this.arcaneStatus.totalWeapons = targets.length;
+      const tierLabel = this.scanMode === "tiered" && tier !== "full" ? ` (${tier})` : "";
+      this.arcaneStatus.lastMessage = targets.length === 0
+        ? `No arcanes matched the ${tier} scan`
+        : `Scanning ${targets.length} arcane order books${tierLabel}`;
+      this.emitStateImmediate();
+
+      await this.runWithConcurrency(targets, async (item) => {
+        if (!stillCurrent()) return;
+        this.arcaneStatus.lastMessage = `Scanning ${item.name}${tierLabel}`;
+        const orders = await this.client.searchArcaneOrders(item);
+        if (!stillCurrent()) return;
+        this.arcaneOrdersByItem.set(item.slug, orders);
+        this.arcaneScannedAtByItem.set(item.slug, new Date().toISOString());
+        this.arcaneStatus.scannedWeapons += 1;
+        this.arcaneRevision += 1;
+        this.emitStateDebounced();
+      });
+
+      if (!stillCurrent()) return;
+      this.arcaneStatus.running = false;
+      this.arcaneStatus.finishedAt = new Date().toISOString();
+      this.arcaneStatus.nextRefreshAt = new Date(Date.now() + (this.scanMode === "tiered" ? this.hotIntervalMs : this.refreshMs)).toISOString();
+      this.arcaneStatus.lastMessage = `Finished ${reason} scan: ${this.arcaneStatus.scannedWeapons}/${this.arcaneStatus.totalWeapons} arcane books refreshed`;
+      delete this.arcaneStatus.lastError;
+      this.emitStateImmediate();
+    } catch (error) {
+      if (!stillCurrent()) return;
+      this.arcaneStatus.running = false;
+      this.arcaneStatus.finishedAt = new Date().toISOString();
+      this.arcaneStatus.lastError = error instanceof Error ? error.message : String(error);
+      this.arcaneStatus.lastMessage = `Arcane refresh failed: ${this.arcaneStatus.lastError}`;
       this.emitStateImmediate();
     }
   }
@@ -655,6 +794,48 @@ export class ThePlatExchangeService {
       if (item !== undefined) slice.push(item);
     }
     this.coldCursor = (start + size) % cold.length;
+    return slice;
+  }
+
+  private arcaneScanTargets(items: ArcaneItem[], tier: ScanTier): ArcaneItem[] {
+    if (this.scanMode !== "tiered" || tier === "full") return items;
+    return tier === "hot" ? this.pickHotArcanes(items) : this.pickColdArcanes(items);
+  }
+
+  private pickHotArcanes(pool: ArcaneItem[]): ArcaneItem[] {
+    if (pool.length === 0) return [];
+    const now = Date.now();
+    const rescanThresholdMs = HOT_SCORE_MIN_HOURS_BETWEEN_RESCANS * 60 * 60_000;
+    const scored = pool.map((item) => {
+      let score = ARCANE_HOT_TARGET_PRIORITY[item.slug] ?? 0;
+      const orders = this.arcaneOrdersByItem.get(item.slug)?.length ?? 0;
+      if (orders > 0) score += Math.min(5, Math.log2(orders + 1));
+      if (item.dissolutionVosfor !== undefined) score += Math.min(4, item.dissolutionVosfor / 24);
+      const lastScan = this.arcaneScannedAtByItem.get(item.slug);
+      if (!lastScan) score += 10;
+      else {
+        const ageMs = now - Date.parse(lastScan);
+        if (Number.isFinite(ageMs) && ageMs > rescanThresholdMs) score += 2;
+      }
+      return { item, score };
+    });
+    scored.sort((a, b) => b.score - a.score);
+    return scored.slice(0, Math.min(this.hotSize, scored.length)).map((entry) => entry.item);
+  }
+
+  private pickColdArcanes(pool: ArcaneItem[]): ArcaneItem[] {
+    if (pool.length === 0) return [];
+    const hotSet = new Set(this.pickHotArcanes(pool).map((item) => item.slug));
+    const cold = pool.filter((item) => !hotSet.has(item.slug));
+    if (cold.length === 0) return [];
+    const size = Math.min(this.coldSliceSize, cold.length);
+    const start = ((this.arcaneColdCursor % cold.length) + cold.length) % cold.length;
+    const slice: ArcaneItem[] = [];
+    for (let i = 0; i < size; i += 1) {
+      const item = cold[(start + i) % cold.length];
+      if (item !== undefined) slice.push(item);
+    }
+    this.arcaneColdCursor = (start + size) % cold.length;
     return slice;
   }
 

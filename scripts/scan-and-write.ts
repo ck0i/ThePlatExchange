@@ -16,8 +16,9 @@ import { existsSync } from "node:fs";
 import { appendFile, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { WarframeMarketClient } from "../src/wfm/client.js";
+import { analyzeArcaneMarket } from "../src/wfm/arcanes.js";
 import { attributeSignature, analyzeMarket, DEFAULT_CONFIG, normalizeConfig } from "../src/wfm/opportunities.js";
-import type { DashboardState, Opportunity, RivenAuction, RivenWeapon, ReferenceSnapshot, ScanStatus } from "../src/wfm/types.js";
+import type { ArcaneDashboardState, ArcaneItem, ArcaneOrder, ArcaneReferenceSnapshot, DashboardState, Opportunity, RivenAuction, RivenWeapon, ReferenceSnapshot, ScanStatus } from "../src/wfm/types.js";
 import { enrichWeaponsWithImageNames, fetchWarframestatImageMap } from "../src/wfm/warframestat.js";
 
 type Tier = "hot" | "cold" | "reference";
@@ -31,6 +32,7 @@ interface Args {
   userAgent: string;
   valuationWindowDays: number;
   vanishThresholdDays: number;
+  arcaneHotSize: number;
 }
 
 interface IndexFile {
@@ -41,6 +43,7 @@ interface IndexFile {
     cold?: { last_run_at: string; scanned_slugs: string[]; opportunity_count: number };
     reference?: { last_run_at: string; weapons: number; attributes: number; version_hash?: string };
     valuations?: { last_run_at: string; signature_count: number; window_days: number };
+    arcanes?: { last_run_at: string; tier: Tier; scanned_slugs: string[]; item_count: number; recommendation_count: number; pack_count: number };
   };
 }
 
@@ -66,6 +69,7 @@ function parseArgs(argv: string[], env: NodeJS.ProcessEnv): Args {
     userAgent: env.WFM_USER_AGENT ?? "the-plat-exchange-ci/0.1 (+https://github.com/ck0i/ThePlatExchange)",
     valuationWindowDays: numberOr(env.WFM_VALUATION_WINDOW_DAYS, 30),
     vanishThresholdDays: numberOr(env.WFM_VELOCITY_VANISH_DAYS, 3),
+    arcaneHotSize: numberOr(env.WFM_ARCANE_HOT_SIZE, 500),
   };
 }
 
@@ -194,6 +198,104 @@ async function loadOrFetchReference(args: Args, client: WarframeMarketClient): P
   await ensureDir(join(args.dataDir, "reference"));
   await writeFile(join(args.dataDir, "reference", "current.json"), JSON.stringify(fresh, null, 2));
   return fresh;
+}
+
+async function loadCachedArcaneReference(dataDir: string): Promise<ArcaneReferenceSnapshot | null> {
+  return readJsonIfExists<ArcaneReferenceSnapshot>(join(dataDir, "arcane", "reference", "current.json"));
+}
+
+async function loadOrFetchArcaneReference(args: Args, client: WarframeMarketClient): Promise<ArcaneReferenceSnapshot> {
+  const cached = await loadCachedArcaneReference(args.dataDir);
+  try {
+    const fresh = await client.loadArcaneReference();
+    await ensureDir(join(args.dataDir, "arcane", "reference"));
+    await writeFile(join(args.dataDir, "arcane", "reference", "current.json"), JSON.stringify(fresh, null, 2));
+    return fresh;
+  } catch (error) {
+    if (cached && Array.isArray(cached.items) && cached.items.length > 0) return cached;
+    throw error;
+  }
+}
+
+async function runArcaneScan(args: Args, client: WarframeMarketClient, tier: Tier): Promise<ArcaneDashboardState> {
+  const reference = await loadOrFetchArcaneReference(args, client);
+  const targets = tier === "hot" ? reference.items.slice(0, Math.min(args.arcaneHotSize, reference.items.length)) : reference.items;
+  console.log(`${tier === "hot" ? "Hot" : "Cold"} arcane scan: ${targets.length}/${reference.items.length} arcanes.`);
+
+  const ordersByArcane = new Map<string, ArcaneOrder[]>();
+  const scannedAtByArcane = new Map<string, string>();
+  let scannedOk = 0;
+  await runInParallel(targets, args.concurrency, async (item: ArcaneItem) => {
+    try {
+      const orders = await client.searchArcaneOrders(item);
+      ordersByArcane.set(item.slug, orders);
+      scannedAtByArcane.set(item.slug, new Date().toISOString());
+      scannedOk += 1;
+      if (scannedOk % 25 === 0) console.log(`  ${scannedOk}/${targets.length} arcanes scanned`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.warn(`skip arcane ${item.slug}: ${message}`);
+    }
+  });
+
+  const nowIso = new Date().toISOString();
+  const arcanes = analyzeArcaneMarket(reference.items, ordersByArcane, scannedAtByArcane, reference.packs);
+  arcanes.generatedAt = nowIso;
+  arcanes.status = {
+    initialized: true,
+    running: false,
+    reason: `ci-${tier}-arcanes`,
+    startedAt: nowIso,
+    finishedAt: nowIso,
+    scannedWeapons: ordersByArcane.size,
+    totalWeapons: targets.length,
+    lastMessage: `CI ${tier} arcane scan wrote ${ordersByArcane.size}/${targets.length} arcane order books`,
+  };
+  if (reference.versionsUpdatedAt) arcanes.reference.versionsUpdatedAt = reference.versionsUpdatedAt;
+  return arcanes;
+}
+
+async function writeArcaneArtifacts(args: Args, tier: Tier, arcanes: ArcaneDashboardState): Promise<void> {
+  await ensureDir(join(args.dataDir, "latest"));
+  await writeFile(join(args.dataDir, "latest", "arcanes.json"), JSON.stringify(arcanes, null, 2));
+  const existing = await readJsonIfExists<DashboardState & CiStateExtras>(join(args.dataDir, "latest", "state.json"));
+  const state: DashboardState & CiStateExtras = existing
+    ? { ...existing, arcanes }
+    : {
+      schemaVersion: 1,
+      tier,
+      scannedWeaponSlugs: [],
+      generatedAt: arcanes.generatedAt,
+      refreshMs: 60 * 60_000,
+      apiBase: "https://api.warframe.market",
+      scanMode: "remote",
+      config: normalizeConfig(DEFAULT_CONFIG),
+      status: {
+        initialized: true,
+        running: false,
+        reason: `ci-${tier}-arcanes`,
+        finishedAt: arcanes.generatedAt,
+        scannedWeapons: 0,
+        totalWeapons: 0,
+        lastMessage: "Arcane-only CI state; Riven cold scan has not populated this data branch yet.",
+      },
+      reference: { weapons: 0, attributes: 0 },
+      totals: { weaponsWithAuctions: 0, auctions: 0, opportunities: 0 },
+      opportunities: [],
+      weaponSummaries: [],
+      arcanes,
+    };
+  await writeFile(join(args.dataDir, "latest", "state.json"), JSON.stringify(state, null, 2));
+  await updateIndex(args.dataDir, {
+    arcanes: {
+      last_run_at: arcanes.generatedAt,
+      tier,
+      scanned_slugs: arcanes.summaries.filter((summary) => summary.lastScannedAt).map((summary) => summary.slug),
+      item_count: arcanes.reference.items,
+      recommendation_count: arcanes.totals.recommendations,
+      pack_count: arcanes.totals.packs,
+    },
+  });
 }
 
 async function runInParallel<T>(items: T[], concurrency: number, worker: (item: T) => Promise<void>): Promise<void> {
@@ -437,6 +539,7 @@ async function runCold(args: Args, client: WarframeMarketClient): Promise<void> 
 
   const config = normalizeConfig(DEFAULT_CONFIG);
   const analysis = analyzeMarket(reference.rivenWeapons, auctionsByWeapon, config);
+  const arcanes = await runArcaneScan(args, client, "cold");
   const nowIso = new Date().toISOString();
   const status: ScanStatus = {
     initialized: true,
@@ -470,11 +573,13 @@ async function runCold(args: Args, client: WarframeMarketClient): Promise<void> 
     },
     opportunities: analysis.opportunities,
     weaponSummaries: analysis.weaponSummaries,
+    arcanes,
   };
 
   await ensureDir(join(args.dataDir, "latest"));
   await writeFile(join(args.dataDir, "latest", "state.json"), JSON.stringify(state, null, 2));
   await writeFile(join(args.dataDir, "latest", "opportunities.json"), JSON.stringify(analysis.opportunities, null, 2));
+  await writeArcaneArtifacts(args, "cold", arcanes);
 
   await ensureDir(join(args.dataDir, "samples"));
   const dispositionBySlug = new Map(reference.rivenWeapons.map((weapon) => [weapon.slug, weapon.disposition]));
@@ -534,8 +639,15 @@ async function main(): Promise<void> {
     cacheDir,
   });
 
-  if (args.tier === "hot" || args.tier === "reference") {
+  if (args.tier === "reference") {
     await runVersionCheck(args, client);
+    return;
+  }
+
+  if (args.tier === "hot") {
+    await runVersionCheck(args, client);
+    const arcanes = await runArcaneScan(args, client, "hot");
+    await writeArcaneArtifacts(args, "hot", arcanes);
     return;
   }
 

@@ -28,6 +28,12 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 
+      - name: Setup Git LFS
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git-lfs
+          git lfs install
+
       - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
@@ -37,15 +43,22 @@ jobs:
         run: |
           if ! git ls-remote --exit-code --heads origin data > /dev/null 2>&1; then
             git switch --orphan data
+            git lfs install --local
+            git lfs track "data/valuations/*.json"
+            git lfs track "data/signatures/*.jsonl"
             mkdir -p data
             touch data/.gitkeep
-            git add data/.gitkeep
+            git add .gitattributes data/.gitkeep
             git commit -m "chore: bootstrap data branch"
             git push origin data
             git checkout main
           fi
           git fetch origin data:refs/remotes/origin/data
           git worktree add data-tree origin/data
+          cd data-tree
+          git lfs install --local
+          git lfs track "data/valuations/*.json"
+          git lfs track "data/signatures/*.jsonl"
 
       - name: Run cold scan
         env:
@@ -57,7 +70,7 @@ jobs:
       - name: Commit and push data
         run: |
           cd data-tree
-          git add data
+          git add .gitattributes data
           if git diff --cached --quiet; then
             echo "No data changes"
             exit 0

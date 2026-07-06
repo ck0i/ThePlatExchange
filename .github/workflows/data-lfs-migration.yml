@@ -1,0 +1,54 @@
+name: Data LFS migration
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type migrate-data-lfs to rewrite the generated data branch with Git LFS pointers."
+        required: true
+        type: string
+
+concurrency:
+  group: data-lfs-migration
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Confirm migration
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "migrate-data-lfs" ]; then
+            echo "Confirmation did not match migrate-data-lfs"
+            exit 1
+          fi
+
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Git LFS
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git-lfs
+          git lfs install
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Rewrite data branch large artifacts into LFS
+        run: |
+          git fetch origin data
+          git switch -C data-lfs-migration origin/data
+          git lfs install --local
+          git lfs track "data/valuations/*.json"
+          git lfs track "data/signatures/*.jsonl"
+          git add .gitattributes
+          git commit -m "chore(data): track large artifacts with Git LFS" || true
+          git lfs migrate import --yes --include="data/valuations/*.json,data/signatures/*.jsonl" --include-ref=refs/heads/data-lfs-migration
+          git push --force-with-lease origin data-lfs-migration:data

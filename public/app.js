@@ -7,6 +7,7 @@ const elements = {
   railRefresh: document.getElementById("railRefresh"),
   homeRefresh: document.getElementById("homeRefresh"),
   instantRefresh: document.getElementById("instantRefresh"),
+  arcaneRefresh: document.getElementById("arcaneRefresh"),
   tickerItems: document.getElementById("tickerItems"),
   liveBadge: document.getElementById("liveBadge"),
   statusMode: document.getElementById("statusMode"),
@@ -42,6 +43,16 @@ const elements = {
   instantList: document.getElementById("instantList"),
   instantPreview: document.getElementById("instantPreview"),
   instantSummary: document.getElementById("instantSummary"),
+  arcaneSummary: document.getElementById("arcaneSummary"),
+  arcaneBestPack: document.getElementById("arcaneBestPack"),
+  arcaneBestPackSub: document.getElementById("arcaneBestPackSub"),
+  arcaneDissolveCount: document.getElementById("arcaneDissolveCount"),
+  arcaneCoverage: document.getElementById("arcaneCoverage"),
+  arcaneCoverageSub: document.getElementById("arcaneCoverageSub"),
+  arcaneVosforRate: document.getElementById("arcaneVosforRate"),
+  arcanePacks: document.getElementById("arcanePacks"),
+  arcaneDissolves: document.getElementById("arcaneDissolves"),
+  arcaneMarket: document.getElementById("arcaneMarket"),
   modeButtons: document.querySelectorAll(".mode-btn"),
   modeHint: document.getElementById("modeHint"),
   dataStatusLine: document.getElementById("dataStatusLine"),
@@ -197,6 +208,7 @@ function render(state) {
   renderStatusFooter(state);
   renderWeapons(state.weaponSummaries ?? []);
   renderHeatmap(state.weaponSummaries ?? []);
+  renderArcanes(state.arcanes);
 
   if (latestEnrichedOpps.length === 0) renderOpportunitySurfaces();
   renderTicker(state, currentOpportunitySource());
@@ -492,6 +504,82 @@ function renderInstantPreview(items) {
   }
 }
 
+function renderArcanes(arcanes) {
+  if (!elements.arcanePacks) return;
+  const summaries = arcanes?.summaries ?? [];
+  const packs = [...(arcanes?.packs ?? [])].sort((left, right) => (right.expectedPlatPerVosfor ?? 0) - (left.expectedPlatPerVosfor ?? 0));
+  const recommendations = [...(arcanes?.dissolveRecommendations ?? [])].sort((left, right) => {
+    const actionScore = { dissolve: 0, hold: 1, sell: 2 };
+    const leftScore = actionScore[left.action] ?? 3;
+    const rightScore = actionScore[right.action] ?? 3;
+    if (leftScore !== rightScore) return leftScore - rightScore;
+    return (right.deltaPlat ?? 0) - (left.deltaPlat ?? 0);
+  });
+  const bestPack = packs[0] ?? null;
+  const dissolveCount = recommendations.filter((entry) => entry.action === "dissolve").length;
+  const scanned = summaries.filter((entry) => entry.lastScannedAt).length;
+  const candidateRates = recommendations.filter((entry) => entry.action === "dissolve" && entry.sellValuePerVosfor > 0).map((entry) => entry.sellValuePerVosfor);
+  const vosforFloor = candidateRates.length > 0 ? Math.min(...candidateRates) : null;
+
+  if (elements.arcaneSummary) {
+    const message = arcanes?.status?.lastMessage ?? (arcanes ? `Tracking ${formatNumber(arcanes.reference?.items ?? summaries.length)} Arcanes across ${formatNumber(arcanes.reference?.packs ?? packs.length)} Vosfor packs.` : "Waiting for Arcane scan.");
+    elements.arcaneSummary.textContent = message;
+  }
+  if (elements.arcaneBestPack) elements.arcaneBestPack.textContent = bestPack ? `${Math.round(bestPack.expectedPlat)}◈` : "—";
+  if (elements.arcaneBestPackSub) elements.arcaneBestPackSub.textContent = bestPack ? `${bestPack.packName} · ${(bestPack.expectedPlatPerVosfor ?? 0).toFixed(3)}◈/Vosfor · ${Math.round((bestPack.confidence ?? 0) * 100)}% confidence` : "No pack scan yet";
+  if (elements.arcaneDissolveCount) elements.arcaneDissolveCount.textContent = formatNumber(dissolveCount);
+  if (elements.arcaneCoverage) elements.arcaneCoverage.textContent = `${formatNumber(scanned)}/${formatNumber(arcanes?.reference?.items ?? summaries.length)}`;
+  if (elements.arcaneCoverageSub) elements.arcaneCoverageSub.textContent = `${formatNumber(arcanes?.totals?.orders ?? 0)} visible WFM orders cached`;
+  if (elements.arcaneVosforRate) elements.arcaneVosforRate.textContent = vosforFloor === null ? "—" : `${vosforFloor.toFixed(2)}◈`;
+
+  elements.arcanePacks.innerHTML = packs.length === 0 ? `<div class="empty-state">No Vosfor pack valuations yet.</div>` : packs.slice(0, 6).map((pack, index) => `
+    <article class="arcane-pack-card">
+      <div class="arcane-card-rank">#${index + 1}</div>
+      <div class="arcane-card-body">
+        <div class="arcane-card-title">${escapeHtml(pack.packName)}</div>
+        <div class="arcane-card-value">${Math.round(pack.expectedPlat)}◈ EV <span>${(pack.expectedPlatPerVosfor ?? 0).toFixed(3)}◈/Vosfor</span></div>
+        <div class="arcane-card-meta">${Math.round((pack.coveragePct ?? 0) * 100)}% priced · ${Math.round((pack.confidence ?? 0) * 100)}% confidence · ${formatNumber(pack.missingPriceCount ?? 0)} missing prices</div>
+        <div class="arcane-drop-row">${(pack.topDrops ?? []).slice(0, 4).map((drop) => `<span>${escapeHtml(drop.arcaneName)} <b>${Math.round((drop.chance ?? 0) * 1000) / 10}%</b> ${drop.priceUsed == null ? "—" : `${drop.priceUsed}◈`}</span>`).join("")}</div>
+      </div>
+    </article>`).join("");
+
+  elements.arcaneDissolves.innerHTML = recommendations.length === 0 ? `<div class="empty-state">No dissolve recommendations yet.</div>` : recommendations.slice(0, 12).map((entry) => `
+    <article class="arcane-dissolve-card ${entry.action}">
+      <div>
+        <div class="arcane-card-title">${escapeHtml(entry.name)} <span>R${entry.rank}</span></div>
+        <div class="arcane-card-meta">${entry.sellPrice}◈ sale · ${entry.dissolutionVosfor} Vosfor · ${entry.bestPackName}</div>
+      </div>
+      <div class="arcane-action">
+        <strong>${escapeHtml(entry.action)}</strong>
+        <span>${entry.deltaPlat >= 0 ? "+" : ""}${entry.deltaPlat.toFixed(1)}◈ EV</span>
+      </div>
+    </article>`).join("");
+
+  const marketRows = [...summaries].sort((left, right) => {
+    const leftPrice = left.rankMax?.sell?.p25 ?? left.rank0?.sell?.p25 ?? 0;
+    const rightPrice = right.rankMax?.sell?.p25 ?? right.rank0?.sell?.p25 ?? 0;
+    return rightPrice - leftPrice;
+  });
+  elements.arcaneMarket.innerHTML = marketRows.length === 0 ? `<div class="empty-state">No Arcane market rows yet.</div>` : marketRows.slice(0, 80).map((entry) => {
+    const maxRank = entry.rankMax ?? null;
+    const rank0 = entry.rank0 ?? null;
+    const sellPrice = maxRank?.sell?.p25 ?? rank0?.sell?.p25 ?? null;
+    const marketDepth = (entry.onlineSellListings ?? 0) + (entry.onlineBuyListings ?? 0);
+    return `
+      <article class="arcane-market-row">
+        <div class="arcane-name-cell">${arcaneThumb(entry)}<div><strong>${escapeHtml(entry.name)}</strong><span>${escapeHtml(entry.rarity)} · ${entry.dissolutionVosfor ?? "?"} Vosfor</span></div></div>
+        <div><span class="small-label">R0 p25</span><strong>${rank0?.sell?.p25 == null ? "—" : `${rank0.sell.p25}◈`}</strong></div>
+        <div><span class="small-label">R${entry.maxRank} p25</span><strong>${sellPrice == null ? "—" : `${sellPrice}◈`}</strong></div>
+        <div><span class="small-label">Depth</span><strong>${formatNumber(marketDepth)}</strong></div>
+      </article>`;
+  }).join("");
+}
+
+function arcaneThumb(summary) {
+  if (!summary.imageName) return `<span class="arcane-thumb-placeholder">✦</span>`;
+  return `<span class="arcane-thumb" style="background-image:url('/img/${encodeURIComponent(summary.imageName)}')" aria-hidden="true"></span>`;
+}
+
 function renderWeapons(summaries) {
   if (!elements.weapons) return;
   elements.weapons.textContent = "";
@@ -718,6 +806,7 @@ async function updateSpotlight(raw) {
     { name: "Home", sub: "Market command center", page: "home" },
     { name: "Opportunities", sub: "Ranked buy-low / sell-high queue", page: "opportunities" },
     { name: "Instant Wins", sub: "Same-signature undervalued listings", page: "instant" },
+    { name: "Arcanes", sub: "Vosfor pack EV and dissolve recommendations", page: "arcanes" },
     { name: "Riven Markets", sub: "Weapon cards and price stats", page: "markets" },
     { name: "MCP Connect", sub: "Endpoint, configs, tool list", page: "settings", settingsTab: "mcp" },
     { name: "Data Source", sub: "Remote/tiered/full scan mode", page: "settings", settingsTab: "data" },
@@ -744,6 +833,10 @@ async function updateSpotlight(raw) {
         }
       }
     } catch { /* ignore */ }
+    const arcaneHits = (latestState?.arcanes?.summaries ?? [])
+      .filter((entry) => entry.name.toLowerCase().includes(text) || entry.slug.toLowerCase().includes(text))
+      .slice(0, 8);
+    for (const arcane of arcaneHits) items.push({ type: "arcane", ...arcane });
   }
   spotlightItems = items;
   renderSpotlightResults(items);
@@ -773,6 +866,9 @@ function renderSpotlightResults(items) {
       } else if (item.type === "weapon") {
         const priceLine = item.summary?.priceStats ? `median ${item.summary.priceStats.median}◈ · p75 ${item.summary.priceStats.p75}◈` : "no cached price stats";
         html.push(`<button class="spotlight-item spotlight-weapon" data-index="${currentIndex}" type="button">${weaponThumb(item.imageName, item.name, "sm")}<div class="spotlight-body"><div class="spotlight-title">${escapeHtml(item.name)}</div><div class="spotlight-sub">${escapeHtml(item.group)} · dispo ${Number(item.disposition ?? 0).toFixed(2)} · ${escapeHtml(priceLine)}</div></div><span class="spotlight-arrow">↵</span></button>`);
+      } else if (item.type === "arcane") {
+        const priceLine = item.rankMax?.sell?.p25 ?? item.rank0?.sell?.p25;
+        html.push(`<button class="spotlight-item spotlight-arcane" data-index="${currentIndex}" type="button">${arcaneThumb(item)}<div class="spotlight-body"><div class="spotlight-title">${escapeHtml(item.name)}</div><div class="spotlight-sub">${escapeHtml(item.rarity)} · ${item.dissolutionVosfor ?? "?"} Vosfor · ${priceLine == null ? "no scanned price" : `${priceLine}◈ p25`}</div></div><span class="spotlight-arrow">↵</span></button>`);
       } else if (item.type === "page") {
         html.push(`<button class="spotlight-item" data-index="${currentIndex}" type="button"><span class="spotlight-glyph">⌂</span><div class="spotlight-body"><div class="spotlight-title">${escapeHtml(item.name)}</div><div class="spotlight-sub">${escapeHtml(item.sub)}</div></div><span class="spotlight-arrow">›</span></button>`);
       } else if (item.type === "action") {
@@ -792,9 +888,10 @@ function groupSpotlightItems(items) {
     ["action", "Actions"],
     ["page", "Pages"],
     ["weapon", "Weapons"],
+    ["arcane", "Arcanes"],
   ]);
   const grouped = [];
-  for (const type of ["filter", "action", "page", "weapon"]) {
+  for (const type of ["filter", "action", "page", "weapon", "arcane"]) {
     const groupItems = items.filter((item) => item.type === type);
     if (groupItems.length > 0) grouped.push([labels.get(type), groupItems]);
   }
@@ -807,6 +904,10 @@ function activateSpotlightItem(index) {
   if (item.type === "weapon") {
     openWeaponDetail(item.slug);
     closeSpotlightOverlay();
+    elements.spotlightInput.value = "";
+  } else if (item.type === "arcane") {
+    closeSpotlightOverlay();
+    navigate("arcanes");
     elements.spotlightInput.value = "";
   } else if (item.type === "filter") {
     spotlightFilter = { text: item.text, filter: item.filter };
@@ -849,8 +950,9 @@ function renderSpotlightHints() {
   spotlightItems = [
     { type: "page", name: "Opportunities", sub: "Ranked buy-low / sell-high queue", page: "opportunities", __index: 0 },
     { type: "page", name: "Instant Wins", sub: "Live undervalued signature listings", page: "instant", __index: 1 },
-    { type: "hint", title: "Search any weapon", sub: "Type a name — e.g. bramma, war, kuva karak", __index: 2 },
-    { type: "hint", title: "Filter by price", sub: "e.g. dark sword < 100p, > 500p, = 250p", __index: 3 },
+    { type: "page", name: "Arcanes", sub: "Vosfor EV and dissolve recommendations", page: "arcanes", __index: 2 },
+    { type: "hint", title: "Search any weapon or Arcane", sub: "Type a name — e.g. bramma, steadfast, hot shot", __index: 3 },
+    { type: "hint", title: "Filter by price", sub: "e.g. dark sword < 100p, > 500p, = 250p", __index: 4 },
   ];
   spotlightIndex = -1;
   results.removeAttribute("hidden");
@@ -858,7 +960,8 @@ function renderSpotlightHints() {
     <div class="spotlight-section-label">Try this</div>
     <button class="spotlight-item" data-index="0" type="button"><span class="spotlight-glyph">◎</span><div class="spotlight-body"><div class="spotlight-title">Opportunities</div><div class="spotlight-sub">Open the ranked trade queue</div></div><span class="spotlight-arrow">›</span></button>
     <button class="spotlight-item" data-index="1" type="button"><span class="spotlight-glyph">ϟ</span><div class="spotlight-body"><div class="spotlight-title">Instant Wins</div><div class="spotlight-sub">Open same-signature undervalued listings</div></div><span class="spotlight-arrow">›</span></button>
-    <div class="spotlight-item spotlight-hint"><span class="spotlight-glyph">⌕</span><div class="spotlight-body"><div class="spotlight-title">Search any weapon</div><div class="spotlight-sub">Type a name — e.g. bramma, war, kuva karak</div></div></div>
+    <button class="spotlight-item" data-index="2" type="button"><span class="spotlight-glyph">✦</span><div class="spotlight-body"><div class="spotlight-title">Arcanes</div><div class="spotlight-sub">Open Vosfor exchange EV</div></div><span class="spotlight-arrow">›</span></button>
+    <div class="spotlight-item spotlight-hint"><span class="spotlight-glyph">⌕</span><div class="spotlight-body"><div class="spotlight-title">Search any weapon or Arcane</div><div class="spotlight-sub">Type a name — e.g. bramma, steadfast, hot shot</div></div></div>
     <div class="spotlight-item spotlight-hint"><span class="spotlight-glyph">≡</span><div class="spotlight-body"><div class="spotlight-title">Filter by price</div><div class="spotlight-sub">e.g. dark sword &lt; 100p, &gt; 500p, = 250p</div></div></div>`;
   for (const button of results.querySelectorAll(".spotlight-item:not(.spotlight-hint)")) button.addEventListener("click", () => activateSpotlightItem(Number(button.dataset.index)));
 }
@@ -1119,7 +1222,7 @@ if (elements.form) {
   });
 }
 
-for (const refreshButton of [elements.refresh, elements.homeRefresh, elements.instantRefresh, elements.railRefresh].filter(Boolean)) {
+for (const refreshButton of [elements.refresh, elements.homeRefresh, elements.instantRefresh, elements.arcaneRefresh, elements.railRefresh].filter(Boolean)) {
   refreshButton.addEventListener("click", () => refreshNow(refreshButton));
 }
 
