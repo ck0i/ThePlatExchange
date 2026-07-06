@@ -54,6 +54,38 @@ const elements = {
   arcaneDissolves: document.getElementById("arcaneDissolves"),
   arcaneMarket: document.getElementById("arcaneMarket"),
   arcaneStrategyButtons: document.querySelectorAll("[data-arcane-strategy]"),
+  productRefresh: document.getElementById("productRefresh"),
+  productSummary: document.getElementById("productSummary"),
+  productHealth: document.getElementById("productHealth"),
+  productHealthSub: document.getElementById("productHealthSub"),
+  productMethodsCount: document.getElementById("productMethodsCount"),
+  productOppCount: document.getElementById("productOppCount"),
+  productBestEv: document.getElementById("productBestEv"),
+  productBestEvSub: document.getElementById("productBestEvSub"),
+  productMethods: document.getElementById("productMethods"),
+  productOpportunities: document.getElementById("productOpportunities"),
+  primeRelics: document.getElementById("primeRelics"),
+  expansionMethods: document.getElementById("expansionMethods"),
+  runNowSummary: document.getElementById("runNowSummary"),
+  runNowList: document.getElementById("runNowList"),
+  dataHealthSummary: document.getElementById("dataHealthSummary"),
+  dataHealthSources: document.getElementById("dataHealthSources"),
+  profileForm: document.getElementById("profileForm"),
+  profileDisplayName: document.getElementById("profileDisplayName"),
+  assumptionTrace: document.getElementById("assumptionTrace"),
+  assumptionEndo: document.getElementById("assumptionEndo"),
+  assumptionCredits: document.getElementById("assumptionCredits"),
+  assumptionUnlocked: document.getElementById("assumptionUnlocked"),
+  privacyPrivate: document.getElementById("privacyPrivate"),
+  privacyAggregates: document.getElementById("privacyAggregates"),
+  deleteUserData: document.getElementById("deleteUserData"),
+  todoForm: document.getElementById("todoForm"),
+  todoTitle: document.getElementById("todoTitle"),
+  todoMethod: document.getElementById("todoMethod"),
+  todoDue: document.getElementById("todoDue"),
+  todoNotes: document.getElementById("todoNotes"),
+  todoList: document.getElementById("todoList"),
+  portfolioList: document.getElementById("portfolioList"),
   modeButtons: document.querySelectorAll(".mode-btn"),
   modeHint: document.getElementById("modeHint"),
   dataStatusLine: document.getElementById("dataStatusLine"),
@@ -258,6 +290,67 @@ if (elements.railToggle) {
   });
 }
 
+if (elements.productRefresh) {
+  elements.productRefresh.addEventListener("click", async () => {
+    elements.productRefresh.disabled = true;
+    try {
+      await postJson("/api/product/refresh", {});
+    } finally {
+      elements.productRefresh.disabled = false;
+    }
+  });
+}
+
+if (elements.profileForm) {
+  elements.profileForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    await postJson("/api/user/profile", {
+      displayName: elements.profileDisplayName?.value,
+      assumptions: {
+        traceOpportunityCostPlat: numberOrUndefined(elements.assumptionTrace?.value),
+        endoPlatPerThousand: numberOrUndefined(elements.assumptionEndo?.value),
+        creditPlatPerMillion: numberOrUndefined(elements.assumptionCredits?.value),
+        unlockedContent: splitCsv(elements.assumptionUnlocked?.value),
+      },
+      privacy: {
+        privateByDefault: Boolean(elements.privacyPrivate?.checked),
+        allowAnonymousAggregates: Boolean(elements.privacyAggregates?.checked),
+      },
+    });
+  });
+}
+
+if (elements.todoForm) {
+  elements.todoForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    await postJson("/api/todos", {
+      title: elements.todoTitle?.value,
+      methodId: elements.todoMethod?.value,
+      dueAt: elements.todoDue?.value ? new Date(elements.todoDue.value).toISOString() : undefined,
+      notes: elements.todoNotes?.value,
+    });
+    elements.todoForm.reset();
+  });
+}
+
+if (elements.todoList) {
+  elements.todoList.addEventListener("click", async (event) => {
+    const button = event.target instanceof HTMLElement ? event.target.closest("[data-todo-action]") : null;
+    if (!button) return;
+    const id = button.dataset.todoId;
+    const status = button.dataset.todoAction;
+    if (!id || !status) return;
+    await requestJson(`/api/todos/${encodeURIComponent(id)}`, "PATCH", { status });
+  });
+}
+
+if (elements.deleteUserData) {
+  elements.deleteUserData.addEventListener("click", async () => {
+    if (!window.confirm("Delete local TPE profile, todos, portfolio, and alerts?")) return;
+    await postJson("/api/user/delete", {});
+  });
+}
+
 async function loadState() {
   const response = await fetch("/api/state");
   if (!response.ok) throw new Error(`state ${response.status}`);
@@ -283,11 +376,15 @@ async function refreshDerived() {
   }
 }
 
-async function postJson(path, body) {
-  const response = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+async function requestJson(path, method, body) {
+  const response = await fetch(path, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body ?? {}) });
   if (!response.ok) throw new Error(`${path} ${response.status}`);
   render(await response.json());
   await refreshDerived();
+}
+
+async function postJson(path, body) {
+  return requestJson(path, "POST", body);
 }
 
 function render(state) {
@@ -337,6 +434,22 @@ function renderVisiblePageSurfaces() {
   }
   if (currentPage === "arcanes") {
     renderArcanes(latestState.arcanes);
+    return;
+  }
+  if (currentPage === "products") {
+    renderProductEngine(latestState.product);
+    return;
+  }
+  if (currentPage === "run-now") {
+    renderRunNow(latestState.product);
+    return;
+  }
+  if (currentPage === "data-health") {
+    renderDataHealth(latestState.product);
+    return;
+  }
+  if (currentPage === "planner") {
+    renderPlanner(latestState.product);
     return;
   }
   if (currentPage === "markets") renderWeapons(latestState.weaponSummaries ?? []);
@@ -408,6 +521,7 @@ function hydrateControls(state) {
   elements.maxBuyPrice.value = state.config?.maxBuyPrice == null ? "" : state.config.maxBuyPrice;
   elements.maxSellPrice.value = state.config?.maxSellPrice == null ? "" : state.config.maxSellPrice;
   for (const checkbox of document.querySelectorAll(".status")) checkbox.checked = (state.config?.statuses ?? []).includes(checkbox.value);
+  hydrateProductControls(state.product);
 }
 
 function renderStatusFooter(state) {
@@ -876,6 +990,159 @@ function renderArcanes(arcanes) {
         <div><span class="small-label">Depth</span><strong>${formatNumber(marketDepth)}</strong></div>
       </article>`;
   }).join("") + resultLimitNote("Arcane market rows", visibleMarketRows.length, marketRows.length);
+}
+
+function renderProductEngine(product) {
+  if (!elements.productMethods) return;
+  const opportunities = product?.opportunities ?? [];
+  const methods = product?.methods ?? [];
+  const best = opportunities[0] ?? null;
+  const summary = product ? `${formatNumber(product.prime?.relicCount ?? 0)} relics · ${formatNumber(product.prime?.rewardCount ?? 0)} rewards · ${formatNumber(opportunities.length)} recommendations` : "Waiting for product engine refresh.";
+  if (elements.productSummary) elements.productSummary.textContent = summary;
+  if (elements.productHealth) elements.productHealth.textContent = product?.dataHealth?.status ?? "—";
+  if (elements.productHealthSub) elements.productHealthSub.textContent = product?.dataHealth ? `${product.dataHealth.sources?.length ?? 0} sources · ${product.dataHealth.warnings?.length ?? 0} warnings` : "Waiting for product data";
+  if (elements.productMethodsCount) elements.productMethodsCount.textContent = formatNumber(methods.filter((method) => method.status !== "red").length);
+  if (elements.productOppCount) elements.productOppCount.textContent = formatNumber(opportunities.length);
+  if (elements.productBestEv) elements.productBestEv.textContent = best ? `${Math.round(best.expectedPlat ?? 0)}◈` : "—";
+  if (elements.productBestEvSub) elements.productBestEvSub.textContent = best ? `${best.title} · ${Math.round((best.confidenceScore ?? 0) * 100)}% confidence` : "No ranked method yet";
+
+  elements.productMethods.innerHTML = methods.length === 0 ? `<div class="empty-state">No method outputs yet.</div>` : methods.map((method) => `
+    <article class="product-method-card status-${escapeHtml(method.status)}">
+      <div><strong>${escapeHtml(method.label)}</strong><span>${escapeHtml(method.description)}</span></div>
+      <div class="product-method-meta"><b>${formatNumber(method.opportunityCount)}</b><small>${escapeHtml(method.sourceIds?.join(" + ") || "manual gate")}</small></div>
+    </article>
+  `).join("");
+
+  elements.productOpportunities.innerHTML = opportunities.length === 0 ? `<div class="empty-state">No product recommendations yet.</div>` : opportunities.slice(0, RESULT_BUDGETS.opportunityCards).map(productOpportunityCard).join("") + resultLimitNote("product recommendations", Math.min(opportunities.length, RESULT_BUDGETS.opportunityCards), opportunities.length);
+  renderPrimeRelics(product?.prime);
+  renderExpansionMethods(product?.expansion);
+}
+
+function renderPrimeRelics(prime) {
+  if (!elements.primeRelics) return;
+  if (!prime) {
+    elements.primeRelics.innerHTML = `<div class="empty-state">Prime/Relic engine has not refreshed.</div>`;
+    return;
+  }
+  const rows = [
+    ...((prime.bestRelicsToSell ?? []).slice(0, 5).map((entry) => productRelicRow(entry, "sell"))),
+    ...((prime.bestRelicsToCrack ?? []).slice(0, 5).map((entry) => productRelicRow(entry, "crack"))),
+    ...((prime.ducatRecommendations ?? []).slice(0, 4).map(productOpportunityCompact)),
+  ];
+  elements.primeRelics.innerHTML = `
+    <div class="product-summary-line">${escapeHtml(prime.summary ?? "")}</div>
+    ${rows.length === 0 ? `<div class="empty-state">No relic EV rows available.</div>` : rows.join("")}
+  `;
+}
+
+function renderExpansionMethods(expansion) {
+  if (!elements.expansionMethods) return;
+  if (!expansion) {
+    elements.expansionMethods.innerHTML = `<div class="empty-state">Expansion engines have not refreshed.</div>`;
+    return;
+  }
+  const sections = [
+    ["Mods", expansion.mods ?? []],
+    ["Syndicates", expansion.syndicates ?? []],
+    ["Baro", expansion.baro ?? []],
+    ["Resources", expansion.resources ?? []],
+    ["Event shocks", expansion.eventShocks ?? []],
+  ];
+  const cards = sections.map(([label, items]) => `<article class="product-compact-row"><strong>${escapeHtml(label)}</strong><span>${formatNumber(items.length)} opportunities</span></article>`);
+  const gates = (expansion.bespokeMarkets ?? []).map((gate) => `<article class="product-compact-row gated"><strong>${escapeHtml(gate.label)}</strong><span>${escapeHtml(gate.warnings?.[0] ?? "Gated")}</span></article>`);
+  elements.expansionMethods.innerHTML = [...cards, ...gates].join("");
+}
+
+function renderRunNow(product) {
+  if (!elements.runNowList) return;
+  const runNow = product?.runNow;
+  const activities = runNow?.activities ?? [];
+  if (elements.runNowSummary) elements.runNowSummary.textContent = activities.length === 0 ? "No valid live activities are currently ranked." : `${formatNumber(activities.length)} live activities ranked by EV/minute, expiry, confidence, and mission speed.`;
+  elements.runNowList.innerHTML = activities.length === 0 ? `<div class="empty-state">No live activities passed validation.</div>` : activities.map((activity) => `
+    <article class="run-card status-${escapeHtml(activity.status)}">
+      <div>
+        <div class="product-card-title">${escapeHtml(activity.title)}</div>
+        <p>${escapeHtml(activity.explanation?.recommendation ?? "")}</p>
+        <div class="product-card-meta"><span>${escapeHtml(activity.activityType)}</span><span>${escapeHtml(activity.missionType ?? "mission")}</span><span>${activity.expiresAt ? `Expires ${shortTime(activity.expiresAt)}` : "No expiry"}</span></div>
+      </div>
+      <div class="product-score"><strong>${activity.evPerMinute}◈/min</strong><span>${Math.round((activity.confidenceScore ?? 0) * 100)}% confidence</span></div>
+    </article>
+  `).join("") + resultLimitNote("live activities", activities.length, activities.length + (runNow?.rejectedActivities?.length ?? 0));
+}
+
+function renderDataHealth(product) {
+  if (!elements.dataHealthSources) return;
+  const health = product?.dataHealth;
+  const sources = health?.sources ?? [];
+  if (elements.dataHealthSummary) elements.dataHealthSummary.textContent = health ? `${health.status.toUpperCase()} · ${sources.length} sources · ${health.warnings.length} warnings` : "Waiting for product data health.";
+  elements.dataHealthSources.innerHTML = sources.length === 0 ? `<div class="empty-state">No source health rows yet.</div>` : sources.map((source) => `
+    <article class="health-source-card status-${escapeHtml(source.status)}">
+      <div>
+        <div class="product-card-title">${escapeHtml(source.label)} <span class="chip">${escapeHtml(source.source)}</span></div>
+        <p>${escapeHtml(source.warnings?.[0] ?? "No source warnings.")}</p>
+        <div class="product-card-meta"><span>TTL ${formatNumber(Math.round((source.ttlSeconds ?? 0) / 60))}m</span><span>${source.coverage ? `${formatNumber(source.coverage.scanned)}/${formatNumber(source.coverage.total)} ${escapeHtml(source.coverage.label)}` : "coverage n/a"}</span><span>${source.schemaHash ? `schema ${escapeHtml(source.schemaHash)}` : "schema n/a"}</span></div>
+      </div>
+      <div class="product-score"><strong>${escapeHtml(source.status)}</strong><span>${source.lastSuccessAt ? `ok ${shortTime(source.lastSuccessAt)}` : source.lastFailureAt ? `fail ${shortTime(source.lastFailureAt)}` : "not observed"}</span></div>
+    </article>
+  `).join("");
+}
+
+function renderPlanner(product) {
+  if (!elements.todoList || !elements.portfolioList) return;
+  hydrateProductControls(product);
+  const personalization = product?.personalization;
+  const todos = personalization?.todos ?? [];
+  elements.todoList.innerHTML = todos.length === 0 ? `<div class="empty-state">No todos yet. Add a task or convert a recommendation into one.</div>` : todos.map((todo) => `
+    <article class="planner-row">
+      <div><strong>${escapeHtml(todo.title)}</strong><span>${escapeHtml(todo.methodId ?? "manual")} · ${escapeHtml(todo.status)}${todo.dueAt ? ` · due ${shortTime(todo.dueAt)}` : ""}</span><p>${escapeHtml(todo.notes ?? "")}</p></div>
+      <div class="planner-actions">
+        <button class="ghost-button" type="button" data-todo-action="in_progress" data-todo-id="${escapeHtml(todo.id)}">Start</button>
+        <button class="primary-button" type="button" data-todo-action="done" data-todo-id="${escapeHtml(todo.id)}">Done</button>
+      </div>
+    </article>
+  `).join("");
+  const portfolio = personalization?.portfolio ?? [];
+  const alerts = personalization?.notificationRules ?? [];
+  const advanced = product?.advanced;
+  elements.portfolioList.innerHTML = `
+    <article class="planner-row"><div><strong>Realized profit</strong><span>${advanced?.tradeJournal?.realizedProfitPlat ?? 0}◈ · ${formatNumber(advanced?.tradeJournal?.tradeCount ?? 0)} trades</span></div></article>
+    <article class="planner-row"><div><strong>Portfolio entries</strong><span>${formatNumber(portfolio.length)} tracked · ${formatNumber(advanced?.portfolioAging?.length ?? 0)} aged</span></div></article>
+    <article class="planner-row"><div><strong>Alert rules</strong><span>${formatNumber(alerts.length)} configured · in-app/email/webhook channels modeled</span></div></article>
+    <article class="planner-row"><div><strong>Privacy</strong><span>${personalization?.profile?.privacy?.privateByDefault ? "Private by default" : "Sharing allowed"} · ${personalization?.exportAvailable ? "export ready" : "export unavailable"} · ${personalization?.deleteAvailable ? "delete ready" : "delete unavailable"}</span></div></article>
+  `;
+}
+
+function hydrateProductControls(product) {
+  const profile = product?.personalization?.profile;
+  if (!profile) return;
+  if (elements.profileDisplayName && document.activeElement !== elements.profileDisplayName) elements.profileDisplayName.value = profile.displayName ?? "";
+  if (elements.assumptionTrace && document.activeElement !== elements.assumptionTrace) elements.assumptionTrace.value = profile.assumptions?.traceOpportunityCostPlat ?? "";
+  if (elements.assumptionEndo && document.activeElement !== elements.assumptionEndo) elements.assumptionEndo.value = profile.assumptions?.endoPlatPerThousand ?? "";
+  if (elements.assumptionCredits && document.activeElement !== elements.assumptionCredits) elements.assumptionCredits.value = profile.assumptions?.creditPlatPerMillion ?? "";
+  if (elements.assumptionUnlocked && document.activeElement !== elements.assumptionUnlocked) elements.assumptionUnlocked.value = (profile.assumptions?.unlockedContent ?? []).join(", ");
+  if (elements.privacyPrivate) elements.privacyPrivate.checked = Boolean(profile.privacy?.privateByDefault);
+  if (elements.privacyAggregates) elements.privacyAggregates.checked = Boolean(profile.privacy?.allowAnonymousAggregates);
+}
+
+function productOpportunityCard(opportunity) {
+  return `
+    <article class="product-opportunity-card">
+      <div>
+        <div class="product-card-title">${escapeHtml(opportunity.title)} <span class="chip">${escapeHtml(opportunity.methodId)}</span></div>
+        <p>${escapeHtml(opportunity.explanation?.recommendation ?? "")}</p>
+        <div class="product-card-meta"><span>${escapeHtml(opportunity.action)}</span><span>${Math.round((opportunity.confidenceScore ?? 0) * 100)}% confidence</span><span>${Math.round((opportunity.liquidityScore ?? 0) * 100)}% liquidity</span></div>
+      </div>
+      <div class="product-score"><strong>${Math.round(opportunity.expectedPlat ?? 0)}◈</strong><span>${opportunity.expectedProfitPlat == null ? "EV" : `+${Math.round(opportunity.expectedProfitPlat)}◈ profit`}</span></div>
+    </article>`;
+}
+
+function productOpportunityCompact(opportunity) {
+  return `<article class="product-compact-row"><strong>${escapeHtml(opportunity.title)}</strong><span>${Math.round(opportunity.expectedPlat ?? 0)}◈ · ${Math.round((opportunity.confidenceScore ?? 0) * 100)}% conf</span></article>`;
+}
+
+function productRelicRow(entry, mode) {
+  const tier = entry.chosenTier ?? {};
+  return `<article class="product-compact-row"><strong>${escapeHtml(entry.relic?.name ?? "Relic")} · ${escapeHtml(tier.tier ?? "Intact")}</strong><span>${mode} · EV ${Math.round(tier.evPlat ?? 0)}◈ · ${Math.round((entry.confidence ?? 0) * 100)}% conf</span></article>`;
 }
 
 function updateArcaneStrategyButtons(strategy) {
@@ -1869,6 +2136,17 @@ function collectConfig() {
     maxSellPrice: elements.maxSellPrice.value.trim() === "" ? null : Number(elements.maxSellPrice.value),
     statuses,
   };
+}
+
+function numberOrUndefined(value) {
+  const trimmed = String(value ?? "").trim();
+  if (trimmed.length === 0) return undefined;
+  const parsed = Number(trimmed);
+  return Number.isFinite(parsed) ? parsed : undefined;
+}
+
+function splitCsv(value) {
+  return String(value ?? "").split(/[,\n]+/).map((entry) => entry.trim()).filter(Boolean);
 }
 
 function shortTime(value) {

@@ -7,6 +7,8 @@ import { McpSseServer } from "./mcp.js";
 import { enrichOpportunity, type SignatureLookupHit } from "./mcp/schemas.js";
 import { attributeSignature } from "./wfm/opportunities.js";
 import { isRecord, readBoolean, readNumber, readString } from "./wfm/guards.js";
+import type { ItemRef, NotificationChannel, NotificationThreshold, ProductOpportunityAction, TodoStatus } from "./wfm/product.js";
+import type { NotificationRuleInput, PortfolioInput, ProfileUpdate, TodoInput, TodoUpdate } from "./wfm/userStore.js";
 import type { ThePlatExchangeService } from "./wfm/scanner.js";
 import type { DashboardState, SellerStatus, TraderConfig } from "./wfm/types.js";
 
@@ -191,6 +193,55 @@ export function createAppServer(service: ThePlatExchangeService, options: AppSer
       }
       if (request.method === "GET" && url.pathname === "/api/vosfor-packs") {
         sendJson(response, 200, service.getState().arcanes?.packs ?? []);
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/product") {
+        sendJson(response, 200, service.getProductState());
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/product/refresh") {
+        void service.refreshProduct("manual-product-refresh");
+        sendJson(response, 202, service.getState());
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/user/profile") {
+        const payload = await readRequestJson(request);
+        await service.updateUserProfile(profileUpdateFromPayload(payload));
+        sendJson(response, 200, service.getState());
+        return;
+      }
+      if (request.method === "GET" && url.pathname === "/api/user/export") {
+        sendJson(response, 200, service.getProductState().personalization);
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/user/delete") {
+        await service.deleteUserData();
+        sendJson(response, 200, service.getState());
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/todos") {
+        const payload = await readRequestJson(request);
+        await service.addTodo(todoFromPayload(payload));
+        sendJson(response, 201, service.getState());
+        return;
+      }
+      if (request.method === "PATCH" && url.pathname.startsWith("/api/todos/")) {
+        const id = decodeURIComponent(url.pathname.slice("/api/todos/".length));
+        const payload = await readRequestJson(request);
+        await service.updateTodo(id, todoUpdateFromPayload(payload));
+        sendJson(response, 200, service.getState());
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/portfolio") {
+        const payload = await readRequestJson(request);
+        await service.addPortfolio(portfolioFromPayload(payload));
+        sendJson(response, 201, service.getState());
+        return;
+      }
+      if (request.method === "POST" && url.pathname === "/api/notification-rules") {
+        const payload = await readRequestJson(request);
+        await service.addNotificationRule(notificationRuleFromPayload(payload));
+        sendJson(response, 201, service.getState());
         return;
       }
       if (request.method === "GET" && url.pathname.startsWith("/api/arcane/")) {
@@ -406,6 +457,7 @@ function computeSignatureValue(service: ThePlatExchangeService, url: URL): Recor
 function handleDashboardSse(request: IncomingMessage, response: ServerResponse, service: ThePlatExchangeService): void {
   response.writeHead(200, {
     "Content-Type": "text/event-stream; charset=utf-8",
+
     "Cache-Control": "no-cache, no-transform",
     Connection: "keep-alive",
     "X-Accel-Buffering": "no",
@@ -440,6 +492,172 @@ async function serveStatic(response: ServerResponse, publicDir: string, pathname
     }
     throw error;
   }
+}
+
+function profileUpdateFromPayload(payload: unknown): ProfileUpdate {
+  if (!isRecord(payload)) return {};
+  const update: ProfileUpdate = {};
+  const displayName = readString(payload, "displayName");
+  const email = readString(payload, "email");
+  const timezone = readString(payload, "timezone");
+  const crossplay = readBoolean(payload, "crossplay");
+  if (displayName !== undefined) update.displayName = displayName;
+  if (email !== undefined) update.email = email;
+  if (timezone !== undefined) update.timezone = timezone;
+  if (crossplay !== undefined) update.crossplay = crossplay;
+  const assumptions = isRecord(payload.assumptions) ? payload.assumptions : payload;
+  const traceOpportunityCostPlat = readNumber(assumptions, "traceOpportunityCostPlat");
+  const endoPlatPerThousand = readNumber(assumptions, "endoPlatPerThousand");
+  const creditPlatPerMillion = readNumber(assumptions, "creditPlatPerMillion");
+  const preferredMissionTypes = readStringArray(assumptions, "preferredMissionTypes");
+  const unlockedContent = readStringArray(assumptions, "unlockedContent");
+  const accessibleSyndicates = readStringArray(assumptions, "accessibleSyndicates");
+  if (traceOpportunityCostPlat !== undefined || endoPlatPerThousand !== undefined || creditPlatPerMillion !== undefined || preferredMissionTypes || unlockedContent || accessibleSyndicates) {
+    update.assumptions = {};
+    if (traceOpportunityCostPlat !== undefined) update.assumptions.traceOpportunityCostPlat = traceOpportunityCostPlat;
+    if (endoPlatPerThousand !== undefined) update.assumptions.endoPlatPerThousand = endoPlatPerThousand;
+    if (creditPlatPerMillion !== undefined) update.assumptions.creditPlatPerMillion = creditPlatPerMillion;
+    if (preferredMissionTypes) update.assumptions.preferredMissionTypes = preferredMissionTypes;
+    if (unlockedContent) update.assumptions.unlockedContent = unlockedContent;
+    if (accessibleSyndicates) update.assumptions.accessibleSyndicates = accessibleSyndicates;
+  }
+  const privacy = isRecord(payload.privacy) ? payload.privacy : payload;
+  const privateByDefault = readBoolean(privacy, "privateByDefault");
+  const allowAnonymousAggregates = readBoolean(privacy, "allowAnonymousAggregates");
+  const teamSharingEnabled = readBoolean(privacy, "teamSharingEnabled");
+  if (privateByDefault !== undefined || allowAnonymousAggregates !== undefined || teamSharingEnabled !== undefined) {
+    update.privacy = {};
+    if (privateByDefault !== undefined) update.privacy.privateByDefault = privateByDefault;
+    if (allowAnonymousAggregates !== undefined) update.privacy.allowAnonymousAggregates = allowAnonymousAggregates;
+    if (teamSharingEnabled !== undefined) update.privacy.teamSharingEnabled = teamSharingEnabled;
+  }
+  return update;
+}
+
+function todoFromPayload(payload: unknown): TodoInput {
+  if (!isRecord(payload)) return { title: "" };
+  const todo: TodoInput = { title: readString(payload, "title") ?? "" };
+  const methodId = readString(payload, "methodId");
+  const itemRefs = readItemRefs(payload, "itemRefs");
+  const action = readAction(payload, "action");
+  const dueAt = readString(payload, "dueAt");
+  const sourceOpportunityId = readString(payload, "sourceOpportunityId");
+  const notes = readString(payload, "notes");
+  if (methodId !== undefined) todo.methodId = methodId;
+  if (itemRefs !== undefined) todo.itemRefs = itemRefs;
+  if (action !== undefined) todo.action = action;
+  if (dueAt !== undefined) todo.dueAt = dueAt;
+  if (sourceOpportunityId !== undefined) todo.sourceOpportunityId = sourceOpportunityId;
+  if (notes !== undefined) todo.notes = notes;
+  return todo;
+}
+
+function todoUpdateFromPayload(payload: unknown): TodoUpdate {
+  if (!isRecord(payload)) return {};
+  const update: TodoUpdate = {};
+  const status = readTodoStatus(payload, "status");
+  const notes = readString(payload, "notes");
+  const dueAt = readString(payload, "dueAt");
+  const title = readString(payload, "title");
+  if (status !== undefined) update.status = status;
+  if (notes !== undefined) update.notes = notes;
+  if (dueAt !== undefined) update.dueAt = dueAt;
+  if (title !== undefined) update.title = title;
+  return update;
+}
+
+function portfolioFromPayload(payload: unknown): PortfolioInput {
+  if (!isRecord(payload)) return { item: { tpeId: "manual:unknown", name: "" }, quantity: 0 };
+  const input: PortfolioInput = {
+    item: readItemRef(payload, "item"),
+    quantity: readNumber(payload, "quantity") ?? 0,
+  };
+  const rank = readNumber(payload, "rank");
+  const acquiredAt = readString(payload, "acquiredAt");
+  const costBasisPlat = readNumber(payload, "costBasisPlat");
+  const notes = readString(payload, "notes");
+  if (rank !== undefined) input.rank = rank;
+  if (acquiredAt !== undefined) input.acquiredAt = acquiredAt;
+  if (costBasisPlat !== undefined) input.costBasisPlat = costBasisPlat;
+  if (notes !== undefined) input.notes = notes;
+  return input;
+}
+
+function notificationRuleFromPayload(payload: unknown): NotificationRuleInput {
+  const record = isRecord(payload) ? payload : {};
+  const thresholdRecord = isRecord(record.threshold) ? record.threshold : record;
+  const threshold: NotificationThreshold = {};
+  const minExpectedProfitPlat = readNumber(thresholdRecord, "minExpectedProfitPlat");
+  const minRoi = readNumber(thresholdRecord, "minRoi");
+  const minConfidence = readNumber(thresholdRecord, "minConfidence");
+  const maxRisk = readNumber(thresholdRecord, "maxRisk");
+  const itemRefs = readItemRefs(thresholdRecord, "itemRefs");
+  if (minExpectedProfitPlat !== undefined) threshold.minExpectedProfitPlat = minExpectedProfitPlat;
+  if (minRoi !== undefined) threshold.minRoi = minRoi;
+  if (minConfidence !== undefined) threshold.minConfidence = minConfidence;
+  if (maxRisk !== undefined) threshold.maxRisk = maxRisk;
+  if (itemRefs !== undefined) threshold.itemRefs = itemRefs;
+  const rule: NotificationRuleInput = {
+    name: readString(record, "name") ?? "Market alert",
+    methodIds: readStringArray(record, "methodIds") ?? [],
+    filters: isRecord(record.filters) ? record.filters : {},
+    threshold,
+    channels: readNotificationChannels(record, "channels"),
+    cooldownSeconds: readNumber(record, "cooldownSeconds") ?? 3600,
+    enabled: readBoolean(record, "enabled") ?? true,
+  };
+  const lastTriggeredAt = readString(record, "lastTriggeredAt");
+  const dedupeKey = readString(record, "dedupeKey");
+  const changedBecause = readString(record, "changedBecause") ?? "User-created alert rule.";
+  if (lastTriggeredAt !== undefined) rule.lastTriggeredAt = lastTriggeredAt;
+  if (dedupeKey !== undefined) rule.dedupeKey = dedupeKey;
+  rule.changedBecause = changedBecause;
+  return rule;
+}
+
+function readStringArray(record: Record<string, unknown>, key: string): string[] | undefined {
+  const value = record[key];
+  if (Array.isArray(value)) return value.filter((entry): entry is string => typeof entry === "string" && entry.trim().length > 0).map((entry) => entry.trim());
+  if (typeof value === "string") return splitWatchlist(value);
+  return undefined;
+}
+
+function readItemRefs(record: Record<string, unknown>, key: string): ItemRef[] | undefined {
+  const value = record[key];
+  if (!Array.isArray(value)) return undefined;
+  const refs = value.map((entry) => (isRecord(entry) ? readItemRef(entry, "item") : null)).filter((entry): entry is ItemRef => entry !== null && entry.name.trim().length > 0);
+  return refs.length > 0 ? refs : undefined;
+}
+
+function readItemRef(record: Record<string, unknown>, key: string): ItemRef {
+  const itemRecord = isRecord(record[key]) ? record[key] : record;
+  const name = readString(itemRecord, "name") ?? readString(record, "itemName") ?? "";
+  const ref: ItemRef = {
+    tpeId: readString(itemRecord, "tpeId") ?? readString(itemRecord, "id") ?? `manual:${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+    name,
+  };
+  const gameRef = readString(itemRecord, "gameRef");
+  const wfmSlug = readString(itemRecord, "wfmSlug") ?? readString(itemRecord, "slug");
+  if (gameRef !== undefined) ref.gameRef = gameRef;
+  if (wfmSlug !== undefined) ref.wfmSlug = wfmSlug;
+  return ref;
+}
+
+function readAction(record: Record<string, unknown>, key: string): ProductOpportunityAction | undefined {
+  const value = readString(record, key);
+  if (value === "rank_up") return "rank";
+  return value === "farm" || value === "buy" || value === "sell" || value === "open" || value === "refine" || value === "rank" || value === "convert" || value === "hold" || value === "complete_set" || value === "run_mission" ? value : undefined;
+}
+
+function readTodoStatus(record: Record<string, unknown>, key: string): TodoStatus | undefined {
+  const value = readString(record, key);
+  return value === "open" || value === "in_progress" || value === "blocked" || value === "done" || value === "archived" ? value : undefined;
+}
+
+function readNotificationChannels(record: Record<string, unknown>, key: string): NotificationChannel[] {
+  const values = readStringArray(record, key) ?? ["in_app"];
+  const channels = values.filter((value): value is NotificationChannel => value === "in_app" || value === "email" || value === "discord_webhook");
+  return channels.length > 0 ? channels : ["in_app"];
 }
 
 async function readRequestJson(request: IncomingMessage): Promise<unknown> {

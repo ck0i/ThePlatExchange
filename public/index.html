@@ -71,6 +71,10 @@
           <button class="rail-item" data-page="opportunities" type="button"><span class="rail-icon">◎</span><span class="rail-label">Opportunities</span></button>
           <button class="rail-item" data-page="instant" type="button"><span class="rail-icon">ϟ</span><span class="rail-label">Instant Wins</span></button>
           <button class="rail-item" data-page="arcanes" type="button"><span class="rail-icon">✦</span><span class="rail-label">Arcanes</span></button>
+          <button class="rail-item" data-page="products" type="button"><span class="rail-icon">◇</span><span class="rail-label">Plat Engine</span></button>
+          <button class="rail-item" data-page="run-now" type="button"><span class="rail-icon">▶</span><span class="rail-label">Run Now</span></button>
+          <button class="rail-item" data-page="data-health" type="button"><span class="rail-icon">◌</span><span class="rail-label">Data Health</span></button>
+          <button class="rail-item" data-page="planner" type="button"><span class="rail-icon">☑</span><span class="rail-label">Planner</span></button>
           <button class="rail-item" data-page="markets" type="button"><span class="rail-icon">▦</span><span class="rail-label">Riven Markets</span></button>
           <button class="rail-item" data-page="settings" type="button"><span class="rail-icon">⚙</span><span class="rail-label">Settings</span></button>
         </nav>
@@ -243,6 +247,110 @@
           </div>
         </section>
 
+
+        <section class="page" data-page-panel="products" aria-labelledby="productsTitle">
+          <div class="page-inner product-layout">
+            <div class="page-heading">
+              <div>
+                <h1 id="productsTitle">Plat Engine</h1>
+                <p id="productSummary">Prime, Relic, Aya, Baro, Mods, Syndicates, Resources, and explainable method recommendations.</p>
+              </div>
+              <button id="productRefresh" class="ghost-button" type="button">Refresh engine</button>
+            </div>
+            <section class="kpi-grid product-kpis" aria-label="Plat Engine statistics">
+              <article class="kpi-card"><span>Engine health</span><strong id="productHealth">—</strong><small id="productHealthSub">Waiting for product data</small></article>
+              <article class="kpi-card"><span>Methods online</span><strong id="productMethodsCount">0</strong><small>Source-backed engines</small></article>
+              <article class="kpi-card"><span>Product opps</span><strong id="productOppCount">0</strong><small>Explainable recommendations</small></article>
+              <article class="kpi-card"><span>Best EV</span><strong id="productBestEv">—</strong><small id="productBestEvSub">No ranked method yet</small></article>
+            </section>
+            <div class="product-grid">
+              <section class="panel">
+                <div class="section-head"><div><h2>Method engines</h2><span>Every method must carry source health, assumptions, and risk.</span></div></div>
+                <div id="productMethods" class="product-methods"></div>
+              </section>
+              <section class="panel">
+                <div class="section-head"><div><h2>Best product recommendations</h2><span>Not rivens: generic plat-making opportunities ranked by EV, confidence, and liquidity.</span></div></div>
+                <div id="productOpportunities" class="product-opportunities"></div>
+              </section>
+            </div>
+            <div class="product-grid">
+              <section class="panel">
+                <div class="section-head"><div><h2>Prime / Relic / Aya</h2><span>Crack-vs-sell, refinement, ducats, set completion, and fissure context.</span></div></div>
+                <div id="primeRelics" class="product-list"></div>
+              </section>
+              <section class="panel">
+                <div class="section-head"><div><h2>Expansion engines</h2><span>Rank-aware mods, standings, Baro ducats, resources, event shocks, and gated bespoke markets.</span></div></div>
+                <div id="expansionMethods" class="product-list"></div>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" data-page-panel="run-now" aria-labelledby="runNowTitle">
+          <div class="page-inner">
+            <div class="page-heading">
+              <div>
+                <h1 id="runNowTitle">Run Now</h1>
+                <p id="runNowSummary">Live fissures and activities filtered through expiry, mission speed, and current market EV.</p>
+              </div>
+            </div>
+            <div id="runNowList" class="run-now-list"></div>
+          </div>
+        </section>
+
+        <section class="page" data-page-panel="data-health" aria-labelledby="dataHealthTitle">
+          <div class="page-inner">
+            <div class="page-heading">
+              <div>
+                <h1 id="dataHealthTitle">Data Health</h1>
+                <p id="dataHealthSummary">Source provenance, coverage, TTL, schema fingerprints, warnings, and fallback state.</p>
+              </div>
+            </div>
+            <div id="dataHealthSources" class="data-health-sources"></div>
+          </div>
+        </section>
+
+        <section class="page" data-page-panel="planner" aria-labelledby="plannerTitle">
+          <div class="page-inner planner-layout">
+            <div class="page-heading">
+              <div>
+                <h1 id="plannerTitle">Planner</h1>
+                <p>Private local todos, watch intent, portfolio aging, assumptions, and alert rules. No Warframe credentials.</p>
+              </div>
+            </div>
+            <div class="product-grid">
+              <section class="panel">
+                <div class="section-head"><div><h2>Profile assumptions</h2><span>These change EV math for traces, Endo, credits, and access.</span></div></div>
+                <form id="profileForm" class="planner-form">
+                  <label>Display name<input id="profileDisplayName" type="text" placeholder="Local trader" /></label>
+                  <div class="inline"><label>Trace cost (p)<input id="assumptionTrace" type="number" min="0" step="0.01" /></label><label>Endo / 1k (p)<input id="assumptionEndo" type="number" min="0" step="0.1" /></label></div>
+                  <div class="inline"><label>Credits / 1m (p)<input id="assumptionCredits" type="number" min="0" step="0.1" /></label><label>Unlocked content<input id="assumptionUnlocked" type="text" placeholder="fissures, arbitrations" /></label></div>
+                  <div class="status-chips"><label class="status-chip"><input id="privacyPrivate" type="checkbox" checked /><span>Private by default</span></label><label class="status-chip"><input id="privacyAggregates" type="checkbox" /><span>Anonymous aggregates</span></label></div>
+                  <div class="actions"><button class="primary-button" type="submit">Save assumptions</button><button id="deleteUserData" class="ghost-button danger" type="button">Delete local data</button></div>
+                </form>
+              </section>
+              <section class="panel">
+                <div class="section-head"><div><h2>Add todo</h2><span>Turn any method into an actionable checklist.</span></div></div>
+                <form id="todoForm" class="planner-form">
+                  <label>Task<input id="todoTitle" type="text" placeholder="Crack Lith A1 Radiant if EV stays positive" /></label>
+                  <div class="inline"><label>Method<input id="todoMethod" type="text" placeholder="prime_relics" /></label><label>Due<input id="todoDue" type="datetime-local" /></label></div>
+                  <label>Notes<textarea id="todoNotes" placeholder="Assumptions, risks, manual checks"></textarea></label>
+                  <div class="actions"><button class="primary-button" type="submit">Add todo</button></div>
+                </form>
+              </section>
+            </div>
+            <div class="product-grid">
+              <section class="panel">
+                <div class="section-head"><div><h2>Todos</h2><span>Local private action queue.</span></div></div>
+                <div id="todoList" class="planner-list"></div>
+              </section>
+              <section class="panel">
+                <div class="section-head"><div><h2>Portfolio & alerts</h2><span>Aging, realized profit, alerts, and privacy state.</span></div></div>
+                <div id="portfolioList" class="planner-list"></div>
+              </section>
+            </div>
+          </div>
+        </section>
         <section class="page" data-page-panel="markets" aria-labelledby="marketsTitle">
           <div class="page-inner">
             <div class="page-heading">

@@ -2,6 +2,9 @@ import { WarframeMarketClient } from "./client.js";
 import type { PriceHistoryStore, SignatureValuation as SignatureValuationResult, SignatureVelocity as SignatureVelocityResult } from "./history.js";
 import { analyzeArcaneMarket } from "./arcanes.js";
 import { analyzeMarket, DEFAULT_CONFIG, deriveWeaponMarketIntel, MAX_REASONABLE_ROI, normalizeConfig, slugify, type MarketAnalysis } from "./opportunities.js";
+import { buildProductDashboard, createInitialProductDashboard } from "./productEngine.js";
+import type { PersonalizationState, ProductDashboardState } from "./product.js";
+import { UserStore, type NotificationRuleInput, type PortfolioInput, type ProfileUpdate, type TodoInput, type TodoUpdate } from "./userStore.js";
 import type { ArcaneDashboardState, ArcaneItem, ArcaneOrder, ArcaneReferenceSnapshot, DashboardState, ReferenceSnapshot, RivenAuction, RivenWeapon, ScanStatus, TraderConfig, WeaponSummary } from "./types.js";
 
 export type ScanTier = "hot" | "cold" | "full";
@@ -23,6 +26,7 @@ export interface ScannerOptions {
   remoteDataUrl?: string;
   remoteDataBase?: string;
   remotePollMs?: number;
+  userStore?: UserStore;
 }
 
 interface RemoteValuationEntry {
@@ -83,6 +87,9 @@ export class ThePlatExchangeService {
   private config: TraderConfig;
   private timers: NodeJS.Timeout[] = [];
   private emitTimer: NodeJS.Timeout | undefined;
+  private readonly userStore: UserStore;
+  private productState: ProductDashboardState = createInitialProductDashboard();
+  private activeProductRefresh: Promise<void> | null = null;
   private activeRefresh: Promise<void> | null = null;
   private activeArcaneRefresh: Promise<void> | null = null;
   private cachedAnalysis: { key: string; analysis: MarketAnalysis } | null = null;
@@ -133,6 +140,11 @@ export class ThePlatExchangeService {
   constructor(options: ScannerOptions) {
     this.client = options.client;
     this.history = options.history;
+    this.userStore = options.userStore ?? new UserStore();
+    void this.userStore.load().then((state) => {
+      this.productState = createInitialProductDashboard(state);
+      this.emitStateImmediate();
+    }).catch(() => undefined);
     this.config = normalizeConfig(options.config ?? DEFAULT_CONFIG);
     this.refreshMs = Math.max(60_000, options.refreshMs ?? 60_000);
     this.concurrency = Math.max(1, Math.floor(options.concurrency ?? 4));
@@ -167,6 +179,7 @@ export class ThePlatExchangeService {
     this.stop();
     this.activeRefresh = null;
     this.activeArcaneRefresh = null;
+    this.activeProductRefresh = null;
     this.scanGeneration += 1;
     this.mode = next;
     this.remoteState = null;
@@ -240,6 +253,10 @@ export class ThePlatExchangeService {
       void this.refresh("startup", "full");
       void this.refreshArcanes("arcane-startup", "full");
     }
+    this.timers.push(setInterval(() => {
+      void this.refreshProduct("product-scheduled");
+    }, Math.max(15 * 60_000, this.hotIntervalMs * 3)));
+    void this.refreshProduct("product-startup");
   }
 
   private startRemotePolling(): void {
@@ -406,6 +423,16 @@ export class ThePlatExchangeService {
     }
   }
 
+  async refreshProduct(reason: string): Promise<void> {
+    if (this.activeProductRefresh) return this.activeProductRefresh;
+    this.activeProductRefresh = this.runProductRefresh(reason);
+    try {
+      await this.activeProductRefresh;
+    } finally {
+      this.activeProductRefresh = null;
+    }
+  }
+
   getSignatureValuation(weaponSlug: string, signature: string, windowDays: number = 30): SignatureValuationResult | null {
     if (this.mode === "remote") {
       const remote = this.remoteValuations.get(`${weaponSlug}::${signature}`);
@@ -509,6 +536,31 @@ export class ThePlatExchangeService {
     return map;
   }
 
+  private async runProductRefresh(reason: string): Promise<void> {
+    const personalization = await this.userStore.load();
+    this.productState = await this.buildProductFromPersonalization(personalization, reason);
+    this.emitStateImmediate();
+  }
+
+  private async buildProductFromPersonalization(personalization: PersonalizationState, reason: string): Promise<ProductDashboardState> {
+    try {
+      return await buildProductDashboard(this.client, personalization);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      return {
+        ...this.productState,
+        personalization,
+        generatedAt: new Date().toISOString(),
+        dataHealth: {
+          ...this.productState.dataHealth,
+          generatedAt: new Date().toISOString(),
+          status: "red",
+          warnings: [`${reason}: ${message}`, ...this.productState.dataHealth.warnings],
+        },
+      };
+    }
+  }
+
   getState(): DashboardState {
     if (this.mode === "remote") {
       if (this.remoteState) {
@@ -567,6 +619,7 @@ export class ThePlatExchangeService {
           opportunities: enriched,
           instantWins,
           weaponSummaries: this.enrichRemoteWeaponSummaries(imageMap),
+          product: this.productForRemoteState(),
         };
       }
       return {
@@ -581,6 +634,7 @@ export class ThePlatExchangeService {
         opportunities: [],
         instantWins: [],
         weaponSummaries: [],
+        product: this.productState,
       };
     }
     const weapons = this.reference?.rivenWeapons ?? [];
@@ -614,7 +668,60 @@ export class ThePlatExchangeService {
       instantWins: analysis.instantWins,
       weaponSummaries: analysis.weaponSummaries,
       arcanes: this.getArcaneState(),
+      product: this.productState,
     };
+  }
+
+  getProductState(): ProductDashboardState {
+    return this.mode === "remote" ? this.productForRemoteState() : this.productState;
+  }
+
+  private productForRemoteState(): ProductDashboardState {
+    const waiting = this.productState.dataHealth.sources.some((source) => source.id === "product" && source.warnings.some((warning) => warning.includes("Waiting for product data refresh")));
+    if (waiting && this.remoteState?.product) return this.remoteState.product;
+    return this.productState;
+  }
+
+  async updateUserProfile(update: ProfileUpdate): Promise<ProductDashboardState> {
+    const personalization = await this.userStore.updateProfile(update);
+    this.productState = await this.buildProductFromPersonalization(personalization, "profile-update");
+    this.emitStateImmediate();
+    return this.productState;
+  }
+
+  async addTodo(input: TodoInput): Promise<ProductDashboardState> {
+    const personalization = await this.userStore.addTodo(input);
+    this.productState = { ...this.productState, personalization };
+    this.emitStateImmediate();
+    return this.productState;
+  }
+
+  async updateTodo(id: string, update: TodoUpdate): Promise<ProductDashboardState> {
+    const personalization = await this.userStore.updateTodo(id, update);
+    this.productState = { ...this.productState, personalization };
+    this.emitStateImmediate();
+    return this.productState;
+  }
+
+  async addPortfolio(input: PortfolioInput): Promise<ProductDashboardState> {
+    const personalization = await this.userStore.addPortfolio(input);
+    this.productState = await this.buildProductFromPersonalization(personalization, "portfolio-update");
+    this.emitStateImmediate();
+    return this.productState;
+  }
+
+  async addNotificationRule(rule: NotificationRuleInput): Promise<ProductDashboardState> {
+    const personalization = await this.userStore.addNotificationRule(rule);
+    this.productState = { ...this.productState, personalization };
+    this.emitStateImmediate();
+    return this.productState;
+  }
+
+  async deleteUserData(): Promise<ProductDashboardState> {
+    const personalization = await this.userStore.deleteAll();
+    this.productState = createInitialProductDashboard(personalization);
+    this.emitStateImmediate();
+    return this.productState;
   }
 
   private getArcaneState(): ArcaneDashboardState {

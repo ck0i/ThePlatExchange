@@ -750,7 +750,54 @@ body.modal-open { overflow: hidden; }
   from { opacity: 0; transform: translate3d(0, 12px, 0) scale(.985); }
   to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 }
+
+.product-layout, .planner-layout { display: grid; gap: 18px; }
+.product-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.product-methods, .product-opportunities, .product-list, .run-now-list, .data-health-sources, .planner-list { display: grid; gap: 10px; }
+.product-method-card, .product-opportunity-card, .run-card, .health-source-card, .planner-row, .product-compact-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, rgba(255,255,255,.045), rgba(255,255,255,.018));
+  box-shadow: var(--shadow-soft);
+  transition: transform .16s var(--ease-out), border-color .16s var(--ease-out), background .16s var(--ease-out);
+}
+.product-method-card:hover, .product-opportunity-card:hover, .run-card:hover, .health-source-card:hover, .planner-row:hover, .product-compact-row:hover { transform: translateY(-1px); border-color: rgba(124, 58, 237, .38); background: linear-gradient(135deg, rgba(124,58,237,.13), rgba(255,255,255,.025)); }
+.product-method-card strong, .product-card-title, .planner-row strong, .product-compact-row strong { color: var(--text-strong); font-weight: 760; letter-spacing: -.01em; }
+.product-method-card span, .product-card-meta, .planner-row span, .product-compact-row span, .product-summary-line { color: var(--muted-light); font-size: 12px; line-height: 1.45; }
+.product-method-meta, .product-score { text-align: right; min-width: 92px; }
+.product-method-meta b, .product-score strong { display: block; color: var(--primary-light); font-size: 20px; line-height: 1; }
+.product-method-meta small, .product-score span { display: block; margin-top: 6px; color: var(--muted); font-size: 11px; }
+.product-card-meta { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
+.product-card-meta span, .chip { border: 1px solid var(--border-soft); border-radius: 999px; padding: 3px 7px; background: rgba(255,255,255,.035); }
+.product-opportunity-card p, .run-card p, .health-source-card p, .planner-row p { margin: 6px 0 0; color: var(--muted-light); font-size: 12px; line-height: 1.5; }
+.product-compact-row { grid-template-columns: minmax(0, 1fr) minmax(120px, auto); box-shadow: none; }
+.product-compact-row.gated { border-color: rgba(251, 191, 36, .24); }
+.status-green { border-color: rgba(74, 222, 128, .22); }
+.status-yellow { border-color: rgba(251, 191, 36, .28); }
+.status-red { border-color: rgba(248, 113, 113, .28); }
+.planner-form { display: grid; gap: 12px; }
+.planner-form label { display: grid; gap: 6px; color: var(--muted-light); font-size: 12px; }
+.planner-form input, .planner-form textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,.04);
+  color: var(--text);
+  padding: 10px 11px;
+  outline: none;
+}
+.planner-form textarea { min-height: 84px; resize: vertical; }
+.planner-form input:focus, .planner-form textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(124,58,237,.14); }
+.planner-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.ghost-button.danger { border-color: rgba(248,113,113,.35); color: #fecaca; }
+
 @media (max-width: 1100px) {
+  .product-grid { grid-template-columns: 1fr; }
   .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .home-panels { grid-template-columns: 1fr; }
   .opportunities-grid { grid-template-columns: 1fr; }
@@ -790,6 +837,9 @@ body.modal-open { overflow: hidden; }
   .arcane-market-row { grid-template-columns: 1fr; }
   .arcane-market-row > div:last-child { display: block; }
   .instant-card { grid-template-columns: 1fr; gap: 10px; }
+  .product-method-card, .product-opportunity-card, .run-card, .health-source-card, .planner-row, .product-compact-row { grid-template-columns: 1fr; }
+  .product-method-meta, .product-score { text-align: left; }
+  .planner-actions { justify-content: flex-start; }
   .instant-actions { justify-content: flex-start; }
 }
 

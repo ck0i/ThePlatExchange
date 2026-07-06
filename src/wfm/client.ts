@@ -9,6 +9,32 @@ import { enrichWeaponsWithImageNames, fetchWarframestatImageMap } from "./warfra
 
 type Fetcher = (input: URL, init: RequestInit) => Promise<Response>;
 
+export interface MarketItem {
+  id: string;
+  slug: string;
+  name: string;
+  tags: string[];
+  tradable: boolean;
+  bulkTradable: boolean;
+  maxRank?: number;
+  ducats?: number;
+  tradingTax?: number;
+  gameRef?: string;
+  icon?: string;
+  thumb?: string;
+  imageName?: string;
+}
+
+export interface WarframeMarketHealth {
+  userAgent: string;
+  orderCacheEntries: number;
+  itemCatalogLoadedAt?: string;
+  lastSuccessAt?: string;
+  lastFailureAt?: string;
+  lastFailure?: string;
+}
+
+
 interface ClientOptions {
   baseUrl: string;
   cacheDir: string;
@@ -44,6 +70,14 @@ export class WarframeMarketClient {
   private readonly maxRetries: number;
   private readonly headers: Record<string, string>;
   private readonly fetcher: Fetcher;
+  private marketItemsCache: { version: string | undefined; loadedAt: string; items: MarketItem[] } | null = null;
+  private marketItemsInflight: Promise<MarketItem[]> | null = null;
+  private readonly itemOrderCache = new Map<string, { expiresAt: number; fetchedAt: string; orders: ArcaneOrder[] }>();
+  private readonly itemOrderInflight = new Map<string, Promise<ArcaneOrder[]>>();
+  private lastSuccessAt: string | undefined;
+  private lastFailureAt: string | undefined;
+  private lastFailure: string | undefined;
+
 
   constructor(options: WarframeMarketClientOptions = {}) {
     const merged = { ...DEFAULT_OPTIONS, ...options };
@@ -128,6 +162,45 @@ export class WarframeMarketClient {
     return Array.isArray(payload) ? compact(payload.map(parseRivenAttribute)) : [];
   }
 
+  async marketItems(): Promise<MarketItem[]> {
+    if (this.marketItemsInflight) return this.marketItemsInflight;
+    this.marketItemsInflight = this.loadMarketItems();
+    try {
+      return await this.marketItemsInflight;
+    } finally {
+      this.marketItemsInflight = null;
+    }
+  }
+
+  async topItemOrders(slug: string, rank = 0, ttlMs = 60_000): Promise<ArcaneOrder[]> {
+    const normalizedRank = Math.max(0, Math.floor(rank));
+    const key = `${slug}::${normalizedRank}`;
+    const now = Date.now();
+    const cached = this.itemOrderCache.get(key);
+    if (cached && cached.expiresAt > now) return cached.orders.map((order) => ({ ...order, user: { ...order.user } }));
+    const inflight = this.itemOrderInflight.get(key);
+    if (inflight) return inflight;
+    const promise = this.fetchTopItemOrders(slug, normalizedRank, ttlMs);
+    this.itemOrderInflight.set(key, promise);
+    try {
+      return await promise;
+    } finally {
+      this.itemOrderInflight.delete(key);
+    }
+  }
+
+  health(): WarframeMarketHealth {
+    const health: WarframeMarketHealth = {
+      userAgent: this.headers["User-Agent"] ?? "the-plat-exchange",
+      orderCacheEntries: this.itemOrderCache.size,
+    };
+    if (this.marketItemsCache?.loadedAt) health.itemCatalogLoadedAt = this.marketItemsCache.loadedAt;
+    if (this.lastSuccessAt) health.lastSuccessAt = this.lastSuccessAt;
+    if (this.lastFailureAt) health.lastFailureAt = this.lastFailureAt;
+    if (this.lastFailure) health.lastFailure = this.lastFailure;
+    return health;
+  }
+
   async searchRivenAuctions(weaponSlug: string): Promise<RivenAuction[]> {
     const payload = await this.getV1("/v1/auctions/search", {
       type: "riven",
@@ -189,21 +262,42 @@ export class WarframeMarketClient {
   }
 
   async arcaneItems(): Promise<ArcaneItem[]> {
-    const payload = await this.getV2("/v2/items");
-    if (!Array.isArray(payload)) return [];
-    return compact(payload.map(parseArcaneItem)).filter((item) => item.tags.includes("arcane_enhancement") && (item.tradable || item.bulkTradable));
+    return compact((await this.marketItems()).map(arcaneItemFromMarketItem))
+      .filter((item) => item.tags.includes("arcane_enhancement") && (item.tradable || item.bulkTradable));
   }
 
   async searchArcaneOrders(item: ArcaneItem): Promise<ArcaneOrder[]> {
     const ranks = item.maxRank > 0 ? [0, item.maxRank] : [0];
     const orders: ArcaneOrder[] = [];
-    for (const rank of ranks) {
-      const payload = await this.getV2(`/v2/orders/item/${encodeURIComponent(item.slug)}/top`, { rank });
-      if (!isRecord(payload)) continue;
-      orders.push(...compact(readArray(payload, "sell").map((order) => parseArcaneOrder(order, rank))));
-      orders.push(...compact(readArray(payload, "buy").map((order) => parseArcaneOrder(order, rank))));
-    }
+    for (const rank of ranks) orders.push(...await this.topItemOrders(item.slug, rank));
     return orders;
+  }
+
+  private async loadMarketItems(): Promise<MarketItem[]> {
+    const versionInfo = await this.versions().catch((): VersionInfo => ({ collections: {} }));
+    const version = versionInfo.collections.items;
+    if (this.marketItemsCache && (!version || this.marketItemsCache.version === version)) {
+      return this.marketItemsCache.items.map((item) => ({ ...item, tags: [...item.tags] }));
+    }
+    const payload = await this.getV2("/v2/items");
+    const items = Array.isArray(payload) ? compact(payload.map(parseMarketItem)) : [];
+    if (items.length === 0 && this.marketItemsCache) return this.marketItemsCache.items.map((item) => ({ ...item, tags: [...item.tags] }));
+    if (items.length === 0) throw new Error("refusing to cache empty Warframe.market item catalog");
+    this.marketItemsCache = { version, loadedAt: new Date().toISOString(), items };
+    return items.map((item) => ({ ...item, tags: [...item.tags] }));
+  }
+
+  private async fetchTopItemOrders(slug: string, rank: number, ttlMs: number): Promise<ArcaneOrder[]> {
+    const key = `${slug}::${rank}`;
+    const payload = await this.getV2(`/v2/orders/item/${encodeURIComponent(slug)}/top`, { rank });
+    const orders = isRecord(payload)
+      ? [
+        ...compact(readArray(payload, "sell").map((order) => parseArcaneOrder(order, rank))),
+        ...compact(readArray(payload, "buy").map((order) => parseArcaneOrder(order, rank))),
+      ]
+      : [];
+    this.itemOrderCache.set(key, { expiresAt: Date.now() + ttlMs, fetchedAt: new Date().toISOString(), orders });
+    return orders.map((order) => ({ ...order, user: { ...order.user } }));
   }
 
   private async backfillImageNames(snapshot: ReferenceSnapshot): Promise<void> {
@@ -301,12 +395,15 @@ export class WarframeMarketClient {
           await delay(250 * 2 ** attempt + Math.random() * 250);
           continue;
         }
+        this.lastSuccessAt = new Date().toISOString();
         return response.json();
       } catch (error) {
         lastError = error instanceof Error ? error.message : String(error);
         await delay(250 * 2 ** attempt + Math.random() * 250);
       }
     }
+    this.lastFailureAt = new Date().toISOString();
+    this.lastFailure = `${url.pathname}: ${lastError}`;
     throw new Error(`exhausted Warframe.market retries for ${url.pathname}: ${lastError}`);
   }
 }
@@ -412,6 +509,56 @@ function parseRivenAttribute(value: unknown): RivenAttribute | null {
     prefix: readStringWithDefault(value, "prefix", ""),
     suffix: readStringWithDefault(value, "suffix", ""),
     name: readString(value, "name") ?? (en ? readStringWithDefault(en, "name", titleFromSlug(slug)) : titleFromSlug(slug)),
+  };
+}
+
+function parseMarketItem(value: unknown): MarketItem | null {
+  if (!isRecord(value)) return null;
+  const slug = readString(value, "slug");
+  if (!slug) return null;
+  const i18n = readRecord(value, "i18n");
+  const en = i18n ? readRecord(i18n, "en") : undefined;
+  const item: MarketItem = {
+    id: readStringWithDefault(value, "id", slug),
+    slug,
+    name: readString(value, "name") ?? (en ? readStringWithDefault(en, "name", titleFromSlug(slug)) : titleFromSlug(slug)),
+    tags: readStringArray(value, "tags"),
+    tradable: readBoolean(value, "tradable") ?? true,
+    bulkTradable: readBoolean(value, "bulkTradable") ?? false,
+  };
+  const maxRank = readNumber(value, "maxRank");
+  const ducats = readNumber(value, "ducats");
+  const tradingTax = readNumber(value, "tradingTax");
+  const gameRef = readString(value, "gameRef");
+  const icon = readString(value, "icon") ?? (en ? readString(en, "icon") : undefined);
+  const thumb = readString(value, "thumb") ?? (en ? readString(en, "thumb") : undefined);
+  const imageName = readString(value, "imageName");
+  if (maxRank !== undefined) item.maxRank = Math.max(0, Math.floor(maxRank));
+  if (ducats !== undefined) item.ducats = ducats;
+  if (tradingTax !== undefined) item.tradingTax = tradingTax;
+  if (gameRef) item.gameRef = gameRef;
+  if (icon) item.icon = icon;
+  if (thumb) item.thumb = thumb;
+  if (imageName) item.imageName = imageName;
+  return item;
+}
+
+function arcaneItemFromMarketItem(marketItem: MarketItem): ArcaneItem | null {
+  if (!marketItem.tags.includes("arcane_enhancement")) return null;
+  return {
+    id: marketItem.id,
+    slug: marketItem.slug,
+    name: marketItem.name,
+    tags: [...marketItem.tags],
+    rarity: parseArcaneRarity(undefined, marketItem.tags),
+    maxRank: marketItem.maxRank ?? 5,
+    tradable: marketItem.tradable,
+    bulkTradable: marketItem.bulkTradable,
+    tradingTax: marketItem.tradingTax ?? 0,
+    ...(marketItem.gameRef ? { gameRef: marketItem.gameRef } : {}),
+    ...(marketItem.icon ? { icon: marketItem.icon } : {}),
+    ...(marketItem.thumb ? { thumb: marketItem.thumb } : {}),
+    ...(marketItem.imageName ? { imageName: marketItem.imageName } : {}),
   };
 }
 

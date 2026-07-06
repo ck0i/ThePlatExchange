@@ -20,6 +20,8 @@ import { join } from "node:path";
 import { WarframeMarketClient } from "../src/wfm/client.js";
 import { analyzeArcaneMarket } from "../src/wfm/arcanes.js";
 import { attributeSignature, analyzeMarket, DEFAULT_CONFIG, normalizeConfig } from "../src/wfm/opportunities.js";
+import { buildProductDashboard, createInitialProductDashboard } from "../src/wfm/productEngine.js";
+import type { ProductDashboardState } from "../src/wfm/product.js";
 import type { ArcaneDashboardState, ArcaneItem, ArcaneOrder, ArcaneReferenceSnapshot, DashboardState, Opportunity, RivenAuction, RivenWeapon, ReferenceSnapshot, ScanStatus } from "../src/wfm/types.js";
 import { enrichWeaponsWithImageNames, fetchWarframestatImageMap } from "../src/wfm/warframestat.js";
 
@@ -875,7 +877,25 @@ async function runColdShard(args: Args, client: WarframeMarketClient): Promise<v
   });
 }
 
-async function runColdMerge(args: Args): Promise<void> {
+async function buildCiProductDashboard(client: WarframeMarketClient): Promise<ProductDashboardState> {
+  const fallback = createInitialProductDashboard();
+  try {
+    return await buildProductDashboard(client, fallback.personalization);
+  } catch (error) {
+    return {
+      ...fallback,
+      generatedAt: new Date().toISOString(),
+      dataHealth: {
+        ...fallback.dataHealth,
+        generatedAt: new Date().toISOString(),
+        status: "red",
+        warnings: [`CI product dashboard failed: ${error instanceof Error ? error.message : String(error)}`, ...fallback.dataHealth.warnings],
+      },
+    };
+  }
+}
+
+async function runColdMerge(args: Args, client: WarframeMarketClient): Promise<void> {
   const input = await loadColdShardMergeInput(args);
   await writeReferenceSnapshots(args.dataDir, input.reference, input.arcaneReference);
 
@@ -883,6 +903,7 @@ async function runColdMerge(args: Args): Promise<void> {
   const analysis = analyzeMarket(input.reference.rivenWeapons, input.auctionsByWeapon, config, input.scannedAtByWeapon);
   const nowIso = new Date().toISOString();
   const arcanes = buildArcaneDashboard(input.arcaneReference, input.ordersByArcane, input.scannedAtByArcane, "cold", nowIso, input.arcaneReference.items.length);
+  const product = await buildCiProductDashboard(client);
   const status: ScanStatus = {
     initialized: true,
     running: false,
@@ -917,6 +938,7 @@ async function runColdMerge(args: Args): Promise<void> {
     instantWins: analysis.instantWins,
     weaponSummaries: analysis.weaponSummaries,
     arcanes,
+    product,
   };
 
   await ensureDir(join(args.dataDir, "latest"));
@@ -984,6 +1006,7 @@ async function runCold(args: Args, client: WarframeMarketClient): Promise<void> 
   const analysis = analyzeMarket(reference.rivenWeapons, auctionsByWeapon, config);
   const arcanes = await runArcaneScan(args, client, "cold");
   const nowIso = new Date().toISOString();
+  const product = await buildCiProductDashboard(client);
   const status: ScanStatus = {
     initialized: true,
     running: false,
@@ -1018,6 +1041,7 @@ async function runCold(args: Args, client: WarframeMarketClient): Promise<void> 
     instantWins: analysis.instantWins,
     weaponSummaries: analysis.weaponSummaries,
     arcanes,
+    product,
   };
 
   await ensureDir(join(args.dataDir, "latest"));
@@ -1101,7 +1125,7 @@ async function main(): Promise<void> {
     return;
   }
   if (args.coldMode === "merge") {
-    await runColdMerge(args);
+    await runColdMerge(args, client);
     return;
   }
 

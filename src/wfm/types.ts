@@ -1,3 +1,5 @@
+import type { ProductDashboardState } from "./product.js";
+
 export type SellerStatus = "ingame" | "online" | "offline" | "unknown";
 
 export interface RivenWeapon {
@@ -433,6 +435,7 @@ export interface DashboardState {
   instantWins?: InstantWin[];
   weaponSummaries: WeaponSummary[];
   arcanes?: ArcaneDashboardState;
+  product?: ProductDashboardState;
 }
 
 export interface ReferenceSnapshot {
