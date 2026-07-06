@@ -191,6 +191,165 @@ const smallBook = analyzeMarket([war], new Map([["war", auctions.slice(0, 3)]]),
 });
 assert.equal(smallBook.opportunities.length, 0, "small comparable books should not produce false confidence");
 
+const tinyOutlierAnalysis = analyzeMarket([war], new Map([[
+  "war",
+  [
+    makeAuction("tiny-floor", 1, "ingame", exactAttrs),
+    makeAuction("tiny-peer", 10, "online", exactAttrs),
+    makeAuction("tiny-unreal", 35_000, "online", exactAttrs),
+  ],
+]]), {
+  watchlist: ["war"],
+  minProfit: 1,
+  minRoi: 0.01,
+  minGroupSize: 2,
+  statuses: ["ingame", "online"],
+});
+const tinyOutlierSummary = tinyOutlierAnalysis.weaponSummaries.find((entry) => entry.slug === "war");
+assert(tinyOutlierSummary?.priceStats, "tiny outlier summary stats missing");
+assert.equal(tinyOutlierSummary.priceStats.max, 10, "isolated 35,000p listing must not define a 1-10p market max");
+assert.equal(tinyOutlierSummary.priceStats.p75, 8, "isolated 35,000p listing must not inflate a 1-10p market p75");
+assert(!tinyOutlierAnalysis.opportunities.some((entry) => entry.auctionId === "tiny-unreal"), "isolated 35,000p listing must not become an opportunity");
+
+const ratioOutlierAuctions: RivenAuction[] = [
+  makeAuction("ratio-floor", 300, "ingame", exactAttrs),
+  makeAuction("ratio-peer-1", 350, "online", exactAttrs),
+  makeAuction("ratio-peer-2", 400, "online", exactAttrs),
+  makeAuction("ratio-unreal-1", 15_000, "online", exactAttrs),
+  makeAuction("ratio-unreal-2", 30_000, "online", exactAttrs),
+];
+const ratioOutlierAnalysis = analyzeMarket([war], new Map([["war", ratioOutlierAuctions]]), {
+  watchlist: ["war"],
+  minProfit: 1,
+  minRoi: 0.01,
+  minGroupSize: 2,
+  statuses: ["ingame", "online"],
+});
+const ratioOutlierSummary = ratioOutlierAnalysis.weaponSummaries.find((entry) => entry.slug === "war");
+assert(ratioOutlierSummary?.priceStats, "ratio outlier summary stats missing");
+assert.equal(ratioOutlierSummary.priceStats.max, 400, "15,000p/30,000p tail must not define a 300-400p market max");
+assert.equal(ratioOutlierSummary.priceStats.p75, 375, "15,000p/30,000p tail must not inflate a 300-400p market p75");
+assert(!ratioOutlierAnalysis.opportunities.some((entry) => entry.auctionId.startsWith("ratio-unreal")), "ratio outliers must not become opportunities");
+const ratioFloorOpportunity = ratioOutlierAnalysis.opportunities.find((entry) => entry.auctionId === "ratio-floor");
+assert(ratioFloorOpportunity, "300p floor listing should still produce a low-risk opportunity against sane peers");
+assert.equal(ratioFloorOpportunity.conservativeSellPrice, 375);
+assert.equal(ratioFloorOpportunity.targetSellPrice, 388);
+assert.equal(ratioFloorOpportunity.expectedProfit, 75);
+
+const roiCapOpportunityAnalysis = analyzeMarket([war], new Map([[
+  "war",
+  [
+    makeAuction("roi-cap-kept", 10, "ingame", exactAttrs),
+    makeAuction("roi-cap-peer-1", 180, "online", exactAttrs),
+    makeAuction("roi-cap-peer-2", 190, "online", exactAttrs),
+  ],
+]]), {
+  watchlist: ["war"],
+  minProfit: 1,
+  minRoi: 0.01,
+  minGroupSize: 2,
+  statuses: ["ingame", "online"],
+});
+const roiCapKept = roiCapOpportunityAnalysis.opportunities.find((entry) => entry.auctionId === "roi-cap-kept");
+assert(roiCapKept, "opportunity at the 1750% ROI sanity cap should remain actionable");
+assert.equal(roiCapKept.conservativeSellPrice, 185);
+assert.equal(roiCapKept.roi, 17.5);
+
+const roiCapFilteredAnalysis = analyzeMarket([war], new Map([[
+  "war",
+  [
+    makeAuction("roi-cap-too-cheap", 10, "ingame", exactAttrs),
+    makeAuction("roi-cap-high-peer-1", 188, "online", exactAttrs),
+    makeAuction("roi-cap-high-peer-2", 190, "online", exactAttrs),
+  ],
+]]), {
+  watchlist: ["war"],
+  minProfit: 1,
+  minRoi: 0.01,
+  minGroupSize: 2,
+  statuses: ["ingame", "online"],
+});
+assert(
+  !roiCapFilteredAnalysis.opportunities.some((entry) => entry.auctionId === "roi-cap-too-cheap"),
+  "opportunity above the 1750% ROI sanity cap should be filtered out",
+);
+
+const roiCapInstantWinAnalysis = analyzeMarket([war], new Map([[
+  "war",
+  [
+    makeAuction("roi-cap-instant-floor", 10, "ingame", exactAttrs),
+    makeAuction("roi-cap-instant-peer-1", 190, "online", exactAttrs),
+    makeAuction("roi-cap-instant-peer-2", 200, "online", exactAttrs),
+    makeAuction("roi-cap-instant-peer-3", 210, "online", exactAttrs),
+  ],
+]]), {
+  watchlist: ["war"],
+  minProfit: 1,
+  minRoi: 0.01,
+  minGroupSize: 2,
+  statuses: ["ingame", "online"],
+});
+assert(
+  !roiCapInstantWinAnalysis.instantWins.some((entry) => entry.opportunity.auctionId === "roi-cap-instant-floor"),
+  "instant win above the 1750% ROI sanity cap should be filtered out",
+);
+const instantOutlierAnalysis = analyzeMarket([war], new Map([[
+  "war",
+  [
+    makeAuction("instant-floor", 1, "ingame", exactAttrs),
+    makeAuction("instant-peer-1", 10, "online", exactAttrs),
+    makeAuction("instant-peer-2", 12, "online", exactAttrs),
+    makeAuction("instant-peer-3", 14, "online", exactAttrs),
+    makeAuction("instant-unreal", 35_000, "online", exactAttrs),
+  ],
+]]), {
+  watchlist: ["war"],
+  minProfit: 1,
+  minRoi: 0.01,
+  minGroupSize: 2,
+  statuses: ["ingame", "online"],
+});
+const instantOutlier = instantOutlierAnalysis.instantWins.find((entry) => entry.opportunity.auctionId === "instant-floor");
+assert(instantOutlier, "floor listing should still be an instant win against sane peers");
+assert.equal(instantOutlier.signature_value.max, 14, "instant-win peers must exclude isolated 35,000p listings");
+assert.equal(instantOutlier.signature_value.p75, 13, "instant-win valuation must not be inflated by isolated 35,000p listings");
+
+const roiAllowedAnalysis = analyzeMarket([war], new Map([[
+  "war",
+  [
+    makeAuction("roi-allowed-floor", 10, "ingame", exactAttrs),
+    makeAuction("roi-allowed-peer-1", 180, "online", exactAttrs),
+    makeAuction("roi-allowed-peer-2", 180, "online", exactAttrs),
+  ],
+]]), {
+  watchlist: ["war"],
+  minProfit: 1,
+  minRoi: 0.01,
+  minGroupSize: 2,
+  statuses: ["ingame", "online"],
+});
+const roiAllowedOpportunity = roiAllowedAnalysis.opportunities.find((entry) => entry.auctionId === "roi-allowed-floor");
+assert(roiAllowedOpportunity, "1700% ROI should remain below the 1750% sanity cap");
+assert.equal(roiAllowedOpportunity.roi, 17);
+
+const roiBlockedAnalysis = analyzeMarket([war], new Map([[
+  "war",
+  [
+    makeAuction("roi-blocked-floor", 10, "ingame", exactAttrs),
+    makeAuction("roi-blocked-peer-1", 190, "online", exactAttrs),
+    makeAuction("roi-blocked-peer-2", 190, "online", exactAttrs),
+    makeAuction("roi-blocked-peer-3", 190, "online", exactAttrs),
+  ],
+]]), {
+  watchlist: ["war"],
+  minProfit: 1,
+  minRoi: 0.01,
+  minGroupSize: 2,
+  statuses: ["ingame", "online"],
+});
+assert(!roiBlockedAnalysis.opportunities.some((entry) => entry.auctionId === "roi-blocked-floor"), "ROI above 1750% must be excluded from opportunities");
+assert(!roiBlockedAnalysis.instantWins.some((entry) => entry.opportunity.auctionId === "roi-blocked-floor"), "ROI above 1750% must be excluded from instant wins");
+
 const preservedOpportunityAuctions: RivenAuction[] = [
   ...Array.from({ length: 6 }, (_, index) => makeAuction(`preserved-cheap-${index + 1}`, 10 + index, "ingame", exactAttrs)),
   ...Array.from({ length: 10 }, (_, index) => makeAuction(`preserved-market-${index + 1}`, 100, "ingame", exactAttrs)),

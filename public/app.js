@@ -1076,15 +1076,9 @@ if (elements.chart) {
     const hit = findScatterHit(mx, my, 4);
     if (hit) {
       const opportunity = hit.opportunity;
-      elements.chartTip.hidden = false;
-      const wrap = elements.chart.parentElement.getBoundingClientRect();
-      const rect = elements.chart.getBoundingClientRect();
-      const px = rect.left - wrap.left + localX + 12;
-      const py = rect.top - wrap.top + localY + 12;
-      elements.chartTip.style.left = `${Math.min(px, Math.max(20, rect.width - 280))}px`;
-      elements.chartTip.style.top = `${py}px`;
       const tier = opportunity.quality?.tier ?? tierFromScore(opportunity.score);
       const signals = topSignalsFor(opportunity, 3).map(signalChip).join("");
+      elements.chartTip.hidden = false;
       elements.chartTip.innerHTML = `
         <div class="tt-head">
           ${weaponThumb(opportunity.imageName, opportunity.weaponName, "sm")}
@@ -1099,6 +1093,21 @@ if (elements.chart) {
           ${signals ? `<div class="signals">${signals}</div>` : ""}
           <div class="tt-hint">click to open</div>
         </div>`;
+      const wrap = elements.chart.parentElement.getBoundingClientRect();
+      const rect = elements.chart.getBoundingClientRect();
+      const tipWidth = elements.chartTip.offsetWidth || 260;
+      const tipHeight = elements.chartTip.offsetHeight || 120;
+      const cursorX = rect.left - wrap.left + localX;
+      const cursorY = rect.top - wrap.top + localY;
+      const minLeft = 8;
+      const maxLeft = Math.max(minLeft, wrap.width - tipWidth - 8);
+      const left = Math.min(Math.max(cursorX + 12, minLeft), maxLeft);
+      const below = cursorY + 12;
+      const above = cursorY - tipHeight - 12;
+      const maxTop = Math.max(8, wrap.height - tipHeight - 8);
+      const top = below + tipHeight <= wrap.height - 8 ? below : Math.max(8, Math.min(above, maxTop));
+      elements.chartTip.style.left = `${left}px`;
+      elements.chartTip.style.top = `${top}px`;
       elements.chart.style.cursor = "pointer";
     } else {
       elements.chartTip.hidden = true;

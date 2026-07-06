@@ -46,6 +46,12 @@ const INSTANT_MIN_PEERS = 3;
 const MARKET_FLOOR_MIN_PEERS = 8;
 const SAME_SIGNATURE_DISCOUNT = 0.10;
 const MARKET_FLOOR_DISCOUNT = 0.25;
+const HIGH_SIDE_OUTLIER_MIN_BOOK = 3;
+const HIGH_SIDE_OUTLIER_MIN_BASELINE = 2;
+const HIGH_SIDE_OUTLIER_MAX_TAIL_FRACTION = 0.4;
+const HIGH_SIDE_OUTLIER_MIN_MEDIAN_RATIO = 10;
+const HIGH_SIDE_OUTLIER_IQR_MULTIPLIER = 8;
+export const MAX_REASONABLE_ROI = 17.5;
 
 export interface MarketAnalysis {
   opportunities: Opportunity[];
@@ -113,9 +119,10 @@ export function analyzeMarket(
 
   for (const weapon of targets) {
     const allAuctions = auctionsByWeapon.get(weapon.slug) ?? [];
-    const directAuctions = allAuctions.filter(isTradableDirectListing);
+    const rawDirectAuctions = allAuctions.filter(isTradableDirectListing);
+    const directAuctions = filterHighSideOutlierAuctions(rawDirectAuctions);
     const actionableAuctions = directAuctions.filter((auction) => config.statuses.includes(auction.owner.status));
-    const directPrices = directAuctions.map((auction) => auction.buyoutPrice).filter((price) => price > 0).sort((left, right) => left - right);
+    const directPrices = sortedBuyoutPrices(directAuctions);
     const directStats = directPrices.length > 0 ? priceStats(directPrices) : null;
     const onlineListings = directAuctions.filter((auction) => auction.owner.status === "ingame" || auction.owner.status === "online").length;
     const ingameListings = directAuctions.filter((auction) => auction.owner.status === "ingame").length;
@@ -187,7 +194,7 @@ function buildOpportunity(
 
   const expectedProfit = estimate.conservativeSellPrice - auction.buyoutPrice;
   const roi = auction.buyoutPrice > 0 ? expectedProfit / auction.buyoutPrice : 0;
-  if (expectedProfit < config.minProfit || roi < config.minRoi) return null;
+  if (expectedProfit < config.minProfit || roi < config.minRoi || roi > MAX_REASONABLE_ROI) return null;
 
   const statMultiplier = statDemandMultiplier(auction.attributes);
   const priceRank = pricePercentile(estimate.comparablePrices, auction.buyoutPrice);
@@ -246,20 +253,22 @@ function estimateAuctionValue(
   const signature = attributeSignature(auction.attributes);
   const exactPeers = (groups.get(signature) ?? []).filter((entry) => entry.id !== auction.id);
   if (exactPeers.length >= config.minGroupSize) {
-    const comparablePrices = trimOutliers(sortedBuyoutPrices(exactPeers));
-    return {
-      groupType: "exact-stats",
-      comparablePrices,
-      targetSellPrice: Math.round(percentile(comparablePrices, 0.75)),
-      conservativeSellPrice: Math.round(percentile(comparablePrices, 0.5)),
-      comparableListings: comparablePrices.length,
-      basisReason: "same stat signature peers",
-    };
+    const comparablePrices = comparableBuyoutPrices(exactPeers);
+    if (comparablePrices.length >= config.minGroupSize) {
+      return {
+        groupType: "exact-stats",
+        comparablePrices,
+        targetSellPrice: Math.round(percentile(comparablePrices, 0.75)),
+        conservativeSellPrice: Math.round(percentile(comparablePrices, 0.5)),
+        comparableListings: comparablePrices.length,
+        basisReason: "same stat signature peers",
+      };
+    }
   }
 
   const weaponPeers = directAuctions.filter((entry) => entry.id !== auction.id);
-  if (weaponPeers.length < config.minGroupSize) return null;
-  const comparablePrices = trimOutliers(sortedBuyoutPrices(weaponPeers));
+  const comparablePrices = comparableBuyoutPrices(weaponPeers);
+  if (comparablePrices.length < config.minGroupSize) return null;
   const statMultiplier = statDemandMultiplier(auction.attributes);
   const conservativeFraction = statMultiplier >= 1.22 ? 0.58 : statMultiplier >= 1.08 ? 0.5 : statMultiplier >= 0.94 ? 0.42 : 0.3;
   const targetFraction = statMultiplier >= 1.22 ? 0.78 : statMultiplier >= 1.08 ? 0.68 : statMultiplier >= 0.94 ? 0.58 : 0.42;
@@ -335,7 +344,7 @@ function buildInstantWinCandidate(input: {
   const statMultiplier = statDemandMultiplier(input.auction.attributes);
   if (input.basis === "market-floor" && statMultiplier < 0.98) return null;
 
-  const peerPrices = trimOutliers(sortedBuyoutPrices(input.peerAuctions));
+  const peerPrices = comparableBuyoutPrices(input.peerAuctions);
   if (peerPrices.length < input.minPeers) return null;
   const p25 = percentile(peerPrices, 0.25);
   const p50 = input.basis === "same-signature"
@@ -346,7 +355,8 @@ function buildInstantWinCandidate(input: {
   const discountToP25 = p25 - input.auction.buyoutPrice;
   const discountPct = p25 > 0 ? discountToP25 / p25 : 0;
   const expectedProfit = Math.round(p50 - input.auction.buyoutPrice);
-  if (discountPct < input.minDiscount || expectedProfit < input.minProfit) return null;
+  const roi = input.auction.buyoutPrice > 0 ? expectedProfit / input.auction.buyoutPrice : 0;
+  if (discountPct < input.minDiscount || expectedProfit < input.minProfit || roi > MAX_REASONABLE_ROI) return null;
   if (input.basis === "market-floor" && pricePercentile(peerPrices, input.auction.buyoutPrice) > 0.12) return null;
 
   const confidence = instantWinConfidence(input.auction, peerPrices.length, discountPct, input.basis, input.summary.marketIntel);
@@ -459,6 +469,51 @@ function groupComparableAuctions(auctions: readonly RivenAuction[]): Map<string,
 
 function sortedBuyoutPrices(auctions: readonly RivenAuction[]): number[] {
   return auctions.map((entry) => entry.buyoutPrice).filter((price) => price > 0).sort((left, right) => left - right);
+}
+
+function filterHighSideOutlierAuctions(auctions: readonly RivenAuction[]): RivenAuction[] {
+  const cutoff = highSideOutlierCutoff(sortedBuyoutPrices(auctions));
+  if (cutoff === null) return [...auctions];
+  return auctions.filter((auction) => auction.buyoutPrice <= cutoff);
+}
+
+function comparableBuyoutPrices(auctions: readonly RivenAuction[]): number[] {
+  const prices = sortedBuyoutPrices(auctions);
+  const filteredPrices = filterHighSideOutlierPrices(prices);
+  return trimOutliers(filteredPrices);
+}
+
+function filterHighSideOutlierPrices(sortedPrices: readonly number[]): number[] {
+  const cutoff = highSideOutlierCutoff(sortedPrices);
+  if (cutoff === null) return [...sortedPrices];
+  return sortedPrices.filter((price) => price <= cutoff);
+}
+
+function highSideOutlierCutoff(sortedPrices: readonly number[]): number | null {
+  if (sortedPrices.length < HIGH_SIDE_OUTLIER_MIN_BOOK) return null;
+  const maxTail = Math.max(1, Math.floor(sortedPrices.length * HIGH_SIDE_OUTLIER_MAX_TAIL_FRACTION));
+  let cutoff: number | null = null;
+  let strongestMargin = 1;
+  for (let index = HIGH_SIDE_OUTLIER_MIN_BASELINE; index < sortedPrices.length; index += 1) {
+    const tailCount = sortedPrices.length - index;
+    if (tailCount > maxTail || tailCount > index) continue;
+    const lowerPrices = sortedPrices.slice(0, index);
+    const upper = sortedPrices[index] ?? 0;
+    const median = percentile(lowerPrices, 0.5);
+    if (upper <= 0 || median <= 0) continue;
+    const p25 = percentile(lowerPrices, 0.25);
+    const p75 = percentile(lowerPrices, 0.75);
+    const iqrCutoff = p75 + HIGH_SIDE_OUTLIER_IQR_MULTIPLIER * Math.max(0, p75 - p25);
+    const ratioCutoff = median * HIGH_SIDE_OUTLIER_MIN_MEDIAN_RATIO;
+    const candidateCutoff = Math.max(iqrCutoff, ratioCutoff);
+    if (upper <= candidateCutoff) continue;
+    const margin = upper / candidateCutoff;
+    if (margin > strongestMargin) {
+      strongestMargin = margin;
+      cutoff = candidateCutoff;
+    }
+  }
+  return cutoff;
 }
 
 function priceStats(sortedPrices: readonly number[]): PriceStats {

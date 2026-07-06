@@ -1,7 +1,7 @@
 import { WarframeMarketClient } from "./client.js";
 import type { PriceHistoryStore, SignatureValuation as SignatureValuationResult, SignatureVelocity as SignatureVelocityResult } from "./history.js";
 import { analyzeArcaneMarket } from "./arcanes.js";
-import { analyzeMarket, DEFAULT_CONFIG, deriveWeaponMarketIntel, normalizeConfig, slugify, type MarketAnalysis } from "./opportunities.js";
+import { analyzeMarket, DEFAULT_CONFIG, deriveWeaponMarketIntel, MAX_REASONABLE_ROI, normalizeConfig, slugify, type MarketAnalysis } from "./opportunities.js";
 import type { ArcaneDashboardState, ArcaneItem, ArcaneOrder, ArcaneReferenceSnapshot, DashboardState, ReferenceSnapshot, RivenAuction, RivenWeapon, ScanStatus, TraderConfig, WeaponSummary } from "./types.js";
 
 export type ScanTier = "hot" | "cold" | "full";
@@ -521,23 +521,40 @@ export class ThePlatExchangeService {
             // losses at the real (median) sell price get dropped or corrected.
             const medianProfit = withImage.conservativeSellPrice - withImage.buyPrice;
             if (medianProfit <= 0) return null;
-            if (medianProfit === withImage.expectedProfit) return withImage;
+            const rawRoi = withImage.buyPrice > 0 ? medianProfit / withImage.buyPrice : Number.POSITIVE_INFINITY;
+            if (rawRoi > MAX_REASONABLE_ROI) return null;
+            const roi = Math.round(rawRoi * 1000) / 1000;
             return {
               ...withImage,
               expectedProfit: medianProfit,
-              roi: Math.round((medianProfit / withImage.buyPrice) * 1000) / 1000,
+              roi,
               buyToSellRatio: Math.round((withImage.conservativeSellPrice / withImage.buyPrice) * 1000) / 1000,
             };
           })
           .filter((opportunity): opportunity is NonNullable<typeof opportunity> => opportunity !== null)
           .sort((left, right) => right.expectedProfit - left.expectedProfit);
-        const instantWins = (this.remoteState.instantWins ?? []).map((win) => {
-          const opportunity = win.opportunity.imageName ? win.opportunity : {
-            ...win.opportunity,
-            ...(imageMap.get(win.opportunity.weaponSlug) ? { imageName: imageMap.get(win.opportunity.weaponSlug)! } : {}),
-          };
-          return { ...win, opportunity };
-        });
+        const instantWins = (this.remoteState.instantWins ?? [])
+          .map((win) => {
+            const opportunity = win.opportunity.imageName ? win.opportunity : {
+              ...win.opportunity,
+              ...(imageMap.get(win.opportunity.weaponSlug) ? { imageName: imageMap.get(win.opportunity.weaponSlug)! } : {}),
+            };
+            const expectedProfit = opportunity.conservativeSellPrice - opportunity.buyPrice;
+            if (expectedProfit <= 0) return null;
+            const rawRoi = opportunity.buyPrice > 0 ? expectedProfit / opportunity.buyPrice : Number.POSITIVE_INFINITY;
+            if (rawRoi > MAX_REASONABLE_ROI) return null;
+            const roi = Math.round(rawRoi * 1000) / 1000;
+            return {
+              ...win,
+              opportunity: {
+                ...opportunity,
+                expectedProfit,
+                roi,
+                buyToSellRatio: Math.round((opportunity.conservativeSellPrice / opportunity.buyPrice) * 1000) / 1000,
+              },
+            };
+          })
+          .filter((win): win is NonNullable<typeof win> => win !== null);
         return {
           ...this.remoteState,
           scanMode: "remote",
