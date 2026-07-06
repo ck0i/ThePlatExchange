@@ -105,6 +105,22 @@ let opportunityRenderIdleHandle = null;
 let heatmapVisibleCount = 9;
 let arcaneDissolveVisibleCount = 6;
 let arcanePackStrategy = "high_value_maxed";
+let renderedOpportunityByKey = new Map();
+let tickerItems = [];
+let tickerHtmlCache = "";
+let chartTooltipKey = null;
+let chartTooltipSize = { width: 260, height: 120 };
+let pendingChartPointer = null;
+let chartPointerFrame = 0;
+let chartResizeFrame = 0;
+let opportunityViewCache = {
+  source: null,
+  filter: null,
+  sortKey: null,
+  sortDirection: null,
+  filtered: [],
+  sorted: [],
+};
 
 
 const SIGNAL_PRIORITY = [
@@ -119,6 +135,7 @@ const SIGNAL_PRIORITY = [
   "disposition_falling",
   "outlier_price",
 ];
+const SIGNAL_RANK = new Map(SIGNAL_PRIORITY.map((signal, index) => [signal, index]));
 
 const TIER_COLORS = { A: "#4ade80", B: "#38bdf8", C: "#fbbf24", D: "#f87171" };
 
@@ -126,6 +143,13 @@ const RESULT_BUDGETS = browserResultBudgets();
 const IDLE_RENDER_TIMEOUT_MS = 80;
 const HEATMAP_SHOW_MORE_BATCH = 9;
 const ARCANE_DISSOLVE_SHOW_MORE_BATCH = 6;
+const NUMBER_FORMATTER = new Intl.NumberFormat();
+const HTML_ESCAPE = { "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" };
+const CONFIDENCE_BAR_SEGMENTS = Array.from({ length: 6 }, (_, filled) => {
+  let html = "";
+  for (let index = 0; index < 5; index += 1) html += `<span${index < filled ? " class=\"on\"" : ""}></span>`;
+  return html;
+});
 
 const MODE_HINTS = {
   remote: "Reading the CI-published feed. Refreshes without browser-side Warframe.market traffic.",
@@ -156,7 +180,7 @@ function navigate(page, options = {}) {
     populateMcp();
     switchSettingsTab(options.settingsTab ?? "data");
   }
-  if (page === "instant") renderInstantWins(latestInstantWins);
+  renderVisiblePageSurfaces();
   document.querySelector(".page-root")?.scrollTo({ top: 0, behavior: "auto" });
 }
 
@@ -199,8 +223,7 @@ async function refreshDerived() {
     ]);
     latestEnrichedOpps = Array.isArray(opps) ? opps : [];
     latestInstantWins = Array.isArray(wins) ? wins : [];
-    renderOpportunitySurfaces();
-    renderInstantWins(latestInstantWins);
+    renderVisiblePageSurfaces();
     if (latestState) {
       renderTicker(latestState, currentOpportunitySource());
       renderStatusFooter(latestState);
@@ -242,21 +265,73 @@ function render(state) {
 
   updateModeUi(state.scanMode ?? "tiered", state);
   renderStatusFooter(state);
-  renderWeapons(state.weaponSummaries ?? []);
-  renderHeatmap(state.weaponSummaries ?? []);
-  renderArcanes(state.arcanes);
-
-  if (latestEnrichedOpps.length === 0) renderOpportunitySurfaces();
+  renderVisiblePageSurfaces();
   renderTicker(state, currentOpportunitySource());
 }
 
+function renderVisiblePageSurfaces() {
+  if (!latestState) return;
+  if (currentPage === "home") {
+    renderHomeSurfaces();
+    return;
+  }
+  if (currentPage === "opportunities") {
+    renderOpportunityListSurface();
+    return;
+  }
+  if (currentPage === "instant") {
+    renderInstantWins(latestInstantWins);
+    return;
+  }
+  if (currentPage === "arcanes") {
+    renderArcanes(latestState.arcanes);
+    return;
+  }
+  if (currentPage === "markets") renderWeapons(latestState.weaponSummaries ?? []);
+}
+
+function renderHomeSurfaces() {
+  const view = opportunityView();
+  renderFreshOpportunities(view.sorted);
+  drawChart(view.filtered);
+  renderHero(view.sorted[0] ?? currentOpportunitySource()[0] ?? null);
+  renderHeatmap(latestState?.weaponSummaries ?? []);
+  renderInstantPreview(latestInstantWins);
+}
+
 function renderOpportunitySurfaces() {
-  const filtered = applySpotlightFilter(currentOpportunitySource());
+  if (currentPage === "home") {
+    renderHomeSurfaces();
+    return;
+  }
+  if (currentPage === "opportunities") renderOpportunityListSurface();
+}
+
+function renderOpportunityListSurface() {
+  renderOpportunities(opportunityView().sorted);
+}
+
+function opportunityView() {
+  const source = currentOpportunitySource();
+  if (
+    opportunityViewCache.source === source &&
+    opportunityViewCache.filter === spotlightFilter &&
+    opportunityViewCache.sortKey === sortState.key &&
+    opportunityViewCache.sortDirection === sortState.direction
+  ) {
+    return opportunityViewCache;
+  }
+  const filtered = applySpotlightFilter(source);
   const sorted = sortedOpportunities(filtered);
-  renderOpportunities(sorted);
-  renderFreshOpportunities(sorted);
-  drawChart(filtered);
-  renderHero(sorted[0] ?? currentOpportunitySource()[0] ?? null);
+  opportunityViewCache = {
+    source,
+    filter: spotlightFilter,
+    sortKey: sortState.key,
+    sortDirection: sortState.direction,
+    filtered,
+    sorted,
+  };
+  return opportunityViewCache;
 }
 
 function currentOpportunitySource() {
@@ -293,23 +368,34 @@ function renderStatusFooter(state) {
 
 function renderTicker(state, opportunities) {
   if (!elements.tickerItems) return;
-  const items = opportunities.slice(0, 10);
-  if (items.length === 0) {
-    elements.tickerItems.innerHTML = `<span class="ticker-item"><span class="ticker-dot"></span>${escapeHtml(state.status?.lastMessage ?? "Waiting for market feed…")}</span>`;
+  tickerItems = opportunities.slice(0, 10);
+  if (tickerItems.length === 0) {
+    const fallbackHtml = `<span class="ticker-item"><span class="ticker-dot"></span>${escapeHtml(state.status?.lastMessage ?? "Waiting for market feed…")}</span>`;
+    if (tickerHtmlCache !== fallbackHtml) {
+      tickerHtmlCache = fallbackHtml;
+      elements.tickerItems.innerHTML = fallbackHtml;
+    }
     return;
   }
-  const html = items.map((opportunity, index) => {
+  const html = tickerItems.map((opportunity, index) => {
     const delta = Math.round((opportunity.roi ?? 0) * 100);
     const trendClass = delta >= 0 ? "ticker-up" : "ticker-down";
     return `<span class="ticker-item"><button type="button" data-ticker-index="${index}"><span class="ticker-dot"></span>${escapeHtml(opportunity.weaponName)} <span class="ticker-price">${opportunity.buyPrice}◈ → ${opportunity.conservativeSellPrice ?? opportunity.targetSellPrice}◈</span> <span class="${trendClass}">+${opportunity.expectedProfit}◈ ${delta}%</span></button></span>`;
   }).join("");
-  elements.tickerItems.innerHTML = html + html;
-  for (const button of elements.tickerItems.querySelectorAll("[data-ticker-index]")) {
-    button.addEventListener("click", () => {
-      const opportunity = items[Number(button.dataset.tickerIndex)];
-      if (opportunity?.weaponSlug) openWeaponDetail(opportunity.weaponSlug);
-    });
+  const nextHtml = html + html;
+  if (tickerHtmlCache !== nextHtml) {
+    tickerHtmlCache = nextHtml;
+    elements.tickerItems.innerHTML = nextHtml;
   }
+}
+
+if (elements.tickerItems) {
+  elements.tickerItems.addEventListener("click", (event) => {
+    const button = event.target instanceof HTMLElement ? event.target.closest("[data-ticker-index]") : null;
+    if (!button || !elements.tickerItems.contains(button)) return;
+    const opportunity = tickerItems[Number(button.dataset.tickerIndex)];
+    if (opportunity?.weaponSlug) openWeaponDetail(opportunity.weaponSlug);
+  });
 }
 
 function renderHero(opportunity) {
@@ -344,9 +430,9 @@ if (elements.heroOpen) {
 function topSignalsFor(opportunity, limit) {
   const signals = opportunity.quality?.signals ?? [];
   const ranked = [...signals].sort((left, right) => {
-    const li = SIGNAL_PRIORITY.indexOf(left);
-    const ri = SIGNAL_PRIORITY.indexOf(right);
-    return (li === -1 ? 99 : li) - (ri === -1 ? 99 : ri);
+    const li = SIGNAL_RANK.get(left) ?? 99;
+    const ri = SIGNAL_RANK.get(right) ?? 99;
+    return li - ri;
   });
   return ranked.slice(0, limit);
 }
@@ -385,6 +471,7 @@ function cancelIdleRender(handle) {
   else window.clearTimeout(handle);
 }
 
+
 function resultLimitNote(label, shown, total) {
   if (shown >= total) return "";
   return `<div class="result-limit-note">Showing ${formatNumber(shown)} of ${formatNumber(total)} ${escapeHtml(label)}. Narrow search or filters to inspect the rest without overloading the browser.</div>`;
@@ -408,6 +495,8 @@ function renderOpportunities(opportunities) {
   cancelIdleRender(opportunityRenderIdleHandle);
   opportunityRenderIdleHandle = null;
   const renderToken = ++opportunityRenderToken;
+  const nextRenderedOpportunityByKey = new Map();
+  renderedOpportunityByKey = nextRenderedOpportunityByKey;
   elements.opps.textContent = "";
   if (opportunities.length === 0) {
     elements.opps.innerHTML = `<div class="empty-state">No opportunities match. Adjust filters, clear the search, or wait for the next scan.</div>`;
@@ -425,7 +514,10 @@ function renderOpportunities(opportunities) {
     let appended = 0;
     while (cursor < renderLimit && appended < batchTarget) {
       if (!firstBatch && appended > 12 && !deadline.didTimeout && deadline.timeRemaining() < 3) break;
-      fragment.appendChild(createOpportunityCard(opportunities[cursor], cursor));
+      const opportunity = opportunities[cursor];
+      const key = opportunityKey(opportunity);
+      nextRenderedOpportunityByKey.set(key, opportunity);
+      fragment.appendChild(createOpportunityCard(opportunity, cursor, key));
       cursor += 1;
       appended += 1;
     }
@@ -443,8 +535,7 @@ function renderOpportunities(opportunities) {
   updateSortControls();
 }
 
-function createOpportunityCard(opportunity, index) {
-  const key = opportunityKey(opportunity);
+function createOpportunityCard(opportunity, index, key = opportunityKey(opportunity)) {
   const tier = opportunity.quality?.tier ?? tierFromScore(opportunity.score);
   const expanded = expandedOpportunityKey === key;
   const topSignals = topSignalsFor(opportunity, 3);
@@ -482,7 +573,6 @@ function createOpportunityCard(opportunity, index) {
       </div>
     </div>` : ""}
   `;
-  card.addEventListener("click", (event) => handleOpportunityClick(event, opportunity));
   return card;
 }
 
@@ -507,11 +597,11 @@ function handleOpportunityClick(event, opportunity) {
     event.stopPropagation();
     copiedOpportunityKey = opportunityKey(opportunity);
     void copyText(tradeWhisper(opportunity), target).then(() => {
-      renderOpportunities(sortedOpportunities(applySpotlightFilter(currentOpportunitySource())));
+      renderOpportunityListSurface();
       setTimeout(() => {
         if (copiedOpportunityKey === opportunityKey(opportunity)) {
           copiedOpportunityKey = null;
-          renderOpportunities(sortedOpportunities(applySpotlightFilter(currentOpportunitySource())));
+          renderOpportunityListSurface();
         }
       }, 1600);
     });
@@ -520,8 +610,17 @@ function handleOpportunityClick(event, opportunity) {
   if (action === "toggle") {
     const key = opportunityKey(opportunity);
     expandedOpportunityKey = expandedOpportunityKey === key ? null : key;
-    renderOpportunities(sortedOpportunities(applySpotlightFilter(currentOpportunitySource())));
+    renderOpportunityListSurface();
   }
+}
+
+if (elements.opps) {
+  elements.opps.addEventListener("click", (event) => {
+    const card = event.target instanceof HTMLElement ? event.target.closest(".opp-card") : null;
+    if (!card || !elements.opps.contains(card)) return;
+    const opportunity = renderedOpportunityByKey.get(card.dataset.key);
+    if (opportunity) handleOpportunityClick(event, opportunity);
+  });
 }
 
 function renderFreshOpportunities(opportunities) {
@@ -904,6 +1003,7 @@ function renderWeapons(summaries) {
   if (!elements.weapons) return;
   elements.weapons.textContent = "";
   const visibleSummaries = summaries.slice(0, RESULT_BUDGETS.weaponCards);
+  const fragment = document.createDocumentFragment();
   for (const summary of visibleSummaries) {
     const stats = summary.priceStats;
     const intel = summary.marketIntel ?? {};
@@ -925,11 +1025,19 @@ function renderWeapons(summaries) {
         <dt>Buy/Sell/Get</dt><dd>${Math.round(intel.buyScore ?? 0)}/${Math.round(intel.sellScore ?? 0)}/${Math.round(intel.farmScore ?? 0)}</dd>
         <dt>Dispo</dt><dd>${Number(summary.disposition ?? 0).toFixed(2)}${floorPct === null ? "" : ` · ${floorPct}% floor`}</dd>
       </dl>`;
-    card.addEventListener("click", () => openWeaponDetail(summary.slug));
-    elements.weapons.appendChild(card);
+    fragment.appendChild(card);
   }
+  elements.weapons.appendChild(fragment);
   if (visibleSummaries.length < summaries.length) elements.weapons.insertAdjacentHTML("beforeend", resultLimitNote("weapon summaries", visibleSummaries.length, summaries.length));
   if (summaries.length === 0) elements.weapons.innerHTML = `<div class="empty-state">No weapon market summaries yet.</div>`;
+}
+
+if (elements.weapons) {
+  elements.weapons.addEventListener("click", (event) => {
+    const card = event.target instanceof HTMLElement ? event.target.closest("[data-weapon-slug]") : null;
+    if (!card || !elements.weapons.contains(card)) return;
+    openWeaponDetail(card.dataset.weaponSlug);
+  });
 }
 
 function renderHeatmap(summaries) {
@@ -943,6 +1051,7 @@ function renderHeatmap(summaries) {
   }
   const maxListings = Math.max(1, ...allItems.map((summary) => summary.directListings ?? summary.listings ?? 0));
   elements.heatmap.textContent = "";
+  const fragment = document.createDocumentFragment();
   for (const summary of items) {
     const listings = summary.directListings ?? summary.listings ?? 0;
     const actionable = summary.actionableListings ?? 0;
@@ -955,14 +1064,14 @@ function renderHeatmap(summaries) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "heat-card";
+    button.dataset.weaponSlug = summary.slug;
     button.style.background = bg;
     button.style.borderColor = border;
     button.style.flexGrow = String(Math.max(1, listings / Math.max(1, maxListings / 4)));
     button.style.flexBasis = `${Math.max(92, Math.min(190, 70 + listings * 2))}px`;
     button.style.height = `${Math.max(58, Math.min(96, 48 + listings))}px`;
     button.innerHTML = `<strong>${escapeHtml(summary.name)}</strong><span style="color:${text}">${formatNumber(listings)} direct · ${actionable} actionable · ${Math.round(score)} score</span>`;
-    button.addEventListener("click", () => openWeaponDetail(summary.slug));
-    elements.heatmap.appendChild(button);
+    fragment.appendChild(button);
   }
   if (visibleLimit < allItems.length && visibleLimit < RESULT_BUDGETS.heatmapCards) {
     const more = document.createElement("button");
@@ -973,10 +1082,20 @@ function renderHeatmap(summaries) {
       heatmapVisibleCount += HEATMAP_SHOW_MORE_BATCH;
       renderHeatmap(summaries);
     });
-    elements.heatmap.appendChild(more);
-  } else if (visibleLimit < allItems.length) {
+    fragment.appendChild(more);
+  }
+  elements.heatmap.appendChild(fragment);
+  if (visibleLimit < allItems.length && visibleLimit >= RESULT_BUDGETS.heatmapCards) {
     elements.heatmap.insertAdjacentHTML("beforeend", resultLimitNote("market coverage cards", visibleLimit, allItems.length));
   }
+}
+
+if (elements.heatmap) {
+  elements.heatmap.addEventListener("click", (event) => {
+    const card = event.target instanceof HTMLElement ? event.target.closest("[data-weapon-slug]") : null;
+    if (!card || !elements.heatmap.contains(card)) return;
+    openWeaponDetail(card.dataset.weaponSlug);
+  });
 }
 
 function drawChart(opportunities) {
@@ -985,8 +1104,14 @@ function drawChart(opportunities) {
   const context = canvas.getContext("2d");
   if (!context) return;
   const rect = canvas.getBoundingClientRect();
-  if (rect.width > 0) canvas.width = Math.floor(rect.width);
-  if (rect.height > 0) canvas.height = Math.floor(rect.height);
+  if (rect.width > 0) {
+    const nextWidth = Math.floor(rect.width);
+    if (canvas.width !== nextWidth) canvas.width = nextWidth;
+  }
+  if (rect.height > 0) {
+    const nextHeight = Math.floor(rect.height);
+    if (canvas.height !== nextHeight) canvas.height = nextHeight;
+  }
   const width = canvas.width || 1200;
   const height = canvas.height || 320;
   context.clearRect(0, 0, width, height);
@@ -1006,6 +1131,8 @@ function drawChart(opportunities) {
   }
 
   scatterHits = [];
+  chartTooltipKey = null;
+  if (elements.chartTip) elements.chartTip.hidden = true;
   if (!opportunities || opportunities.length === 0) {
     context.fillStyle = "#6b6b7a";
     context.font = "13px Inter, sans-serif";
@@ -1014,8 +1141,12 @@ function drawChart(opportunities) {
   }
 
   const chartItems = chartRenderItems(opportunities);
-  const maxRoi = Math.max(1, ...opportunities.map((entry) => entry.roi ?? 0));
-  const maxProfit = Math.max(1, ...opportunities.map((entry) => entry.expectedProfit ?? 0));
+  let maxRoi = 1;
+  let maxProfit = 1;
+  for (const entry of opportunities) {
+    maxRoi = Math.max(maxRoi, entry.roi ?? 0);
+    maxProfit = Math.max(maxProfit, entry.expectedProfit ?? 0);
+  }
 
   context.fillStyle = "#6b6b7a";
   context.font = "10px JetBrains Mono, monospace";
@@ -1070,51 +1201,93 @@ function findScatterHit(mx, my, tolerance = 3) {
   return best;
 }
 
+function scheduleChartRedraw() {
+  if (currentPage !== "home" || chartResizeFrame) return;
+  chartResizeFrame = window.requestAnimationFrame(() => {
+    chartResizeFrame = 0;
+    drawChart(opportunityView().filtered);
+  });
+}
+
+function renderChartTooltip(hit) {
+  const opportunity = hit.opportunity;
+  const key = opportunityKey(opportunity);
+  if (chartTooltipKey === key) return chartTooltipSize;
+  chartTooltipKey = key;
+  const tier = opportunity.quality?.tier ?? tierFromScore(opportunity.score);
+  const signals = topSignalsFor(opportunity, 3).map(signalChip).join("");
+  elements.chartTip.innerHTML = `
+    <div class="tt-head">
+      ${weaponThumb(opportunity.imageName, opportunity.weaponName, "sm")}
+      <div>
+        <div><span class="tier-badge tier-${tier}">${tier}</span> <strong>${escapeHtml(opportunity.weaponName)}</strong></div>
+        <div class="small">${escapeHtml(opportunity.rivenName)}</div>
+      </div>
+    </div>
+    <div class="tt-body">
+      <div><span class="price">${opportunity.buyPrice}◈</span> → <strong>${opportunity.targetSellPrice}◈</strong> <span class="profit">+${opportunity.expectedProfit}◈</span> <span class="roi">${Math.round((opportunity.roi ?? 0) * 100)}%</span></div>
+      <div class="small">${escapeHtml(opportunity.seller?.ingameName ?? "seller")} · ${escapeHtml(opportunity.status)} · ${opportunity.comparableListings} comps</div>
+      ${signals ? `<div class="signals">${signals}</div>` : ""}
+      <div class="tt-hint">click to open</div>
+    </div>`;
+  chartTooltipSize = {
+    width: elements.chartTip.offsetWidth || 260,
+    height: elements.chartTip.offsetHeight || 120,
+  };
+  return chartTooltipSize;
+}
+
+function positionChartTooltip(localX, localY, tipWidth, tipHeight) {
+  const wrap = elements.chart.parentElement.getBoundingClientRect();
+  const minLeft = 8;
+  const maxLeft = Math.max(minLeft, wrap.width - tipWidth - 8);
+  const left = Math.min(Math.max(localX + 12, minLeft), maxLeft);
+  const below = localY + 12;
+  const above = localY - tipHeight - 12;
+  const maxTop = Math.max(8, wrap.height - tipHeight - 8);
+  const top = below + tipHeight <= wrap.height - 8 ? below : Math.max(8, Math.min(above, maxTop));
+  elements.chartTip.style.transform = `translate3d(${left}px, ${top}px, 0)`;
+}
+
+function updateChartPointer() {
+  chartPointerFrame = 0;
+  const pointer = pendingChartPointer;
+  pendingChartPointer = null;
+  if (!pointer || !elements.chart || !elements.chartTip) return;
+  const rect = elements.chart.getBoundingClientRect();
+  const scaleX = elements.chart.width / rect.width;
+  const scaleY = elements.chart.height / rect.height;
+  const localX = pointer.clientX - rect.left;
+  const localY = pointer.clientY - rect.top;
+  const hit = findScatterHit(localX * scaleX, localY * scaleY, 4);
+  if (!hit) {
+    elements.chartTip.hidden = true;
+    chartTooltipKey = null;
+    elements.chart.style.cursor = "default";
+    return;
+  }
+  elements.chartTip.hidden = false;
+  const size = renderChartTooltip(hit);
+  const wrap = elements.chart.parentElement.getBoundingClientRect();
+  positionChartTooltip(rect.left - wrap.left + localX, rect.top - wrap.top + localY, size.width, size.height);
+  elements.chart.style.cursor = "pointer";
+}
+
 if (elements.chart) {
   elements.chart.addEventListener("mousemove", (event) => {
-    const { mx, my, localX, localY } = canvasPointFromEvent(event);
-    const hit = findScatterHit(mx, my, 4);
-    if (hit) {
-      const opportunity = hit.opportunity;
-      const tier = opportunity.quality?.tier ?? tierFromScore(opportunity.score);
-      const signals = topSignalsFor(opportunity, 3).map(signalChip).join("");
-      elements.chartTip.hidden = false;
-      elements.chartTip.innerHTML = `
-        <div class="tt-head">
-          ${weaponThumb(opportunity.imageName, opportunity.weaponName, "sm")}
-          <div>
-            <div><span class="tier-badge tier-${tier}">${tier}</span> <strong>${escapeHtml(opportunity.weaponName)}</strong></div>
-            <div class="small">${escapeHtml(opportunity.rivenName)}</div>
-          </div>
-        </div>
-        <div class="tt-body">
-          <div><span class="price">${opportunity.buyPrice}◈</span> → <strong>${opportunity.targetSellPrice}◈</strong> <span class="profit">+${opportunity.expectedProfit}◈</span> <span class="roi">${Math.round((opportunity.roi ?? 0) * 100)}%</span></div>
-          <div class="small">${escapeHtml(opportunity.seller?.ingameName ?? "seller")} · ${escapeHtml(opportunity.status)} · ${opportunity.comparableListings} comps</div>
-          ${signals ? `<div class="signals">${signals}</div>` : ""}
-          <div class="tt-hint">click to open</div>
-        </div>`;
-      const wrap = elements.chart.parentElement.getBoundingClientRect();
-      const rect = elements.chart.getBoundingClientRect();
-      const tipWidth = elements.chartTip.offsetWidth || 260;
-      const tipHeight = elements.chartTip.offsetHeight || 120;
-      const cursorX = rect.left - wrap.left + localX;
-      const cursorY = rect.top - wrap.top + localY;
-      const minLeft = 8;
-      const maxLeft = Math.max(minLeft, wrap.width - tipWidth - 8);
-      const left = Math.min(Math.max(cursorX + 12, minLeft), maxLeft);
-      const below = cursorY + 12;
-      const above = cursorY - tipHeight - 12;
-      const maxTop = Math.max(8, wrap.height - tipHeight - 8);
-      const top = below + tipHeight <= wrap.height - 8 ? below : Math.max(8, Math.min(above, maxTop));
-      elements.chartTip.style.left = `${left}px`;
-      elements.chartTip.style.top = `${top}px`;
-      elements.chart.style.cursor = "pointer";
-    } else {
-      elements.chartTip.hidden = true;
-      elements.chart.style.cursor = "default";
-    }
+    pendingChartPointer = { clientX: event.clientX, clientY: event.clientY };
+    if (!chartPointerFrame) chartPointerFrame = window.requestAnimationFrame(updateChartPointer);
   });
-  elements.chart.addEventListener("mouseleave", () => { elements.chartTip.hidden = true; elements.chart.style.cursor = "default"; });
+  elements.chart.addEventListener("mouseleave", () => {
+    pendingChartPointer = null;
+    if (chartPointerFrame) {
+      window.cancelAnimationFrame(chartPointerFrame);
+      chartPointerFrame = 0;
+    }
+    elements.chartTip.hidden = true;
+    chartTooltipKey = null;
+    elements.chart.style.cursor = "default";
+  });
   elements.chart.addEventListener("click", (event) => {
     const { mx, my } = canvasPointFromEvent(event);
     const hit = findScatterHit(mx, my, 6);
@@ -1272,7 +1445,6 @@ function activateSpotlightItem(index) {
     spotlightFilter = { text: item.text, filter: item.filter };
     closeSpotlightOverlay();
     navigate("opportunities");
-    renderOpportunitySurfaces();
   } else if (item.type === "page") {
     closeSpotlightOverlay();
     navigate(item.page, { settingsTab: item.settingsTab });
@@ -1517,7 +1689,7 @@ function timeAgo(value) {
 }
 
 function escapeHtml(value) {
-  return String(value ?? "").replace(/[&<>'"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[character]);
+  return String(value ?? "").replace(/[&<>'"]/g, (character) => HTML_ESCAPE[character]);
 }
 
 function weaponThumb(imageName, alt, size = "sm") {
@@ -1729,7 +1901,7 @@ for (const button of elements.modeButtons) {
 function confidenceBar(value) {
   const score = Math.max(0, Math.min(1, Number(value) || 0));
   const filled = Math.round(score * 5);
-  return `<span class="confbar" aria-label="${Math.round(score * 100)}% confidence">${Array.from({ length: 5 }, (_, i) => `<span class="${i < filled ? "on" : ""}"></span>`).join("")}</span>`;
+  return `<span class="confbar" aria-label="${Math.round(score * 100)}% confidence">${CONFIDENCE_BAR_SEGMENTS[filled]}</span>`;
 }
 
 function tierFromScore(score) {
@@ -1750,7 +1922,7 @@ function tradeWhisper(opportunity) {
 }
 
 function formatNumber(value) {
-  return Number(value ?? 0).toLocaleString();
+  return NUMBER_FORMATTER.format(Number(value ?? 0));
 }
 
 if (window.EventSource) {
@@ -1768,6 +1940,4 @@ loadState().catch((error) => {
   if (elements.summary) elements.summary.textContent = error.message;
 });
 setInterval(() => { refreshDerived().catch(() => undefined); }, 60_000);
-window.addEventListener("resize", () => {
-  drawChart(applySpotlightFilter(currentOpportunitySource()));
-});
+window.addEventListener("resize", scheduleChartRedraw);
