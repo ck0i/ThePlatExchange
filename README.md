@@ -159,14 +159,12 @@ Useful local endpoints:
 
 The workflows in `.github/workflows` can publish a data branch used by the default `remote` mode:
 
-- Hot scan every 15 minutes.
-- Cold scan hourly.
+- Cold scan every 30 minutes.
 - Sentiment fetch every 6 hours.
 
 The one-shot scanner can also be run manually:
 
 ```bash
-npx tsx scripts/scan-and-write.ts --tier hot --data-dir data
 npx tsx scripts/scan-and-write.ts --tier cold --data-dir data
 npx tsx scripts/scan-and-write.ts --tier reference --data-dir data
 ```
