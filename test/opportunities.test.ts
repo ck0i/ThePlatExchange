@@ -99,20 +99,39 @@ for (const opportunity of analysis.opportunities) {
 const exact = analysis.opportunities.find((entry) => entry.auctionId === "exact-cheap");
 assert(exact, "exact opportunity missing");
 assert.equal(exact.groupType, "exact-stats");
-assert.equal(exact.targetSellPrice, 210);
-assert.equal(exact.conservativeSellPrice, 165);
-// Profit is now median-based (p50 - buy) rather than aggressive (p75 - buy)
-// so a lone high-price outlier can't inflate expected returns.
-assert.equal(exact.expectedProfit, 115);
-assert.equal(exact.buyToSellRatio, 4.2);
+assert.equal(exact.targetSellPrice, 220);
+assert.equal(exact.conservativeSellPrice, 180);
+// Comparable pricing excludes the candidate itself, so the cheap listing cannot
+// drag down the peer median or p75 target used for expected resale.
+assert.equal(exact.expectedProfit, 130);
+assert.equal(exact.buyToSellRatio, 4.4);
 assert.equal(exact.status, "ingame");
 
 const unique = analysis.opportunities.find((entry) => entry.auctionId === "unique-cheap");
 assert(unique, "fallback opportunity missing");
 assert.equal(unique.groupType, "weapon-market");
-assert.equal(unique.targetSellPrice, 200);
+assert.equal(unique.targetSellPrice, 206);
 assert(unique.roi > exact.roi, "fallback cheap listing should expose the stronger ratio");
 
+const instantWinIds = analysis.instantWins.map((entry) => entry.opportunity.auctionId);
+assert(instantWinIds.includes("exact-cheap"), "cheap exact-stat riven should be flagged as an instant win");
+assert(!instantWinIds.includes("offline-cheap"), "off-status listings must not become instant wins");
+assert(!instantWinIds.includes("closed-bait"), "closed listings must not become instant wins");
+assert(!instantWinIds.includes("hidden-bait"), "invisible listings must not become instant wins");
+assert(!instantWinIds.includes("auction-bid-only"), "non-direct auctions must not become instant wins");
+
+const exactInstantWin = analysis.instantWins.find((entry) => entry.opportunity.auctionId === "exact-cheap");
+assert(exactInstantWin, "exact instant win missing");
+assert.equal(exactInstantWin.basis, "same-signature");
+assert.equal(exactInstantWin.signature_value.source, "live_signature");
+assert.equal(exactInstantWin.signature_value.sample_count, 5);
+assert.equal(exactInstantWin.signature_value.p25, 150);
+assert.equal(exactInstantWin.signature_value.p50, 180);
+assert.equal(exactInstantWin.discount_to_p25, 100);
+assert(
+  exactInstantWin.reasons.some((reason) => reason.includes("peer listings excluding this auction")),
+  "instant win explanation should disclose candidate-excluded peer pricing",
+);
 const minBuyFiltered = analyzeMarket([war], new Map([["war", auctions]]), {
   watchlist: ["war"],
   minProfit: 20,
@@ -130,12 +149,16 @@ const maxSellFiltered = analyzeMarket([war], new Map([["war", auctions]]), {
   minProfit: 20,
   minRoi: 0.25,
   minGroupSize: 4,
-  maxSellPrice: 205,
+  maxSellPrice: 206,
   statuses: ["ingame", "online"],
   maxResults: 20,
 });
 assert(maxSellFiltered.opportunities.some((entry) => entry.auctionId === "unique-cheap"), "max sell filter should keep targets at or below threshold");
 assert(!maxSellFiltered.opportunities.some((entry) => entry.auctionId === "exact-cheap"), "max sell filter should remove targets above threshold");
+assert(
+  maxSellFiltered.instantWins.some((entry) => entry.opportunity.auctionId === "exact-cheap"),
+  "max sell filters final opportunities only; instant wins should still come from raw actionable auctions",
+);
 
 const summary = analysis.weaponSummaries[0];
 assert(summary, "summary missing");
@@ -143,6 +166,11 @@ assert.equal(summary.listings, 10);
 assert.equal(summary.directListings, 7);
 assert.equal(summary.priceStats?.min, 20);
 assert.equal(summary.priceStats?.p75, 200);
+assert(summary.marketIntel, "summary market intel missing");
+assert.equal(summary.marketIntel.opportunityCount, 2);
+assert.equal(summary.marketIntel.bestOpportunityProfit, 154);
+assert(summary.marketIntel.marketScore > 0, "market intel should expose a ranked market score");
+assert(summary.marketIntel.reasons.some((reason) => reason.includes("ranked buy-low candidates")), "market intel should explain ranked candidates");
 
 const withOffline = analyzeMarket([war], new Map([["war", auctions]]), {
   watchlist: ["war"],
@@ -186,4 +214,65 @@ assert(
   "server analysis should keep opportunities beyond the user-visible maxResults window",
 );
 
+const hotBlade: RivenWeapon = {
+  id: "hot-blade",
+  slug: "hot_blade",
+  name: "Hot Blade",
+  group: "melee",
+  rivenType: "melee",
+  disposition: 1.1,
+  reqMasteryRank: 8,
+};
+
+const coldCannon: RivenWeapon = {
+  id: "cold-cannon",
+  slug: "cold_cannon",
+  name: "Cold Cannon",
+  group: "primary",
+  rivenType: "rifle",
+  disposition: 1.3,
+  reqMasteryRank: 12,
+};
+
+const summaryOrdering = analyzeMarket(
+  [coldCannon, hotBlade],
+  new Map([
+    [
+      "hot_blade",
+      [70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125].map((price, index) =>
+        makeAuction(`hot-${index + 1}`, price, index % 3 === 0 ? "ingame" : "online", exactAttrs, { weaponSlug: "hot_blade" }),
+      ),
+    ],
+    [
+      "cold_cannon",
+      [500, 600, 700, 800].map((price, index) =>
+        makeAuction(`cold-${index + 1}`, price, "offline", exactAttrs, { weaponSlug: "cold_cannon" }),
+      ),
+    ],
+  ]),
+  {
+    watchlist: ["hot_blade", "cold_cannon"],
+    minProfit: 10_000,
+    minRoi: 0.01,
+    minGroupSize: 4,
+    statuses: ["ingame", "online"],
+  },
+);
+const hotSummary = summaryOrdering.weaponSummaries.find((entry) => entry.slug === "hot_blade");
+const coldSummary = summaryOrdering.weaponSummaries.find((entry) => entry.slug === "cold_cannon");
+assert(hotSummary?.marketIntel, "hot market intel missing");
+assert(coldSummary?.marketIntel, "cold market intel missing");
+assert(hotSummary.priceStats && coldSummary.priceStats, "summary price stats missing");
+assert(coldSummary.priceStats.p75 > hotSummary.priceStats.p75, "fixture must have a higher p75 on the cold market");
+assert.equal(
+  summaryOrdering.weaponSummaries[0]?.slug,
+  "hot_blade",
+  "weapon summaries should rank market quality ahead of a stale high-p75 book",
+);
+assert(hotSummary.marketIntel.marketScore > coldSummary.marketIntel.marketScore, "deeper active market should score above stale high prices");
+assert(hotSummary.marketIntel.liquidityScore > coldSummary.marketIntel.liquidityScore, "online direct depth should improve liquidity score");
+assert.equal(hotSummary.marketIntel.demand, "steady");
+assert.equal(coldSummary.marketIntel.demand, "dead");
+assert.equal(hotSummary.marketIntel.actionableRatio, 1);
+assert.equal(coldSummary.marketIntel.actionableRatio, 0);
 console.log("opportunities behavior tests passed");

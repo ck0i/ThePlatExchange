@@ -8,7 +8,7 @@ import { enrichOpportunity, type SignatureLookupHit } from "./mcp/schemas.js";
 import { attributeSignature } from "./wfm/opportunities.js";
 import { isRecord, readBoolean, readNumber, readString } from "./wfm/guards.js";
 import type { ThePlatExchangeService } from "./wfm/scanner.js";
-import type { DashboardState, Opportunity, SellerStatus, TraderConfig } from "./wfm/types.js";
+import type { DashboardState, SellerStatus, TraderConfig } from "./wfm/types.js";
 
 export interface AppServerOptions {
   publicDir?: string;
@@ -280,26 +280,18 @@ function buildEnrichmentContext(service: ThePlatExchangeService): { dispositionS
 
 function computeInstantWins(service: ThePlatExchangeService, url: URL): Array<{ opportunity: unknown; signature_value: unknown; expected_uplift: number }> {
   const limit = Math.max(1, Math.floor(Number(url.searchParams.get("limit") ?? 25)));
-  const minConfidence = Number(url.searchParams.get("minConfidence") ?? url.searchParams.get("min_confidence") ?? 0.6);
+  const requestedConfidence = Number(url.searchParams.get("minConfidence") ?? url.searchParams.get("min_confidence") ?? 0.45);
+  const minConfidence = Number.isFinite(requestedConfidence) ? Math.max(0, Math.min(1, requestedConfidence)) : 0.45;
   const state = service.getState();
   const ctx = buildEnrichmentContext(service);
-  const hits: Array<{ opportunity: unknown; signature_value: unknown; expected_uplift: number }> = [];
-  for (const opportunity of state.opportunities) {
-    const valuation = service.getSignatureValuation(opportunity.weaponSlug, opportunity.signature);
-    if (!valuation || valuation.sample_count < 8) continue;
-    if (valuation.confidence < minConfidence) continue;
-    if (valuation.p25 === null || valuation.p50 === null) continue;
-    if (opportunity.buyPrice >= valuation.p25) continue;
-    const velocity = service.getSignatureVelocity(opportunity.weaponSlug, opportunity.signature);
-    const uplift = (valuation.p50 - opportunity.buyPrice) * valuation.confidence;
-    hits.push({
-      opportunity: enrichOpportunity(opportunity, Date.parse(state.generatedAt), ctx),
-      signature_value: { ...valuation, velocity },
-      expected_uplift: Math.round(uplift * 100) / 100,
-    });
-  }
-  hits.sort((left, right) => right.expected_uplift - left.expected_uplift);
-  return hits.slice(0, limit);
+  return [...(state.instantWins ?? [])]
+    .filter((win) => (win.signature_value?.confidence ?? win.opportunity.confidence ?? 0) >= minConfidence)
+    .sort((left, right) => right.expected_uplift - left.expected_uplift)
+    .slice(0, limit)
+    .map((win) => ({
+      ...win,
+      opportunity: enrichOpportunity(win.opportunity, Date.parse(state.generatedAt), ctx),
+    }));
 }
 
 function computeArcaneDetail(service: ThePlatExchangeService, slug: string): Record<string, unknown> | null {
@@ -346,8 +338,13 @@ function listWeapons(service: ThePlatExchangeService, url: URL): Array<Record<st
     ? weapons.filter((weapon) => weapon.name.toLowerCase().includes(query) || weapon.slug.toLowerCase().includes(query) || weapon.group.toLowerCase().includes(query))
     : weapons;
   const sorted = [...matches].sort((left, right) => {
-    const leftLive = summaryBySlug.get(left.slug)?.priceStats?.p75 ?? -1;
-    const rightLive = summaryBySlug.get(right.slug)?.priceStats?.p75 ?? -1;
+    const leftSummary = summaryBySlug.get(left.slug);
+    const rightSummary = summaryBySlug.get(right.slug);
+    const leftScore = leftSummary?.marketIntel?.marketScore ?? -1;
+    const rightScore = rightSummary?.marketIntel?.marketScore ?? -1;
+    if (leftScore !== rightScore) return rightScore - leftScore;
+    const leftLive = leftSummary?.priceStats?.median ?? -1;
+    const rightLive = rightSummary?.priceStats?.median ?? -1;
     if (leftLive !== rightLive) return rightLive - leftLive;
     return right.disposition - left.disposition;
   });

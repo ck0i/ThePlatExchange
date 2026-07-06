@@ -270,8 +270,8 @@ function hydrateControls(state) {
   controlsHydrated = true;
   elements.watchlist.value = (state.config?.watchlist ?? []).join("\n");
   elements.minProfit.value = state.config?.minProfit ?? 25;
-  elements.minRoi.value = state.config?.minRoi ?? 0.35;
-  elements.minGroupSize.value = state.config?.minGroupSize ?? 4;
+  elements.minRoi.value = state.config?.minRoi ?? 0.2;
+  elements.minGroupSize.value = state.config?.minGroupSize ?? 3;
   elements.minBuyPrice.value = state.config?.minBuyPrice == null ? "" : state.config.minBuyPrice;
   elements.maxBuyPrice.value = state.config?.maxBuyPrice == null ? "" : state.config.maxBuyPrice;
   elements.maxSellPrice.value = state.config?.maxSellPrice == null ? "" : state.config.maxSellPrice;
@@ -550,8 +550,8 @@ function renderInstantWins(items) {
   const wins = Array.isArray(items) ? items : [];
   if (elements.instantSummary) {
     elements.instantSummary.textContent = wins.length === 0
-      ? "No same-signature undervalued listings right now."
-      : `${wins.length} listing${wins.length === 1 ? "" : "s"} priced below their same-signature p25.`;
+      ? "No undervalued raw-auction listings clear the confidence gate right now."
+      : `${wins.length} listing${wins.length === 1 ? "" : "s"} below same-signature peers or the usable weapon floor.`;
   }
   renderInstantPreview(wins);
   if (!elements.instantList) return;
@@ -572,8 +572,8 @@ function renderInstantWins(items) {
         <div><strong>${escapeHtml(opportunity.weaponName)}</strong><span>${escapeHtml(opportunity.rivenName)} · ${escapeHtml(opportunity.seller?.ingameName ?? "seller")} · ${timeAgo(opportunity.updated)}</span></div>
       </div>
       <div class="instant-stat"><span>Listed</span><strong class="listed">${opportunity.buyPrice}◈</strong></div>
-      <div class="instant-stat"><span>p25 value</span><strong>${Math.round(value.p25 ?? 0)}◈</strong></div>
-      <div class="instant-stat hide-mobile"><span>Undervalue</span><strong class="uplift">+${Math.round(item.expected_uplift ?? 0)}◈</strong></div>
+      <div class="instant-stat"><span>${item.basis === "market-floor" ? "Floor p25" : "Sig p25"}</span><strong>${Math.round(value.p25 ?? 0)}◈</strong></div>
+      <div class="instant-stat hide-mobile"><span>Uplift</span><strong class="uplift">+${Math.round(item.expected_uplift ?? 0)}◈</strong></div>
       <div class="instant-actions"><button class="ghost-button" data-action="open" type="button">Open</button><button class="primary-button" data-action="copy" type="button">${copiedOpportunityKey === key ? "Copied ✓" : "Copy /w"}</button></div>
     `;
     card.addEventListener("click", (event) => {
@@ -906,17 +906,24 @@ function renderWeapons(summaries) {
   const visibleSummaries = summaries.slice(0, RESULT_BUDGETS.weaponCards);
   for (const summary of visibleSummaries) {
     const stats = summary.priceStats;
+    const intel = summary.marketIntel ?? {};
+    const strategy = intel.strategy ? intel.strategy.toUpperCase() : "—";
+    const score = Number.isFinite(intel.marketScore) ? Math.round(intel.marketScore) : null;
+    const spreadPct = Number.isFinite(intel.spreadPct) ? Math.round(intel.spreadPct * 100) : null;
+    const floorPct = Number.isFinite(intel.floorDiscountPct) ? Math.round(intel.floorDiscountPct * 100) : null;
     const card = document.createElement("article");
     card.className = "weapon-card";
     card.dataset.weaponSlug = summary.slug;
     card.innerHTML = `
       <div class="weapon-card-head">${weaponThumb(summary.imageName, summary.name, "sm")}<h3>${escapeHtml(summary.name)}</h3></div>
+      <div class="weapon-card-tags"><span>${escapeHtml(strategy)}</span><span>${escapeHtml(intel.demand ?? "unknown")}</span>${score === null ? "" : `<span>${score} score</span>`}</div>
       <dl>
-        <dt>Listings</dt><dd>${formatNumber(summary.directListings ?? summary.listings ?? 0)}</dd>
+        <dt>Direct</dt><dd>${formatNumber(summary.directListings ?? summary.listings ?? 0)}</dd>
         <dt>Online</dt><dd>${formatNumber(summary.onlineListings ?? 0)}</dd>
-        <dt>Median</dt><dd>${stats ? `${stats.median}◈` : "—"}</dd>
-        <dt>P75</dt><dd>${stats ? `${stats.p75}◈` : "—"}</dd>
-        <dt>Dispo</dt><dd>${Number(summary.disposition ?? 0).toFixed(2)}</dd>
+        <dt>Floor/Med</dt><dd>${stats ? `${stats.min}◈/${stats.median}◈` : "—"}</dd>
+        <dt>Spread</dt><dd>${spreadPct === null ? (stats ? `${stats.p25}→${stats.p75}` : "—") : `+${spreadPct}%`}</dd>
+        <dt>Buy/Sell/Get</dt><dd>${Math.round(intel.buyScore ?? 0)}/${Math.round(intel.sellScore ?? 0)}/${Math.round(intel.farmScore ?? 0)}</dd>
+        <dt>Dispo</dt><dd>${Number(summary.disposition ?? 0).toFixed(2)}${floorPct === null ? "" : ` · ${floorPct}% floor`}</dd>
       </dl>`;
     card.addEventListener("click", () => openWeaponDetail(summary.slug));
     elements.weapons.appendChild(card);
@@ -939,10 +946,11 @@ function renderHeatmap(summaries) {
   for (const summary of items) {
     const listings = summary.directListings ?? summary.listings ?? 0;
     const actionable = summary.actionableListings ?? 0;
-    const intensity = Math.min(0.28, 0.06 + (listings / maxListings) * 0.22);
-    const positive = actionable > 0;
+    const score = summary.marketIntel?.marketScore ?? 0;
+    const intensity = Math.min(0.3, 0.06 + (Math.max(listings / maxListings, score / 100) * 0.24));
+    const positive = score >= 55 || actionable > 0;
     const bg = positive ? `rgba(74, 222, 128, ${intensity})` : `rgba(123, 111, 239, ${intensity})`;
-    const border = positive ? `rgba(74, 222, 128, ${Math.min(.45, intensity + .18)})` : `rgba(123, 111, 239, ${Math.min(.45, intensity + .18)})`;
+    const border = positive ? `rgba(74, 222, 128, ${Math.min(.48, intensity + .18)})` : `rgba(123, 111, 239, ${Math.min(.45, intensity + .18)})`;
     const text = positive ? "#4ade80" : "#a09af8";
     const button = document.createElement("button");
     button.type = "button";
@@ -952,7 +960,7 @@ function renderHeatmap(summaries) {
     button.style.flexGrow = String(Math.max(1, listings / Math.max(1, maxListings / 4)));
     button.style.flexBasis = `${Math.max(92, Math.min(190, 70 + listings * 2))}px`;
     button.style.height = `${Math.max(58, Math.min(96, 48 + listings))}px`;
-    button.innerHTML = `<strong>${escapeHtml(summary.name)}</strong><span style="color:${text}">${formatNumber(listings)} listings · ${actionable} actionable</span>`;
+    button.innerHTML = `<strong>${escapeHtml(summary.name)}</strong><span style="color:${text}">${formatNumber(listings)} direct · ${actionable} actionable · ${Math.round(score)} score</span>`;
     button.addEventListener("click", () => openWeaponDetail(summary.slug));
     elements.heatmap.appendChild(button);
   }
@@ -1205,8 +1213,9 @@ function renderSpotlightResults(items) {
         const labelText = item.text ? `${item.text} · ` : "";
         html.push(`<button class="spotlight-item spotlight-filter" data-index="${currentIndex}" type="button"><span class="spotlight-glyph">≡</span><div class="spotlight-body"><div class="spotlight-title">Filter opportunities</div><div class="spotlight-sub">${escapeHtml(labelText)}buy price ${item.filter.op} ${item.filter.value}◈</div></div><span class="spotlight-arrow">↵</span></button>`);
       } else if (item.type === "weapon") {
-        const priceLine = item.summary?.priceStats ? `median ${item.summary.priceStats.median}◈ · p75 ${item.summary.priceStats.p75}◈` : "no cached price stats";
-        html.push(`<button class="spotlight-item spotlight-weapon" data-index="${currentIndex}" type="button">${weaponThumb(item.imageName, item.name, "sm")}<div class="spotlight-body"><div class="spotlight-title">${escapeHtml(item.name)}</div><div class="spotlight-sub">${escapeHtml(item.group)} · dispo ${Number(item.disposition ?? 0).toFixed(2)} · ${escapeHtml(priceLine)}</div></div><span class="spotlight-arrow">↵</span></button>`);
+        const intel = item.summary?.marketIntel ?? {};
+        const priceLine = item.summary?.priceStats ? `score ${Math.round(intel.marketScore ?? 0)} · online ${item.summary.onlineListings ?? 0}/${item.summary.directListings ?? 0} · median ${item.summary.priceStats.median}◈` : "no cached price stats";
+        html.push(`<button class="spotlight-item spotlight-weapon" data-index="${currentIndex}" type="button">${weaponThumb(item.imageName, item.name, "sm")}<div class="spotlight-body"><div class="spotlight-title">${escapeHtml(item.name)}</div><div class="spotlight-sub">${escapeHtml(item.group)} · ${escapeHtml(intel.strategy ?? "watch")} · ${escapeHtml(priceLine)}</div></div><span class="spotlight-arrow">↵</span></button>`);
       } else if (item.type === "arcane") {
         const priceLine = item.rankMax?.sell?.p25 ?? item.rank0?.sell?.p25;
         html.push(`<button class="spotlight-item spotlight-arcane" data-index="${currentIndex}" type="button">${arcaneThumb(item)}<div class="spotlight-body"><div class="spotlight-title">${escapeHtml(item.name)}</div><div class="spotlight-sub">${escapeHtml(item.rarity)} · ${item.dissolutionVosfor ?? "?"} Vosfor · ${priceLine == null ? "no scanned price" : `${priceLine}◈ p25`}</div></div><span class="spotlight-arrow">↵</span></button>`);
@@ -1377,6 +1386,7 @@ if (elements.weaponModal) {
 function renderWeaponDetail(detail) {
   const { weapon, summary, opportunities, signatures, auctionsUrl } = detail;
   const stats = summary?.priceStats;
+  const intel = summary?.marketIntel ?? {};
   const topSignatures = (signatures ?? []).filter((entry) => entry.sample_count > 0).slice(0, 8);
 
   const signaturesHtml = topSignatures.length > 0
@@ -1403,7 +1413,7 @@ function renderWeaponDetail(detail) {
     ? opportunities.slice(0, RESULT_BUDGETS.weaponDetailOpportunities).map((opp) => {
         const tier = opp.quality?.tier ?? tierFromScore(opp.score);
         return `<div class="wd-opp" data-url="${escapeHtml(opp.url)}">
-          <div class="wd-opp-price"><span class="price">${opp.buyPrice}◈</span> → ${opp.targetSellPrice}◈ <span class="profit">+${opp.expectedProfit}◈</span></div>
+          <div class="wd-opp-price"><span class="price">${opp.buyPrice}◈</span> → ${opp.conservativeSellPrice ?? opp.targetSellPrice}◈ <span class="profit">+${opp.expectedProfit}◈</span></div>
           <div class="wd-opp-meta small">${escapeHtml(opp.rivenName)} · ${escapeHtml(opp.seller?.ingameName ?? "seller")} · ${escapeHtml(opp.status)} · comps ${opp.comparableListings}</div>
           <div class="wd-opp-flags">${(opp.positives ?? []).slice(0, 4).map((p) => `<span class="flag good">+${escapeHtml(p)}</span>`).join("")}${(opp.negatives ?? []).slice(0, 2).map((n) => `<span class="flag bad">-${escapeHtml(n)}</span>`).join("")}<span class="tier-badge tier-${tier}">${tier}</span></div>
         </div>`;
@@ -1420,6 +1430,8 @@ function renderWeaponDetail(detail) {
           <span>disposition <strong>${Number(weapon.disposition ?? 0).toFixed(2)}</strong></span>
           <span>direct listings <strong>${summary?.directListings ?? 0}</strong></span>
           <span>online <strong>${summary?.onlineListings ?? 0}</strong></span>
+          <span>market score <strong>${Math.round(intel.marketScore ?? 0)}</strong></span>
+          <span>best for <strong>${escapeHtml(intel.strategy ?? "watch")}</strong></span>
         </div>
       </div>
       <a class="wd-external" href="${escapeHtml(auctionsUrl)}" target="_blank" rel="noopener">Open on WFM ↗</a>

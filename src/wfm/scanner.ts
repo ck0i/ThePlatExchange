@@ -1,8 +1,8 @@
 import { WarframeMarketClient } from "./client.js";
 import type { PriceHistoryStore, SignatureValuation as SignatureValuationResult, SignatureVelocity as SignatureVelocityResult } from "./history.js";
 import { analyzeArcaneMarket } from "./arcanes.js";
-import { analyzeMarket, DEFAULT_CONFIG, normalizeConfig, slugify, type MarketAnalysis } from "./opportunities.js";
-import type { ArcaneDashboardState, ArcaneItem, ArcaneOrder, ArcaneReferenceSnapshot, DashboardState, ReferenceSnapshot, RivenAuction, RivenWeapon, ScanStatus, TraderConfig } from "./types.js";
+import { analyzeMarket, DEFAULT_CONFIG, deriveWeaponMarketIntel, normalizeConfig, slugify, type MarketAnalysis } from "./opportunities.js";
+import type { ArcaneDashboardState, ArcaneItem, ArcaneOrder, ArcaneReferenceSnapshot, DashboardState, ReferenceSnapshot, RivenAuction, RivenWeapon, ScanStatus, TraderConfig, WeaponSummary } from "./types.js";
 
 export type ScanTier = "hot" | "cold" | "full";
 export type ScanMode = "tiered" | "full" | "remote";
@@ -296,6 +296,15 @@ export class ThePlatExchangeService {
       this.lastRemoteFetchAt = Date.now();
       const scannedWeapons = parsed.status?.scannedWeapons ?? 0;
       const totalWeapons = parsed.status?.totalWeapons ?? scannedWeapons;
+      const opportunityCount = parsed.totals?.opportunities ?? 0;
+      const instantWins = Array.isArray(parsed.instantWins) ? parsed.instantWins.length : null;
+      const hasMarketIntel = Array.isArray(parsed.weaponSummaries) && parsed.weaponSummaries.some((summary: unknown) =>
+        Boolean(summary && typeof summary === "object" && "marketIntel" in summary),
+      );
+      const legacySnapshot = instantWins === null || !hasMarketIntel;
+      const remoteSummary = legacySnapshot
+        ? `Remote snapshot fetched legacy pre-overhaul feed: ${opportunityCount} opportunities across ${scannedWeapons} weapons; waiting for next cold scan to publish raw instant wins`
+        : `Remote snapshot fetched: ${opportunityCount} opportunities and ${instantWins} instant wins across ${scannedWeapons} weapons`;
       this.status = {
         initialized: true,
         running: false,
@@ -303,7 +312,7 @@ export class ThePlatExchangeService {
         finishedAt: new Date().toISOString(),
         scannedWeapons,
         totalWeapons,
-        lastMessage: `Remote snapshot fetched: ${parsed.totals?.opportunities ?? 0} opportunities across ${scannedWeapons} weapons`,
+        lastMessage: remoteSummary,
       };
       delete this.status.lastError;
       this.emitStateImmediate();
@@ -463,6 +472,30 @@ export class ThePlatExchangeService {
     return map;
   }
 
+  private enrichRemoteWeaponSummaries(imageMap: ReadonlyMap<string, string>): WeaponSummary[] {
+    const summaries = this.remoteState?.weaponSummaries ?? [];
+    return summaries
+      .map((summary) => {
+        const withImage = summary.imageName ? summary : { ...summary, ...(imageMap.get(summary.slug) ? { imageName: imageMap.get(summary.slug)! } : {}) };
+        if (withImage.marketIntel) return withImage;
+        return {
+          ...withImage,
+          marketIntel: deriveWeaponMarketIntel({
+            disposition: withImage.disposition,
+            directListings: withImage.directListings,
+            actionableListings: withImage.actionableListings,
+            onlineListings: withImage.onlineListings,
+            priceStats: withImage.priceStats,
+          }),
+        };
+      })
+      .sort((left, right) =>
+        (right.marketIntel?.marketScore ?? 0) - (left.marketIntel?.marketScore ?? 0)
+        || (right.marketIntel?.liquidityScore ?? 0) - (left.marketIntel?.liquidityScore ?? 0)
+        || (right.priceStats?.median ?? 0) - (left.priceStats?.median ?? 0),
+      );
+  }
+
   getDispositionSignals(sinceSeconds: number = 30 * 24 * 60 * 60): Map<string, "rising" | "falling"> {
     const map = new Map<string, "rising" | "falling">();
     if (!this.history) return map;
@@ -498,6 +531,13 @@ export class ThePlatExchangeService {
           })
           .filter((opportunity): opportunity is NonNullable<typeof opportunity> => opportunity !== null)
           .sort((left, right) => right.expectedProfit - left.expectedProfit);
+        const instantWins = (this.remoteState.instantWins ?? []).map((win) => {
+          const opportunity = win.opportunity.imageName ? win.opportunity : {
+            ...win.opportunity,
+            ...(imageMap.get(win.opportunity.weaponSlug) ? { imageName: imageMap.get(win.opportunity.weaponSlug)! } : {}),
+          };
+          return { ...win, opportunity };
+        });
         return {
           ...this.remoteState,
           scanMode: "remote",
@@ -508,9 +548,8 @@ export class ThePlatExchangeService {
             opportunities: enriched.length,
           },
           opportunities: enriched,
-          weaponSummaries: imageMap.size > 0
-            ? this.remoteState.weaponSummaries.map((summary) => summary.imageName ? summary : { ...summary, ...(imageMap.get(summary.slug) ? { imageName: imageMap.get(summary.slug)! } : {}) })
-            : this.remoteState.weaponSummaries,
+          instantWins,
+          weaponSummaries: this.enrichRemoteWeaponSummaries(imageMap),
         };
       }
       return {
@@ -523,6 +562,7 @@ export class ThePlatExchangeService {
         reference: { weapons: 0, attributes: 0 },
         totals: { weaponsWithAuctions: 0, auctions: 0, opportunities: 0 },
         opportunities: [],
+        instantWins: [],
         weaponSummaries: [],
       };
     }
@@ -554,6 +594,7 @@ export class ThePlatExchangeService {
         opportunities: analysis.opportunities.length,
       },
       opportunities: analysis.opportunities,
+      instantWins: analysis.instantWins,
       weaponSummaries: analysis.weaponSummaries,
       arcanes: this.getArcaneState(),
     };

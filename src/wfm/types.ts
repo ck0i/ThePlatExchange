@@ -284,6 +284,30 @@ export interface ArcaneReferenceSnapshot {
   loadedAt: string;
 }
 
+export type WeaponMarketDemand = "hot" | "steady" | "thin" | "dead";
+
+export type WeaponMarketStrategy = "buy" | "sell" | "farm" | "avoid";
+
+export interface WeaponMarketIntel {
+  liquidityScore: number;
+  spreadScore: number;
+  buyScore: number;
+  sellScore: number;
+  farmScore: number;
+  marketScore: number;
+  demand: WeaponMarketDemand;
+  strategy: WeaponMarketStrategy;
+  spread: number | null;
+  spreadPct: number | null;
+  floorDiscountPct: number | null;
+  actionableRatio: number;
+  onlineRatio: number;
+  opportunityCount: number;
+  bestOpportunityProfit: number | null;
+  bestOpportunityScore: number | null;
+  reasons: string[];
+}
+
 export interface WeaponSummary {
   slug: string;
   name: string;
@@ -296,6 +320,7 @@ export interface WeaponSummary {
   priceStats: PriceStats | null;
   lastScannedAt?: string;
   imageName?: string;
+  marketIntel?: WeaponMarketIntel;
 }
 
 export interface Opportunity {
@@ -323,6 +348,42 @@ export interface Opportunity {
   reasons: string[];
   updated: string;
   url: string;
+}
+
+export type InstantWinBasis = "same-signature" | "market-floor";
+
+export interface InstantWinSignatureValue {
+  weapon_slug: string;
+  signature: string;
+  window_days: number;
+  sample_count: number;
+  p25: number | null;
+  p50: number | null;
+  p75: number | null;
+  p90: number | null;
+  min: number | null;
+  max: number | null;
+  last_seen_price: number | null;
+  last_seen_at: number | null;
+  confidence: number;
+  source: "live_signature" | "live_weapon_market";
+  velocity?: {
+    classification: "fast_moving" | "stuck" | "unknown";
+    observed_listings?: number;
+    vanished_listings?: number;
+    vanish_rate?: number;
+    avg_time_on_market_days?: number | null;
+  } | null;
+}
+
+export interface InstantWin {
+  opportunity: Opportunity;
+  signature_value: InstantWinSignatureValue;
+  expected_uplift: number;
+  discount_to_p25: number;
+  discount_pct: number;
+  basis: InstantWinBasis;
+  reasons: string[];
 }
 
 export interface TraderConfig {
@@ -369,6 +430,7 @@ export interface DashboardState {
     opportunities: number;
   };
   opportunities: Opportunity[];
+  instantWins?: InstantWin[];
   weaponSummaries: WeaponSummary[];
   arcanes?: ArcaneDashboardState;
 }

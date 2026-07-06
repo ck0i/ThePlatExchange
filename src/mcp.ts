@@ -25,7 +25,7 @@ import {
 import { isRecord, readNumber, readPositiveInteger, readString, readStringArray } from "./wfm/guards.js";
 import { attributeSignature, slugify } from "./wfm/opportunities.js";
 import type { ThePlatExchangeService } from "./wfm/scanner.js";
-import type { ArcaneDashboardState, ArcaneDissolveRecommendation, ArcaneMarketSummary, ArcanePackStrategy, ArcanePackValuation, DashboardState, Opportunity, TraderConfig } from "./wfm/types.js";
+import type { ArcaneDashboardState, ArcaneDissolveRecommendation, ArcaneMarketSummary, ArcanePackStrategy, ArcanePackValuation, DashboardState, TraderConfig } from "./wfm/types.js";
 
 interface McpSession {
   id: string;
@@ -175,28 +175,21 @@ export class McpSseServer {
 
   private instantWinsTool(id: unknown, args: Record<string, unknown>): Record<string, unknown> {
     const limit = readPositiveInteger(args, "limit", 25);
-    const minConfidence = readNumber(args, "minConfidence") ?? readNumber(args, "min_confidence") ?? 0.6;
+    const requestedConfidence = readNumber(args, "minConfidence") ?? readNumber(args, "min_confidence") ?? 0.45;
+    const minConfidence = Math.max(0, Math.min(1, requestedConfidence));
     const state = this.service.getState();
     const meta = this.buildMeta(state);
     const dispositionSignals = this.service.getDispositionSignals();
     const signatureLookup = this.buildSignatureLookup();
-    const hits: Array<{ opportunity: Opportunity; signature_value: unknown; expected_uplift: number }> = [];
-    for (const opportunity of state.opportunities) {
-      const valuation = this.service.getSignatureValuation(opportunity.weaponSlug, opportunity.signature);
-      if (!valuation || valuation.sample_count < 8) continue;
-      if (valuation.confidence < minConfidence) continue;
-      if (valuation.p25 === null || valuation.p50 === null) continue;
-      if (opportunity.buyPrice >= valuation.p25) continue;
-      const velocity = this.service.getSignatureVelocity(opportunity.weaponSlug, opportunity.signature);
-      const uplift = (valuation.p50 - opportunity.buyPrice) * valuation.confidence;
-      hits.push({
-        opportunity: enrichOpportunity(opportunity, Date.parse(state.generatedAt), { dispositionSignals, signatureLookup }),
-        signature_value: { ...valuation, velocity },
-        expected_uplift: Math.round(uplift * 100) / 100,
-      });
-    }
-    hits.sort((a, b) => b.expected_uplift - a.expected_uplift);
-    return ok(id, this.finalizeEnvelope(toEnvelope(hits.slice(0, limit), meta)));
+    const hits = [...(state.instantWins ?? [])]
+      .filter((win) => (win.signature_value?.confidence ?? win.opportunity.confidence ?? 0) >= minConfidence)
+      .sort((left, right) => right.expected_uplift - left.expected_uplift)
+      .slice(0, limit)
+      .map((win) => ({
+        ...win,
+        opportunity: enrichOpportunity(win.opportunity, Date.parse(state.generatedAt), { dispositionSignals, signatureLookup }),
+      }));
+    return ok(id, this.finalizeEnvelope(toEnvelope(hits, meta)));
   }
 
   private snapshotTool(id: unknown, args: Record<string, unknown>): Record<string, unknown> {
@@ -206,9 +199,14 @@ export class McpSseServer {
     const dispositionSignals = this.service.getDispositionSignals();
     const signatureLookup = this.buildSignatureLookup();
     const enriched = state.opportunities.slice(0, limit).map((opportunity) => enrichOpportunity(opportunity, Date.parse(state.generatedAt), { dispositionSignals, signatureLookup }));
+    const enrichedWins = (state.instantWins ?? []).slice(0, limit).map((win) => ({
+      ...win,
+      opportunity: enrichOpportunity(win.opportunity, Date.parse(state.generatedAt), { dispositionSignals, signatureLookup }),
+    }));
     const data = {
       totals: state.totals,
       opportunities: enriched,
+      instantWins: enrichedWins,
       weaponSummaries: state.weaponSummaries.slice(0, limit),
       config: state.config,
       status: state.status,
@@ -442,12 +440,12 @@ export class McpSseServer {
       },
       {
         name: "riven_instant_wins",
-        description: "Return current listings priced below their same-signature p25 (with enough history to trust). Ranked by (p50 - buy) * confidence. This is the 'snipe candidates' feed.",
+        description: "Return current raw-auction snipe candidates priced materially below same-signature peers or the usable weapon-market floor. Ranked by conservative uplift times confidence.",
         inputSchema: {
           type: "object",
           properties: {
             limit: { type: "number", minimum: 1, default: 25 },
-            minConfidence: { type: "number", minimum: 0, maximum: 1, default: 0.6 },
+            minConfidence: { type: "number", minimum: 0, maximum: 1, default: 0.45 },
           },
           additionalProperties: false,
         },

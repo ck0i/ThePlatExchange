@@ -1,17 +1,18 @@
 # ThePlatExchange
 
-ThePlatExchange is a TypeScript dashboard for finding Warframe riven arbitrage opportunities: buy low, sell high, and sort by expected platinum margin, ROI, confidence, and seller availability.
+ThePlatExchange is a TypeScript dashboard for finding Warframe riven trading targets: buy-low flips, instant raw-auction snipes, and weapon markets worth buying, selling, or farming into.
 
 It reads public Warframe.market riven data, enriches weapons with warframestat.us images, and serves both a browser UI and an MCP-over-SSE endpoint for MCP-aware clients.
 
 ## What it shows
 
-- Ranked buy-low / sell-high riven opportunities.
-- Expected profit, ROI, buy-to-sell ratio, comparable listing count, confidence, and score.
+- Ranked buy-low / sell-high riven opportunities scored by profit, ROI, liquidity, stat quality, seller status, and market depth.
+- Expected profit, ROI, buy-to-sell ratio, peer comparable count, confidence, and score.
+- Weapon-level buy/sell/get market intelligence from online depth, current price spread, floor-to-median gap, disposition, and active opportunity density.
 - Seller status filters for `ingame`, `online`, and `offline` listings.
 - Watchlist filters for scanning specific weapons.
 - ROI-vs-profit chart and weapon market detail cards.
-- Instant-win candidates when a listing is below same-signature valuation history.
+- Instant-win candidates computed from raw actionable auctions when a listing is materially below same-signature peers or the usable weapon-market floor.
 - MCP tools for live snapshots, opportunity queries, refreshes, watchlist updates, health checks, signature valuation, and instant-win lookup.
 
 ## Requirements
@@ -94,8 +95,8 @@ Most settings can be changed in the UI. Environment variables are useful for sta
 | `WFM_SCAN_MODE` | `remote` | `remote`, `tiered`, `full`, or `local` (`local` maps to `tiered`). |
 | `WFM_WATCHLIST` | empty | Comma- or newline-separated weapon names/slugs. Empty means all weapons. |
 | `WFM_MIN_PROFIT` | `25` | Minimum expected profit in platinum. |
-| `WFM_MIN_ROI` | `0.35` | Minimum ROI. |
-| `WFM_MIN_GROUP_SIZE` | `4` | Minimum comparable listings required. |
+| `WFM_MIN_ROI` | `0.2` | Minimum ROI. |
+| `WFM_MIN_GROUP_SIZE` | `3` | Minimum peer comparable listings required after excluding the candidate listing. |
 | `WFM_STATUSES` | `ingame,online` | Seller statuses to include. |
 | `WFM_MIN_BUY_PRICE` | unset | Optional minimum listing buyout. |
 | `WFM_MAX_BUY_PRICE` | unset | Optional maximum listing buyout. |
@@ -151,8 +152,8 @@ Useful local endpoints:
 | `GET /events` | Dashboard server-sent events. |
 | `GET /api/state` | Current dashboard state. |
 | `GET /api/opportunities` | Enriched opportunity list. |
-| `GET /api/instant-wins` | Same-signature undervaluation candidates. |
-| `GET /api/weapons` | Weapon market summaries. |
+| `GET /api/instant-wins` | Raw-auction undervaluation candidates with preserved opportunity shape. |
+| `GET /api/weapons` | Weapon market summaries with market intelligence scores. |
 | `GET /api/weapon/:slug` | Detailed weapon market view. |
 | `GET /api/signature-value` | Historical valuation for a weapon/signature. |
 | `POST /api/scan` | Update filters and trigger a manual scan. |
@@ -192,5 +193,6 @@ test/                    behavior tests
 ## Notes
 
 - Prices are estimates based on current listings and historical samples; always verify a listing before trading.
-- Profit is median-based over outlier-trimmed comparables so single extreme listings do not inflate expected returns.
+- Profit and instant-win thresholds exclude the candidate listing from its peer comparable set, so cheap listings cannot drag their own fair value down.
+- Buy-low profit remains based on conservative peer median exits, not aggressive high-end outliers.
 - Warframe.market fetches are rate-limited by this server. Avoid raising request limits unless you know the API can handle it.

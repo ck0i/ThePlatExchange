@@ -148,7 +148,7 @@
             <div class="page-heading">
               <div>
                 <h1 id="opportunitiesTitle">Opportunities</h1>
-                <p>Buy-low / sell-high queue from the current scan.</p>
+                <p>Buy-low / sell-high queue ranked by spread, liquidity, stat quality, and seller recency.</p>
               </div>
               <div id="sortPills" class="sort-pills" aria-label="Sort opportunities">
                 <button data-sort="score" type="button">Score</button>
@@ -165,9 +165,9 @@
                   <summary><h2>Filters</h2></summary>
                   <form id="filters">
                     <label>Watchlist<textarea id="watchlist" placeholder="blank = all weapons&#10;war&#10;kuva bramma"></textarea></label>
-                    <div class="inline"><label>Min profit<input id="minProfit" type="number" min="0" step="1" value="25" /></label><label>Min ROI<input id="minRoi" type="number" min="0" step="0.05" value="0.35" /></label></div>
+                    <div class="inline"><label>Min profit<input id="minProfit" type="number" min="0" step="1" value="25" /></label><label>Min ROI<input id="minRoi" type="number" min="0" step="0.05" value="0.2" /></label></div>
                     <div class="inline"><label>Min buy<input id="minBuyPrice" type="number" min="0" step="1" placeholder="—" /></label><label>Max buy<input id="maxBuyPrice" type="number" min="0" step="1" placeholder="—" /></label></div>
-                    <div class="inline"><label>Min comps<input id="minGroupSize" type="number" min="2" step="1" value="4" /></label><label>Max target<input id="maxSellPrice" type="number" min="0" step="1" placeholder="—" /></label></div>
+                    <div class="inline"><label>Min comps<input id="minGroupSize" type="number" min="2" step="1" value="3" /></label><label>Max target<input id="maxSellPrice" type="number" min="0" step="1" placeholder="—" /></label></div>
                     <div class="field-title">Seller status</div>
                     <div class="status-chips">
                       <label class="status-chip"><input class="status" type="checkbox" value="ingame" checked /><span>ingame</span></label>
@@ -191,7 +191,7 @@
             <div class="page-heading">
               <div>
                 <h1 id="instantTitle">Instant wins</h1>
-                <p id="instantSummary">Undervalued listings priced below same-signature p25.</p>
+                <p id="instantSummary">Undervalued raw-auction listings priced below same-signature peers or the usable weapon floor.</p>
               </div>
               <button id="instantRefresh" class="ghost-button" type="button">Refresh</button>
             </div>
@@ -248,7 +248,7 @@
             <div class="page-heading">
               <div>
                 <h1 id="marketsTitle">Riven markets</h1>
-                <p>Weapon-level price stats from the current cache. Click any card for listings and signature values.</p>
+                <p>Weapon-level buy/sell/get scores from liquidity, spreads, online depth, disposition, and current price shape.</p>
               </div>
             </div>
             <div id="weapons" class="weapons"></div>

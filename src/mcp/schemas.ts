@@ -263,15 +263,21 @@ const signatureValueDataSchema: Record<string, unknown> = {
     last_seen_price: { type: ["number", "null"] },
     last_seen_at: { type: ["integer", "null"] },
     confidence: { type: "number", minimum: 0, maximum: 1 },
+    source: { enum: ["live_signature", "live_weapon_market"] },
     velocity: {
-      type: "object",
-      properties: {
-        observed_listings: { type: "integer" },
-        vanished_listings: { type: "integer" },
-        vanish_rate: { type: "number" },
-        avg_time_on_market_days: { type: ["number", "null"] },
-        classification: { enum: ["fast_moving", "stuck", "unknown"] },
-      },
+      anyOf: [
+        {
+          type: "object",
+          properties: {
+            observed_listings: { type: "integer" },
+            vanished_listings: { type: "integer" },
+            vanish_rate: { type: "number" },
+            avg_time_on_market_days: { type: ["number", "null"] },
+            classification: { enum: ["fast_moving", "stuck", "unknown"] },
+          },
+        },
+        { type: "null" },
+      ],
     },
   },
 };
@@ -490,6 +496,22 @@ export const outputSchemas = {
         },
       },
       opportunities: { type: "array", items: opportunityJsonSchema },
+      instantWins: {
+        type: "array",
+        items: {
+          type: "object",
+          required: ["opportunity", "signature_value", "expected_uplift"],
+          properties: {
+            opportunity: opportunityJsonSchema,
+            signature_value: signatureValueDataSchema,
+            expected_uplift: { type: "number" },
+            discount_to_p25: { type: "number" },
+            discount_pct: { type: "number" },
+            basis: { enum: ["same-signature", "market-floor"] },
+            reasons: { type: "array", items: { type: "string" } },
+          },
+        },
+      },
       weaponSummaries: { type: "array", items: { type: "object" } },
       config: { type: "object" },
       status: { type: "object" },
@@ -512,10 +534,15 @@ export const outputSchemas = {
     type: "array",
     items: {
       type: "object",
+      required: ["opportunity", "signature_value", "expected_uplift"],
       properties: {
         opportunity: opportunityJsonSchema,
         signature_value: signatureValueDataSchema,
         expected_uplift: { type: "number" },
+        discount_to_p25: { type: "number" },
+        discount_pct: { type: "number" },
+        basis: { enum: ["same-signature", "market-floor"] },
+        reasons: { type: "array", items: { type: "string" } },
       },
     },
   }),

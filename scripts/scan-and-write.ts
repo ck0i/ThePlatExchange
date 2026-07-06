@@ -914,6 +914,7 @@ async function runColdMerge(args: Args): Promise<void> {
       opportunities: analysis.opportunities.length,
     },
     opportunities: analysis.opportunities,
+    instantWins: analysis.instantWins,
     weaponSummaries: analysis.weaponSummaries,
     arcanes,
   };
@@ -921,6 +922,7 @@ async function runColdMerge(args: Args): Promise<void> {
   await ensureDir(join(args.dataDir, "latest"));
   await writeFile(join(args.dataDir, "latest", "state.json"), JSON.stringify(state, null, 2));
   await writeFile(join(args.dataDir, "latest", "opportunities.json"), JSON.stringify(analysis.opportunities, null, 2));
+  await writeFile(join(args.dataDir, "latest", "instant-wins.json"), JSON.stringify(analysis.instantWins, null, 2));
   await writeArcaneArtifacts(args, "cold", arcanes);
 
   await ensureDir(join(args.dataDir, "samples"));
@@ -1013,6 +1015,7 @@ async function runCold(args: Args, client: WarframeMarketClient): Promise<void> 
       opportunities: analysis.opportunities.length,
     },
     opportunities: analysis.opportunities,
+    instantWins: analysis.instantWins,
     weaponSummaries: analysis.weaponSummaries,
     arcanes,
   };
@@ -1020,6 +1023,7 @@ async function runCold(args: Args, client: WarframeMarketClient): Promise<void> 
   await ensureDir(join(args.dataDir, "latest"));
   await writeFile(join(args.dataDir, "latest", "state.json"), JSON.stringify(state, null, 2));
   await writeFile(join(args.dataDir, "latest", "opportunities.json"), JSON.stringify(analysis.opportunities, null, 2));
+  await writeFile(join(args.dataDir, "latest", "instant-wins.json"), JSON.stringify(analysis.instantWins, null, 2));
   await writeArcaneArtifacts(args, "cold", arcanes);
 
   await ensureDir(join(args.dataDir, "samples"));
