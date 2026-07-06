@@ -6,6 +6,8 @@ import type {
   ArcaneOrder,
   ArcanePackDefinition,
   ArcanePackDrop,
+  ArcanePackStrategy,
+  ArcanePackStrategyMetrics,
   ArcanePackValuation,
   ArcanePackValuationDrop,
   ArcaneRarity,
@@ -22,6 +24,8 @@ export const ARCANE_DISSOLUTION_SOURCE_URL = "https://wiki.warframe.com/w/Module
 
 const PACK_PRICE_RANK = 0;
 const PACK_PRICE_STAT: keyof Pick<PriceStats, "p25" | "median" | "min"> = "p25";
+export const ARCANE_HIGH_VALUE_MAXED_THRESHOLD = 180;
+export const DEFAULT_ARCANE_PACK_STRATEGY: ArcanePackStrategy = "high_value_maxed";
 
 type PackPoolBlueprint = {
   rarity: Exclude<ArcaneRarity, "unknown">;
@@ -169,7 +173,11 @@ export function analyzeArcaneMarket(
   const summaries = items.map((item) => summarizeArcane(item, ordersByArcane.get(item.slug) ?? [], scannedAtByArcane.get(item.slug)));
   const summaryBySlug = new Map(summaries.map((summary) => [summary.slug, summary]));
   const packValuations = evaluateArcanePacks(packs, summaryBySlug);
-  const dissolveRecommendations = recommendArcaneDissolutions(summaries, packValuations);
+  const dissolveRecommendationsByStrategy: Record<ArcanePackStrategy, ArcaneDissolveRecommendation[]> = {
+    high_value_maxed: recommendArcaneDissolutions(summaries, packValuations, "high_value_maxed"),
+    rank0_bulk: recommendArcaneDissolutions(summaries, packValuations, "rank0_bulk"),
+  };
+  const dissolveRecommendations = dissolveRecommendationsByStrategy[DEFAULT_ARCANE_PACK_STRATEGY];
   let orders = 0;
   let itemsWithOrders = 0;
   for (const summary of summaries) {
@@ -192,11 +200,15 @@ export function analyzeArcaneMarket(
     summaries: summaries.sort(compareArcaneSummaries),
     packs: packValuations,
     dissolveRecommendations,
+    dissolveRecommendationsByStrategy,
     mechanics: {
       packCostVosfor: ARCANE_PACK_COST_VOSFOR,
       rewardsPerPack: ARCANE_PACK_REWARD_COUNT,
       priceRank: PACK_PRICE_RANK,
       priceStatistic: PACK_PRICE_STAT,
+      defaultPackStrategy: DEFAULT_ARCANE_PACK_STRATEGY,
+      highValueThreshold: ARCANE_HIGH_VALUE_MAXED_THRESHOLD,
+      copiesToMaxFormula: "triangular(maxRank + 1): rank 5 = 21 copies, rank 3 = 10 copies",
       sources: [ARCANE_PACK_SOURCE_URL, ARCANE_DISSOLUTION_SOURCE_URL],
     },
   };
@@ -209,18 +221,38 @@ export function evaluateArcanePacks(
   const valuations = packs.map((pack): ArcanePackValuation => {
     let expectedPlatPerSlot = 0;
     let expectedVosforPerSlot = 0;
+    let expectedHighValueMaxedPlatPerSlot = 0;
+    let highValueTargetChance = 0;
     let missingPriceCount = 0;
     let pricedCount = 0;
+    let missingMaxRankPriceCount = 0;
+    let maxRankPricedCount = 0;
+    let highValueTargetCount = 0;
+    const chanceMass = pack.drops.reduce((sum, drop) => sum + drop.chance, 0);
     const drops = pack.drops.map((drop) => {
       const summary = summaryBySlug.get(drop.arcaneSlug);
       const priceUsed = summary ? packPrice(summary) : null;
+      const maxRank = summary?.maxRank ?? null;
+      const copiesToMax = maxRank === null ? null : arcaneCopiesToMax(maxRank);
+      const maxedSellPrice = summary ? maxRankPrice(summary) : null;
       const dissolutionVosfor = summary?.dissolutionVosfor;
       if (priceUsed === null) missingPriceCount += 1;
       else {
         pricedCount += 1;
         expectedPlatPerSlot += drop.chance * priceUsed;
       }
+      if (maxedSellPrice === null) missingMaxRankPriceCount += 1;
+      else maxRankPricedCount += 1;
       if (dissolutionVosfor !== undefined) expectedVosforPerSlot += drop.chance * dissolutionVosfor;
+      const highValueTarget = maxedSellPrice !== null && copiesToMax !== null && maxedSellPrice >= ARCANE_HIGH_VALUE_MAXED_THRESHOLD;
+      const expectedHighValueMaxedPlat = highValueTarget
+        ? round(pack.rewardsPerPack * drop.chance * (maxedSellPrice / copiesToMax), 3)
+        : 0;
+      if (highValueTarget) {
+        highValueTargetCount += 1;
+        highValueTargetChance += drop.chance;
+        expectedHighValueMaxedPlatPerSlot += drop.chance * (maxedSellPrice / copiesToMax);
+      }
       const valuedDrop: ArcanePackValuationDrop = {
         ...drop,
         rank: PACK_PRICE_RANK,
@@ -229,17 +261,57 @@ export function evaluateArcanePacks(
         expectedPlat: round(pack.rewardsPerPack * drop.chance * (priceUsed ?? 0), 3),
         expectedVosfor: dissolutionVosfor === undefined ? null : round(pack.rewardsPerPack * drop.chance * dissolutionVosfor, 3),
         sourcePrice: priceUsed === null ? "missing" as const : `rank${PACK_PRICE_RANK}_sell_${PACK_PRICE_STAT}` as const,
+        maxRank,
+        copiesToMax,
+        maxRankPrice: maxedSellPrice,
+        highValueTarget,
+        expectedHighValueMaxedPlat,
+        sourceMaxRankPrice: maxedSellPrice === null || maxRank === null ? "missing" as const : `rank${maxRank}_sell_${PACK_PRICE_STAT}` as const,
       };
       if (dissolutionVosfor !== undefined) valuedDrop.dissolutionVosfor = dissolutionVosfor;
       return valuedDrop;
     });
     const expectedPlat = round(pack.rewardsPerPack * expectedPlatPerSlot, 3);
     const expectedVosforReturn = round(pack.rewardsPerPack * expectedVosforPerSlot, 3);
+    const expectedHighValueMaxedPlat = round(pack.rewardsPerPack * expectedHighValueMaxedPlatPerSlot, 3);
     const coveragePct = pack.drops.length === 0 ? 0 : pricedCount / pack.drops.length;
-    const chanceMass = pack.drops.reduce((sum, drop) => sum + drop.chance, 0);
+    const maxRankCoveragePct = pack.drops.length === 0 ? 0 : maxRankPricedCount / pack.drops.length;
+    const confidence = round(Math.max(0, Math.min(1, coveragePct * Math.min(1, chanceMass))), 4);
+    const highValueConfidence = round(Math.max(0, Math.min(1, maxRankCoveragePct * Math.min(1, chanceMass))), 4);
+    const expectedHighValueCopies = round(pack.rewardsPerPack * highValueTargetChance, 4);
+    const chanceAtLeastOneHighValue = round(1 - Math.pow(1 - Math.max(0, Math.min(1, highValueTargetChance)), pack.rewardsPerPack), 5);
+    const expectedPlatPerVosfor = round(expectedPlat / pack.costVosfor, 5);
+    const expectedHighValueMaxedPlatPerVosfor = round(expectedHighValueMaxedPlat / pack.costVosfor, 5);
+    const rank0Metrics: ArcanePackStrategyMetrics = {
+      strategy: "rank0_bulk",
+      label: "Rank-0 bulk EV",
+      expectedPlat,
+      expectedPlatPerVosfor,
+      confidence,
+      coveragePct: round(coveragePct, 4),
+      targetChance: round(chanceMass, 5),
+      chanceAtLeastOneTarget: round(1 - Math.pow(1 - Math.max(0, Math.min(1, chanceMass)), pack.rewardsPerPack), 5),
+      expectedTargetCopies: round(pack.rewardsPerPack * chanceMass, 4),
+      targetCount: pack.drops.length,
+    };
+    const highValueMetrics: ArcanePackStrategyMetrics = {
+      strategy: "high_value_maxed",
+      label: "High-value max-out",
+      expectedPlat: expectedHighValueMaxedPlat,
+      expectedPlatPerVosfor: expectedHighValueMaxedPlatPerVosfor,
+      confidence: highValueConfidence,
+      coveragePct: round(maxRankCoveragePct, 4),
+      targetChance: round(highValueTargetChance, 5),
+      chanceAtLeastOneTarget: chanceAtLeastOneHighValue,
+      expectedTargetCopies: expectedHighValueCopies,
+      targetCount: highValueTargetCount,
+    };
     const topDrops = drops
       .slice()
-      .sort((left, right) => right.expectedPlat - left.expectedPlat);
+      .sort((left, right) =>
+        right.expectedHighValueMaxedPlat - left.expectedHighValueMaxedPlat ||
+        right.expectedPlat - left.expectedPlat,
+      );
     return {
       packId: pack.id,
       packName: pack.name,
@@ -247,56 +319,83 @@ export function evaluateArcanePacks(
       creditCost: pack.creditCost,
       rewardsPerPack: pack.rewardsPerPack,
       expectedPlat,
-      expectedPlatPerVosfor: round(expectedPlat / pack.costVosfor, 5),
+      expectedPlatPerVosfor,
       expectedVosforReturn,
       netVosforBurn: round(pack.costVosfor - expectedVosforReturn, 3),
       coveragePct: round(coveragePct, 4),
-      confidence: round(Math.max(0, Math.min(1, coveragePct * Math.min(1, chanceMass))), 4),
+      confidence,
       missingPriceCount,
       pricedDropCount: pricedCount,
+      maxRankCoveragePct: round(maxRankCoveragePct, 4),
+      highValueConfidence,
+      missingMaxRankPriceCount,
+      maxRankPricedDropCount: maxRankPricedCount,
+      highValueThreshold: ARCANE_HIGH_VALUE_MAXED_THRESHOLD,
+      highValueTargetCount,
+      highValueTargetChance: round(highValueTargetChance, 5),
+      chanceAtLeastOneHighValue,
+      expectedHighValueCopies,
+      expectedHighValueMaxedPlat,
+      expectedHighValueMaxedPlatPerVosfor,
+      defaultStrategy: DEFAULT_ARCANE_PACK_STRATEGY,
+      strategyMetrics: {
+        high_value_maxed: highValueMetrics,
+        rank0_bulk: rank0Metrics,
+      },
       topDrops,
       source: pack.source,
       notes: [
-        `EV uses rank-${PACK_PRICE_RANK} ${PACK_PRICE_STAT} sell prices because Vosfor packs award unranked single arcanes.`,
+        `Default Raw Plat Output uses max-rank ${PACK_PRICE_STAT} sell prices only for targets worth at least ${ARCANE_HIGH_VALUE_MAXED_THRESHOLD}p when maxed.`,
+        "Max-out value is divided by triangular copies-to-max, so rank 5 needs 21 copies and rank 3 needs 10 copies.",
+        `Rank-0 bulk EV remains available and uses rank-${PACK_PRICE_RANK} ${PACK_PRICE_STAT} sell prices because Vosfor packs award unranked single arcanes.`,
         "Each pack has 3 independent reward slots.",
       ],
     };
   });
-  valuations.sort((left, right) => {
-    if (right.confidence !== left.confidence) return right.confidence - left.confidence;
-    return right.expectedPlat - left.expectedPlat;
-  });
+  valuations.sort((left, right) => compareArcanePacksByStrategy(left, right, DEFAULT_ARCANE_PACK_STRATEGY));
   return valuations;
 }
 
 export function recommendArcaneDissolutions(
   summaries: readonly ArcaneMarketSummary[],
   packs: readonly ArcanePackValuation[],
+  strategy: ArcanePackStrategy = DEFAULT_ARCANE_PACK_STRATEGY,
 ): ArcaneDissolveRecommendation[] {
-  const usablePacks = packs.filter((pack) => pack.confidence >= 0.45 && pack.expectedPlatPerVosfor > 0);
-  const candidates = usablePacks.length > 0 ? usablePacks : packs.filter((pack) => pack.expectedPlatPerVosfor > 0);
+  const usablePacks = packs.filter((pack) => {
+    const metric = pack.strategyMetrics[strategy];
+    return metric.confidence >= 0.45 && metric.expectedPlatPerVosfor > 0;
+  });
+  const candidates = usablePacks.length > 0
+    ? usablePacks
+    : packs.filter((pack) => pack.strategyMetrics[strategy].expectedPlatPerVosfor > 0);
   const bestPack = candidates.reduce<ArcanePackValuation | null>(
-    (winner, pack) => !winner || pack.expectedPlatPerVosfor > winner.expectedPlatPerVosfor ? pack : winner,
+    (winner, pack) => !winner || compareArcanePacksByStrategy(pack, winner, strategy) < 0 ? pack : winner,
     null,
   );
   if (!bestPack) return [];
+  const bestMetric = bestPack.strategyMetrics[strategy];
   const recommendations: ArcaneDissolveRecommendation[] = [];
   for (const summary of summaries) {
     if (summary.dissolutionVosfor === undefined) continue;
     const sellPrice = packPrice(summary);
     if (sellPrice === null || sellPrice <= 0) continue;
-    const rollValue = round(summary.dissolutionVosfor * bestPack.expectedPlatPerVosfor, 3);
+    const rollValue = round(summary.dissolutionVosfor * bestMetric.expectedPlatPerVosfor, 3);
     const sellValuePerVosfor = round(sellPrice / summary.dissolutionVosfor, 5);
     const deltaPlat = round(rollValue - sellPrice, 3);
-    const action: ArcaneDissolveRecommendation["action"] = deltaPlat > Math.max(2, sellPrice * 0.12) && bestPack.confidence >= 0.45
+    const action: ArcaneDissolveRecommendation["action"] = deltaPlat > Math.max(2, sellPrice * 0.12) && bestMetric.confidence >= 0.45
       ? "dissolve"
       : deltaPlat < -Math.max(2, sellPrice * 0.10)
       ? "sell"
       : "hold";
     const reasons = [
       `rank-${PACK_PRICE_RANK} ${PACK_PRICE_STAT} sell: ${round(sellPrice, 2)}p`,
-      `${summary.dissolutionVosfor} Vosfor × ${bestPack.packName} EV ${bestPack.expectedPlatPerVosfor}p/Vosfor = ${rollValue}p`,
+      strategy === "high_value_maxed"
+        ? `${summary.dissolutionVosfor} Vosfor × ${bestPack.packName} high-value max-out ${bestMetric.expectedPlatPerVosfor}p/Vosfor = ${rollValue}p`
+        : `${summary.dissolutionVosfor} Vosfor × ${bestPack.packName} rank-0 bulk EV ${bestMetric.expectedPlatPerVosfor}p/Vosfor = ${rollValue}p`,
     ];
+    if (strategy === "high_value_maxed") {
+      reasons.push(`Only maxed arcanes worth at least ${ARCANE_HIGH_VALUE_MAXED_THRESHOLD}p are counted; per-copy value is max-rank sale divided by copies needed to max.`);
+    }
     if (action === "dissolve") reasons.push("Dissolution EV clears the sell price by the safety margin.");
     else if (action === "sell") reasons.push("Current rank-0 sale value beats Vosfor EV.");
     else reasons.push("Sell and dissolve values are too close; avoid forced churn.");
@@ -310,10 +409,11 @@ export function recommendArcaneDissolutions(
       bestPackName: bestPack.packName,
       estimatedRollValue: rollValue,
       sellValuePerVosfor,
-      rollValuePerVosfor: bestPack.expectedPlatPerVosfor,
+      rollValuePerVosfor: bestMetric.expectedPlatPerVosfor,
       deltaPlat,
       action,
-      confidence: bestPack.confidence,
+      strategy,
+      confidence: bestMetric.confidence,
       reasons,
       url: summary.url,
     };
@@ -426,6 +526,30 @@ function packPrice(summary: ArcaneMarketSummary): number | null {
   if (!stats || stats.count === 0) return null;
   const value = stats[PACK_PRICE_STAT];
   return Number.isFinite(value) && value > 0 ? value : stats.min > 0 ? stats.min : null;
+}
+
+function maxRankPrice(summary: ArcaneMarketSummary): number | null {
+  const market = summary.rankMax ?? (summary.maxRank === 0 ? summary.rank0 : undefined);
+  const stats = market?.sell;
+  if (!stats || stats.count === 0) return null;
+  const value = stats[PACK_PRICE_STAT];
+  return Number.isFinite(value) && value > 0 ? value : stats.min > 0 ? stats.min : null;
+}
+
+function arcaneCopiesToMax(maxRank: number): number {
+  const rank = Math.max(0, Math.floor(maxRank));
+  return ((rank + 1) * (rank + 2)) / 2;
+}
+
+
+function compareArcanePacksByStrategy(left: ArcanePackValuation, right: ArcanePackValuation, strategy: ArcanePackStrategy): number {
+  const leftMetric = left.strategyMetrics[strategy];
+  const rightMetric = right.strategyMetrics[strategy];
+  if (rightMetric.expectedPlatPerVosfor !== leftMetric.expectedPlatPerVosfor) return rightMetric.expectedPlatPerVosfor - leftMetric.expectedPlatPerVosfor;
+  if (rightMetric.chanceAtLeastOneTarget !== leftMetric.chanceAtLeastOneTarget) return rightMetric.chanceAtLeastOneTarget - leftMetric.chanceAtLeastOneTarget;
+  if (rightMetric.confidence !== leftMetric.confidence) return rightMetric.confidence - leftMetric.confidence;
+  if (rightMetric.expectedPlat !== leftMetric.expectedPlat) return rightMetric.expectedPlat - leftMetric.expectedPlat;
+  return left.packName.localeCompare(right.packName);
 }
 
 function priceStats(sortedPrices: readonly number[]): PriceStats | null {

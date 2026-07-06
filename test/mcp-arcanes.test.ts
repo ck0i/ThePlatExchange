@@ -120,6 +120,44 @@ const eidolonPack: ArcanePackValuation = {
   confidence: 0.91,
   missingPriceCount: 0,
   pricedDropCount: 2,
+  maxRankCoveragePct: 1,
+  highValueConfidence: 0.91,
+  missingMaxRankPriceCount: 0,
+  maxRankPricedDropCount: 2,
+  highValueThreshold: 180,
+  highValueTargetCount: 1,
+  highValueTargetChance: 0.25,
+  chanceAtLeastOneHighValue: 0.57813,
+  expectedHighValueCopies: 0.75,
+  expectedHighValueMaxedPlat: 30,
+  expectedHighValueMaxedPlatPerVosfor: 0.15,
+  defaultStrategy: "high_value_maxed",
+  strategyMetrics: {
+    high_value_maxed: {
+      strategy: "high_value_maxed",
+      label: "High-value max-out",
+      expectedPlat: 30,
+      expectedPlatPerVosfor: 0.15,
+      confidence: 0.91,
+      coveragePct: 1,
+      targetChance: 0.25,
+      chanceAtLeastOneTarget: 0.57813,
+      expectedTargetCopies: 0.75,
+      targetCount: 1,
+    },
+    rank0_bulk: {
+      strategy: "rank0_bulk",
+      label: "Rank-0 bulk EV",
+      expectedPlat: 120,
+      expectedPlatPerVosfor: 0.6,
+      confidence: 0.91,
+      coveragePct: 1,
+      targetChance: 1,
+      chanceAtLeastOneTarget: 1,
+      expectedTargetCopies: 3,
+      targetCount: 2,
+    },
+  },
   topDrops: [
     {
       arcaneSlug: "arcane_energize",
@@ -133,6 +171,12 @@ const eidolonPack: ArcanePackValuation = {
       expectedPlat: 60,
       expectedVosfor: 73.5,
       sourcePrice: "rank0_sell_p25",
+      maxRank: 5,
+      copiesToMax: 21,
+      maxRankPrice: 840,
+      highValueTarget: true,
+      expectedHighValueMaxedPlat: 30,
+      sourceMaxRankPrice: "rank5_sell_p25",
     },
     {
       arcaneSlug: "arcane_grace",
@@ -146,6 +190,12 @@ const eidolonPack: ArcanePackValuation = {
       expectedPlat: 54,
       expectedVosfor: 94.5,
       sourcePrice: "rank0_sell_p25",
+      maxRank: 5,
+      copiesToMax: 21,
+      maxRankPrice: 100,
+      highValueTarget: false,
+      expectedHighValueMaxedPlat: 0,
+      sourceMaxRankPrice: "rank5_sell_p25",
     },
   ],
   source: "test fixture",
@@ -159,6 +209,39 @@ const secondaryPack: ArcanePackValuation = {
   expectedPlat: 30,
   expectedPlatPerVosfor: 0.15,
   confidence: 0.5,
+  highValueConfidence: 0.95,
+  highValueTargetCount: 1,
+  highValueTargetChance: 1,
+  chanceAtLeastOneHighValue: 1,
+  expectedHighValueCopies: 3,
+  expectedHighValueMaxedPlat: 120,
+  expectedHighValueMaxedPlatPerVosfor: 0.6,
+  strategyMetrics: {
+    high_value_maxed: {
+      strategy: "high_value_maxed",
+      label: "High-value max-out",
+      expectedPlat: 120,
+      expectedPlatPerVosfor: 0.6,
+      confidence: 0.95,
+      coveragePct: 1,
+      targetChance: 1,
+      chanceAtLeastOneTarget: 1,
+      expectedTargetCopies: 3,
+      targetCount: 1,
+    },
+    rank0_bulk: {
+      strategy: "rank0_bulk",
+      label: "Rank-0 bulk EV",
+      expectedPlat: 30,
+      expectedPlatPerVosfor: 0.15,
+      confidence: 0.5,
+      coveragePct: 1,
+      targetChance: 1,
+      chanceAtLeastOneTarget: 1,
+      expectedTargetCopies: 3,
+      targetCount: 1,
+    },
+  },
   topDrops: [
     {
       arcaneSlug: "arcane_grace",
@@ -166,15 +249,98 @@ const secondaryPack: ArcanePackValuation = {
       rarity: "rare",
       chance: 1,
       rank: 0,
-      priceUsed: 24,
+      priceUsed: 10,
       dissolutionVosfor: 42,
       expectedCopies: 3,
-      expectedPlat: 72,
+      expectedPlat: 30,
       expectedVosfor: 126,
       sourcePrice: "rank0_sell_p25",
+      maxRank: 5,
+      copiesToMax: 21,
+      maxRankPrice: 840,
+      highValueTarget: true,
+      expectedHighValueMaxedPlat: 120,
+      sourceMaxRankPrice: "rank5_sell_p25",
     },
   ],
 };
+const highValueRecommendations: ArcaneDashboardState["dissolveRecommendations"] = [
+  {
+    slug: "arcane_energize",
+    name: "Arcane Energize",
+    rank: 0,
+    sellPrice: 80,
+    dissolutionVosfor: 98,
+    bestPackId: "secondary_pack",
+    bestPackName: "Secondary Pack",
+    estimatedRollValue: 58.8,
+    sellValuePerVosfor: 0.816,
+    rollValuePerVosfor: 0.6,
+    deltaPlat: -21.2,
+    action: "sell",
+    strategy: "high_value_maxed",
+    confidence: 0.95,
+    reasons: ["High-value max-out roll value trails direct sale."],
+    url: energizeSummary.url,
+  },
+  {
+    slug: "arcane_grace",
+    name: "Arcane Grace",
+    rank: 0,
+    sellPrice: 24,
+    dissolutionVosfor: 42,
+    bestPackId: "secondary_pack",
+    bestPackName: "Secondary Pack",
+    estimatedRollValue: 25.2,
+    sellValuePerVosfor: 0.571,
+    rollValuePerVosfor: 0.6,
+    deltaPlat: 1.2,
+    action: "hold",
+    strategy: "high_value_maxed",
+    confidence: 0.95,
+    reasons: ["Hold because values are too close."],
+    url: graceSummary.url,
+  },
+];
+
+const rank0BulkRecommendations: ArcaneDashboardState["dissolveRecommendations"] = [
+  {
+    slug: "arcane_energize",
+    name: "Arcane Energize",
+    rank: 0,
+    sellPrice: 80,
+    dissolutionVosfor: 98,
+    bestPackId: "eidolon_pack",
+    bestPackName: "Eidolon Pack",
+    estimatedRollValue: 100,
+    sellValuePerVosfor: 0.816,
+    rollValuePerVosfor: 1.02,
+    deltaPlat: 20,
+    action: "dissolve",
+    strategy: "rank0_bulk",
+    confidence: 0.91,
+    reasons: ["Vosfor roll value beats direct sale."],
+    url: energizeSummary.url,
+  },
+  {
+    slug: "arcane_grace",
+    name: "Arcane Grace",
+    rank: 0,
+    sellPrice: 24,
+    dissolutionVosfor: 42,
+    bestPackId: "eidolon_pack",
+    bestPackName: "Eidolon Pack",
+    estimatedRollValue: 42.86,
+    sellValuePerVosfor: 0.571,
+    rollValuePerVosfor: 1.02,
+    deltaPlat: 18.86,
+    action: "hold",
+    strategy: "rank0_bulk",
+    confidence: 0.91,
+    reasons: ["Hold because market spread is thin."],
+    url: graceSummary.url,
+  },
+];
 
 const arcaneState: ArcaneDashboardState = {
   generatedAt: nowIso,
@@ -193,47 +359,19 @@ const arcaneState: ArcaneDashboardState = {
   status: arcaneStatus,
   summaries: [energizeSummary, graceSummary],
   packs: [eidolonPack, secondaryPack],
-  dissolveRecommendations: [
-    {
-      slug: "arcane_energize",
-      name: "Arcane Energize",
-      rank: 0,
-      sellPrice: 80,
-      dissolutionVosfor: 98,
-      bestPackId: "eidolon_pack",
-      bestPackName: "Eidolon Pack",
-      estimatedRollValue: 100,
-      sellValuePerVosfor: 0.816,
-      rollValuePerVosfor: 1.02,
-      deltaPlat: 20,
-      action: "dissolve",
-      confidence: 0.91,
-      reasons: ["Vosfor roll value beats direct sale."],
-      url: energizeSummary.url,
-    },
-    {
-      slug: "arcane_grace",
-      name: "Arcane Grace",
-      rank: 0,
-      sellPrice: 24,
-      dissolutionVosfor: 42,
-      bestPackId: "eidolon_pack",
-      bestPackName: "Eidolon Pack",
-      estimatedRollValue: 42.86,
-      sellValuePerVosfor: 0.571,
-      rollValuePerVosfor: 1.02,
-      deltaPlat: 18.86,
-      action: "hold",
-      confidence: 0.91,
-      reasons: ["Hold because market spread is thin."],
-      url: graceSummary.url,
-    },
-  ],
+  dissolveRecommendations: highValueRecommendations,
+  dissolveRecommendationsByStrategy: {
+    high_value_maxed: highValueRecommendations,
+    rank0_bulk: rank0BulkRecommendations,
+  },
   mechanics: {
     packCostVosfor: 200,
     rewardsPerPack: 3,
     priceRank: 0,
     priceStatistic: "p25",
+    defaultPackStrategy: "high_value_maxed",
+    highValueThreshold: 180,
+    copiesToMaxFormula: "triangular(maxRank + 1)",
     sources: ["test fixture"],
   },
 };
@@ -391,11 +529,19 @@ assert.equal(fakeService.refreshCalls.length, 0, "arcane_refresh must not schedu
 const packs = requireArray((await callTool("arcane_packs", { limit: 1 })).data, "arcane_packs data");
 assert.equal(packs.length, 1, "arcane_packs honors the requested limit");
 const firstPack = requireRecord(firstOf(packs, "arcane_packs data"), "first arcane pack");
-assert.equal(firstPack.packId, "eidolon_pack");
-assert.equal(firstPack.expectedPlat, 120);
-assert.equal(firstPack.expectedPlatPerVosfor, 0.6);
-const firstPackDrops = requireArray(firstPack.topDrops, "first arcane pack topDrops");
-assert.equal(firstPackDrops.length, 2, "arcane_packs includes the pack drop economics clients need to explain EV");
+assert.equal(firstPack.packId, "secondary_pack", "arcane_packs defaults to high-value max-out ranking");
+assert.equal(firstPack.expectedHighValueMaxedPlat, 120);
+assert.equal(firstPack.expectedHighValueMaxedPlatPerVosfor, 0.6);
+const firstPackMetrics = requireRecord(firstPack.strategyMetrics, "first arcane pack strategyMetrics");
+const firstPackHighValueMetrics = requireRecord(firstPackMetrics.high_value_maxed, "first arcane pack high-value metrics");
+assert.equal(firstPackHighValueMetrics.expectedPlat, 120);
+const rank0Packs = requireArray((await callTool("arcane_packs", { limit: 1, strategy: "rank0_bulk" })).data, "rank0 arcane_packs data");
+const firstRank0Pack = requireRecord(firstOf(rank0Packs, "rank0 arcane_packs data"), "first rank0 arcane pack");
+assert.equal(firstRank0Pack.packId, "eidolon_pack", "arcane_packs strategy=rank0_bulk switches back to old rank-0 EV ordering");
+assert.equal(firstRank0Pack.expectedPlat, 120);
+assert.equal(firstRank0Pack.expectedPlatPerVosfor, 0.6);
+const firstRank0PackDrops = requireArray(firstRank0Pack.topDrops, "first rank0 arcane pack topDrops");
+assert.equal(firstRank0PackDrops.length, 2, "arcane_packs includes the pack drop economics clients need to explain EV");
 
 const recommendations = requireArray(
   (await callTool("arcane_dissolve_recommendations", { limit: 1 })).data,
@@ -404,9 +550,9 @@ const recommendations = requireArray(
 assert.equal(recommendations.length, 1, "arcane_dissolve_recommendations honors the requested limit");
 const firstRecommendation = requireRecord(firstOf(recommendations, "arcane recommendations"), "first recommendation");
 assert.equal(firstRecommendation.slug, "arcane_energize");
-assert.equal(firstRecommendation.action, "dissolve");
-assert.equal(firstRecommendation.bestPackId, "eidolon_pack");
-assert.equal(firstRecommendation.deltaPlat, 20);
+assert.equal(firstRecommendation.action, "sell");
+assert.equal(firstRecommendation.bestPackId, "secondary_pack");
+assert.equal(firstRecommendation.strategy, "high_value_maxed");
 
 const market = requireArray((await callTool("arcane_market", { limit: 1 })).data, "arcane_market data");
 assert.equal(market.length, 1, "arcane_market honors the requested limit");
@@ -422,7 +568,8 @@ assert.equal(detailSummary.slug, "arcane_energize", "arcane_detail returns the r
 assert.equal(detailSummary.name, "Arcane Energize");
 const detailRecommendation = requireRecord(detailData.recommendation, "arcane_detail recommendation");
 assert.equal(detailRecommendation.slug, "arcane_energize", "arcane_detail returns the requested arcane's recommendation");
-assert.equal(detailRecommendation.action, "dissolve");
+assert.equal(detailRecommendation.action, "sell");
+assert.equal(detailRecommendation.strategy, "high_value_maxed");
 const detailDrops = requireArray(detailData.topPackDrops, "arcane_detail topPackDrops");
 assert.equal(detailDrops.length, 1, "arcane_detail returns only pack drops for the requested arcane");
 const energizeDrop = requireRecord(firstOf(detailDrops, "arcane_detail topPackDrops"), "arcane_detail energize drop");

@@ -52,6 +52,7 @@ const elements = {
   arcanePacks: document.getElementById("arcanePacks"),
   arcaneDissolves: document.getElementById("arcaneDissolves"),
   arcaneMarket: document.getElementById("arcaneMarket"),
+  arcaneStrategyButtons: document.querySelectorAll("[data-arcane-strategy]"),
   modeButtons: document.querySelectorAll(".mode-btn"),
   modeHint: document.getElementById("modeHint"),
   dataStatusLine: document.getElementById("dataStatusLine"),
@@ -103,6 +104,7 @@ let opportunityRenderToken = 0;
 let opportunityRenderIdleHandle = null;
 let heatmapVisibleCount = 9;
 let arcaneDissolveVisibleCount = 6;
+let arcanePackStrategy = "high_value_maxed";
 
 
 const SIGNAL_PRIORITY = [
@@ -131,6 +133,21 @@ const MODE_HINTS = {
   full: "Full local scan is active. This machine scans the whole riven weapon reference with rate limiting.",
 };
 
+const ARCANE_RAW_PLAT_STRATEGIES = {
+  high_value_maxed: {
+    label: "High-value max-out",
+    shortLabel: "max-out EV",
+    detail: "maxed ≥180p targets",
+    empty: "No maxed ≥180p target prices are available for this pack.",
+  },
+  rank0_bulk: {
+    label: "Rank-0 bulk EV",
+    shortLabel: "rank-0 EV",
+    detail: "sell every roll",
+    empty: "No rank-0 prices are available for this pack.",
+  },
+};
+
 function navigate(page, options = {}) {
   currentPage = page;
   for (const panel of elements.pagePanels) panel.classList.toggle("active", panel.dataset.pagePanel === page);
@@ -148,6 +165,16 @@ for (const button of elements.pageButtons) {
     const page = button.dataset.page;
     if (!page) return;
     navigate(page, { settingsTab: button.dataset.settingsTabTarget });
+  });
+}
+
+for (const button of elements.arcaneStrategyButtons) {
+  button.addEventListener("click", () => {
+    const nextStrategy = button.dataset.arcaneStrategy;
+    if (!ARCANE_RAW_PLAT_STRATEGIES[nextStrategy]) return;
+    arcanePackStrategy = nextStrategy;
+    arcaneDissolveVisibleCount = ARCANE_DISSOLVE_SHOW_MORE_BATCH;
+    renderArcanes(latestState?.arcanes);
   });
 }
 
@@ -591,9 +618,14 @@ function renderInstantPreview(items) {
 
 function renderArcanes(arcanes) {
   if (!elements.arcanePacks) return;
+  const strategy = ARCANE_RAW_PLAT_STRATEGIES[arcanePackStrategy] ? arcanePackStrategy : "high_value_maxed";
+  arcanePackStrategy = strategy;
+  updateArcaneStrategyButtons(strategy);
+  const strategyCopy = ARCANE_RAW_PLAT_STRATEGIES[strategy];
   const summaries = arcanes?.summaries ?? [];
-  const packs = [...(arcanes?.packs ?? [])].sort((left, right) => (right.expectedPlatPerVosfor ?? 0) - (left.expectedPlatPerVosfor ?? 0));
-  const recommendations = [...(arcanes?.dissolveRecommendations ?? [])].sort((left, right) => {
+  const summaryBySlug = new Map(summaries.map((summary) => [summary.slug, summary]));
+  const packs = [...(arcanes?.packs ?? [])].sort((left, right) => compareArcanePacksForStrategy(left, right, strategy, summaryBySlug));
+  const recommendations = arcaneRecommendationsForStrategy(arcanes, strategy, packs, summaryBySlug).sort((left, right) => {
     const actionScore = { dissolve: 0, hold: 1, sell: 2 };
     const leftScore = actionScore[left.action] ?? 3;
     const rightScore = actionScore[right.action] ?? 3;
@@ -601,44 +633,55 @@ function renderArcanes(arcanes) {
     return (right.deltaPlat ?? 0) - (left.deltaPlat ?? 0);
   });
   const bestPack = packs[0] ?? null;
+  const bestMetric = bestPack ? arcaneStrategyMetric(bestPack, strategy, summaryBySlug) : null;
   const dissolveCount = recommendations.filter((entry) => entry.action === "dissolve").length;
   const scanned = summaries.filter((entry) => entry.lastScannedAt).length;
   const candidateRates = recommendations.filter((entry) => entry.action === "dissolve" && entry.sellValuePerVosfor > 0).map((entry) => entry.sellValuePerVosfor);
   const vosforFloor = candidateRates.length > 0 ? Math.min(...candidateRates) : null;
 
   if (elements.arcaneSummary) {
-    const message = arcanes?.status?.lastMessage ?? (arcanes ? `Tracking ${formatNumber(arcanes.reference?.items ?? summaries.length)} Arcanes across ${formatNumber(arcanes.reference?.packs ?? packs.length)} Vosfor packs.` : "Waiting for Arcane scan.");
-    elements.arcaneSummary.textContent = message;
+    const baseMessage = arcanes?.status?.lastMessage ?? (arcanes ? `Tracking ${formatNumber(arcanes.reference?.items ?? summaries.length)} Arcanes across ${formatNumber(arcanes.reference?.packs ?? packs.length)} Vosfor packs.` : "Waiting for Arcane scan.");
+    elements.arcaneSummary.textContent = arcanes ? `${baseMessage} Raw Plat Output: ${strategyCopy.label} (${strategyCopy.detail}).` : baseMessage;
   }
-  if (elements.arcaneBestPack) elements.arcaneBestPack.textContent = bestPack ? `${Math.round(bestPack.expectedPlat)}◈` : "—";
-  if (elements.arcaneBestPackSub) elements.arcaneBestPackSub.textContent = bestPack ? `${bestPack.packName} · ${(bestPack.expectedPlatPerVosfor ?? 0).toFixed(3)}◈/Vosfor · ${Math.round((bestPack.confidence ?? 0) * 100)}% confidence` : "No pack scan yet";
+  if (elements.arcaneBestPack) elements.arcaneBestPack.textContent = bestPack && bestMetric ? `${Math.round(bestMetric.expectedPlat)}◈` : "—";
+  if (elements.arcaneBestPackSub) {
+    elements.arcaneBestPackSub.textContent = bestPack && bestMetric
+      ? `${bestPack.packName} · ${(bestMetric.expectedPlatPerVosfor ?? 0).toFixed(3)}◈/Vosfor · ${formatArcanePercent(bestMetric.chanceAtLeastOneTarget)} hit/pack · ${Math.round((bestMetric.confidence ?? 0) * 100)}% confidence`
+      : "No pack scan yet";
+  }
   if (elements.arcaneDissolveCount) elements.arcaneDissolveCount.textContent = formatNumber(dissolveCount);
   if (elements.arcaneCoverage) elements.arcaneCoverage.textContent = `${formatNumber(scanned)}/${formatNumber(arcanes?.reference?.items ?? summaries.length)}`;
   if (elements.arcaneCoverageSub) elements.arcaneCoverageSub.textContent = `${formatNumber(arcanes?.totals?.orders ?? 0)} visible WFM orders cached`;
   if (elements.arcaneVosforRate) elements.arcaneVosforRate.textContent = vosforFloor === null ? "—" : `${vosforFloor.toFixed(2)}◈`;
 
   const visiblePacks = packs.slice(0, RESULT_BUDGETS.arcaneCards);
-  elements.arcanePacks.innerHTML = packs.length === 0 ? `<div class="empty-state">No Vosfor pack valuations yet.</div>` : visiblePacks.map((pack, index) => `
+  elements.arcanePacks.innerHTML = packs.length === 0 ? `<div class="empty-state">No Vosfor pack valuations yet.</div>` : visiblePacks.map((pack, index) => {
+    const metric = arcaneStrategyMetric(pack, strategy, summaryBySlug);
+    const meta = strategy === "high_value_maxed"
+      ? `${formatNumber(metric.targetCount ?? 0)} maxed ≥${formatNumber(pack.highValueThreshold ?? 180)}p targets · ${formatArcanePercent(metric.chanceAtLeastOneTarget)} hit/pack · ${Math.round((metric.confidence ?? 0) * 100)}% confidence`
+      : `${Math.round((metric.coveragePct ?? pack.coveragePct ?? 0) * 100)}% priced · ${Math.round((metric.confidence ?? pack.confidence ?? 0) * 100)}% confidence · ${formatNumber(pack.missingPriceCount ?? 0)} missing prices`;
+    return `
     <article class="arcane-pack-card">
       <div class="arcane-card-rank">#${index + 1}</div>
       <div class="arcane-card-body">
-        <div class="arcane-card-title">${escapeHtml(pack.packName)}</div>
-        <div class="arcane-card-value">${Math.round(pack.expectedPlat)}◈ EV <span>${(pack.expectedPlatPerVosfor ?? 0).toFixed(3)}◈/Vosfor</span></div>
-        <div class="arcane-card-meta">${Math.round((pack.coveragePct ?? 0) * 100)}% priced · ${Math.round((pack.confidence ?? 0) * 100)}% confidence · ${formatNumber(pack.missingPriceCount ?? 0)} missing prices</div>
-        <div class="arcane-drop-row">${(pack.topDrops ?? []).slice(0, 8).map((drop) => `<span>${escapeHtml(drop.arcaneName)} <b>${Math.round((drop.chance ?? 0) * 1000) / 10}%</b> ${drop.priceUsed == null ? "—" : `${drop.priceUsed}◈`}</span>`).join("")}</div>
+        <div class="arcane-card-title">${escapeHtml(pack.packName)} <span>${escapeHtml(strategyCopy.label)}</span></div>
+        <div class="arcane-card-value">${Math.round(metric.expectedPlat)}◈ ${escapeHtml(strategyCopy.shortLabel)} <span>${(metric.expectedPlatPerVosfor ?? 0).toFixed(3)}◈/Vosfor</span></div>
+        <div class="arcane-card-meta">${meta}</div>
+        <div class="arcane-drop-row">${arcaneDropChips(pack, strategy, summaryBySlug)}</div>
       </div>
-    </article>`).join("") + resultLimitNote("Vosfor packs", visiblePacks.length, packs.length);
+    </article>`;
+  }).join("") + resultLimitNote("Vosfor packs", visiblePacks.length, packs.length);
 
   const recommendationLimit = Math.min(recommendations.length, RESULT_BUDGETS.arcaneRecommendations, arcaneDissolveVisibleCount);
   const visibleRecommendations = recommendations.slice(0, recommendationLimit);
   const dissolveMore = recommendationLimit < recommendations.length && recommendationLimit < RESULT_BUDGETS.arcaneRecommendations
     ? `<button class="show-more-button" type="button" data-show-more-dissolves>Show ${formatNumber(Math.min(ARCANE_DISSOLVE_SHOW_MORE_BATCH, recommendations.length - recommendationLimit))} more</button>`
     : resultLimitNote("dissolve recommendations", recommendationLimit, recommendations.length);
-  elements.arcaneDissolves.innerHTML = recommendations.length === 0 ? `<div class="empty-state">No dissolve recommendations yet.</div>` : visibleRecommendations.map((entry) => `
+  elements.arcaneDissolves.innerHTML = recommendations.length === 0 ? `<div class="empty-state">No dissolve recommendations yet for ${escapeHtml(strategyCopy.label)}.</div>` : visibleRecommendations.map((entry) => `
     <article class="arcane-dissolve-card ${entry.action}">
       <div>
         <div class="arcane-card-title">${escapeHtml(entry.name)} <span>R${entry.rank}</span></div>
-        <div class="arcane-card-meta">${entry.sellPrice}◈ sale · ${entry.dissolutionVosfor} Vosfor · ${entry.bestPackName}</div>
+        <div class="arcane-card-meta">${entry.sellPrice}◈ sale · ${entry.dissolutionVosfor} Vosfor · ${entry.bestPackName} · ${escapeHtml(strategyCopy.shortLabel)}</div>
       </div>
       <div class="arcane-action">
         <strong>${escapeHtml(entry.action)}</strong>
@@ -669,6 +712,187 @@ function renderArcanes(arcanes) {
         <div><span class="small-label">Depth</span><strong>${formatNumber(marketDepth)}</strong></div>
       </article>`;
   }).join("") + resultLimitNote("Arcane market rows", visibleMarketRows.length, marketRows.length);
+}
+
+function updateArcaneStrategyButtons(strategy) {
+  for (const button of elements.arcaneStrategyButtons) {
+    const active = button.dataset.arcaneStrategy === strategy;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+  }
+}
+
+function arcaneRecommendationsForStrategy(arcanes, strategy, packs, summaryBySlug) {
+  const existing = arcanes?.dissolveRecommendationsByStrategy?.[strategy];
+  if (strategy !== "high_value_maxed") return [...(existing ?? arcanes?.dissolveRecommendations ?? [])];
+  const bestPack = packs.find((pack) => arcaneStrategyMetric(pack, strategy, summaryBySlug).expectedPlatPerVosfor > 0);
+  if (!bestPack) return [...(existing ?? [])];
+  const bestMetric = arcaneStrategyMetric(bestPack, strategy, summaryBySlug);
+  const existingLooksUsable = existing && existing.length > 0 && existing.some((entry) => Number(entry.rollValuePerVosfor ?? 0) > 0 || Number(entry.estimatedRollValue ?? 0) > 0);
+  if (existingLooksUsable) return [...existing];
+  return [...summaryBySlug.values()].flatMap((summary) => {
+    const sellPrice = arcaneRank0SellPrice(summary);
+    const dissolutionVosfor = Number(summary.dissolutionVosfor ?? 0);
+    if (!sellPrice || dissolutionVosfor <= 0) return [];
+    const estimatedRollValue = roundUi(dissolutionVosfor * bestMetric.expectedPlatPerVosfor, 3);
+    const deltaPlat = roundUi(estimatedRollValue - sellPrice, 3);
+    const action = deltaPlat > Math.max(2, sellPrice * 0.12) && bestMetric.confidence >= 0.45
+      ? "dissolve"
+      : deltaPlat < -Math.max(2, sellPrice * 0.10)
+      ? "sell"
+      : "hold";
+    return [{
+      slug: summary.slug,
+      name: summary.name,
+      rank: 0,
+      sellPrice,
+      dissolutionVosfor,
+      bestPackId: bestPack.packId,
+      bestPackName: bestPack.packName,
+      estimatedRollValue,
+      sellValuePerVosfor: roundUi(sellPrice / dissolutionVosfor, 5),
+      rollValuePerVosfor: bestMetric.expectedPlatPerVosfor,
+      deltaPlat,
+      action,
+      strategy,
+      confidence: bestMetric.confidence,
+      reasons: [],
+      url: summary.url,
+    }];
+  });
+}
+
+function arcaneStrategyMetric(pack, strategy, summaryBySlug = new Map()) {
+  const metric = pack.strategyMetrics?.[strategy];
+  if (strategy === "high_value_maxed") {
+    const derived = derivedHighValueMetric(pack, summaryBySlug);
+    if (!metric) return derived;
+    if ((derived.targetCount ?? 0) > (metric.targetCount ?? 0) || (derived.expectedPlat ?? 0) > (metric.expectedPlat ?? 0)) return derived;
+    return metric;
+  }
+  if (metric) return metric;
+  return {
+    expectedPlat: Number(pack.expectedPlat ?? 0),
+    expectedPlatPerVosfor: Number(pack.expectedPlatPerVosfor ?? 0),
+    confidence: Number(pack.confidence ?? 0),
+    coveragePct: Number(pack.coveragePct ?? 0),
+    targetCount: (pack.topDrops ?? []).length,
+    chanceAtLeastOneTarget: 1,
+    expectedTargetCopies: Number(pack.rewardsPerPack ?? 0),
+  };
+}
+
+function derivedHighValueMetric(pack, summaryBySlug) {
+  if (Number(pack.expectedHighValueMaxedPlatPerVosfor ?? 0) > 0 || Number(pack.highValueTargetCount ?? 0) > 0) {
+    return {
+      expectedPlat: Number(pack.expectedHighValueMaxedPlat ?? 0),
+      expectedPlatPerVosfor: Number(pack.expectedHighValueMaxedPlatPerVosfor ?? 0),
+      confidence: Number(pack.highValueConfidence ?? 0),
+      coveragePct: Number(pack.maxRankCoveragePct ?? 0),
+      targetCount: Number(pack.highValueTargetCount ?? 0),
+      chanceAtLeastOneTarget: Number(pack.chanceAtLeastOneHighValue ?? 0),
+      expectedTargetCopies: Number(pack.expectedHighValueCopies ?? 0),
+    };
+  }
+  const drops = pack.topDrops ?? [];
+  const rewardsPerPack = Number(pack.rewardsPerPack ?? 3);
+  const threshold = Number(pack.highValueThreshold ?? 180);
+  let expectedPlat = 0;
+  let highValueChance = 0;
+  let pricedCount = 0;
+  let targetCount = 0;
+  let chanceMass = 0;
+  for (const drop of drops) {
+    chanceMass += Number(drop.chance ?? 0);
+    const derived = deriveHighValueDrop(drop, summaryBySlug, threshold, rewardsPerPack);
+    if (derived.maxRankPrice !== null) pricedCount += 1;
+    if (!derived.highValueTarget) continue;
+    targetCount += 1;
+    highValueChance += Number(drop.chance ?? 0);
+    expectedPlat += derived.expectedHighValueMaxedPlat;
+  }
+  const coveragePct = drops.length === 0 ? 0 : pricedCount / drops.length;
+  const confidence = Math.max(0, Math.min(1, coveragePct * Math.min(1, chanceMass)));
+  return {
+    expectedPlat: roundUi(expectedPlat, 3),
+    expectedPlatPerVosfor: roundUi(expectedPlat / Number(pack.costVosfor ?? 200), 5),
+    confidence: roundUi(confidence, 4),
+    coveragePct: roundUi(coveragePct, 4),
+    targetCount,
+    chanceAtLeastOneTarget: roundUi(1 - Math.pow(1 - Math.max(0, Math.min(1, highValueChance)), rewardsPerPack), 5),
+    expectedTargetCopies: roundUi(rewardsPerPack * highValueChance, 4),
+  };
+}
+
+function compareArcanePacksForStrategy(left, right, strategy, summaryBySlug = new Map()) {
+  const leftMetric = arcaneStrategyMetric(left, strategy, summaryBySlug);
+  const rightMetric = arcaneStrategyMetric(right, strategy, summaryBySlug);
+  if ((rightMetric.expectedPlatPerVosfor ?? 0) !== (leftMetric.expectedPlatPerVosfor ?? 0)) return (rightMetric.expectedPlatPerVosfor ?? 0) - (leftMetric.expectedPlatPerVosfor ?? 0);
+  if ((rightMetric.chanceAtLeastOneTarget ?? 0) !== (leftMetric.chanceAtLeastOneTarget ?? 0)) return (rightMetric.chanceAtLeastOneTarget ?? 0) - (leftMetric.chanceAtLeastOneTarget ?? 0);
+  if ((rightMetric.confidence ?? 0) !== (leftMetric.confidence ?? 0)) return (rightMetric.confidence ?? 0) - (leftMetric.confidence ?? 0);
+  return (rightMetric.expectedPlat ?? 0) - (leftMetric.expectedPlat ?? 0);
+}
+
+function arcaneDropChips(pack, strategy, summaryBySlug = new Map()) {
+  const strategyCopy = ARCANE_RAW_PLAT_STRATEGIES[strategy];
+  const drops = [...(pack.topDrops ?? [])];
+  const ranked = strategy === "high_value_maxed"
+    ? drops
+      .map((drop) => ({ ...drop, ...deriveHighValueDrop(drop, summaryBySlug, Number(pack.highValueThreshold ?? 180), Number(pack.rewardsPerPack ?? 3)) }))
+      .filter((drop) => drop.highValueTarget)
+      .sort((left, right) => (right.expectedHighValueMaxedPlat ?? 0) - (left.expectedHighValueMaxedPlat ?? 0))
+    : drops.filter((drop) => drop.priceUsed != null).sort((left, right) => (right.expectedPlat ?? 0) - (left.expectedPlat ?? 0));
+  const visibleDrops = ranked.slice(0, 8);
+  if (visibleDrops.length === 0) return `<span>${escapeHtml(strategyCopy.empty)}</span>`;
+  return visibleDrops.map((drop) => {
+    if (strategy === "high_value_maxed") {
+      const maxPrice = drop.maxRankPrice == null ? "—" : `${Math.round(drop.maxRankPrice)}◈ max`;
+      const copies = drop.copiesToMax == null ? "? copies" : `${drop.copiesToMax} copies`;
+      return `<span>${escapeHtml(drop.arcaneName)} <b>${formatArcanePercent(drop.chance ?? 0)}</b> ${maxPrice} · ${copies}</span>`;
+    }
+    return `<span>${escapeHtml(drop.arcaneName)} <b>${formatArcanePercent(drop.chance ?? 0)}</b> ${drop.priceUsed == null ? "—" : `${drop.priceUsed}◈`}</span>`;
+  }).join("");
+}
+
+function deriveHighValueDrop(drop, summaryBySlug, threshold, rewardsPerPack) {
+  const summary = summaryBySlug.get(drop.arcaneSlug);
+  const maxRank = drop.maxRank ?? summary?.maxRank ?? null;
+  const copiesToMax = drop.copiesToMax ?? (maxRank == null ? null : arcaneCopiesToMax(maxRank));
+  const maxRankPrice = drop.maxRankPrice ?? arcaneMaxRankSellPrice(summary);
+  const highValueTarget = drop.highValueTarget === true || (maxRankPrice !== null && copiesToMax !== null && maxRankPrice >= threshold);
+  return {
+    maxRank,
+    copiesToMax,
+    maxRankPrice,
+    highValueTarget,
+    expectedHighValueMaxedPlat: highValueTarget && maxRankPrice !== null && copiesToMax !== null
+      ? roundUi(rewardsPerPack * Number(drop.chance ?? 0) * (maxRankPrice / copiesToMax), 3)
+      : 0,
+  };
+}
+
+function arcaneMaxRankSellPrice(summary) {
+  const value = summary?.rankMax?.sell?.p25 ?? summary?.rankMax?.sell?.median ?? summary?.rankMax?.sell?.min ?? null;
+  return Number.isFinite(value) && value > 0 ? value : null;
+}
+
+function arcaneRank0SellPrice(summary) {
+  const value = summary?.rank0?.sell?.p25 ?? summary?.rank0?.sell?.median ?? summary?.rank0?.sell?.min ?? null;
+  return Number.isFinite(value) && value > 0 ? value : null;
+}
+
+function arcaneCopiesToMax(maxRank) {
+  const rank = Math.max(0, Math.floor(Number(maxRank) || 0));
+  return ((rank + 1) * (rank + 2)) / 2;
+}
+
+function roundUi(value, digits) {
+  const factor = 10 ** digits;
+  return Math.round(value * factor) / factor;
+}
+
+function formatArcanePercent(value) {
+  return `${Math.round((Number(value) || 0) * 1000) / 10}%`;
 }
 
 function arcaneThumb(summary) {
@@ -923,7 +1147,7 @@ async function updateSpotlight(raw) {
     { name: "Home", sub: "Market command center", page: "home" },
     { name: "Opportunities", sub: "Ranked buy-low / sell-high queue", page: "opportunities" },
     { name: "Instant Wins", sub: "Same-signature undervalued listings", page: "instant" },
-    { name: "Arcanes", sub: "Vosfor pack EV and dissolve recommendations", page: "arcanes" },
+    { name: "Arcanes", sub: "Raw Plat Output and dissolve recommendations", page: "arcanes" },
     { name: "Riven Markets", sub: "Weapon cards and price stats", page: "markets" },
     { name: "MCP Connect", sub: "Endpoint, configs, tool list", page: "settings", settingsTab: "mcp" },
     { name: "Data Source", sub: "Remote/tiered/full scan mode", page: "settings", settingsTab: "data" },

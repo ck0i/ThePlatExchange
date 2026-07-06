@@ -317,12 +317,17 @@ function computeArcaneDetail(service: ThePlatExchangeService, slug: string): Rec
         chance: drop.chance,
         expectedCopies: drop.expectedCopies,
         expectedPlat: drop.expectedPlat,
+        expectedHighValueMaxedPlat: drop.expectedHighValueMaxedPlat ?? 0,
         priceUsed: drop.priceUsed,
-        confidence: pack.confidence,
+        maxRankPrice: drop.maxRankPrice ?? null,
+        copiesToMax: drop.copiesToMax ?? null,
+        highValueTarget: drop.highValueTarget ?? false,
+        confidence: pack.highValueConfidence ?? pack.confidence,
       };
     })
-    .filter((entry): entry is NonNullable<typeof entry> => entry !== null);
-  const recommendation = arcanes.dissolveRecommendations.find((entry) => entry.slug === slug) ?? null;
+    .filter((entry): entry is NonNullable<typeof entry> => entry !== null)
+    .sort((left, right) => (right.expectedHighValueMaxedPlat ?? 0) - (left.expectedHighValueMaxedPlat ?? 0) || right.expectedPlat - left.expectedPlat);
+  const recommendation = (arcanes.dissolveRecommendationsByStrategy?.high_value_maxed ?? arcanes.dissolveRecommendations).find((entry) => entry.slug === slug) ?? null;
   return {
     summary,
     recommendation,

@@ -25,7 +25,7 @@ import {
 import { isRecord, readNumber, readPositiveInteger, readString, readStringArray } from "./wfm/guards.js";
 import { attributeSignature, slugify } from "./wfm/opportunities.js";
 import type { ThePlatExchangeService } from "./wfm/scanner.js";
-import type { ArcaneDashboardState, ArcaneDissolveRecommendation, ArcaneMarketSummary, ArcanePackValuation, DashboardState, Opportunity, TraderConfig } from "./wfm/types.js";
+import type { ArcaneDashboardState, ArcaneDissolveRecommendation, ArcaneMarketSummary, ArcanePackStrategy, ArcanePackValuation, DashboardState, Opportunity, TraderConfig } from "./wfm/types.js";
 
 interface McpSession {
   id: string;
@@ -276,11 +276,12 @@ export class McpSseServer {
   private arcanePacksTool(id: unknown, args: Record<string, unknown>): Record<string, unknown> {
     const limit = readPositiveInteger(args, "limit", 25);
     const minConfidence = readNumber(args, "minConfidence") ?? readNumber(args, "min_confidence") ?? 0;
+    const strategy = readArcanePackStrategy(args);
     const state = this.service.getState();
     const meta = this.buildArcaneMeta(state);
     const packs = [...(state.arcanes?.packs ?? [])]
-      .filter((pack) => pack.confidence >= minConfidence)
-      .sort(compareArcanePacks)
+      .filter((pack) => packStrategyMetrics(pack, strategy).confidence >= minConfidence)
+      .sort((left, right) => compareArcanePacks(left, right, strategy))
       .slice(0, limit);
     return ok(id, this.finalizeEnvelope(toEnvelope(packs, meta)));
   }
@@ -289,9 +290,10 @@ export class McpSseServer {
     const limit = readPositiveInteger(args, "limit", 25);
     const minDelta = readNumber(args, "minDeltaPlat") ?? readNumber(args, "min_delta_plat");
     const actions = parseArcaneActions(args);
+    const strategy = readArcanePackStrategy(args);
     const state = this.service.getState();
     const meta = this.buildArcaneMeta(state);
-    const recommendations = (state.arcanes?.dissolveRecommendations ?? [])
+    const recommendations = (state.arcanes?.dissolveRecommendationsByStrategy?.[strategy] ?? state.arcanes?.dissolveRecommendations ?? [])
       .filter((entry) => actions.size === 0 || actions.has(entry.action))
       .filter((entry) => minDelta === undefined || entry.deltaPlat >= minDelta)
       .slice(0, limit);
@@ -465,12 +467,13 @@ export class McpSseServer {
       },
       {
         name: "arcane_packs",
-        description: "Return ranked 200-Vosfor Arcane pack expected values with coverage, confidence, net Vosfor burn, and the highest-EV drops driving each pack.",
+        description: "Return ranked 200-Vosfor Arcane pack Raw Plat Output values. Defaults to high-value max-out targets (max-rank sale ≥180p) and can switch back to rank-0 bulk EV.",
         inputSchema: {
           type: "object",
           properties: {
             limit: { type: "number", minimum: 1, default: 25 },
             minConfidence: { type: "number", minimum: 0, maximum: 1, default: 0 },
+            strategy: { enum: ["high_value_maxed", "rank0_bulk"], default: "high_value_maxed" },
           },
           additionalProperties: false,
         },
@@ -478,7 +481,7 @@ export class McpSseServer {
       },
       {
         name: "arcane_dissolve_recommendations",
-        description: "Return Arcane sell-vs-dissolve recommendations. Use action=dissolve for candidates where Vosfor pack EV beats direct sale by the safety margin.",
+        description: "Return Arcane sell-vs-dissolve recommendations. Defaults to high-value max-out Raw Plat Output; use strategy=rank0_bulk for the old direct rank-0 EV path.",
         inputSchema: {
           type: "object",
           properties: {
@@ -486,6 +489,7 @@ export class McpSseServer {
             action: { enum: ["dissolve", "sell", "hold"] },
             actions: { type: "array", items: { enum: ["dissolve", "sell", "hold"] } },
             minDeltaPlat: { type: "number" },
+            strategy: { enum: ["high_value_maxed", "rank0_bulk"], default: "high_value_maxed" },
           },
           additionalProperties: false,
         },
@@ -570,6 +574,11 @@ function parseWatchlist(record: Record<string, unknown>): string[] {
 type ArcaneAction = ArcaneDissolveRecommendation["action"];
 type ArcaneMarketSort = "default" | "sell_price" | "liquidity" | "vosfor_value";
 
+function readArcanePackStrategy(record: Record<string, unknown>): ArcanePackStrategy {
+  const value = readString(record, "strategy") ?? readString(record, "rawPlatStrategy") ?? readString(record, "raw_plat_strategy");
+  return value === "rank0_bulk" ? "rank0_bulk" : "high_value_maxed";
+}
+
 function parseArcaneActions(record: Record<string, unknown>): Set<ArcaneAction> {
   const values = [...readStringArray(record, "actions")];
   const single = readString(record, "action");
@@ -587,10 +596,46 @@ function readArcaneMarketSort(record: Record<string, unknown>): ArcaneMarketSort
   return "default";
 }
 
-function compareArcanePacks(left: ArcanePackValuation, right: ArcanePackValuation): number {
-  if (right.expectedPlatPerVosfor !== left.expectedPlatPerVosfor) return right.expectedPlatPerVosfor - left.expectedPlatPerVosfor;
-  if (right.confidence !== left.confidence) return right.confidence - left.confidence;
-  return right.expectedPlat - left.expectedPlat;
+function packStrategyMetrics(pack: ArcanePackValuation, strategy: ArcanePackStrategy) {
+  const metrics = pack.strategyMetrics?.[strategy];
+  if (metrics) return metrics;
+  if (strategy === "high_value_maxed") {
+    const expectedPlat = Number(pack.expectedHighValueMaxedPlat ?? 0);
+    const expectedPlatPerVosfor = Number(pack.expectedHighValueMaxedPlatPerVosfor ?? 0);
+    return {
+      strategy,
+      label: "High-value max-out",
+      expectedPlat,
+      expectedPlatPerVosfor,
+      confidence: Number(pack.highValueConfidence ?? 0),
+      coveragePct: Number(pack.maxRankCoveragePct ?? 0),
+      targetChance: Number(pack.highValueTargetChance ?? 0),
+      chanceAtLeastOneTarget: Number(pack.chanceAtLeastOneHighValue ?? 0),
+      expectedTargetCopies: Number(pack.expectedHighValueCopies ?? 0),
+      targetCount: Number(pack.highValueTargetCount ?? 0),
+    };
+  }
+  return {
+    strategy,
+    label: "Rank-0 bulk EV",
+    expectedPlat: pack.expectedPlat,
+    expectedPlatPerVosfor: pack.expectedPlatPerVosfor,
+    confidence: pack.confidence,
+    coveragePct: pack.coveragePct,
+    targetChance: 1,
+    chanceAtLeastOneTarget: 1,
+    expectedTargetCopies: pack.rewardsPerPack,
+    targetCount: pack.topDrops.length,
+  };
+}
+
+function compareArcanePacks(left: ArcanePackValuation, right: ArcanePackValuation, strategy: ArcanePackStrategy): number {
+  const leftMetrics = packStrategyMetrics(left, strategy);
+  const rightMetrics = packStrategyMetrics(right, strategy);
+  if (rightMetrics.expectedPlatPerVosfor !== leftMetrics.expectedPlatPerVosfor) return rightMetrics.expectedPlatPerVosfor - leftMetrics.expectedPlatPerVosfor;
+  if (rightMetrics.chanceAtLeastOneTarget !== leftMetrics.chanceAtLeastOneTarget) return rightMetrics.chanceAtLeastOneTarget - leftMetrics.chanceAtLeastOneTarget;
+  if (rightMetrics.confidence !== leftMetrics.confidence) return rightMetrics.confidence - leftMetrics.confidence;
+  return rightMetrics.expectedPlat - leftMetrics.expectedPlat;
 }
 
 function compareArcaneSummariesForTool(left: ArcaneMarketSummary, right: ArcaneMarketSummary, sort: ArcaneMarketSort): number {
@@ -632,16 +677,20 @@ function computeArcaneDetail(arcanes: ArcaneDashboardState, query: string): Reco
         chance: drop.chance,
         expectedCopies: drop.expectedCopies,
         expectedPlat: drop.expectedPlat,
+        expectedHighValueMaxedPlat: drop.expectedHighValueMaxedPlat ?? 0,
         expectedVosfor: drop.expectedVosfor,
         priceUsed: drop.priceUsed,
-        confidence: pack.confidence,
+        maxRankPrice: drop.maxRankPrice ?? null,
+        copiesToMax: drop.copiesToMax ?? null,
+        highValueTarget: drop.highValueTarget ?? false,
+        confidence: packStrategyMetrics(pack, "high_value_maxed").confidence,
       };
     })
     .filter((entry): entry is NonNullable<typeof entry> => entry !== null)
-    .sort((left, right) => right.expectedPlat - left.expectedPlat);
+    .sort((left, right) => (right.expectedHighValueMaxedPlat ?? 0) - (left.expectedHighValueMaxedPlat ?? 0) || right.expectedPlat - left.expectedPlat);
   return {
     summary,
-    recommendation: arcanes.dissolveRecommendations.find((entry) => entry.slug === summary.slug) ?? null,
+    recommendation: (arcanes.dissolveRecommendationsByStrategy?.high_value_maxed ?? arcanes.dissolveRecommendations).find((entry) => entry.slug === summary.slug) ?? null,
     topPackDrops,
     ordersUrl: summary.url,
   };

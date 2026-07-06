@@ -203,28 +203,35 @@
 
         <section class="page" data-page-panel="arcanes" aria-labelledby="arcanesTitle">
           <div class="page-inner arcane-layout">
-            <div class="page-heading">
+            <div class="page-heading arcane-heading">
               <div>
                 <h1 id="arcanesTitle">Arcane Vosfor exchange</h1>
-                <p id="arcaneSummary">Expected value for dissolving low-value Arcanes into Vosfor, then rolling 200 Vosfor packs.</p>
+                <p id="arcaneSummary">Raw Plat Output for dissolving Arcanes into Vosfor, rolling packs, then either maxing ≥180p targets or selling rank-0 rolls.</p>
               </div>
-              <button id="arcaneRefresh" class="ghost-button" type="button">Refresh</button>
+              <div class="arcane-heading-actions">
+                <div class="arcane-strategy-control" role="radiogroup" aria-label="Raw Plat Output algorithm">
+                  <span>Raw Plat Output</span>
+                  <button class="arcane-strategy-btn active" data-arcane-strategy="high_value_maxed" type="button" aria-pressed="true"><strong>High-value max-out</strong><small>Maxed ≥180p targets</small></button>
+                  <button class="arcane-strategy-btn" data-arcane-strategy="rank0_bulk" type="button" aria-pressed="false"><strong>Rank-0 bulk EV</strong><small>Sell every roll</small></button>
+                </div>
+                <button id="arcaneRefresh" class="ghost-button" type="button">Refresh</button>
+              </div>
             </div>
 
             <section class="kpi-grid arcane-kpis" aria-label="Arcane statistics">
-              <article class="kpi-card"><span>Best pack EV</span><strong id="arcaneBestPack">—</strong><small id="arcaneBestPackSub">No pack scan yet</small></article>
-              <article class="kpi-card"><span>Dissolve candidates</span><strong id="arcaneDissolveCount">0</strong><small>Better as Vosfor</small></article>
+              <article class="kpi-card"><span>Best Raw Plat Output</span><strong id="arcaneBestPack">—</strong><small id="arcaneBestPackSub">No pack scan yet</small></article>
+              <article class="kpi-card"><span>Dissolve candidates</span><strong id="arcaneDissolveCount">0</strong><small>Better as Vosfor under selected output</small></article>
               <article class="kpi-card"><span>Arcane coverage</span><strong id="arcaneCoverage">0/0</strong><small id="arcaneCoverageSub">Scanned market books</small></article>
               <article class="kpi-card"><span>Vosfor floor</span><strong id="arcaneVosforRate">—</strong><small>Plat per Vosfor from candidate dissolves</small></article>
             </section>
 
             <div class="arcane-grid">
               <section class="panel arcane-packs-panel">
-                <div class="section-head"><div><h2>Best 200 Vosfor packs</h2><span>EV uses rank-0 and max-rank sell books, rarity weights, and scan confidence.</span></div></div>
+                <div class="section-head"><div><h2>Best 200 Vosfor packs</h2><span>Raw Plat Output defaults to maxed ≥180p targets; switch to rank-0 bulk EV for predictable mid-range sales.</span></div></div>
                 <div id="arcanePacks" class="arcane-packs"></div>
               </section>
               <section class="panel arcane-dissolve-panel">
-                <div class="section-head"><div><h2>Dissolve instead of sell</h2><span>Low direct-sale value compared with the current best pack EV.</span></div></div>
+                <div class="section-head"><div><h2>Dissolve instead of sell</h2><span>Low direct-sale value compared with the selected Raw Plat Output strategy.</span></div></div>
                 <div id="arcaneDissolves" class="arcane-dissolves"></div>
               </section>
             </div>

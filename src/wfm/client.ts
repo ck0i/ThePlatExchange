@@ -200,8 +200,8 @@ export class WarframeMarketClient {
     for (const rank of ranks) {
       const payload = await this.getV2(`/v2/orders/item/${encodeURIComponent(item.slug)}/top`, { rank });
       if (!isRecord(payload)) continue;
-      orders.push(...compact(readArray(payload, "sell").map(parseArcaneOrder)));
-      orders.push(...compact(readArray(payload, "buy").map(parseArcaneOrder)));
+      orders.push(...compact(readArray(payload, "sell").map((order) => parseArcaneOrder(order, rank))));
+      orders.push(...compact(readArray(payload, "buy").map((order) => parseArcaneOrder(order, rank))));
     }
     return orders;
   }
@@ -452,7 +452,7 @@ function parseArcaneItem(value: unknown): ArcaneItem | null {
   return item;
 }
 
-function parseArcaneOrder(value: unknown): ArcaneOrder | null {
+function parseArcaneOrder(value: unknown, fallbackRank = 0): ArcaneOrder | null {
   if (!isRecord(value)) return null;
   const id = readString(value, "id");
   const rawType = readString(value, "type");
@@ -467,7 +467,7 @@ function parseArcaneOrder(value: unknown): ArcaneOrder | null {
     unitPrice: Math.round((platinum / perTrade) * 1000) / 1000,
     quantity: Math.max(1, Math.floor(readNumberWithDefault(value, "quantity", 1))),
     perTrade,
-    rank: Math.max(0, Math.floor(readNumberWithDefault(value, "rank", 0))),
+    rank: Math.max(0, Math.floor(readNumberWithDefault(value, "rank", fallbackRank))),
     visible: readBooleanWithDefault(value, "visible", true),
     createdAt: readStringWithDefault(value, "createdAt", ""),
     updatedAt: readStringWithDefault(value, "updatedAt", ""),

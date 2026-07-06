@@ -3,6 +3,7 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { WarframeMarketClient } from "../src/wfm/client.js";
+import type { ArcaneItem } from "../src/wfm/types.js";
 
 const versionBody = {
   apiVersion: "0.25.0",
@@ -89,8 +90,80 @@ try {
   await rm(tempDir, { recursive: true, force: true });
 }
 
-console.log("cache persistence tests passed");
+await testArcaneOrderRankFallback();
+
+console.log("cache and client parsing tests passed");
 
 function jsonResponse(body: unknown): Response {
   return new Response(JSON.stringify(body), { status: 200, headers: { "content-type": "application/json" } });
+}
+
+async function testArcaneOrderRankFallback(): Promise<void> {
+  const requestedRanks: string[] = [];
+  const fetcher = async (input: URL, _init: RequestInit) => {
+    if (input.pathname !== "/v2/orders/item/arcane_grace/top") {
+      return new Response(JSON.stringify({ error: "unexpected path" }), { status: 404 });
+    }
+
+    const rank = input.searchParams.get("rank");
+    requestedRanks.push(rank ?? "");
+    if (rank === "0") {
+      return jsonResponse({
+        apiVersion: "0.25.0",
+        data: {
+          sell: [arcaneOrderPayload("rank-zero-omits-rank", "sell", 25)],
+          buy: [],
+        },
+        error: null,
+      });
+    }
+
+    if (rank === "5") {
+      return jsonResponse({
+        apiVersion: "0.25.0",
+        data: {
+          sell: [arcaneOrderPayload("max-rank-omits-rank", "sell", 250)],
+          buy: [arcaneOrderPayload("explicit-rank-wins", "buy", 75, 3)],
+        },
+        error: null,
+      });
+    }
+
+    return new Response(JSON.stringify({ error: `unexpected rank ${rank}` }), { status: 404 });
+  };
+
+  const client = new WarframeMarketClient({ fetcher, ratePerSecond: 1000, burst: 10, maxRetries: 1 });
+  const item: ArcaneItem = {
+    id: "arcane-grace",
+    slug: "arcane_grace",
+    name: "Arcane Grace",
+    tags: ["arcane_enhancement"],
+    rarity: "legendary",
+    maxRank: 5,
+    tradable: true,
+    bulkTradable: true,
+    tradingTax: 100_000,
+  };
+
+  const orders = await client.searchArcaneOrders(item);
+
+  assert.deepEqual(requestedRanks, ["0", "5"], "arcane top orders must be fetched for rank 0 and max rank");
+  assert.equal(orders.find((order) => order.id === "rank-zero-omits-rank")?.rank, 0);
+  assert.equal(orders.find((order) => order.id === "max-rank-omits-rank")?.rank, 5);
+  assert.equal(orders.find((order) => order.id === "explicit-rank-wins")?.rank, 3);
+}
+
+function arcaneOrderPayload(id: string, type: "sell" | "buy", platinum: number, rank?: number): Record<string, unknown> {
+  return {
+    id,
+    type,
+    platinum,
+    user: {
+      id: `${id}-seller`,
+      ingameName: `${id}-seller`,
+      slug: `${id}-seller`,
+      status: "ingame",
+    },
+    ...(rank === undefined ? {} : { rank }),
+  };
 }

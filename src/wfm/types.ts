@@ -162,6 +162,21 @@ export interface ArcanePackDefinition {
   drops: ArcanePackDrop[];
 }
 
+export type ArcanePackStrategy = "high_value_maxed" | "rank0_bulk";
+
+export interface ArcanePackStrategyMetrics {
+  strategy: ArcanePackStrategy;
+  label: string;
+  expectedPlat: number;
+  expectedPlatPerVosfor: number;
+  confidence: number;
+  coveragePct: number;
+  targetChance: number;
+  chanceAtLeastOneTarget: number;
+  expectedTargetCopies: number;
+  targetCount: number;
+}
+
 export interface ArcanePackValuationDrop extends ArcanePackDrop {
   rank: number;
   priceUsed: number | null;
@@ -170,6 +185,12 @@ export interface ArcanePackValuationDrop extends ArcanePackDrop {
   expectedPlat: number;
   expectedVosfor: number | null;
   sourcePrice: "missing" | `rank${number}_sell_${string}`;
+  maxRank: number | null;
+  copiesToMax: number | null;
+  maxRankPrice: number | null;
+  highValueTarget: boolean;
+  expectedHighValueMaxedPlat: number;
+  sourceMaxRankPrice: "missing" | `rank${number}_sell_${string}`;
 }
 
 export interface ArcanePackValuation {
@@ -186,6 +207,19 @@ export interface ArcanePackValuation {
   confidence: number;
   missingPriceCount: number;
   pricedDropCount: number;
+  maxRankCoveragePct: number;
+  highValueConfidence: number;
+  missingMaxRankPriceCount: number;
+  maxRankPricedDropCount: number;
+  highValueThreshold: number;
+  highValueTargetCount: number;
+  highValueTargetChance: number;
+  chanceAtLeastOneHighValue: number;
+  expectedHighValueCopies: number;
+  expectedHighValueMaxedPlat: number;
+  expectedHighValueMaxedPlatPerVosfor: number;
+  defaultStrategy: ArcanePackStrategy;
+  strategyMetrics: Record<ArcanePackStrategy, ArcanePackStrategyMetrics>;
   topDrops: ArcanePackValuationDrop[];
   source: string;
   notes: string[];
@@ -204,6 +238,7 @@ export interface ArcaneDissolveRecommendation {
   rollValuePerVosfor: number;
   deltaPlat: number;
   action: "dissolve" | "sell" | "hold";
+  strategy: ArcanePackStrategy;
   confidence: number;
   reasons: string[];
   url: string;
@@ -228,11 +263,15 @@ export interface ArcaneDashboardState {
   summaries: ArcaneMarketSummary[];
   packs: ArcanePackValuation[];
   dissolveRecommendations: ArcaneDissolveRecommendation[];
+  dissolveRecommendationsByStrategy: Record<ArcanePackStrategy, ArcaneDissolveRecommendation[]>;
   mechanics: {
     packCostVosfor: number;
     rewardsPerPack: number;
     priceRank: number;
     priceStatistic: string;
+    defaultPackStrategy: ArcanePackStrategy;
+    highValueThreshold: number;
+    copiesToMaxFormula: string;
     sources: string[];
   };
 }

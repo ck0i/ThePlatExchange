@@ -525,6 +525,42 @@ body.modal-open { overflow: hidden; }
 
 
 .arcane-layout { display: grid; gap: 18px; }
+.arcane-heading { align-items: flex-start; }
+.arcane-heading-actions { display: flex; align-items: flex-start; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+.arcane-strategy-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card-elev);
+}
+.arcane-strategy-control > span {
+  padding: 0 7px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.arcane-strategy-btn {
+  min-height: 38px;
+  padding: 6px 9px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted-light);
+  text-align: left;
+}
+.arcane-strategy-btn strong { display: block; color: inherit; font-size: 12px; line-height: 1.15; }
+.arcane-strategy-btn small { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; line-height: 1.15; }
+.arcane-strategy-btn.active {
+  border-color: var(--primary-border);
+  background: var(--primary-soft);
+  color: var(--text-strong);
+}
+.arcane-strategy-btn.active small { color: var(--primary-light); }
 .arcane-kpis .kpi-card strong { color: var(--primary-light); }
 .arcane-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(340px, .85fr); gap: 16px; align-items: start; }
 .arcane-packs, .arcane-dissolves, .arcane-market { display: grid; gap: 10px; }
@@ -615,6 +651,9 @@ body.modal-open { overflow: hidden; }
   .page-root { overflow: visible; }
   .page-inner { padding: 14px; }
   .page-heading { align-items: flex-start; flex-direction: column; }
+  .arcane-heading-actions, .arcane-strategy-control { width: 100%; }
+  .arcane-strategy-control { align-items: stretch; flex-direction: column; }
+  .arcane-strategy-btn { width: 100%; text-align: left; }
   .kpi-grid { grid-template-columns: 1fr; }
   .hero-deal { grid-template-columns: 1fr; }
   .hero-title { font-size: 23px; }
