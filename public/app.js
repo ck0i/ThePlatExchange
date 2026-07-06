@@ -1,6 +1,7 @@
 const elements = {
   topBar: document.getElementById("topBar"),
   leftRail: document.getElementById("leftRail"),
+  pageRoot: document.getElementById("pageRoot"),
   railToggle: document.getElementById("railToggle"),
   pagePanels: document.querySelectorAll("[data-page-panel]"),
   pageButtons: document.querySelectorAll("[data-page]"),
@@ -94,6 +95,10 @@ let controlsHydrated = false;
 let sortState = { key: "expectedProfit", direction: "desc" };
 let heroOpportunity = null;
 let spotlightTimer = null;
+let spotlightCloseTimer = 0;
+let spotlightMorphNode = null;
+let spotlightMorphAnimation = null;
+let motionRevealTimer = 0;
 let spotlightItems = [];
 let spotlightIndex = -1;
 let spotlightFilter = null;
@@ -102,6 +107,7 @@ let expandedOpportunityKey = null;
 let copiedOpportunityKey = null;
 let opportunityRenderToken = 0;
 let opportunityRenderIdleHandle = null;
+let opportunityVisibleCount = 25;
 let heatmapVisibleCount = 9;
 let arcaneDissolveVisibleCount = 6;
 let arcanePackStrategy = "high_value_maxed";
@@ -110,6 +116,8 @@ let tickerItems = [];
 let tickerHtmlCache = "";
 let chartTooltipKey = null;
 let chartTooltipSize = { width: 260, height: 120 };
+let filtersRevealTimer = 0;
+let lastOpportunityScrollTop = 0;
 let pendingChartPointer = null;
 let chartPointerFrame = 0;
 let chartResizeFrame = 0;
@@ -143,6 +151,11 @@ const RESULT_BUDGETS = browserResultBudgets();
 const IDLE_RENDER_TIMEOUT_MS = 80;
 const HEATMAP_SHOW_MORE_BATCH = 9;
 const ARCANE_DISSOLVE_SHOW_MORE_BATCH = 6;
+const OPPORTUNITY_PAGE_SIZE = 25;
+const SPOTLIGHT_CLOSE_MS = 110;
+const SPOTLIGHT_MORPH_MS = 160;
+const SPOTLIGHT_CLONE_FADE_MS = 45;
+const MOTION_REVEAL_MS = 220;
 const NUMBER_FORMATTER = new Intl.NumberFormat();
 const HTML_ESCAPE = { "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" };
 const CONFIDENCE_BAR_SEGMENTS = Array.from({ length: 6 }, (_, filled) => {
@@ -172,16 +185,52 @@ const ARCANE_RAW_PLAT_STRATEGIES = {
   },
 };
 
+function triggerMotionReveal() {
+  window.clearTimeout(motionRevealTimer);
+  if (prefersReducedMotion()) {
+    document.body.classList.remove("motion-reveal");
+    return;
+  }
+  document.body.classList.remove("motion-reveal");
+  void document.body.offsetWidth;
+  document.body.classList.add("motion-reveal");
+  motionRevealTimer = window.setTimeout(() => document.body.classList.remove("motion-reveal"), MOTION_REVEAL_MS);
+}
+
+function setOpportunityFiltersHidden(hidden) {
+  document.querySelector(".opportunities-grid")?.classList.toggle("filters-auto-hidden", hidden);
+}
+
+function handlePageRootScroll() {
+  const root = elements.pageRoot;
+  if (!root) return;
+  if (currentPage !== "opportunities") {
+    lastOpportunityScrollTop = root.scrollTop;
+    setOpportunityFiltersHidden(false);
+    return;
+  }
+  const nextTop = root.scrollTop;
+  const delta = nextTop - lastOpportunityScrollTop;
+  lastOpportunityScrollTop = nextTop;
+  window.clearTimeout(filtersRevealTimer);
+  if (nextTop < 24) setOpportunityFiltersHidden(false);
+  else if (Math.abs(delta) > 3) setOpportunityFiltersHidden(true);
+  filtersRevealTimer = window.setTimeout(() => setOpportunityFiltersHidden(false), 720);
+}
+
 function navigate(page, options = {}) {
   currentPage = page;
   for (const panel of elements.pagePanels) panel.classList.toggle("active", panel.dataset.pagePanel === page);
   for (const button of elements.pageButtons) button.classList.toggle("active", button.dataset.page === page);
+  triggerMotionReveal();
   if (page === "settings") {
     populateMcp();
     switchSettingsTab(options.settingsTab ?? "data");
   }
   renderVisiblePageSurfaces();
-  document.querySelector(".page-root")?.scrollTo({ top: 0, behavior: "auto" });
+  elements.pageRoot?.scrollTo({ top: 0, behavior: "auto" });
+  lastOpportunityScrollTop = 0;
+  setOpportunityFiltersHidden(false);
 }
 
 for (const button of elements.pageButtons) {
@@ -191,6 +240,7 @@ for (const button of elements.pageButtons) {
     navigate(page, { settingsTab: button.dataset.settingsTabTarget });
   });
 }
+if (elements.pageRoot) elements.pageRoot.addEventListener("scroll", handlePageRootScroll, { passive: true });
 
 for (const button of elements.arcaneStrategyButtons) {
   button.addEventListener("click", () => {
@@ -241,7 +291,9 @@ async function postJson(path, body) {
 }
 
 function render(state) {
+  const firstRender = latestState === null;
   latestState = state;
+  if (firstRender) triggerMotionReveal();
   hydrateControls(state);
 
   const totalRefWeapons = state.reference?.weapons ?? 0;
@@ -309,6 +361,11 @@ function renderOpportunitySurfaces() {
 
 function renderOpportunityListSurface() {
   renderOpportunities(opportunityView().sorted);
+}
+
+function resetOpportunityPagination() {
+  opportunityVisibleCount = OPPORTUNITY_PAGE_SIZE;
+  expandedOpportunityKey = null;
 }
 
 function opportunityView() {
@@ -505,33 +562,27 @@ function renderOpportunities(opportunities) {
   }
 
   const total = opportunities.length;
-  const renderLimit = Math.min(total, RESULT_BUDGETS.opportunityCards);
-  let cursor = 0;
-  const appendBatch = (deadline, firstBatch = false) => {
+  opportunityVisibleCount = Math.min(Math.max(OPPORTUNITY_PAGE_SIZE, opportunityVisibleCount), total);
+  const shown = opportunityVisibleCount;
+  const fragment = document.createDocumentFragment();
+  for (let index = 0; index < shown; index += 1) {
     if (renderToken !== opportunityRenderToken) return;
-    const fragment = document.createDocumentFragment();
-    const batchTarget = firstBatch ? RESULT_BUDGETS.opportunityInitial : RESULT_BUDGETS.opportunityBatch;
-    let appended = 0;
-    while (cursor < renderLimit && appended < batchTarget) {
-      if (!firstBatch && appended > 12 && !deadline.didTimeout && deadline.timeRemaining() < 3) break;
-      const opportunity = opportunities[cursor];
-      const key = opportunityKey(opportunity);
-      nextRenderedOpportunityByKey.set(key, opportunity);
-      fragment.appendChild(createOpportunityCard(opportunity, cursor, key));
-      cursor += 1;
-      appended += 1;
-    }
-    elements.opps.appendChild(fragment);
-    if (cursor < renderLimit) {
-      opportunityRenderIdleHandle = scheduleIdleRender((nextDeadline) => appendBatch(nextDeadline, false));
-      return;
-    }
-    opportunityRenderIdleHandle = null;
-    const note = resultLimitNote("opportunities", renderLimit, total);
-    if (note) elements.opps.insertAdjacentHTML("beforeend", note);
-  };
+    const opportunity = opportunities[index];
+    const key = opportunityKey(opportunity);
+    nextRenderedOpportunityByKey.set(key, opportunity);
+    fragment.appendChild(createOpportunityCard(opportunity, index, key));
+  }
+  elements.opps.appendChild(fragment);
 
-  appendBatch({ didTimeout: true, timeRemaining: () => 0 }, true);
+  if (shown < total) {
+    const remaining = total - shown;
+    elements.opps.insertAdjacentHTML("beforeend", `
+      <button class="show-more-button opportunity-show-more" type="button" data-show-more-opportunities>
+        Show next ${formatNumber(Math.min(OPPORTUNITY_PAGE_SIZE, remaining))} opportunities
+        <span>${formatNumber(shown)} of ${formatNumber(total)} shown</span>
+      </button>
+    `);
+  }
   updateSortControls();
 }
 
@@ -541,22 +592,30 @@ function createOpportunityCard(opportunity, index, key = opportunityKey(opportun
   const topSignals = topSignalsFor(opportunity, 3);
   const positives = (opportunity.positives ?? []).slice(0, 4).map((p) => `<span class="flag good">+${escapeHtml(p)}</span>`).join("");
   const negatives = (opportunity.negatives ?? []).slice(0, 2).map((n) => `<span class="flag bad">-${escapeHtml(n)}</span>`).join("");
+  const confidencePercent = Math.round((opportunity.confidence ?? 0) * 100);
+  const inlineSignals = topSignals.slice(0, 2).map(signalChip).join("");
+  const sellerName = opportunity.seller?.ingameName ?? "unknown";
   const card = document.createElement("article");
   card.className = `opp-card tier-${tier}${expanded ? " expanded" : ""}`;
   card.dataset.key = key;
   card.innerHTML = `
-    <button class="opp-row" type="button" data-action="toggle" title="${escapeHtml(opportunity.seller?.ingameName ?? "seller")} · ${escapeHtml(opportunity.status)} · ${opportunity.comparableListings} comparables · score ${Math.round(opportunity.score ?? 0)}">
+    <button class="opp-row" type="button" data-action="toggle" title="${escapeHtml(sellerName)} · ${escapeHtml(opportunity.status)} · ${opportunity.comparableListings} comparables · score ${Math.round(opportunity.score ?? 0)}">
       <span class="opp-rank">${String(index + 1).padStart(2, "0")}</span>
       <span class="opp-main" data-action="weapon" data-weapon-slug="${escapeHtml(opportunity.weaponSlug)}">
         ${weaponThumb(opportunity.imageName, opportunity.weaponName, "sm")}
-        <span class="opp-title"><strong>${escapeHtml(opportunity.weaponName)}</strong><span>${escapeHtml(opportunity.rivenName)}</span></span>
+        <span class="opp-title">
+          <strong>${escapeHtml(opportunity.weaponName)}</strong>
+          <span class="opp-riven-line">${escapeHtml(opportunity.rivenName)}</span>
+          <span class="opp-context"><span class="chip">${escapeHtml(opportunity.status)}</span><span class="chip">${opportunity.comparableListings} comps</span><span class="chip">${timeAgo(opportunity.updated)}</span>${inlineSignals}</span>
+        </span>
       </span>
-      <span class="opp-metric"><span>Buy</span><strong class="buy">${opportunity.buyPrice}◈</strong></span>
-      <span class="opp-metric"><span>Sell</span><strong class="sell">${opportunity.conservativeSellPrice ?? opportunity.targetSellPrice}◈</strong></span>
-      <span class="opp-metric"><span>Profit</span><strong class="profit">+${opportunity.expectedProfit}◈</strong></span>
-      <span class="opp-metric"><span>ROI</span><strong class="roi">${Math.round((opportunity.roi ?? 0) * 100)}%</strong></span>
-      <span class="opp-metric"><span>Conf</span>${confidenceBar(opportunity.confidence ?? 0)}</span>
-      <span class="opp-age">${timeAgo(opportunity.updated)}</span>
+      <span class="opp-metrics">
+        <span class="opp-metric"><span class="opp-metric-label">Buy</span><strong class="buy">${opportunity.buyPrice}◈</strong></span>
+        <span class="opp-metric"><span class="opp-metric-label">Sell</span><strong class="sell">${opportunity.conservativeSellPrice ?? opportunity.targetSellPrice}◈</strong></span>
+        <span class="opp-metric"><span class="opp-metric-label">Profit</span><strong class="profit">+${opportunity.expectedProfit}◈</strong></span>
+        <span class="opp-metric"><span class="opp-metric-label">ROI</span><strong class="roi">${Math.round((opportunity.roi ?? 0) * 100)}%</strong></span>
+        <span class="opp-metric opp-confidence"><span class="opp-metric-label">Conf</span><strong>${confidencePercent}%</strong>${confidenceBar(opportunity.confidence ?? 0)}</span>
+      </span>
       <span class="opp-chevron">⌄</span>
     </button>
     ${expanded ? `<div class="opp-detail">
@@ -616,6 +675,12 @@ function handleOpportunityClick(event, opportunity) {
 
 if (elements.opps) {
   elements.opps.addEventListener("click", (event) => {
+    const showMore = event.target instanceof HTMLElement ? event.target.closest("[data-show-more-opportunities]") : null;
+    if (showMore && elements.opps.contains(showMore)) {
+      opportunityVisibleCount += OPPORTUNITY_PAGE_SIZE;
+      renderOpportunityListSurface();
+      return;
+    }
     const card = event.target instanceof HTMLElement ? event.target.closest(".opp-card") : null;
     if (!card || !elements.opps.contains(card)) return;
     const opportunity = renderedOpportunityByKey.get(card.dataset.key);
@@ -1443,6 +1508,7 @@ function activateSpotlightItem(index) {
     elements.spotlightInput.value = "";
   } else if (item.type === "filter") {
     spotlightFilter = { text: item.text, filter: item.filter };
+    resetOpportunityPagination();
     closeSpotlightOverlay();
     navigate("opportunities");
   } else if (item.type === "page") {
@@ -1455,24 +1521,141 @@ function activateSpotlightItem(index) {
 }
 
 function closeSpotlight() {
+  clearTimeout(spotlightTimer);
+  spotlightTimer = null;
   if (elements.spotlightResults) elements.spotlightResults.hidden = true;
   spotlightIndex = -1;
+}
+
+function prefersReducedMotion() {
+  return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
+}
+
+function clearSpotlightMorph(removeMorphingClass = true) {
+  if (spotlightMorphAnimation) {
+    spotlightMorphAnimation.cancel();
+    spotlightMorphAnimation = null;
+  }
+  if (spotlightMorphNode) {
+    spotlightMorphNode.remove();
+    spotlightMorphNode = null;
+  }
+  if (removeMorphingClass) elements.spotlightOverlay?.classList.remove("morphing");
+}
+
+function runSpotlightMorph() {
+  const overlay = elements.spotlightOverlay;
+  const trigger = elements.spotlightTrigger;
+  const inputRow = elements.spotlight?.querySelector(".spotlight-input-row");
+  if (!overlay || !trigger || !inputRow || prefersReducedMotion()) return false;
+  clearSpotlightMorph(false);
+
+  const triggerRect = trigger.getBoundingClientRect();
+  const rowRect = inputRow.getBoundingClientRect();
+  if (triggerRect.width <= 0 || triggerRect.height <= 0 || rowRect.width <= 0 || rowRect.height <= 0) return false;
+
+  const clone = document.createElement("div");
+  clone.className = "spotlight-morph";
+  clone.setAttribute("aria-hidden", "true");
+  clone.innerHTML = trigger.innerHTML;
+  clone.style.left = `${triggerRect.left}px`;
+  clone.style.top = `${triggerRect.top}px`;
+  clone.style.width = `${triggerRect.width}px`;
+  clone.style.height = `${triggerRect.height}px`;
+  overlay.appendChild(clone);
+  spotlightMorphNode = clone;
+
+  if (typeof clone.animate !== "function") {
+    clone.remove();
+    spotlightMorphNode = null;
+    return false;
+  }
+  const deltaX = rowRect.left - triggerRect.left;
+  const deltaY = rowRect.top - triggerRect.top;
+  const scaleX = rowRect.width / triggerRect.width;
+  const scaleY = rowRect.height / triggerRect.height;
+  const targetTransform = `translate3d(${deltaX}px, ${deltaY}px, 0) scale(${scaleX}, ${scaleY})`;
+  const animation = clone.animate([
+    { transform: "translate3d(0, 0, 0) scale(1)" },
+    { transform: targetTransform },
+  ], {
+    duration: SPOTLIGHT_MORPH_MS,
+    easing: "cubic-bezier(.16, 1, .3, 1)",
+    fill: "both",
+  });
+  spotlightMorphAnimation = animation;
+  let morphFinished = false;
+  const finish = () => {
+    if (morphFinished) return;
+    morphFinished = true;
+    const ownsMorph = spotlightMorphNode === clone || spotlightMorphAnimation === animation;
+    if (!ownsMorph) return;
+    overlay.classList.remove("morphing");
+    if (spotlightMorphAnimation === animation) spotlightMorphAnimation = null;
+    const removeClone = () => {
+      if (spotlightMorphNode === clone) {
+        clone.remove();
+        spotlightMorphNode = null;
+      }
+    };
+    clone.animate([
+      { opacity: 1 },
+      { opacity: 0 },
+    ], {
+      duration: SPOTLIGHT_CLONE_FADE_MS,
+      easing: "cubic-bezier(.16, 1, .3, 1)",
+      fill: "forwards",
+    }).finished.then(removeClone, removeClone);
+    window.setTimeout(removeClone, SPOTLIGHT_CLONE_FADE_MS + 30);
+  };
+  if (animation.finished) animation.finished.then(finish, finish);
+  else {
+    animation.onfinish = finish;
+    animation.oncancel = finish;
+  }
+  window.setTimeout(finish, SPOTLIGHT_MORPH_MS + 40);
+  return true;
 }
 
 function moveSpotlightSelection(delta) {
   if (spotlightItems.length === 0) return;
   spotlightIndex = (spotlightIndex + delta + spotlightItems.length) % spotlightItems.length;
-  for (const button of elements.spotlightResults.querySelectorAll(".spotlight-item")) button.classList.toggle("active", Number(button.dataset.index) === spotlightIndex);
+  let selected = null;
+  for (const button of elements.spotlightResults.querySelectorAll(".spotlight-item")) {
+    const active = Number(button.dataset.index) === spotlightIndex;
+    button.classList.toggle("active", active);
+    if (active) selected = button;
+  }
+  selected?.scrollIntoView({ block: "nearest", behavior: prefersReducedMotion() ? "auto" : "smooth" });
 }
 
 function openSpotlightOverlay() {
-  if (!elements.spotlightOverlay) return;
-  elements.spotlightOverlay.removeAttribute("hidden");
+  const overlay = elements.spotlightOverlay;
+  if (!overlay) return;
+  window.clearTimeout(spotlightCloseTimer);
+  if (overlay.hidden === false && !overlay.classList.contains("closing")) {
+    elements.spotlightInput?.focus();
+    return;
+  }
+  clearSpotlightMorph();
+  overlay.classList.remove("closing", "opening", "morphing");
+  overlay.hidden = false;
   document.body.classList.add("spotlight-active");
   const value = (elements.spotlightInput?.value ?? "").trim();
   if (value === "") renderSpotlightHints();
   else void updateSpotlight(value);
-  Promise.resolve().then(() => elements.spotlightInput?.focus());
+  const shouldMorph = !prefersReducedMotion();
+  if (shouldMorph) overlay.classList.add("morphing");
+  window.requestAnimationFrame(() => {
+    overlay.classList.add("opening");
+    const didMorph = shouldMorph && runSpotlightMorph();
+    if (!didMorph) overlay.classList.remove("morphing");
+    try {
+      elements.spotlightInput?.focus({ preventScroll: true });
+    } catch {
+      elements.spotlightInput?.focus();
+    }
+  });
 }
 
 function renderSpotlightHints() {
@@ -1498,9 +1681,26 @@ function renderSpotlightHints() {
 }
 
 function closeSpotlightOverlay() {
+  const overlay = elements.spotlightOverlay;
   document.body.classList.remove("spotlight-active");
-  if (elements.spotlightOverlay) elements.spotlightOverlay.hidden = true;
-  closeSpotlight();
+  window.clearTimeout(spotlightCloseTimer);
+  clearSpotlightMorph();
+  if (!overlay) {
+    closeSpotlight();
+    return;
+  }
+  const finishClose = () => {
+    overlay.hidden = true;
+    overlay.classList.remove("closing", "opening", "morphing");
+    closeSpotlight();
+  };
+  if (overlay.hidden || prefersReducedMotion()) {
+    finishClose();
+    return;
+  }
+  overlay.classList.remove("opening", "morphing");
+  overlay.classList.add("closing");
+  spotlightCloseTimer = window.setTimeout(finishClose, SPOTLIGHT_CLOSE_MS);
 }
 
 if (elements.spotlightTrigger) elements.spotlightTrigger.addEventListener("click", () => openSpotlightOverlay());
@@ -1736,6 +1936,7 @@ for (const button of document.querySelectorAll("[data-sort]")) {
     if (!key) return;
     if (sortState.key === key) sortState = { key, direction: sortState.direction === "asc" ? "desc" : "asc" };
     else sortState = { key, direction: key === "weaponName" ? "asc" : "desc" };
+    resetOpportunityPagination();
     renderOpportunitySurfaces();
   });
 }
@@ -1747,6 +1948,7 @@ if (elements.form) {
     if (submitButton) submitButton.disabled = true;
     try {
       spotlightFilter = null;
+      resetOpportunityPagination();
       await postJson("/api/scan", collectConfig());
       navigate("opportunities");
     } finally {
