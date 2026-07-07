@@ -5,6 +5,7 @@ const elements = {
   railToggle: document.getElementById("railToggle"),
   pagePanels: document.querySelectorAll("[data-page-panel]"),
   pageButtons: document.querySelectorAll("[data-page]"),
+  rateStatus: document.getElementById("rateStatus"),
   railRefresh: document.getElementById("railRefresh"),
   homeRefresh: document.getElementById("homeRefresh"),
   instantRefresh: document.getElementById("instantRefresh"),
@@ -34,6 +35,8 @@ const elements = {
   form: document.getElementById("filters"),
   refresh: document.getElementById("refresh"),
   watchlist: document.getElementById("watchlist"),
+  watchlistSuggestions: document.getElementById("watchlistSuggestions"),
+  watchlistChips: document.getElementById("watchlistChips"),
   minProfit: document.getElementById("minProfit"),
   minRoi: document.getElementById("minRoi"),
   minGroupSize: document.getElementById("minGroupSize"),
@@ -71,6 +74,7 @@ const elements = {
   productViewPanels: document.querySelectorAll("[data-product-view-panel]"),
   runNowSummary: document.getElementById("runNowSummary"),
   runNowList: document.getElementById("runNowList"),
+  runNowPager: document.getElementById("runNowPager"),
   dataHealthSummary: document.getElementById("dataHealthSummary"),
   dataHealthSources: document.getElementById("dataHealthSources"),
   profileForm: document.getElementById("profileForm"),
@@ -120,6 +124,13 @@ const elements = {
   spotlightTrigger: document.getElementById("spotlightTrigger"),
   weaponModal: document.getElementById("weaponModal"),
   wdContent: document.getElementById("wdContent"),
+  marketsPager: document.getElementById("marketsPager"),
+  rankedOverlay: document.getElementById("rankedOverlay"),
+  rankedKicker: document.getElementById("rankedKicker"),
+  rankedTitle: document.getElementById("rankedTitle"),
+  rankedCount: document.getElementById("rankedCount"),
+  rankedList: document.getElementById("rankedList"),
+  rankedPager: document.getElementById("rankedPager"),
 };
 
 let latestState = null;
@@ -147,6 +158,11 @@ let heatmapVisibleCount = 9;
 let arcaneDissolveVisibleCount = 6;
 let arcanePackStrategy = "high_value_maxed";
 let renderedOpportunityByKey = new Map();
+let watchlistSelections = [];
+let watchlistSuggestionTimer = 0;
+let runNowPage = 0;
+let marketsPage = 0;
+let rankedOverlayState = null;
 let tickerItems = [];
 let tickerHtmlCache = "";
 let chartTooltipKey = null;
@@ -185,9 +201,16 @@ const TIER_COLORS = { A: "#4ade80", B: "#38bdf8", C: "#fbbf24", D: "#f87171" };
 
 const RESULT_BUDGETS = browserResultBudgets();
 const IDLE_RENDER_TIMEOUT_MS = 80;
+const TOP_SPREAD_COUNT = 5;
 const HEATMAP_SHOW_MORE_BATCH = 9;
-const ARCANE_DISSOLVE_SHOW_MORE_BATCH = 6;
+const ARCANE_PREVIEW_COUNT = 5;
+const PRODUCT_METHOD_PREVIEW_COUNT = 8;
+const PRODUCT_OPPORTUNITY_PREVIEW_COUNT = 6;
+const RUN_NOW_PAGE_SIZE = 6;
+const MARKETS_PAGE_SIZE = 15;
+const OVERLAY_PAGE_SIZE = 10;
 const OPPORTUNITY_PAGE_SIZE = 25;
+const HEARTBEAT_MS = 30_000;
 const SPOTLIGHT_CLOSE_MS = 110;
 const SPOTLIGHT_MORPH_MS = 160;
 const SPOTLIGHT_CLONE_FADE_MS = 45;
@@ -283,30 +306,54 @@ for (const button of elements.arcaneStrategyButtons) {
     const nextStrategy = button.dataset.arcaneStrategy;
     if (!ARCANE_RAW_PLAT_STRATEGIES[nextStrategy]) return;
     arcanePackStrategy = nextStrategy;
-    arcaneDissolveVisibleCount = ARCANE_DISSOLVE_SHOW_MORE_BATCH;
     renderArcanes(latestState?.arcanes);
   });
 }
 
 if (elements.railToggle) {
   elements.railToggle.addEventListener("click", () => {
-    elements.leftRail?.classList.toggle("collapsed");
+    const collapsed = elements.leftRail?.classList.toggle("collapsed");
+    elements.railToggle.textContent = collapsed ? "›" : "‹";
+    elements.railToggle.setAttribute("aria-label", collapsed ? "Expand navigation" : "Collapse navigation");
   });
 }
 
-if (elements.productRefresh) {
-  elements.productRefresh.addEventListener("click", async () => {
-    elements.productRefresh.disabled = true;
-    try {
-      await postJson("/api/product/refresh", {});
-    } finally {
-      elements.productRefresh.disabled = false;
-    }
-  });
-}
 
 for (const tab of elements.productTabs) {
   tab.addEventListener("click", () => switchProductView(tab.dataset.productView || "engines"));
+}
+
+document.addEventListener("click", (event) => {
+  const target = event.target instanceof HTMLElement ? event.target : null;
+  const arcaneButton = target?.closest("[data-open-arcane-overlay]");
+  if (arcaneButton) {
+    openArcaneOverlay(arcaneButton.dataset.openArcaneOverlay);
+    return;
+  }
+  const productButton = target?.closest("[data-open-product-overlay]");
+  if (productButton) {
+    openProductOverlay(productButton.dataset.openProductOverlay);
+    return;
+  }
+  const expansionButton = target?.closest("[data-open-expansion-overlay]");
+  if (expansionButton) {
+    openProductOverlay("expansion", expansionButton.dataset.openExpansionOverlay);
+  }
+});
+
+if (elements.rankedOverlay) {
+  elements.rankedOverlay.addEventListener("click", (event) => {
+    if (event.target instanceof HTMLElement && event.target.dataset.rankedClose !== undefined) closeRankedOverlay();
+  });
+}
+
+if (elements.rankedPager) {
+  elements.rankedPager.addEventListener("click", (event) => {
+    const delta = pageMeterDelta(event, elements.rankedPager);
+    if (!delta || !rankedOverlayState) return;
+    rankedOverlayState.page = Math.max(0, rankedOverlayState.page + delta);
+    renderRankedOverlay();
+  });
 }
 
 function switchProductView(view) {
@@ -535,7 +582,9 @@ function hydrateControls(state) {
   if (controlsHydrated) return;
   if (!elements.watchlist) return;
   controlsHydrated = true;
-  elements.watchlist.value = (state.config?.watchlist ?? []).join("\n");
+  watchlistSelections = [...(state.config?.watchlist ?? [])];
+  elements.watchlist.value = "";
+  renderWatchlistChips();
   elements.minProfit.value = state.config?.minProfit ?? 25;
   elements.minRoi.value = state.config?.minRoi ?? 0.2;
   elements.minGroupSize.value = state.config?.minGroupSize ?? 3;
@@ -546,11 +595,77 @@ function hydrateControls(state) {
   hydrateProductControls(state.product);
 }
 
+function addWatchlistSelection(name) {
+  const clean = String(name ?? "").trim();
+  if (!clean) return;
+  if (!watchlistSelections.some((entry) => entry.toLowerCase() === clean.toLowerCase())) watchlistSelections.push(clean);
+  if (elements.watchlist) elements.watchlist.value = "";
+  if (elements.watchlistSuggestions) elements.watchlistSuggestions.hidden = true;
+  renderWatchlistChips();
+}
+
+function removeWatchlistSelection(name) {
+  const needle = String(name ?? "").toLowerCase();
+  watchlistSelections = watchlistSelections.filter((entry) => entry.toLowerCase() !== needle);
+  renderWatchlistChips();
+}
+
+function watchlistTermsForSubmit() {
+  const transient = String(elements.watchlist?.value ?? "").trim();
+  return [...watchlistSelections, transient].filter(Boolean);
+}
+
+function scheduleWatchlistSuggestions() {
+  window.clearTimeout(watchlistSuggestionTimer);
+  watchlistSuggestionTimer = window.setTimeout(updateWatchlistSuggestions, 120);
+}
+
+async function updateWatchlistSuggestions() {
+  const query = String(elements.watchlist?.value ?? "").trim();
+  if (!elements.watchlistSuggestions || query.length < 2) {
+    if (elements.watchlistSuggestions) elements.watchlistSuggestions.hidden = true;
+    return;
+  }
+  try {
+    const response = await fetch(`/api/weapons?q=${encodeURIComponent(query)}&limit=6`);
+    if (!response.ok) throw new Error(`status ${response.status}`);
+    const weapons = await response.json();
+    const rows = Array.isArray(weapons) ? weapons : [];
+    if (rows.length === 0) {
+      elements.watchlistSuggestions.hidden = true;
+      return;
+    }
+    elements.watchlistSuggestions.innerHTML = rows.map((weapon) => `
+      <button type="button" data-watchlist-add="${escapeHtml(weapon.name)}">
+        ${weaponThumb(weapon.imageName ?? weapon.summary?.imageName, weapon.name, "sm")}
+        <span><strong>${escapeHtml(weapon.name)}</strong><small>${escapeHtml(weapon.group ?? "weapon")}</small></span>
+      </button>
+    `).join("");
+    elements.watchlistSuggestions.hidden = false;
+  } catch {
+    elements.watchlistSuggestions.hidden = true;
+  }
+}
+
+function renderWatchlistChips() {
+  if (!elements.watchlistChips) return;
+  if (watchlistSelections.length === 0) {
+    elements.watchlistChips.innerHTML = `<span class="watchlist-empty">All weapons</span>`;
+    return;
+  }
+  elements.watchlistChips.innerHTML = watchlistSelections.map((name) => `
+    <button class="watchlist-chip" type="button" data-watchlist-remove="${escapeHtml(name)}">
+      ${escapeHtml(name)} <span aria-hidden="true">×</span>
+    </button>
+  `).join("");
+}
+
 function renderStatusFooter(state) {
   const mode = state.scanMode ?? "tiered";
+  const localScanning = mode === "tiered" || mode === "full";
   if (elements.statusMode) elements.statusMode.textContent = mode === "remote" ? "Remote feed" : mode === "full" ? "Full local scan" : "Tiered local scan";
   if (elements.footerRefresh) elements.footerRefresh.textContent = shortTime(state.status?.finishedAt || state.generatedAt);
-  if (elements.footerMcp) elements.footerMcp.textContent = "MCP ready";
+  if (elements.rateStatus) elements.rateStatus.hidden = !localScanning;
   const total = Math.max(1, state.status?.totalWeapons ?? 0);
   const scanned = Math.max(0, state.status?.scannedWeapons ?? 0);
   const progress = state.status?.running ? Math.min(100, Math.round((scanned / total) * 100)) : 100;
@@ -668,6 +783,101 @@ function cancelIdleRender(handle) {
 function resultLimitNote(label, shown, total) {
   if (shown >= total) return "";
   return `<div class="result-limit-note">Showing ${formatNumber(shown)} of ${formatNumber(total)} ${escapeHtml(label)}. Narrow search or filters to inspect the rest without overloading the browser.</div>`;
+}
+
+function rankedPreviewNote(label, shown, total) {
+  if (shown >= total) return "";
+  return `<div class="result-limit-note compact-preview-note">Showing top ${formatNumber(shown)} of ${formatNumber(total)} ${escapeHtml(label)}. Open ranked view for the full paged list.</div>`;
+}
+
+function renderPageMeter(container, page, totalPages, total, label) {
+  if (!container) return;
+  if (total <= 0) {
+    container.hidden = true;
+    container.innerHTML = "";
+    return;
+  }
+  container.hidden = false;
+  container.innerHTML = `
+    <button class="page-meter-btn" type="button" data-page-delta="-1" ${page <= 0 ? "disabled" : ""}>‹</button>
+    <span>Page ${formatNumber(page + 1)} / ${formatNumber(totalPages)} · ${formatNumber(total)} ${escapeHtml(label)}</span>
+    <button class="page-meter-btn" type="button" data-page-delta="1" ${page >= totalPages - 1 ? "disabled" : ""}>›</button>
+  `;
+}
+
+function pageMeterDelta(event, container) {
+  const button = event.target instanceof HTMLElement ? event.target.closest("[data-page-delta]") : null;
+  if (!button || !container?.contains(button) || button.disabled) return 0;
+  return Number(button.dataset.pageDelta ?? 0);
+}
+
+function openRankedOverlay({ title, kicker, rows, renderRow, pageSize = OVERLAY_PAGE_SIZE }) {
+  if (!elements.rankedOverlay || !elements.rankedList) return;
+  rankedOverlayState = { title, kicker, rows: rows ?? [], renderRow, pageSize, page: 0 };
+  elements.rankedOverlay.hidden = false;
+  document.body.classList.add("modal-open");
+  renderRankedOverlay();
+}
+
+function renderRankedOverlay() {
+  if (!rankedOverlayState || !elements.rankedList) return;
+  const { title, kicker, rows, renderRow, pageSize } = rankedOverlayState;
+  const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
+  rankedOverlayState.page = Math.min(rankedOverlayState.page, totalPages - 1);
+  const start = rankedOverlayState.page * pageSize;
+  const pageRows = rows.slice(start, start + pageSize);
+  if (elements.rankedKicker) elements.rankedKicker.textContent = kicker ?? "Ranked view";
+  if (elements.rankedTitle) elements.rankedTitle.textContent = title;
+  if (elements.rankedCount) elements.rankedCount.textContent = `${formatNumber(rows.length)} total`;
+  elements.rankedList.innerHTML = pageRows.length === 0
+    ? `<div class="empty-state">No rows available.</div>`
+    : pageRows.map((row, offset) => renderRow(row, start + offset)).join("");
+  renderPageMeter(elements.rankedPager, rankedOverlayState.page, totalPages, rows.length, "rows");
+}
+
+function closeRankedOverlay() {
+  if (!elements.rankedOverlay) return;
+  elements.rankedOverlay.hidden = true;
+  rankedOverlayState = null;
+  if (elements.weaponModal?.hidden !== false) document.body.classList.remove("modal-open");
+}
+
+function openArcaneOverlay(kind) {
+  const arcanes = latestState?.arcanes;
+  const strategy = ARCANE_RAW_PLAT_STRATEGIES[arcanePackStrategy] ? arcanePackStrategy : "high_value_maxed";
+  const summaries = arcanes?.summaries ?? [];
+  const summaryBySlug = new Map(summaries.map((summary) => [summary.slug, summary]));
+  const packs = [...(arcanes?.packs ?? [])].sort((left, right) => compareArcanePacksForStrategy(left, right, strategy, summaryBySlug));
+  if (kind === "packs") {
+    openRankedOverlay({ title: "Arcane Vosfor packs", kicker: ARCANE_RAW_PLAT_STRATEGIES[strategy].label, rows: packs, renderRow: (pack, index) => arcanePackCard(pack, index, strategy, summaryBySlug) });
+    return;
+  }
+  if (kind === "dissolves") {
+    const rows = arcaneRecommendationsForStrategy(arcanes, strategy, packs, summaryBySlug).sort(compareArcaneRecommendations);
+    openRankedOverlay({ title: "Sell or dissolve ranking", kicker: ARCANE_RAW_PLAT_STRATEGIES[strategy].label, rows, renderRow: (entry) => arcaneDissolveCard(entry, strategy) });
+    return;
+  }
+  if (kind === "market") {
+    openRankedOverlay({ title: "Arcane market board", kicker: "Ranked by sell-side price", rows: arcaneMarketRows(summaries), renderRow: arcaneMarketRow });
+  }
+}
+
+function openProductOverlay(kind, sectionId = null) {
+  const product = latestState?.product;
+  const opportunities = product?.opportunities ?? [];
+  if (kind === "engines") {
+    openRankedOverlay({ title: "Plat Engine method engines", kicker: "All engines", rows: product?.methods ?? [], renderRow: (method) => productMethodCard(method, opportunities) });
+    return;
+  }
+  if (kind === "methods") {
+    openRankedOverlay({ title: "Best methods", kicker: "Ranked by expected plat", rows: opportunities, renderRow: productOpportunityCard });
+    return;
+  }
+  if (kind === "expansion" && sectionId) {
+    const section = expansionSections(product?.expansion).find((entry) => entry.id === sectionId);
+    if (!section) return;
+    openRankedOverlay({ title: `${section.label} expansion`, kicker: "Paged opportunity list", rows: section.items, renderRow: productOpportunityCard });
+  }
 }
 
 function chartRenderItems(opportunities) {
@@ -875,12 +1085,12 @@ function topSpreadRows(opportunities) {
     if ((right.opportunity.expectedProfit ?? 0) !== (left.opportunity.expectedProfit ?? 0)) return (right.opportunity.expectedProfit ?? 0) - (left.opportunity.expectedProfit ?? 0);
     return (right.opportunity.updated ?? 0) - (left.opportunity.updated ?? 0);
   });
-  return scored.map((item) => item.opportunity).slice(0, 4);
+  return scored.map((item) => item.opportunity).slice(0, TOP_SPREAD_COUNT);
 }
 
 function renderTopSpreadCards(opportunities) {
   if (!elements.topSpreadCards) return;
-  const items = opportunities.slice(0, 4);
+  const items = opportunities.slice(0, TOP_SPREAD_COUNT);
   if (items.length === 0) {
     elements.topSpreadCards.innerHTML = `<div class="empty-state">No deals yet.</div>`;
     return;
@@ -921,7 +1131,7 @@ function renderInstantWins(items) {
   if (!elements.instantList) return;
   elements.instantList.textContent = "";
   if (wins.length === 0) {
-    elements.instantList.innerHTML = `<div class="empty-state">No instant wins match the current cache. Refresh or widen filters.</div>`;
+    elements.instantList.innerHTML = `<div class="empty-state">No instant wins match the current cache. Wait for the next heartbeat or widen filters.</div>`;
     return;
   }
   for (const item of wins) {
@@ -985,17 +1195,10 @@ function renderArcanes(arcanes) {
   const strategy = ARCANE_RAW_PLAT_STRATEGIES[arcanePackStrategy] ? arcanePackStrategy : "high_value_maxed";
   arcanePackStrategy = strategy;
   updateArcaneStrategyButtons(strategy);
-  const strategyCopy = ARCANE_RAW_PLAT_STRATEGIES[strategy];
   const summaries = arcanes?.summaries ?? [];
   const summaryBySlug = new Map(summaries.map((summary) => [summary.slug, summary]));
   const packs = [...(arcanes?.packs ?? [])].sort((left, right) => compareArcanePacksForStrategy(left, right, strategy, summaryBySlug));
-  const recommendations = arcaneRecommendationsForStrategy(arcanes, strategy, packs, summaryBySlug).sort((left, right) => {
-    const actionScore = { dissolve: 0, hold: 1, sell: 2 };
-    const leftScore = actionScore[left.action] ?? 3;
-    const rightScore = actionScore[right.action] ?? 3;
-    if (leftScore !== rightScore) return leftScore - rightScore;
-    return (right.deltaPlat ?? 0) - (left.deltaPlat ?? 0);
-  });
+  const recommendations = arcaneRecommendationsForStrategy(arcanes, strategy, packs, summaryBySlug).sort(compareArcaneRecommendations);
   const bestPack = packs[0] ?? null;
   const bestMetric = bestPack ? arcaneStrategyMetric(bestPack, strategy, summaryBySlug) : null;
   const dissolveCount = recommendations.filter((entry) => entry.action === "dissolve").length;
@@ -1003,28 +1206,49 @@ function renderArcanes(arcanes) {
   const candidateRates = recommendations.filter((entry) => entry.action === "dissolve" && entry.sellValuePerVosfor > 0).map((entry) => entry.sellValuePerVosfor);
   const vosforFloor = candidateRates.length > 0 ? Math.min(...candidateRates) : null;
 
-  if (elements.arcaneSummary) {
-    const baseMessage = arcanes?.status?.lastMessage ?? (arcanes ? `Tracking ${formatNumber(arcanes.reference?.items ?? summaries.length)} Arcanes across ${formatNumber(arcanes.reference?.packs ?? packs.length)} Vosfor packs.` : "Waiting for Arcane scan.");
-    elements.arcaneSummary.textContent = arcanes ? `${baseMessage} Raw Plat Output: ${strategyCopy.label} (${strategyCopy.detail}).` : baseMessage;
-  }
   if (elements.arcaneBestPack) elements.arcaneBestPack.textContent = bestPack && bestMetric ? `${Math.round(bestMetric.expectedPlat)}◈` : "—";
-  if (elements.arcaneBestPackSub) {
-    elements.arcaneBestPackSub.textContent = bestPack && bestMetric
-      ? `${bestPack.packName} · ${(bestMetric.expectedPlatPerVosfor ?? 0).toFixed(3)}◈/Vosfor · ${formatArcanePercent(bestMetric.chanceAtLeastOneTarget)} hit/pack · ${Math.round((bestMetric.confidence ?? 0) * 100)}% confidence`
-      : "No pack scan yet";
-  }
   if (elements.arcaneDissolveCount) elements.arcaneDissolveCount.textContent = formatNumber(dissolveCount);
   if (elements.arcaneCoverage) elements.arcaneCoverage.textContent = `${formatNumber(scanned)}/${formatNumber(arcanes?.reference?.items ?? summaries.length)}`;
-  if (elements.arcaneCoverageSub) elements.arcaneCoverageSub.textContent = `${formatNumber(arcanes?.totals?.orders ?? 0)} visible WFM orders cached`;
   if (elements.arcaneVosforRate) elements.arcaneVosforRate.textContent = vosforFloor === null ? "—" : `${vosforFloor.toFixed(2)}◈`;
 
-  const visiblePacks = packs.slice(0, RESULT_BUDGETS.arcaneCards);
-  elements.arcanePacks.innerHTML = packs.length === 0 ? `<div class="empty-state">No Vosfor pack valuations yet.</div>` : visiblePacks.map((pack, index) => {
-    const metric = arcaneStrategyMetric(pack, strategy, summaryBySlug);
-    const meta = strategy === "high_value_maxed"
-      ? `${formatNumber(metric.targetCount ?? 0)} maxed ≥${formatNumber(pack.highValueThreshold ?? 180)}p targets · ${formatArcanePercent(metric.chanceAtLeastOneTarget)} hit/pack · ${Math.round((metric.confidence ?? 0) * 100)}% confidence`
-      : `${Math.round((metric.coveragePct ?? pack.coveragePct ?? 0) * 100)}% priced · ${Math.round((metric.confidence ?? pack.confidence ?? 0) * 100)}% confidence · ${formatNumber(pack.missingPriceCount ?? 0)} missing prices`;
-    return `
+  const marketRows = arcaneMarketRows(summaries);
+  const visiblePacks = packs.slice(0, ARCANE_PREVIEW_COUNT);
+  const visibleRecommendations = recommendations.slice(0, ARCANE_PREVIEW_COUNT);
+  const visibleMarketRows = marketRows.slice(0, ARCANE_PREVIEW_COUNT);
+  elements.arcanePacks.innerHTML = packs.length === 0
+    ? `<div class="empty-state">No Vosfor pack valuations yet.</div>`
+    : visiblePacks.map((pack, index) => arcanePackCard(pack, index, strategy, summaryBySlug)).join("") + rankedPreviewNote("packs", visiblePacks.length, packs.length);
+  elements.arcaneDissolves.innerHTML = recommendations.length === 0
+    ? `<div class="empty-state">No sell/dissolve recommendations yet for ${escapeHtml(ARCANE_RAW_PLAT_STRATEGIES[strategy].label)}.</div>`
+    : visibleRecommendations.map((entry) => arcaneDissolveCard(entry, strategy)).join("") + rankedPreviewNote("recommendations", visibleRecommendations.length, recommendations.length);
+  elements.arcaneMarket.innerHTML = marketRows.length === 0
+    ? `<div class="empty-state">No Arcane market rows yet.</div>`
+    : visibleMarketRows.map(arcaneMarketRow).join("") + rankedPreviewNote("market rows", visibleMarketRows.length, marketRows.length);
+}
+
+function compareArcaneRecommendations(left, right) {
+  const actionScore = { dissolve: 0, hold: 1, sell: 2 };
+  const leftScore = actionScore[left.action] ?? 3;
+  const rightScore = actionScore[right.action] ?? 3;
+  if (leftScore !== rightScore) return leftScore - rightScore;
+  return (right.deltaPlat ?? 0) - (left.deltaPlat ?? 0);
+}
+
+function arcaneMarketRows(summaries) {
+  return [...(summaries ?? [])].sort((left, right) => {
+    const leftPrice = left.rankMax?.sell?.p25 ?? left.rank0?.sell?.p25 ?? 0;
+    const rightPrice = right.rankMax?.sell?.p25 ?? right.rank0?.sell?.p25 ?? 0;
+    return rightPrice - leftPrice;
+  });
+}
+
+function arcanePackCard(pack, index, strategy, summaryBySlug) {
+  const strategyCopy = ARCANE_RAW_PLAT_STRATEGIES[strategy];
+  const metric = arcaneStrategyMetric(pack, strategy, summaryBySlug);
+  const meta = strategy === "high_value_maxed"
+    ? `${formatNumber(metric.targetCount ?? 0)} maxed ≥${formatNumber(pack.highValueThreshold ?? 180)}p targets · ${formatArcanePercent(metric.chanceAtLeastOneTarget)} hit/pack · ${Math.round((metric.confidence ?? 0) * 100)}% confidence`
+    : `${Math.round((metric.coveragePct ?? pack.coveragePct ?? 0) * 100)}% priced · ${Math.round((metric.confidence ?? pack.confidence ?? 0) * 100)}% confidence · ${formatNumber(pack.missingPriceCount ?? 0)} missing prices`;
+  return `
     <article class="arcane-pack-card">
       <div class="arcane-card-rank">#${index + 1}</div>
       <div class="arcane-card-body">
@@ -1034,48 +1258,35 @@ function renderArcanes(arcanes) {
         <div class="arcane-drop-row">${arcaneDropChips(pack, strategy, summaryBySlug)}</div>
       </div>
     </article>`;
-  }).join("") + resultLimitNote("Vosfor packs", visiblePacks.length, packs.length);
+}
 
-  const recommendationLimit = Math.min(recommendations.length, RESULT_BUDGETS.arcaneRecommendations, arcaneDissolveVisibleCount);
-  const visibleRecommendations = recommendations.slice(0, recommendationLimit);
-  const dissolveMore = recommendationLimit < recommendations.length && recommendationLimit < RESULT_BUDGETS.arcaneRecommendations
-    ? `<button class="show-more-button" type="button" data-show-more-dissolves>Show ${formatNumber(Math.min(ARCANE_DISSOLVE_SHOW_MORE_BATCH, recommendations.length - recommendationLimit))} more</button>`
-    : resultLimitNote("dissolve recommendations", recommendationLimit, recommendations.length);
-  elements.arcaneDissolves.innerHTML = recommendations.length === 0 ? `<div class="empty-state">No dissolve recommendations yet for ${escapeHtml(strategyCopy.label)}.</div>` : visibleRecommendations.map((entry) => `
+function arcaneDissolveCard(entry, strategy) {
+  const strategyCopy = ARCANE_RAW_PLAT_STRATEGIES[strategy];
+  return `
     <article class="arcane-dissolve-card ${entry.action}">
       <div>
         <div class="arcane-card-title">${escapeHtml(entry.name)} <span>R${entry.rank}</span></div>
-        <div class="arcane-card-meta">${entry.sellPrice}◈ sale · ${entry.dissolutionVosfor} Vosfor · ${entry.bestPackName} · ${escapeHtml(strategyCopy.shortLabel)}</div>
+        <div class="arcane-card-meta">${entry.sellPrice}◈ sale · ${entry.dissolutionVosfor} Vosfor · ${escapeHtml(entry.bestPackName ?? "best pack")} · ${escapeHtml(strategyCopy.shortLabel)}</div>
       </div>
       <div class="arcane-action">
         <strong>${escapeHtml(entry.action)}</strong>
         <span>${entry.deltaPlat >= 0 ? "+" : ""}${entry.deltaPlat.toFixed(1)}◈ EV</span>
       </div>
-    </article>`).join("") + dissolveMore;
-  elements.arcaneDissolves.querySelector("[data-show-more-dissolves]")?.addEventListener("click", () => {
-    arcaneDissolveVisibleCount += ARCANE_DISSOLVE_SHOW_MORE_BATCH;
-    renderArcanes(arcanes);
-  });
+    </article>`;
+}
 
-  const marketRows = [...summaries].sort((left, right) => {
-    const leftPrice = left.rankMax?.sell?.p25 ?? left.rank0?.sell?.p25 ?? 0;
-    const rightPrice = right.rankMax?.sell?.p25 ?? right.rank0?.sell?.p25 ?? 0;
-    return rightPrice - leftPrice;
-  });
-  const visibleMarketRows = marketRows.slice(0, RESULT_BUDGETS.arcaneRows);
-  elements.arcaneMarket.innerHTML = marketRows.length === 0 ? `<div class="empty-state">No Arcane market rows yet.</div>` : visibleMarketRows.map((entry) => {
-    const maxRank = entry.rankMax ?? null;
-    const rank0 = entry.rank0 ?? null;
-    const sellPrice = maxRank?.sell?.p25 ?? rank0?.sell?.p25 ?? null;
-    const marketDepth = (entry.onlineSellListings ?? 0) + (entry.onlineBuyListings ?? 0);
-    return `
-      <article class="arcane-market-row">
-        <div class="arcane-name-cell">${arcaneThumb(entry)}<div><strong>${escapeHtml(entry.name)}</strong><span>${escapeHtml(entry.rarity)} · ${entry.dissolutionVosfor ?? "?"} Vosfor</span></div></div>
-        <div><span class="small-label">R0 p25</span><strong>${rank0?.sell?.p25 == null ? "—" : `${rank0.sell.p25}◈`}</strong></div>
-        <div><span class="small-label">R${entry.maxRank} p25</span><strong>${sellPrice == null ? "—" : `${sellPrice}◈`}</strong></div>
-        <div><span class="small-label">Depth</span><strong>${formatNumber(marketDepth)}</strong></div>
-      </article>`;
-  }).join("") + resultLimitNote("Arcane market rows", visibleMarketRows.length, marketRows.length);
+function arcaneMarketRow(entry) {
+  const maxRank = entry.rankMax ?? null;
+  const rank0 = entry.rank0 ?? null;
+  const sellPrice = maxRank?.sell?.p25 ?? rank0?.sell?.p25 ?? null;
+  const marketDepth = (entry.onlineSellListings ?? 0) + (entry.onlineBuyListings ?? 0);
+  return `
+    <article class="arcane-market-row">
+      <div class="arcane-name-cell">${arcaneThumb(entry)}<div><strong>${escapeHtml(entry.name)}</strong><span>${escapeHtml(entry.rarity)} · ${entry.dissolutionVosfor ?? "?"} Vosfor</span></div></div>
+      <div><span class="small-label">R0 p25</span><strong>${rank0?.sell?.p25 == null ? "—" : `${rank0.sell.p25}◈`}</strong></div>
+      <div><span class="small-label">R${entry.maxRank} p25</span><strong>${sellPrice == null ? "—" : `${sellPrice}◈`}</strong></div>
+      <div><span class="small-label">Depth</span><strong>${formatNumber(marketDepth)}</strong></div>
+    </article>`;
 }
 
 function renderProductEngine(product) {
@@ -1083,8 +1294,7 @@ function renderProductEngine(product) {
   const opportunities = product?.opportunities ?? [];
   const methods = product?.methods ?? [];
   const best = opportunities[0] ?? null;
-  const summary = product ? `${formatNumber(opportunities.length)} ranked actions · ${formatNumber(methods.length)} engines · updated ${timeAgo(product.generatedAt)}` : "Waiting for product engine refresh.";
-  if (elements.productSummary) elements.productSummary.textContent = summary;
+  if (elements.productSummary) elements.productSummary.textContent = product ? `${formatNumber(opportunities.length)} ranked actions · ${formatNumber(methods.length)} engines` : "";
   if (elements.productHealth) elements.productHealth.textContent = product?.dataHealth ? `${product.dataHealth.sources?.length ?? 0}` : "—";
   if (elements.productHealthSub) elements.productHealthSub.textContent = product?.dataHealth ? `sources · updated ${timeAgo(product.dataHealth.generatedAt)}` : "Waiting for product data";
   if (elements.productMethodsCount) elements.productMethodsCount.textContent = formatNumber(methods.filter((method) => method.status !== "red").length);
@@ -1092,21 +1302,29 @@ function renderProductEngine(product) {
   if (elements.productBestEv) elements.productBestEv.textContent = best ? `${Math.round(best.expectedPlat ?? 0)}◈` : "—";
   if (elements.productBestEvSub) elements.productBestEvSub.textContent = best ? `${best.title} · ${Math.round((best.confidenceScore ?? 0) * 100)}% confidence` : "No ranked method yet";
 
-  elements.productMethods.innerHTML = methods.length === 0 ? `<div class="empty-state">No method outputs yet.</div>` : methods.map((method) => {
-    const methodOpp = opportunities.find((opportunity) => opportunity.id === method.bestOpportunityId || opportunity.methodId === method.id);
-    return `
-      <article class="product-method-card method-engine-card status-${escapeHtml(method.status)}">
-        <div>
-          <strong>${escapeHtml(method.label)}</strong>
-          <span>${formatNumber(method.opportunityCount)} opportunities · ${methodOpp ? `${Math.round(methodOpp.expectedPlat ?? 0)}◈ best EV` : "no best pick"}</span>
-        </div>
-        <div class="product-method-meta"><b>${formatNumber(method.opportunityCount)}</b><small>opps</small></div>
-      </article>`;
-  }).join("");
+  const visibleMethods = methods.slice(0, PRODUCT_METHOD_PREVIEW_COUNT);
+  elements.productMethods.innerHTML = methods.length === 0
+    ? `<div class="empty-state">No method outputs yet.</div>`
+    : visibleMethods.map((method) => productMethodCard(method, opportunities)).join("") + rankedPreviewNote("engines", visibleMethods.length, methods.length);
 
-  elements.productOpportunities.innerHTML = opportunities.length === 0 ? `<div class="empty-state">No product recommendations yet.</div>` : opportunities.slice(0, 6).map(productOpportunityCard).join("") + resultLimitNote("top product recommendations", Math.min(opportunities.length, 6), opportunities.length);
+  const visibleOpportunities = opportunities.slice(0, PRODUCT_OPPORTUNITY_PREVIEW_COUNT);
+  elements.productOpportunities.innerHTML = opportunities.length === 0
+    ? `<div class="empty-state">No product recommendations yet.</div>`
+    : visibleOpportunities.map(productOpportunityCard).join("") + rankedPreviewNote("best methods", visibleOpportunities.length, opportunities.length);
   renderPrimeRelics(product?.prime);
   renderExpansionMethods(product?.expansion);
+}
+
+function productMethodCard(method, opportunities = []) {
+  const methodOpp = opportunities.find((opportunity) => opportunity.id === method.bestOpportunityId || opportunity.methodId === method.id);
+  return `
+    <article class="product-method-card method-engine-card status-${escapeHtml(method.status)}">
+      <div>
+        <strong>${escapeHtml(method.label)}</strong>
+        <span>${formatNumber(method.opportunityCount)} opportunities · ${methodOpp ? `${Math.round(methodOpp.expectedPlat ?? 0)}◈ best EV` : "no best pick"}</span>
+      </div>
+      <div class="product-method-meta"><b>${formatNumber(method.opportunityCount)}</b><small>opps</small></div>
+    </article>`;
 }
 
 function renderPrimeRelics(prime) {
@@ -1125,20 +1343,23 @@ function renderPrimeRelics(prime) {
   `;
 }
 
+function expansionSections(expansion) {
+  return [
+    { label: "Mods", id: "mods", items: expansion?.mods ?? [], hint: "Rank-aware mods and upgrade inputs with market depth checks." },
+    { label: "Syndicates", id: "syndicates", items: expansion?.syndicates ?? [], hint: "Standing-to-plat conversions and access assumptions." },
+    { label: "Baro", id: "baro", items: expansion?.baro ?? [], hint: "Ducat inputs, timed vendor inventory, and resale windows." },
+    { label: "Resources", id: "resources", items: expansion?.resources ?? [], hint: "Tradable open-world commodities gated by cycle windows and liquidity." },
+    { label: "Event shocks", id: "event_shocks", items: expansion?.eventShocks ?? [], hint: "Temporary supply/demand shifts from live events." },
+  ];
+}
+
 function renderExpansionMethods(expansion) {
   if (!elements.expansionMethods) return;
   if (!expansion) {
     elements.expansionMethods.innerHTML = `<div class="empty-state">Expansion engines have not refreshed.</div>`;
     return;
   }
-  const sections = [
-    { label: "Mods", id: "mods", items: expansion.mods ?? [], hint: "Rank-aware mods and upgrade inputs with market depth checks." },
-    { label: "Syndicates", id: "syndicates", items: expansion.syndicates ?? [], hint: "Standing-to-plat conversions and access assumptions." },
-    { label: "Baro", id: "baro", items: expansion.baro ?? [], hint: "Ducat inputs, timed vendor inventory, and resale windows." },
-    { label: "Resources", id: "resources", items: expansion.resources ?? [], hint: "Tradable resource-like markets that pass validation." },
-    { label: "Event shocks", id: "event_shocks", items: expansion.eventShocks ?? [], hint: "Temporary supply/demand shifts from live events." },
-  ];
-  const cards = sections.map((section) => expansionSection(section, false));
+  const cards = expansionSections(expansion).map((section) => expansionSection(section, false));
   const gates = (expansion.bespokeMarkets ?? []).map((gate) => `
     <details class="expansion-section gated">
       <summary>
@@ -1152,7 +1373,7 @@ function renderExpansionMethods(expansion) {
 
 function expansionSection(section, open = false) {
   const items = section.items ?? [];
-  const topItems = items.slice(0, 2);
+  const topItems = items.slice(0, 3);
   return `
     <details class="expansion-section" ${open ? "open" : ""}>
       <summary>
@@ -1161,7 +1382,7 @@ function expansionSection(section, open = false) {
       </summary>
       <div class="expansion-body">
         ${topItems.length === 0 ? `<div class="empty-state">No validated ${escapeHtml(section.label.toLowerCase())} opportunities yet.</div>` : topItems.map(productOpportunityCard).join("")}
-        ${items.length > topItems.length ? `<div class="result-limit-note">Showing ${topItems.length}/${items.length}. Top rows are sorted by EV and confidence.</div>` : ""}
+        ${items.length > topItems.length ? `<button class="show-more-button" type="button" data-open-expansion-overlay="${escapeHtml(section.id)}">View all ${formatNumber(items.length)} ${escapeHtml(section.label)} rows</button>` : ""}
       </div>
     </details>`;
 }
@@ -1170,8 +1391,21 @@ function renderRunNow(product) {
   if (!elements.runNowList) return;
   const runNow = product?.runNow;
   const activities = runNow?.activities ?? [];
-  if (elements.runNowSummary) elements.runNowSummary.textContent = activities.length === 0 ? "No valid live activities are currently ranked." : `${formatNumber(activities.length)} live activities ranked by EV/minute, expiry, confidence, and mission speed.`;
-  elements.runNowList.innerHTML = activities.length === 0 ? `<div class="empty-state">No live activities passed validation.</div>` : activities.map((activity, index) => `
+  const liveStatus = currentLiveStatus(product, activities);
+  const usableActivities = liveStatus.live ? activities : [];
+  const totalPages = Math.max(1, Math.ceil(usableActivities.length / RUN_NOW_PAGE_SIZE));
+  runNowPage = Math.min(runNowPage, totalPages - 1);
+  const start = runNowPage * RUN_NOW_PAGE_SIZE;
+  const pageItems = usableActivities.slice(start, start + RUN_NOW_PAGE_SIZE);
+  const disclaimer = liveStatus.live ? "" : `<div class="empty-state live-disclaimer">${escapeHtml(liveStatus.message)}</div>`;
+  elements.runNowList.innerHTML = disclaimer + (pageItems.length === 0
+    ? `<div class="empty-state">No live activities passed validation.</div>`
+    : pageItems.map((activity, index) => runNowCard(activity, start + index)).join(""));
+  renderPageMeter(elements.runNowPager, runNowPage, totalPages, usableActivities.length, "live activities");
+}
+
+function runNowCard(activity, index) {
+  return `
     <article class="run-card run-activity-card status-${escapeHtml(activity.status)}">
       <div class="run-rank">#${index + 1}</div>
       <div>
@@ -1180,8 +1414,22 @@ function renderRunNow(product) {
         <div class="product-card-meta"><span>${escapeHtml(activity.activityType)}</span><span>${escapeHtml(activity.missionType ?? "mission")}</span><span>${activity.expiresAt ? `Expires ${shortTime(activity.expiresAt)}` : "No expiry"}</span><span>${escapeHtml(activity.node ?? "node n/a")}</span></div>
       </div>
       <div class="product-score run-score"><strong>${activity.evPerMinute}◈/min</strong><span>${Math.round((activity.confidenceScore ?? 0) * 100)}% confidence · ${escapeHtml(activity.status)}</span></div>
-    </article>
-  `).join("") + resultLimitNote("live activities", activities.length, activities.length + (runNow?.rejectedActivities?.length ?? 0));
+    </article>`;
+}
+
+function currentLiveStatus(product, activities) {
+  const liveSource = product?.dataHealth?.sources?.find((source) => source.id === "live")
+    ?? activities.find((activity) => activity.source?.fetchedAt)?.source
+    ?? null;
+  const fetchedAt = liveSource?.lastSuccessAt ?? liveSource?.fetchedAt ?? null;
+  const ageMs = fetchedAt ? Date.now() - Date.parse(fetchedAt) : Infinity;
+  const fresh = Number.isFinite(ageMs) && ageMs <= 60 * 60 * 1000;
+  const healthy = liveSource?.status ? liveSource.status !== "red" : true;
+  const hasValidatedLiveRows = Array.isArray(activities) && activities.length > 0;
+  if (fresh && healthy && hasValidatedLiveRows) return { live: true, message: "" };
+  if (!fresh) return { live: false, message: "No live Warframe activity source has refreshed successfully within the last hour. Run Now is hidden until the heartbeat receives fresh live data." };
+  if (!healthy) return { live: false, message: "The live activity source is reporting a failed health state. Run Now is hidden until the heartbeat recovers it." };
+  return { live: false, message: "No validated live activities are available from the current Warframe activity feed." };
 }
 
 function renderDataHealth(product) {
@@ -1266,7 +1514,22 @@ function productOpportunityCompact(opportunity) {
 
 function productRelicRow(entry, mode) {
   const tier = entry.chosenTier ?? {};
-  return `<article class="product-compact-row"><strong>${escapeHtml(entry.relic?.name ?? "Relic")} · ${escapeHtml(tier.tier ?? "Intact")}</strong><span>${mode} · EV ${Math.round(tier.evPlat ?? 0)}◈ · ${Math.round((entry.confidence ?? 0) * 100)}% conf</span></article>`;
+  return `<article class="product-compact-row relic-row">${itemThumb(entry.relic, "sm")}<strong>${escapeHtml(entry.relic?.name ?? "Relic")} · ${escapeHtml(tier.tier ?? "Intact")}</strong><span>${mode} · EV ${Math.round(tier.evPlat ?? 0)}◈ · ${Math.round((entry.confidence ?? 0) * 100)}% conf</span></article>`;
+}
+
+function marketAssetUrl(path) {
+  const raw = String(path ?? "").trim();
+  if (!raw) return null;
+  if (/^https?:\/\//i.test(raw)) return raw;
+  const normalized = raw.replace(/^\/+/, "").replace(/^static\/assets\//, "");
+  return `https://warframe.market/static/assets/${normalized}`;
+}
+
+function itemThumb(item, size = "sm") {
+  if (item?.imageName) return weaponThumb(item.imageName, item.name ?? "Item", size);
+  const url = marketAssetUrl(item?.thumb ?? item?.icon);
+  if (url) return `<img class="weapon-thumb weapon-thumb-${size}" loading="lazy" src="${escapeHtml(url)}" alt="${escapeHtml(item.name ?? "Item")}" onerror="this.classList.add('weapon-thumb-blank'); this.removeAttribute('src');" />`;
+  return `<span class="weapon-thumb weapon-thumb-${size} weapon-thumb-blank" aria-hidden="true"></span>`;
 }
 
 function updateArcaneStrategyButtons(strategy) {
@@ -1451,26 +1714,40 @@ function formatArcanePercent(value) {
 }
 
 function arcaneThumb(summary) {
-  if (!summary.imageName) return `<span class="arcane-thumb-placeholder">✦</span>`;
-  return `<span class="arcane-thumb" style="background-image:url('/img/${encodeURIComponent(summary.imageName)}')" aria-hidden="true"></span>`;
+  const assetUrl = marketAssetUrl(summary?.thumb ?? summary?.icon);
+  if (assetUrl) return `<img class="arcane-thumb" loading="lazy" src="${escapeHtml(assetUrl)}" alt="" aria-hidden="true" onerror="this.replaceWith(Object.assign(document.createElement('span'), { className: 'arcane-thumb-placeholder', textContent: '✦' }));" />`;
+  if (!summary?.imageName) return `<span class="arcane-thumb-placeholder">✦</span>`;
+  const escaped = encodeURIComponent(summary.imageName);
+  return `<img class="arcane-thumb" loading="lazy" src="/img/${escaped}" alt="" aria-hidden="true" onerror="this.replaceWith(Object.assign(document.createElement('span'), { className: 'arcane-thumb-placeholder', textContent: '✦' }));" />`;
 }
 
 function renderWeapons(summaries) {
   if (!elements.weapons) return;
   elements.weapons.textContent = "";
-  const visibleSummaries = summaries.slice(0, RESULT_BUDGETS.weaponCards);
+  const totalPages = Math.max(1, Math.ceil((summaries?.length ?? 0) / MARKETS_PAGE_SIZE));
+  marketsPage = Math.min(marketsPage, totalPages - 1);
+  const start = marketsPage * MARKETS_PAGE_SIZE;
+  const visibleSummaries = (summaries ?? []).slice(start, start + MARKETS_PAGE_SIZE);
   const fragment = document.createDocumentFragment();
   for (const summary of visibleSummaries) {
-    const stats = summary.priceStats;
-    const intel = summary.marketIntel ?? {};
-    const strategy = intel.strategy ? intel.strategy.toUpperCase() : "—";
-    const score = Number.isFinite(intel.marketScore) ? Math.round(intel.marketScore) : null;
-    const spreadPct = Number.isFinite(intel.spreadPct) ? Math.round(intel.spreadPct * 100) : null;
-    const floorPct = Number.isFinite(intel.floorDiscountPct) ? Math.round(intel.floorDiscountPct * 100) : null;
-    const card = document.createElement("article");
-    card.className = "weapon-card";
-    card.dataset.weaponSlug = summary.slug;
-    card.innerHTML = `
+    const wrapper = document.createElement("template");
+    wrapper.innerHTML = weaponSummaryCard(summary);
+    fragment.appendChild(wrapper.content.firstElementChild);
+  }
+  elements.weapons.appendChild(fragment);
+  if ((summaries ?? []).length === 0) elements.weapons.innerHTML = `<div class="empty-state">No weapon market summaries yet.</div>`;
+  renderPageMeter(elements.marketsPager, marketsPage, totalPages, summaries?.length ?? 0, "weapons");
+}
+
+function weaponSummaryCard(summary) {
+  const stats = summary.priceStats;
+  const intel = summary.marketIntel ?? {};
+  const strategy = intel.strategy ? intel.strategy.toUpperCase() : "—";
+  const score = Number.isFinite(intel.marketScore) ? Math.round(intel.marketScore) : null;
+  const spreadPct = Number.isFinite(intel.spreadPct) ? Math.round(intel.spreadPct * 100) : null;
+  const floorPct = Number.isFinite(intel.floorDiscountPct) ? Math.round(intel.floorDiscountPct * 100) : null;
+  return `
+    <article class="weapon-card" data-weapon-slug="${escapeHtml(summary.slug)}">
       <div class="weapon-card-head">${weaponThumb(summary.imageName, summary.name, "sm")}<h3>${escapeHtml(summary.name)}</h3></div>
       <div class="weapon-card-tags"><span>${escapeHtml(strategy)}</span><span>${escapeHtml(intel.demand ?? "unknown")}</span>${score === null ? "" : `<span>${score} score</span>`}</div>
       <dl>
@@ -1480,12 +1757,8 @@ function renderWeapons(summaries) {
         <dt>Spread</dt><dd>${spreadPct === null ? (stats ? `${stats.p25}→${stats.p75}` : "—") : `+${spreadPct}%`}</dd>
         <dt>Buy/Sell/Get</dt><dd>${Math.round(intel.buyScore ?? 0)}/${Math.round(intel.sellScore ?? 0)}/${Math.round(intel.farmScore ?? 0)}</dd>
         <dt>Dispo</dt><dd>${Number(summary.disposition ?? 0).toFixed(2)}${floorPct === null ? "" : ` · ${floorPct}% floor`}</dd>
-      </dl>`;
-    fragment.appendChild(card);
-  }
-  elements.weapons.appendChild(fragment);
-  if (visibleSummaries.length < summaries.length) elements.weapons.insertAdjacentHTML("beforeend", resultLimitNote("weapon summaries", visibleSummaries.length, summaries.length));
-  if (summaries.length === 0) elements.weapons.innerHTML = `<div class="empty-state">No weapon market summaries yet.</div>`;
+      </dl>
+    </article>`;
 }
 
 if (elements.weapons) {
@@ -1493,6 +1766,24 @@ if (elements.weapons) {
     const card = event.target instanceof HTMLElement ? event.target.closest("[data-weapon-slug]") : null;
     if (!card || !elements.weapons.contains(card)) return;
     openWeaponDetail(card.dataset.weaponSlug);
+  });
+}
+
+if (elements.marketsPager) {
+  elements.marketsPager.addEventListener("click", (event) => {
+    const delta = pageMeterDelta(event, elements.marketsPager);
+    if (!delta) return;
+    marketsPage = Math.max(0, marketsPage + delta);
+    renderWeapons(latestState?.weaponSummaries ?? []);
+  });
+}
+
+if (elements.runNowPager) {
+  elements.runNowPager.addEventListener("click", (event) => {
+    const delta = pageMeterDelta(event, elements.runNowPager);
+    if (!delta) return;
+    runNowPage = Math.max(0, runNowPage + delta);
+    renderRunNow(latestState?.product);
   });
 }
 
@@ -1584,13 +1875,13 @@ function drawChart(opportunities) {
   const items = chartRenderItems(opportunities)
     .filter((entry) => (entry.expectedProfit ?? 0) > 0 && (entry.roi ?? 0) > 0)
     .sort((left, right) => chartImportance(right) - chartImportance(left))
-    .slice(0, 8);
+    .slice(0, TOP_SPREAD_COUNT);
 
-  const padding = { left: 18, right: 18, top: 18, bottom: 18 };
+  const padding = { left: 18, right: 32, top: 18, bottom: 18 };
   const rowGap = 8;
   const rowHeight = Math.max(28, Math.min(46, (height - padding.top - padding.bottom - rowGap * Math.max(0, items.length - 1)) / Math.max(1, items.length)));
   const labelWidth = Math.min(310, Math.max(210, width * 0.28));
-  const metricWidth = 178;
+  const metricWidth = 218;
   const barX = padding.left + labelWidth;
   const barW = Math.max(120, width - padding.left - padding.right - labelWidth - metricWidth);
   const maxProfit = Math.max(1, ...items.map((entry) => Math.max(0, entry.expectedProfit ?? 0)));
@@ -1610,9 +1901,6 @@ function drawChart(opportunities) {
     return;
   }
 
-  context.font = "10px JetBrains Mono, monospace";
-  context.fillStyle = "rgba(160,160,184,0.72)";
-  context.fillText(`Top ${items.length} ranked spreads from ${formatNumber(opportunities?.length ?? 0)} opportunities`, padding.left, 13);
 
   items.forEach((opportunity, index) => {
     const y = padding.top + index * (rowHeight + rowGap);
@@ -1831,7 +2119,6 @@ async function updateSpotlight(raw) {
   ]) {
     if (text && (page.name.toLowerCase().includes(text) || page.sub.toLowerCase().includes(text))) items.push({ type: "page", ...page });
   }
-  if (text && "refresh feed".includes(text)) items.push({ type: "action", name: "Refresh feed", sub: "Force-refresh market data", action: "refresh" });
 
   if (parsed.text.length > 0) {
     try {
@@ -1890,8 +2177,6 @@ function renderSpotlightResults(items) {
         html.push(`<button class="spotlight-item spotlight-arcane" data-index="${currentIndex}" type="button">${arcaneThumb(item)}<div class="spotlight-body"><div class="spotlight-title">${escapeHtml(item.name)}</div><div class="spotlight-sub">${escapeHtml(item.rarity)} · ${item.dissolutionVosfor ?? "?"} Vosfor · ${priceLine == null ? "no scanned price" : `${priceLine}◈ p25`}</div></div><span class="spotlight-arrow">↵</span></button>`);
       } else if (item.type === "page") {
         html.push(`<button class="spotlight-item" data-index="${currentIndex}" type="button"><span class="spotlight-glyph">⌂</span><div class="spotlight-body"><div class="spotlight-title">${escapeHtml(item.name)}</div><div class="spotlight-sub">${escapeHtml(item.sub)}</div></div><span class="spotlight-arrow">›</span></button>`);
-      } else if (item.type === "action") {
-        html.push(`<button class="spotlight-item" data-index="${currentIndex}" type="button"><span class="spotlight-glyph">ϟ</span><div class="spotlight-body"><div class="spotlight-title">${escapeHtml(item.name)}</div><div class="spotlight-sub">${escapeHtml(item.sub)}</div></div><span class="spotlight-arrow">↵</span></button>`);
       }
     }
   }
@@ -1904,13 +2189,12 @@ function renderSpotlightResults(items) {
 function groupSpotlightItems(items) {
   const labels = new Map([
     ["filter", "Actions"],
-    ["action", "Actions"],
     ["page", "Pages"],
     ["weapon", "Weapons"],
     ["arcane", "Arcanes"],
   ]);
   const grouped = [];
-  for (const type of ["filter", "action", "page", "weapon", "arcane"]) {
+  for (const type of ["filter", "page", "weapon", "arcane"]) {
     const groupItems = items.filter((item) => item.type === type);
     if (groupItems.length > 0) grouped.push([labels.get(type), groupItems]);
   }
@@ -1936,9 +2220,6 @@ function activateSpotlightItem(index) {
   } else if (item.type === "page") {
     closeSpotlightOverlay();
     navigate(item.page, { settingsTab: item.settingsTab });
-  } else if (item.type === "action" && item.action === "refresh") {
-    closeSpotlightOverlay();
-    void refreshNow();
   }
 }
 
@@ -2084,21 +2365,18 @@ function renderSpotlightHints() {
   const results = elements.spotlightResults;
   if (!results) return;
   spotlightItems = [
-    { type: "page", name: "Opportunities", sub: "Ranked buy-low / sell-high queue", page: "opportunities", __index: 0 },
-    { type: "page", name: "Instant Wins", sub: "Live undervalued signature listings", page: "instant", __index: 1 },
-    { type: "page", name: "Arcanes", sub: "Vosfor EV and dissolve recommendations", page: "arcanes", __index: 2 },
-    { type: "hint", title: "Search any weapon or Arcane", sub: "Type a name — e.g. bramma, steadfast, hot shot", __index: 3 },
-    { type: "hint", title: "Filter by price", sub: "e.g. dark sword < 100p, > 500p, = 250p", __index: 4 },
+    { type: "page", name: "Opportunities", sub: "", page: "opportunities", __index: 0 },
+    { type: "page", name: "Instant Wins", sub: "", page: "instant", __index: 1 },
+    { type: "page", name: "Arcanes", sub: "", page: "arcanes", __index: 2 },
   ];
   spotlightIndex = -1;
   results.removeAttribute("hidden");
   results.innerHTML = `
     <div class="spotlight-section-label">Try this</div>
-    <button class="spotlight-item" data-index="0" type="button"><span class="spotlight-glyph">◎</span><div class="spotlight-body"><div class="spotlight-title">Opportunities</div><div class="spotlight-sub">Open the ranked trade queue</div></div><span class="spotlight-arrow">›</span></button>
-    <button class="spotlight-item" data-index="1" type="button"><span class="spotlight-glyph">ϟ</span><div class="spotlight-body"><div class="spotlight-title">Instant Wins</div><div class="spotlight-sub">Open same-signature undervalued listings</div></div><span class="spotlight-arrow">›</span></button>
-    <button class="spotlight-item" data-index="2" type="button"><span class="spotlight-glyph">✦</span><div class="spotlight-body"><div class="spotlight-title">Arcanes</div><div class="spotlight-sub">Open Vosfor exchange EV</div></div><span class="spotlight-arrow">›</span></button>
-    <div class="spotlight-item spotlight-hint"><span class="spotlight-glyph">⌕</span><div class="spotlight-body"><div class="spotlight-title">Search any weapon or Arcane</div><div class="spotlight-sub">Type a name — e.g. bramma, steadfast, hot shot</div></div></div>
-    <div class="spotlight-item spotlight-hint"><span class="spotlight-glyph">≡</span><div class="spotlight-body"><div class="spotlight-title">Filter by price</div><div class="spotlight-sub">e.g. dark sword &lt; 100p, &gt; 500p, = 250p</div></div></div>`;
+    <button class="spotlight-item" data-index="0" type="button"><span class="spotlight-glyph">◎</span><div class="spotlight-body"><div class="spotlight-title">Opportunities</div></div><span class="spotlight-arrow">›</span></button>
+    <button class="spotlight-item" data-index="1" type="button"><span class="spotlight-glyph">ϟ</span><div class="spotlight-body"><div class="spotlight-title">Instant Wins</div></div><span class="spotlight-arrow">›</span></button>
+    <button class="spotlight-item" data-index="2" type="button"><span class="spotlight-glyph">✦</span><div class="spotlight-body"><div class="spotlight-title">Arcanes</div></div><span class="spotlight-arrow">›</span></button>
+    <div class="spotlight-item spotlight-hint"><span class="spotlight-glyph">⌕</span><div class="spotlight-body"><div class="spotlight-title">Search items, weapons, filters...</div></div></div>`;
   for (const button of results.querySelectorAll(".spotlight-item:not(.spotlight-hint)")) button.addEventListener("click", () => activateSpotlightItem(Number(button.dataset.index)));
 }
 
@@ -2156,6 +2434,7 @@ document.addEventListener("keydown", (event) => {
   } else if (event.key === "Escape") {
     if (elements.spotlightOverlay?.hidden === false) closeSpotlightOverlay();
     if (elements.weaponModal?.hidden === false) closeWeaponModal();
+    if (elements.rankedOverlay?.hidden === false) closeRankedOverlay();
   }
 });
 
@@ -2282,7 +2561,7 @@ function parseSignature(sig) {
 function collectConfig() {
   const statuses = [...document.querySelectorAll(".status")].filter((checkbox) => checkbox.checked).map((checkbox) => checkbox.value);
   return {
-    watchlistText: elements.watchlist.value,
+    watchlistText: watchlistTermsForSubmit().join("\n"),
     minProfit: Number(elements.minProfit.value),
     minRoi: Number(elements.minRoi.value),
     minGroupSize: Number(elements.minGroupSize.value),
@@ -2374,6 +2653,33 @@ for (const button of document.querySelectorAll("[data-sort]")) {
   });
 }
 
+if (elements.watchlist) {
+  elements.watchlist.addEventListener("input", scheduleWatchlistSuggestions);
+  elements.watchlist.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === ",") {
+      event.preventDefault();
+      addWatchlistSelection(elements.watchlist.value);
+    }
+    if (event.key === "Escape" && elements.watchlistSuggestions) elements.watchlistSuggestions.hidden = true;
+  });
+}
+
+if (elements.watchlistSuggestions) {
+  elements.watchlistSuggestions.addEventListener("click", (event) => {
+    const button = event.target instanceof HTMLElement ? event.target.closest("[data-watchlist-add]") : null;
+    if (!button || !elements.watchlistSuggestions.contains(button)) return;
+    addWatchlistSelection(button.dataset.watchlistAdd);
+  });
+}
+
+if (elements.watchlistChips) {
+  elements.watchlistChips.addEventListener("click", (event) => {
+    const button = event.target instanceof HTMLElement ? event.target.closest("[data-watchlist-remove]") : null;
+    if (!button || !elements.watchlistChips.contains(button)) return;
+    removeWatchlistSelection(button.dataset.watchlistRemove);
+  });
+}
+
 if (elements.form) {
   elements.form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -2390,18 +2696,6 @@ if (elements.form) {
   });
 }
 
-for (const refreshButton of [elements.refresh, elements.homeRefresh, elements.instantRefresh, elements.arcaneRefresh, elements.railRefresh].filter(Boolean)) {
-  refreshButton.addEventListener("click", () => refreshNow(refreshButton));
-}
-
-async function refreshNow(button = null) {
-  if (button) button.disabled = true;
-  try {
-    await postJson("/api/refresh", {});
-  } finally {
-    if (button) button.disabled = false;
-  }
-}
 
 function openSettingsModal(defaultTab = "data") {
   navigate("settings", { settingsTab: defaultTab });
@@ -2574,5 +2868,5 @@ if (window.EventSource) {
 loadState().catch((error) => {
   if (elements.summary) elements.summary.textContent = error.message;
 });
-setInterval(() => { refreshDerived().catch(() => undefined); }, 60_000);
+setInterval(() => { loadState().catch(() => refreshDerived().catch(() => undefined)); }, HEARTBEAT_MS);
 window.addEventListener("resize", scheduleChartRedraw);

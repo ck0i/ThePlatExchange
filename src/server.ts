@@ -85,9 +85,9 @@ class ImageProxy {
 
 function sanitizeImageName(raw: string): string | null {
   const trimmed = raw.trim();
-  if (!trimmed || trimmed.length > 128) return null;
+  if (!trimmed || trimmed.length > 160) return null;
   if (trimmed.includes("/") || trimmed.includes("\\") || trimmed.includes("..")) return null;
-  if (!/^[A-Za-z0-9._-]+$/.test(trimmed)) return null;
+  if (!/^[A-Za-z0-9 ._'’()+,&-]+$/u.test(trimmed)) return null;
   const ext = extname(trimmed).toLowerCase();
   if (!IMAGE_ALLOWED_EXTENSIONS.has(ext)) return null;
   return trimmed;
