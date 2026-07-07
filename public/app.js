@@ -29,6 +29,7 @@ const elements = {
   weapons: document.getElementById("weapons"),
   chart: document.getElementById("profitChart"),
   chartTip: document.getElementById("chartTip"),
+  topSpreadCards: document.getElementById("topSpreadCards"),
   sortPills: document.getElementById("sortPills"),
   form: document.getElementById("filters"),
   refresh: document.getElementById("refresh"),
@@ -66,6 +67,8 @@ const elements = {
   productOpportunities: document.getElementById("productOpportunities"),
   primeRelics: document.getElementById("primeRelics"),
   expansionMethods: document.getElementById("expansionMethods"),
+  productTabs: document.querySelectorAll("[data-product-view]"),
+  productViewPanels: document.querySelectorAll("[data-product-view-panel]"),
   runNowSummary: document.getElementById("runNowSummary"),
   runNowList: document.getElementById("runNowList"),
   dataHealthSummary: document.getElementById("dataHealthSummary"),
@@ -153,6 +156,7 @@ let lastOpportunityScrollTop = 0;
 let pendingChartPointer = null;
 let chartPointerFrame = 0;
 let chartResizeFrame = 0;
+let currentProductView = "engines";
 let opportunityViewCache = {
   source: null,
   filter: null,
@@ -299,6 +303,22 @@ if (elements.productRefresh) {
       elements.productRefresh.disabled = false;
     }
   });
+}
+
+for (const tab of elements.productTabs) {
+  tab.addEventListener("click", () => switchProductView(tab.dataset.productView || "engines"));
+}
+
+function switchProductView(view) {
+  currentProductView = view;
+  for (const tab of elements.productTabs) {
+    const active = tab.dataset.productView === view;
+    tab.classList.toggle("active", active);
+    tab.setAttribute("aria-selected", active ? "true" : "false");
+  }
+  for (const panel of elements.productViewPanels) {
+    panel.classList.toggle("active", panel.dataset.productViewPanel === view);
+  }
 }
 
 if (elements.profileForm) {
@@ -458,6 +478,8 @@ function renderVisiblePageSurfaces() {
 function renderHomeSurfaces() {
   const view = opportunityView();
   renderFreshOpportunities(view.sorted);
+  const topSpreadOpportunities = topSpreadRows(view.filtered);
+  renderTopSpreadCards(topSpreadOpportunities);
   drawChart(view.filtered);
   renderHero(view.sorted[0] ?? currentOpportunitySource()[0] ?? null);
   renderHeatmap(latestState?.weaponSummaries ?? []);
@@ -650,14 +672,26 @@ function resultLimitNote(label, shown, total) {
 
 function chartRenderItems(opportunities) {
   if (!Array.isArray(opportunities)) return [];
-  if (opportunities.length <= RESULT_BUDGETS.chartPoints) return opportunities;
-  const sampled = [];
-  const step = opportunities.length / RESULT_BUDGETS.chartPoints;
-  for (let index = 0; index < RESULT_BUDGETS.chartPoints; index += 1) {
-    const item = opportunities[Math.floor(index * step)];
-    if (item) sampled.push(item);
-  }
-  return sampled;
+  const actionable = opportunities
+    .filter((entry) => (entry.expectedProfit ?? 0) > 0 && (entry.roi ?? 0) > 0)
+    .sort((left, right) => chartImportance(right) - chartImportance(left));
+  const limit = Math.min(64, RESULT_BUDGETS.chartPoints);
+  if (actionable.length <= limit) return actionable;
+  const selected = new Map();
+  for (const item of actionable.slice(0, limit * 0.55)) selected.set(opportunityKey(item), item);
+  for (const item of [...actionable].sort((left, right) => (right.roi ?? 0) - (left.roi ?? 0)).slice(0, limit * 0.2)) selected.set(opportunityKey(item), item);
+  for (const item of [...actionable].sort((left, right) => (right.expectedProfit ?? 0) - (left.expectedProfit ?? 0)).slice(0, limit * 0.2)) selected.set(opportunityKey(item), item);
+  for (const item of actionable.filter((entry) => (entry.quality?.signals ?? []).includes("undervalued_signature")).slice(0, limit * 0.15)) selected.set(opportunityKey(item), item);
+  return [...selected.values()].slice(0, limit);
+}
+
+function chartImportance(opportunity) {
+  const profit = Math.max(0, opportunity.expectedProfit ?? 0);
+  const roi = Math.max(0, opportunity.roi ?? 0);
+  const confidence = Math.max(0, Math.min(1, opportunity.confidence ?? opportunity.confidenceScore ?? 0.6));
+  const tierBoost = ({ A: 1.25, B: 1.08, C: 0.92, D: 0.72 })[opportunity.quality?.tier ?? tierFromScore(opportunity.score)] ?? 0.8;
+  const signalBoost = (opportunity.quality?.signals ?? []).includes("undervalued_signature") ? 1.2 : 1;
+  return (Math.log1p(profit) * 0.62 + Math.log1p(roi * 100) * 0.38) * confidence * tierBoost * signalBoost;
 }
 
 
@@ -822,6 +856,58 @@ function renderFreshOpportunities(opportunities) {
     button.addEventListener("click", () => openWeaponDetail(opportunity.weaponSlug));
     elements.freshOpps.appendChild(button);
   }
+}
+
+function topSpreadRows(opportunities) {
+  const rows = Array.isArray(opportunities) ? opportunities : [];
+  const scored = rows.map((opportunity) => {
+    const profit = Math.max(0, opportunity.expectedProfit ?? 0);
+    const roi = Math.max(0, opportunity.roi ?? 0);
+    const confidence = Math.max(0, Math.min(1, opportunity.confidence ?? opportunity.confidenceScore ?? 0.5));
+    const tier = opportunity.quality?.tier ?? tierFromScore(opportunity.score);
+    const tierScore = ({ A: 48, B: 24, C: 10, D: 0 })[tier] ?? 0;
+    const bonus = (opportunity.quality?.signals ?? []).includes("undervalued_signature") ? 18 : 0;
+    return { opportunity, score: (profit * 0.75) + (roi * 90) + (confidence * 28) + tierScore + bonus };
+  });
+  scored.sort((left, right) => {
+    if (right.score !== left.score) return right.score - left.score;
+    if (right.opportunity.roi !== left.opportunity.roi) return (right.opportunity.roi ?? 0) - (left.opportunity.roi ?? 0);
+    if ((right.opportunity.expectedProfit ?? 0) !== (left.opportunity.expectedProfit ?? 0)) return (right.opportunity.expectedProfit ?? 0) - (left.opportunity.expectedProfit ?? 0);
+    return (right.opportunity.updated ?? 0) - (left.opportunity.updated ?? 0);
+  });
+  return scored.map((item) => item.opportunity).slice(0, 4);
+}
+
+function renderTopSpreadCards(opportunities) {
+  if (!elements.topSpreadCards) return;
+  const items = opportunities.slice(0, 4);
+  if (items.length === 0) {
+    elements.topSpreadCards.innerHTML = `<div class="empty-state">No deals yet.</div>`;
+    return;
+  }
+  elements.topSpreadCards.innerHTML = items.map((opportunity, index) => {
+    const tier = opportunity.quality?.tier ?? tierFromScore(opportunity.score);
+    const buy = opportunity.buyPrice == null ? "?" : `${opportunity.buyPrice}◈`;
+    const target = opportunity.conservativeSellPrice == null ? opportunity.targetSellPrice : opportunity.conservativeSellPrice;
+    const targetText = target == null ? "?" : `${target}◈`;
+    return `
+      <button class="top-spread-card" type="button" data-url="${escapeHtml(opportunity.url ?? "")}" data-weapon-slug="${escapeHtml(opportunity.weaponSlug ?? "")}">
+        <strong>${escapeHtml(opportunity.weaponName)}</strong>
+        <span>${escapeHtml(opportunity.rivenName)}</span>
+        <small class="top-spread-meta">#${index + 1} · ${escapeHtml(buy)} → ${escapeHtml(targetText)} · ${escapeHtml(tier)}-tier · ${Math.round((opportunity.roi ?? 0) * 100)}% ROI</small>
+        <b>+${Math.round(opportunity.expectedProfit ?? 0)}◈</b>
+      </button>
+    `;
+  }).join("");
+}
+
+if (elements.topSpreadCards) {
+  elements.topSpreadCards.addEventListener("click", (event) => {
+    const card = event.target instanceof HTMLElement ? event.target.closest(".top-spread-card") : null;
+    if (!card || !elements.topSpreadCards.contains(card)) return;
+    if (card.dataset.url) window.open(card.dataset.url, "_blank", "noopener");
+    else if (card.dataset.weaponSlug) openWeaponDetail(card.dataset.weaponSlug);
+  });
 }
 
 function renderInstantWins(items) {
@@ -997,23 +1083,28 @@ function renderProductEngine(product) {
   const opportunities = product?.opportunities ?? [];
   const methods = product?.methods ?? [];
   const best = opportunities[0] ?? null;
-  const summary = product ? `${formatNumber(product.prime?.relicCount ?? 0)} relics · ${formatNumber(product.prime?.rewardCount ?? 0)} rewards · ${formatNumber(opportunities.length)} recommendations` : "Waiting for product engine refresh.";
+  const summary = product ? `${formatNumber(opportunities.length)} ranked actions · ${formatNumber(methods.length)} engines · updated ${timeAgo(product.generatedAt)}` : "Waiting for product engine refresh.";
   if (elements.productSummary) elements.productSummary.textContent = summary;
-  if (elements.productHealth) elements.productHealth.textContent = product?.dataHealth?.status ?? "—";
-  if (elements.productHealthSub) elements.productHealthSub.textContent = product?.dataHealth ? `${product.dataHealth.sources?.length ?? 0} sources · ${product.dataHealth.warnings?.length ?? 0} warnings` : "Waiting for product data";
+  if (elements.productHealth) elements.productHealth.textContent = product?.dataHealth ? `${product.dataHealth.sources?.length ?? 0}` : "—";
+  if (elements.productHealthSub) elements.productHealthSub.textContent = product?.dataHealth ? `sources · updated ${timeAgo(product.dataHealth.generatedAt)}` : "Waiting for product data";
   if (elements.productMethodsCount) elements.productMethodsCount.textContent = formatNumber(methods.filter((method) => method.status !== "red").length);
   if (elements.productOppCount) elements.productOppCount.textContent = formatNumber(opportunities.length);
   if (elements.productBestEv) elements.productBestEv.textContent = best ? `${Math.round(best.expectedPlat ?? 0)}◈` : "—";
   if (elements.productBestEvSub) elements.productBestEvSub.textContent = best ? `${best.title} · ${Math.round((best.confidenceScore ?? 0) * 100)}% confidence` : "No ranked method yet";
 
-  elements.productMethods.innerHTML = methods.length === 0 ? `<div class="empty-state">No method outputs yet.</div>` : methods.map((method) => `
-    <article class="product-method-card status-${escapeHtml(method.status)}">
-      <div><strong>${escapeHtml(method.label)}</strong><span>${escapeHtml(method.description)}</span></div>
-      <div class="product-method-meta"><b>${formatNumber(method.opportunityCount)}</b><small>${escapeHtml(method.sourceIds?.join(" + ") || "manual gate")}</small></div>
-    </article>
-  `).join("");
+  elements.productMethods.innerHTML = methods.length === 0 ? `<div class="empty-state">No method outputs yet.</div>` : methods.map((method) => {
+    const methodOpp = opportunities.find((opportunity) => opportunity.id === method.bestOpportunityId || opportunity.methodId === method.id);
+    return `
+      <article class="product-method-card method-engine-card status-${escapeHtml(method.status)}">
+        <div>
+          <strong>${escapeHtml(method.label)}</strong>
+          <span>${formatNumber(method.opportunityCount)} opportunities · ${methodOpp ? `${Math.round(methodOpp.expectedPlat ?? 0)}◈ best EV` : "no best pick"}</span>
+        </div>
+        <div class="product-method-meta"><b>${formatNumber(method.opportunityCount)}</b><small>opps</small></div>
+      </article>`;
+  }).join("");
 
-  elements.productOpportunities.innerHTML = opportunities.length === 0 ? `<div class="empty-state">No product recommendations yet.</div>` : opportunities.slice(0, RESULT_BUDGETS.opportunityCards).map(productOpportunityCard).join("") + resultLimitNote("product recommendations", Math.min(opportunities.length, RESULT_BUDGETS.opportunityCards), opportunities.length);
+  elements.productOpportunities.innerHTML = opportunities.length === 0 ? `<div class="empty-state">No product recommendations yet.</div>` : opportunities.slice(0, 6).map(productOpportunityCard).join("") + resultLimitNote("top product recommendations", Math.min(opportunities.length, 6), opportunities.length);
   renderPrimeRelics(product?.prime);
   renderExpansionMethods(product?.expansion);
 }
@@ -1024,14 +1115,13 @@ function renderPrimeRelics(prime) {
     elements.primeRelics.innerHTML = `<div class="empty-state">Prime/Relic engine has not refreshed.</div>`;
     return;
   }
-  const rows = [
-    ...((prime.bestRelicsToSell ?? []).slice(0, 5).map((entry) => productRelicRow(entry, "sell"))),
-    ...((prime.bestRelicsToCrack ?? []).slice(0, 5).map((entry) => productRelicRow(entry, "crack"))),
-    ...((prime.ducatRecommendations ?? []).slice(0, 4).map(productOpportunityCompact)),
+  const farmRows = [
+    ...((prime.bestRelicsToCrack ?? []).slice(0, 4).map((entry) => productRelicRow(entry, "crack"))),
+    ...((prime.bestRelicsToSell ?? []).slice(0, 2).map((entry) => productRelicRow(entry, "sell"))),
   ];
   elements.primeRelics.innerHTML = `
-    <div class="product-summary-line">${escapeHtml(prime.summary ?? "")}</div>
-    ${rows.length === 0 ? `<div class="empty-state">No relic EV rows available.</div>` : rows.join("")}
+    <div class="product-summary-line relic-summary">${escapeHtml(prime.summary ?? "")}</div>
+    ${farmRows.length === 0 ? `<div class="empty-state">No relic EV rows available.</div>` : farmRows.join("")}
   `;
 }
 
@@ -1042,15 +1132,38 @@ function renderExpansionMethods(expansion) {
     return;
   }
   const sections = [
-    ["Mods", expansion.mods ?? []],
-    ["Syndicates", expansion.syndicates ?? []],
-    ["Baro", expansion.baro ?? []],
-    ["Resources", expansion.resources ?? []],
-    ["Event shocks", expansion.eventShocks ?? []],
+    { label: "Mods", id: "mods", items: expansion.mods ?? [], hint: "Rank-aware mods and upgrade inputs with market depth checks." },
+    { label: "Syndicates", id: "syndicates", items: expansion.syndicates ?? [], hint: "Standing-to-plat conversions and access assumptions." },
+    { label: "Baro", id: "baro", items: expansion.baro ?? [], hint: "Ducat inputs, timed vendor inventory, and resale windows." },
+    { label: "Resources", id: "resources", items: expansion.resources ?? [], hint: "Tradable resource-like markets that pass validation." },
+    { label: "Event shocks", id: "event_shocks", items: expansion.eventShocks ?? [], hint: "Temporary supply/demand shifts from live events." },
   ];
-  const cards = sections.map(([label, items]) => `<article class="product-compact-row"><strong>${escapeHtml(label)}</strong><span>${formatNumber(items.length)} opportunities</span></article>`);
-  const gates = (expansion.bespokeMarkets ?? []).map((gate) => `<article class="product-compact-row gated"><strong>${escapeHtml(gate.label)}</strong><span>${escapeHtml(gate.warnings?.[0] ?? "Gated")}</span></article>`);
+  const cards = sections.map((section) => expansionSection(section, false));
+  const gates = (expansion.bespokeMarkets ?? []).map((gate) => `
+    <details class="expansion-section gated">
+      <summary>
+        <span><strong>${escapeHtml(gate.label)}</strong><small>Gated bespoke market</small></span>
+        <b>${escapeHtml(gate.status)}</b>
+      </summary>
+      <div class="expansion-body"><div class="empty-state">${escapeHtml(gate.warnings?.[0] ?? "Manual verification required before this market can be scored.")}</div></div>
+    </details>`);
   elements.expansionMethods.innerHTML = [...cards, ...gates].join("");
+}
+
+function expansionSection(section, open = false) {
+  const items = section.items ?? [];
+  const topItems = items.slice(0, 2);
+  return `
+    <details class="expansion-section" ${open ? "open" : ""}>
+      <summary>
+        <span><strong>${escapeHtml(section.label)}</strong><small>${escapeHtml(section.hint)}</small></span>
+        <b>${formatNumber(items.length)} opps</b>
+      </summary>
+      <div class="expansion-body">
+        ${topItems.length === 0 ? `<div class="empty-state">No validated ${escapeHtml(section.label.toLowerCase())} opportunities yet.</div>` : topItems.map(productOpportunityCard).join("")}
+        ${items.length > topItems.length ? `<div class="result-limit-note">Showing ${topItems.length}/${items.length}. Top rows are sorted by EV and confidence.</div>` : ""}
+      </div>
+    </details>`;
 }
 
 function renderRunNow(product) {
@@ -1058,14 +1171,15 @@ function renderRunNow(product) {
   const runNow = product?.runNow;
   const activities = runNow?.activities ?? [];
   if (elements.runNowSummary) elements.runNowSummary.textContent = activities.length === 0 ? "No valid live activities are currently ranked." : `${formatNumber(activities.length)} live activities ranked by EV/minute, expiry, confidence, and mission speed.`;
-  elements.runNowList.innerHTML = activities.length === 0 ? `<div class="empty-state">No live activities passed validation.</div>` : activities.map((activity) => `
-    <article class="run-card status-${escapeHtml(activity.status)}">
+  elements.runNowList.innerHTML = activities.length === 0 ? `<div class="empty-state">No live activities passed validation.</div>` : activities.map((activity, index) => `
+    <article class="run-card run-activity-card status-${escapeHtml(activity.status)}">
+      <div class="run-rank">#${index + 1}</div>
       <div>
         <div class="product-card-title">${escapeHtml(activity.title)}</div>
         <p>${escapeHtml(activity.explanation?.recommendation ?? "")}</p>
-        <div class="product-card-meta"><span>${escapeHtml(activity.activityType)}</span><span>${escapeHtml(activity.missionType ?? "mission")}</span><span>${activity.expiresAt ? `Expires ${shortTime(activity.expiresAt)}` : "No expiry"}</span></div>
+        <div class="product-card-meta"><span>${escapeHtml(activity.activityType)}</span><span>${escapeHtml(activity.missionType ?? "mission")}</span><span>${activity.expiresAt ? `Expires ${shortTime(activity.expiresAt)}` : "No expiry"}</span><span>${escapeHtml(activity.node ?? "node n/a")}</span></div>
       </div>
-      <div class="product-score"><strong>${activity.evPerMinute}◈/min</strong><span>${Math.round((activity.confidenceScore ?? 0) * 100)}% confidence</span></div>
+      <div class="product-score run-score"><strong>${activity.evPerMinute}◈/min</strong><span>${Math.round((activity.confidenceScore ?? 0) * 100)}% confidence · ${escapeHtml(activity.status)}</span></div>
     </article>
   `).join("") + resultLimitNote("live activities", activities.length, activities.length + (runNow?.rejectedActivities?.length ?? 0));
 }
@@ -1074,17 +1188,26 @@ function renderDataHealth(product) {
   if (!elements.dataHealthSources) return;
   const health = product?.dataHealth;
   const sources = health?.sources ?? [];
-  if (elements.dataHealthSummary) elements.dataHealthSummary.textContent = health ? `${health.status.toUpperCase()} · ${sources.length} sources · ${health.warnings.length} warnings` : "Waiting for product data health.";
-  elements.dataHealthSources.innerHTML = sources.length === 0 ? `<div class="empty-state">No source health rows yet.</div>` : sources.map((source) => `
-    <article class="health-source-card status-${escapeHtml(source.status)}">
-      <div>
-        <div class="product-card-title">${escapeHtml(source.label)} <span class="chip">${escapeHtml(source.source)}</span></div>
-        <p>${escapeHtml(source.warnings?.[0] ?? "No source warnings.")}</p>
-        <div class="product-card-meta"><span>TTL ${formatNumber(Math.round((source.ttlSeconds ?? 0) / 60))}m</span><span>${source.coverage ? `${formatNumber(source.coverage.scanned)}/${formatNumber(source.coverage.total)} ${escapeHtml(source.coverage.label)}` : "coverage n/a"}</span><span>${source.schemaHash ? `schema ${escapeHtml(source.schemaHash)}` : "schema n/a"}</span></div>
-      </div>
-      <div class="product-score"><strong>${escapeHtml(source.status)}</strong><span>${source.lastSuccessAt ? `ok ${shortTime(source.lastSuccessAt)}` : source.lastFailureAt ? `fail ${shortTime(source.lastFailureAt)}` : "not observed"}</span></div>
-    </article>
-  `).join("");
+  if (elements.dataHealthSummary) elements.dataHealthSummary.textContent = health ? `${health.status.toUpperCase()} · ${sources.length} sources · updated ${timeAgo(health.generatedAt)}` : "Waiting for product data health.";
+  elements.dataHealthSources.innerHTML = sources.length === 0 ? `<div class="empty-state">No source health rows yet.</div>` : sources.map((source) => {
+    const lastUpdated = source.lastSuccessAt ?? source.lastFailureAt ?? health?.generatedAt;
+    const description = healthSourceDescription(source);
+    return `
+      <article class="health-source-card health-status-row status-${escapeHtml(source.status)}">
+        <div class="health-status-line"></div>
+        <div class="health-source-main">
+          <div class="health-source-title"><strong>${escapeHtml(source.label)}</strong><span class="health-updated">Updated ${lastUpdated ? timeAgo(lastUpdated) : "never"}</span></div>
+          <p>${escapeHtml(description)}</p>
+        </div>
+      </article>`;
+  }).join("");
+}
+
+function healthSourceDescription(source) {
+  if (source.warnings?.[0]) return source.warnings[0];
+  if (source.coverage) return `Updated ${source.coverage.label} coverage from ${source.source}; ${source.coverage.scanned} of ${source.coverage.total} rows are represented.`;
+  if (source.schemaHash) return `Validated ${source.source} schema ${source.schemaHash}.`;
+  return `Latest ${source.source} refresh completed without source warnings.`;
 }
 
 function renderPlanner(product) {
@@ -1093,8 +1216,9 @@ function renderPlanner(product) {
   const personalization = product?.personalization;
   const todos = personalization?.todos ?? [];
   elements.todoList.innerHTML = todos.length === 0 ? `<div class="empty-state">No todos yet. Add a task or convert a recommendation into one.</div>` : todos.map((todo) => `
-    <article class="planner-row">
-      <div><strong>${escapeHtml(todo.title)}</strong><span>${escapeHtml(todo.methodId ?? "manual")} · ${escapeHtml(todo.status)}${todo.dueAt ? ` · due ${shortTime(todo.dueAt)}` : ""}</span><p>${escapeHtml(todo.notes ?? "")}</p></div>
+    <article class="planner-row planner-task status-${escapeHtml(todo.status)}">
+      <div class="planner-task-state">${escapeHtml(todo.status.replace(/_/g, " "))}</div>
+      <div><strong>${escapeHtml(todo.title)}</strong><span>${escapeHtml(todo.methodId ?? "manual")} ${todo.dueAt ? `· due ${shortTime(todo.dueAt)}` : "· no due date"}</span><p>${escapeHtml(todo.notes ?? "")}</p></div>
       <div class="planner-actions">
         <button class="ghost-button" type="button" data-todo-action="in_progress" data-todo-id="${escapeHtml(todo.id)}">Start</button>
         <button class="primary-button" type="button" data-todo-action="done" data-todo-id="${escapeHtml(todo.id)}">Done</button>
@@ -1105,10 +1229,10 @@ function renderPlanner(product) {
   const alerts = personalization?.notificationRules ?? [];
   const advanced = product?.advanced;
   elements.portfolioList.innerHTML = `
-    <article class="planner-row"><div><strong>Realized profit</strong><span>${advanced?.tradeJournal?.realizedProfitPlat ?? 0}◈ · ${formatNumber(advanced?.tradeJournal?.tradeCount ?? 0)} trades</span></div></article>
-    <article class="planner-row"><div><strong>Portfolio entries</strong><span>${formatNumber(portfolio.length)} tracked · ${formatNumber(advanced?.portfolioAging?.length ?? 0)} aged</span></div></article>
-    <article class="planner-row"><div><strong>Alert rules</strong><span>${formatNumber(alerts.length)} configured · in-app/email/webhook channels modeled</span></div></article>
-    <article class="planner-row"><div><strong>Privacy</strong><span>${personalization?.profile?.privacy?.privateByDefault ? "Private by default" : "Sharing allowed"} · ${personalization?.exportAvailable ? "export ready" : "export unavailable"} · ${personalization?.deleteAvailable ? "delete ready" : "delete unavailable"}</span></div></article>
+    <article class="planner-row planner-metric"><div><strong>Realized profit</strong><span>${advanced?.tradeJournal?.realizedProfitPlat ?? 0}◈ across ${formatNumber(advanced?.tradeJournal?.tradeCount ?? 0)} trades</span></div></article>
+    <article class="planner-row planner-metric"><div><strong>Portfolio entries</strong><span>${formatNumber(portfolio.length)} tracked · ${formatNumber(advanced?.portfolioAging?.length ?? 0)} aged lots</span></div></article>
+    <article class="planner-row planner-metric"><div><strong>Alert rules</strong><span>${formatNumber(alerts.length)} configured · in-app/email/webhook channels modeled</span></div></article>
+    <article class="planner-row planner-metric"><div><strong>Privacy</strong><span>${personalization?.profile?.privacy?.privateByDefault ? "Private by default" : "Sharing allowed"} · ${personalization?.exportAvailable ? "export ready" : "export unavailable"} · ${personalization?.deleteAvailable ? "delete ready" : "delete unavailable"}</span></div></article>
   `;
 }
 
@@ -1386,48 +1510,54 @@ function renderHeatmap(summaries) {
   const fragment = document.createDocumentFragment();
   for (const summary of items) {
     const listings = summary.directListings ?? summary.listings ?? 0;
-    const actionable = summary.actionableListings ?? 0;
-    const score = summary.marketIntel?.marketScore ?? 0;
-    const intensity = Math.min(0.3, 0.06 + (Math.max(listings / maxListings, score / 100) * 0.24));
-    const positive = score >= 55 || actionable > 0;
-    const bg = positive ? `rgba(74, 222, 128, ${intensity})` : `rgba(123, 111, 239, ${intensity})`;
-    const border = positive ? `rgba(74, 222, 128, ${Math.min(.48, intensity + .18)})` : `rgba(123, 111, 239, ${Math.min(.45, intensity + .18)})`;
-    const text = positive ? "#4ade80" : "#a09af8";
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "heat-card";
-    button.dataset.weaponSlug = summary.slug;
-    button.style.background = bg;
-    button.style.borderColor = border;
-    button.style.flexGrow = String(Math.max(1, listings / Math.max(1, maxListings / 4)));
-    button.style.flexBasis = `${Math.max(92, Math.min(190, 70 + listings * 2))}px`;
-    button.style.height = `${Math.max(58, Math.min(96, 48 + listings))}px`;
-    button.innerHTML = `<strong>${escapeHtml(summary.name)}</strong><span style="color:${text}">${formatNumber(listings)} direct · ${actionable} actionable · ${Math.round(score)} score</span>`;
-    fragment.appendChild(button);
-  }
-  if (visibleLimit < allItems.length && visibleLimit < RESULT_BUDGETS.heatmapCards) {
-    const more = document.createElement("button");
-    more.type = "button";
-    more.className = "show-more-button heatmap-more";
-    more.textContent = `Show ${formatNumber(Math.min(HEATMAP_SHOW_MORE_BATCH, allItems.length - visibleLimit))} more`;
-    more.addEventListener("click", () => {
-      heatmapVisibleCount += HEATMAP_SHOW_MORE_BATCH;
-      renderHeatmap(summaries);
-    });
-    fragment.appendChild(more);
+    const strength = Math.max(0.12, Math.min(1, listings / maxListings));
+    const score = Math.round(summary.marketIntel?.marketScore ?? 0);
+    const hue = score >= 70 ? "74,222,128" : score >= 45 ? "56,189,248" : "251,191,36";
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "heat-card";
+    card.style.background = `linear-gradient(135deg, rgba(${hue},${0.06 + strength * 0.18}), rgba(255,255,255,0.025))`;
+    card.style.borderColor = `rgba(${hue},${0.16 + strength * 0.32})`;
+    card.dataset.weaponSlug = summary.slug;
+    card.innerHTML = `<strong>${escapeHtml(summary.name)}</strong><span>${formatNumber(listings)} listings · ${score || "—"} score</span>`;
+    card.addEventListener("click", () => openWeaponDetail(summary.slug));
+    fragment.appendChild(card);
   }
   elements.heatmap.appendChild(fragment);
-  if (visibleLimit < allItems.length && visibleLimit >= RESULT_BUDGETS.heatmapCards) {
-    elements.heatmap.insertAdjacentHTML("beforeend", resultLimitNote("market coverage cards", visibleLimit, allItems.length));
-  }
+  if (items.length < allItems.length) elements.heatmap.insertAdjacentHTML("beforeend", resultLimitNote("market tiles", items.length, allItems.length));
 }
 
 if (elements.heatmap) {
   elements.heatmap.addEventListener("click", (event) => {
-    const card = event.target instanceof HTMLElement ? event.target.closest("[data-weapon-slug]") : null;
-    if (!card || !elements.heatmap.contains(card)) return;
-    openWeaponDetail(card.dataset.weaponSlug);
+    const button = event.target instanceof HTMLElement ? event.target.closest("[data-heatmap-more]") : null;
+    if (!button) return;
+    heatmapVisibleCount += HEATMAP_SHOW_MORE_BATCH;
+    renderHeatmap(latestState?.summaries ?? []);
   });
+}
+
+function percentile(sortedValues, pct) {
+  if (sortedValues.length === 0) return 0;
+  const index = Math.min(sortedValues.length - 1, Math.max(0, pct * (sortedValues.length - 1)));
+  const lower = Math.floor(index);
+  const upper = Math.ceil(index);
+  if (lower === upper) return sortedValues[lower];
+  return sortedValues[lower] + (sortedValues[upper] - sortedValues[lower]) * (index - lower);
+}
+
+function roundRectPath(context, x, y, width, height, radius) {
+  const r = Math.min(radius, width / 2, height / 2);
+  context.beginPath();
+  context.moveTo(x + r, y);
+  context.lineTo(x + width - r, y);
+  context.quadraticCurveTo(x + width, y, x + width, y + r);
+  context.lineTo(x + width, y + height - r);
+  context.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+  context.lineTo(x + r, y + height);
+  context.quadraticCurveTo(x, y + height, x, y + height - r);
+  context.lineTo(x, y + r);
+  context.quadraticCurveTo(x, y, x + r, y);
+  context.closePath();
 }
 
 function drawChart(opportunities) {
@@ -1447,66 +1577,81 @@ function drawChart(opportunities) {
   const width = canvas.width || 1200;
   const height = canvas.height || 320;
   context.clearRect(0, 0, width, height);
-
-  const marginX = 46;
-  const marginY = 28;
-  const plotW = width - marginX * 2;
-  const plotH = height - marginY * 2;
-
-  context.strokeStyle = "rgba(30, 30, 39, 0.95)";
-  context.lineWidth = 1;
-  for (let i = 0; i <= 4; i += 1) {
-    const y = marginY + (i * plotH) / 4;
-    context.beginPath(); context.moveTo(marginX, y); context.lineTo(width - marginX, y); context.stroke();
-    const x = marginX + (i * plotW) / 4;
-    context.beginPath(); context.moveTo(x, marginY); context.lineTo(x, height - marginY); context.stroke();
-  }
-
   scatterHits = [];
   chartTooltipKey = null;
   if (elements.chartTip) elements.chartTip.hidden = true;
-  if (!opportunities || opportunities.length === 0) {
-    context.fillStyle = "#6b6b7a";
-    context.font = "13px Inter, sans-serif";
-    context.fillText("Waiting for opportunities…", marginX + 4, height / 2);
+
+  const items = chartRenderItems(opportunities)
+    .filter((entry) => (entry.expectedProfit ?? 0) > 0 && (entry.roi ?? 0) > 0)
+    .sort((left, right) => chartImportance(right) - chartImportance(left))
+    .slice(0, 8);
+
+  const padding = { left: 18, right: 18, top: 18, bottom: 18 };
+  const rowGap = 8;
+  const rowHeight = Math.max(28, Math.min(46, (height - padding.top - padding.bottom - rowGap * Math.max(0, items.length - 1)) / Math.max(1, items.length)));
+  const labelWidth = Math.min(310, Math.max(210, width * 0.28));
+  const metricWidth = 178;
+  const barX = padding.left + labelWidth;
+  const barW = Math.max(120, width - padding.left - padding.right - labelWidth - metricWidth);
+  const maxProfit = Math.max(1, ...items.map((entry) => Math.max(0, entry.expectedProfit ?? 0)));
+
+  const gradient = context.createLinearGradient(0, 0, width, height);
+  gradient.addColorStop(0, "rgba(74,222,128,0.08)");
+  gradient.addColorStop(0.48, "rgba(123,111,239,0.045)");
+  gradient.addColorStop(1, "rgba(56,189,248,0.05)");
+  context.fillStyle = gradient;
+  roundRectPath(context, 8, 8, width - 16, height - 16, 14);
+  context.fill();
+
+  if (items.length === 0) {
+    context.fillStyle = "#a0a0b8";
+    context.font = "13px Bricolage Grotesque, sans-serif";
+    context.fillText("Waiting for ranked deals…", padding.left + 4, height / 2);
     return;
   }
 
-  const chartItems = chartRenderItems(opportunities);
-  let maxRoi = 1;
-  let maxProfit = 1;
-  for (const entry of opportunities) {
-    maxRoi = Math.max(maxRoi, entry.roi ?? 0);
-    maxProfit = Math.max(maxProfit, entry.expectedProfit ?? 0);
-  }
-
-  context.fillStyle = "#6b6b7a";
   context.font = "10px JetBrains Mono, monospace";
-  for (let i = 0; i <= 4; i += 1) {
-    const roi = Math.round(((i * maxRoi) / 4) * 100);
-    context.fillText(`${roi}%`, marginX + (i * plotW) / 4 - 10, height - 8);
-    const profit = Math.round(((4 - i) * maxProfit) / 4);
-    context.fillText(`${profit}◈`, 4, marginY + (i * plotH) / 4 + 4);
-  }
-  if (chartItems.length < opportunities.length) {
-    context.fillText(`${formatNumber(chartItems.length)}/${formatNumber(opportunities.length)} plotted`, width - marginX - 96, marginY - 8);
-  }
+  context.fillStyle = "rgba(160,160,184,0.72)";
+  context.fillText(`Top ${items.length} ranked spreads from ${formatNumber(opportunities?.length ?? 0)} opportunities`, padding.left, 13);
 
-  for (const opportunity of chartItems) {
-    const roi = Math.max(0, Math.min(maxRoi, opportunity.roi ?? 0));
-    const profit = Math.max(0, Math.min(maxProfit, opportunity.expectedProfit ?? 0));
-    const cx = marginX + (roi / maxRoi) * plotW;
-    const cy = height - marginY - (profit / maxProfit) * plotH;
+  items.forEach((opportunity, index) => {
+    const y = padding.top + index * (rowHeight + rowGap);
     const tier = opportunity.quality?.tier ?? tierFromScore(opportunity.score);
-    const undervalued = (opportunity.quality?.signals ?? []).includes("undervalued_signature");
-    context.fillStyle = TIER_COLORS[tier] ?? TIER_COLORS.D;
-    context.beginPath(); context.arc(cx, cy, 4.5, 0, Math.PI * 2); context.fill();
-    if (undervalued) {
-      context.strokeStyle = "rgba(255,255,255,0.86)"; context.lineWidth = 1.5;
-      context.beginPath(); context.arc(cx, cy, 8, 0, Math.PI * 2); context.stroke();
-    }
-    scatterHits.push({ cx, cy, r: 4.5, opportunity });
-  }
+    const color = TIER_COLORS[tier] ?? TIER_COLORS.D;
+    const profit = Math.max(0, opportunity.expectedProfit ?? 0);
+    const roiPct = Math.round((opportunity.roi ?? 0) * 100);
+    const fillW = Math.max(6, (profit / maxProfit) * barW);
+
+    context.fillStyle = "rgba(255,255,255,0.035)";
+    roundRectPath(context, padding.left, y, width - padding.left - padding.right, rowHeight, 10);
+    context.fill();
+
+    context.fillStyle = color;
+    context.globalAlpha = 0.18;
+    roundRectPath(context, barX, y + 7, barW, rowHeight - 14, 999);
+    context.fill();
+    context.globalAlpha = 0.95;
+    roundRectPath(context, barX, y + 7, fillW, rowHeight - 14, 999);
+    context.fill();
+    context.globalAlpha = 1;
+
+    context.fillStyle = "rgba(232,232,244,0.95)";
+    context.font = "700 13px Bricolage Grotesque, sans-serif";
+    context.fillText(`${index + 1}. ${opportunity.weaponName ?? "Unknown"}`, padding.left + 12, y + rowHeight * 0.48);
+    context.fillStyle = "rgba(160,160,184,0.78)";
+    context.font = "10px JetBrains Mono, monospace";
+    context.fillText(`${opportunity.buyPrice ?? "?"}◈ → ${opportunity.targetSellPrice ?? "?"}◈`, padding.left + 12, y + rowHeight * 0.78);
+
+    const metricX = barX + barW + 16;
+    context.fillStyle = "rgba(74,222,128,0.96)";
+    context.font = "700 15px JetBrains Mono, monospace";
+    context.fillText(`+${Math.round(profit)}◈`, metricX, y + rowHeight * 0.45);
+    context.fillStyle = "rgba(232,232,244,0.78)";
+    context.font = "11px JetBrains Mono, monospace";
+    context.fillText(`${roiPct}% ROI · ${tier}`, metricX, y + rowHeight * 0.76);
+
+    scatterHits.push({ x: padding.left, y, w: width - padding.left - padding.right, h: rowHeight, cx: metricX, cy: y + rowHeight / 2, r: rowHeight / 2, opportunity });
+  });
 }
 
 function canvasPointFromEvent(event) {
@@ -1525,6 +1670,16 @@ function canvasPointFromEvent(event) {
 function findScatterHit(mx, my, tolerance = 3) {
   let best = null; let bestDist = Infinity;
   for (const hit of scatterHits) {
+    if (Number.isFinite(hit.x) && Number.isFinite(hit.y) && Number.isFinite(hit.w) && Number.isFinite(hit.h)) {
+      const inside = mx >= hit.x - tolerance && mx <= hit.x + hit.w + tolerance && my >= hit.y - tolerance && my <= hit.y + hit.h + tolerance;
+      if (inside) {
+        const centerX = hit.x + hit.w / 2;
+        const centerY = hit.y + hit.h / 2;
+        const dist = (centerX - mx) ** 2 + (centerY - my) ** 2;
+        if (dist < bestDist) { best = hit; bestDist = dist; }
+      }
+      continue;
+    }
     const dx = hit.cx - mx; const dy = hit.cy - my;
     const dist = dx * dx + dy * dy;
     const limit = (hit.r + tolerance) ** 2;
