@@ -1,52 +1,54 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-08T01:12:05.134Z",
+  "generatedAt": "2026-07-08T04:34:17.118Z",
   "live": {
     "id": "live",
     "label": "Live Warframe activities",
     "status": "yellow",
     "source": "warframestat",
     "url": "https://api.warframestat.us/pc/fissures",
-    "lastSuccessAt": "2026-07-08T01:12:05.134Z",
+    "lastSuccessAt": "2026-07-08T04:34:17.118Z",
     "ttlSeconds": 300,
     "coverage": {
-      "scanned": 26,
-      "total": 27,
+      "scanned": 36,
+      "total": 39,
       "label": "validated activities"
     },
-    "warningCount": 2,
+    "warningCount": 4,
     "fallback": "raw worldstate unavailable; wrapper validation active",
     "warnings": [
+      "Taveuni (Kuva Fortress): activity has expired",
+      "Dakata (Kuva Fortress): activity has expired",
       "Arbitration rejected: activity payload is already expired",
       "SolNode000: activity payload is already expired"
     ]
   },
   "runNow": {
-    "generatedAt": "2026-07-08T01:12:05.134Z",
+    "generatedAt": "2026-07-08T04:34:17.118Z",
     "activities": [
       {
-        "id": "6a4d94a6bda5fcb0c2370201",
+        "id": "6a4dc25ad623f67868630cc1",
         "activityType": "fissure",
-        "title": "Yuvarium (Lua) Omnia Fissure",
-        "node": "Yuvarium (Lua)",
-        "missionType": "Survival",
-        "evPerMinute": 8.54,
-        "priority": 6.83,
-        "expiresAt": "2026-07-08T01:31:26.368Z",
+        "title": "Everview Arc (Zariman) Omnia Fissure",
+        "node": "Everview Arc (Zariman)",
+        "missionType": "Void Flood",
+        "evPerMinute": 9.6,
+        "priority": 7.68,
+        "expiresAt": "2026-07-08T05:20:50.958Z",
         "confidenceScore": 0.8,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
         },
         "explanation": {
           "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
-          "expectedOutcome": "8.54 estimated EV/minute before user inventory adjustments.",
+          "expectedOutcome": "9.6 estimated EV/minute before user inventory adjustments.",
           "dataBasis": [
             "warframestat fissure payload",
             "Prime/Relic method EV multiplier by tier and mission speed"
@@ -70,28 +72,28 @@
         }
       },
       {
-        "id": "6a4d9d168976f2d7f8bee3ae",
+        "id": "6a4dc25ad623f67868630cc0",
         "activityType": "fissure",
-        "title": "Circulus (Lua) Omnia Fissure",
-        "node": "Circulus (Lua)",
-        "missionType": "Survival",
-        "evPerMinute": 7.91,
-        "priority": 6.33,
-        "expiresAt": "2026-07-08T02:19:22.636Z",
+        "title": "Everview Arc (Zariman) Omnia Fissure",
+        "node": "Everview Arc (Zariman)",
+        "missionType": "Void Flood",
+        "evPerMinute": 8.89,
+        "priority": 7.11,
+        "expiresAt": "2026-07-08T04:38:08.553Z",
         "confidenceScore": 0.8,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
         },
         "explanation": {
           "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
-          "expectedOutcome": "7.91 estimated EV/minute before user inventory adjustments.",
+          "expectedOutcome": "8.89 estimated EV/minute before user inventory adjustments.",
           "dataBasis": [
             "warframestat fissure payload",
             "Prime/Relic method EV multiplier by tier and mission speed"
@@ -115,21 +117,21 @@
         }
       },
       {
-        "id": "6a4d94a6bda5fcb0c2370202",
+        "id": "6a4dc25ad623f67868630cc2",
         "activityType": "fissure",
         "title": "Cambire (Deimos) Omnia Fissure",
         "node": "Cambire (Deimos)",
         "missionType": "Alchemy",
         "evPerMinute": 7,
         "priority": 5.6,
-        "expiresAt": "2026-07-08T01:24:03.267Z",
+        "expiresAt": "2026-07-08T04:45:55.560Z",
         "confidenceScore": 0.8,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
@@ -160,36 +162,36 @@
         }
       },
       {
-        "id": "6a4d97b29b609e51c931d4cf",
-        "activityType": "fissure",
-        "title": "Saxis (Eris) Axi Fissure",
-        "node": "Saxis (Eris)",
+        "id": "6a4dc69253338ef1455c2490",
+        "activityType": "void_storm",
+        "title": "Calabash (Veil) Axi Void Storm",
+        "node": "Calabash (Veil)",
         "missionType": "Extermination",
-        "evPerMinute": 7,
-        "priority": 5.32,
-        "expiresAt": "2026-07-08T02:03:01.679Z",
+        "evPerMinute": 7.26,
+        "priority": 5.52,
+        "expiresAt": "2026-07-08T05:50:03.360Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
         },
         "explanation": {
           "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
-          "expectedOutcome": "7 estimated EV/minute before user inventory adjustments.",
+          "expectedOutcome": "7.26 estimated EV/minute before user inventory adjustments.",
           "dataBasis": [
             "warframestat fissure payload",
             "Prime/Relic method EV multiplier by tier and mission speed"
           ],
           "mechanics": [
             "Axi tier",
-            "standard fissure",
-            "Steel Path flag present"
+            "Void Storm reward overlap",
+            "normal path"
           ],
           "liquidity": [
             "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
@@ -205,36 +207,36 @@
         }
       },
       {
-        "id": "6a4d97b29b609e51c931d4d1",
+        "id": "6a4dc25ad623f67868630cbf",
         "activityType": "fissure",
-        "title": "Oxomoco (Void) Axi Fissure",
-        "node": "Oxomoco (Void)",
-        "missionType": "Extermination",
-        "evPerMinute": 7,
-        "priority": 5.32,
-        "expiresAt": "2026-07-08T02:12:23.287Z",
-        "confidenceScore": 0.76,
+        "title": "Cambire (Deimos) Omnia Fissure",
+        "node": "Cambire (Deimos)",
+        "missionType": "Alchemy",
+        "evPerMinute": 6.48,
+        "priority": 5.18,
+        "expiresAt": "2026-07-08T04:54:31.611Z",
+        "confidenceScore": 0.8,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
         },
         "explanation": {
           "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
-          "expectedOutcome": "7 estimated EV/minute before user inventory adjustments.",
+          "expectedOutcome": "6.48 estimated EV/minute before user inventory adjustments.",
           "dataBasis": [
             "warframestat fissure payload",
             "Prime/Relic method EV multiplier by tier and mission speed"
           ],
           "mechanics": [
-            "Axi tier",
+            "Omnia tier",
             "standard fissure",
-            "Steel Path flag present"
+            "normal path"
           ],
           "liquidity": [
             "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
@@ -250,66 +252,21 @@
         }
       },
       {
-        "id": "6a4da022aba6d9e5ababda71",
+        "id": "6a4dc7fa7364a8ebd6d7f7b8",
         "activityType": "fissure",
-        "title": "Tamu (Kuva Fortress) Requiem Fissure",
-        "node": "Tamu (Kuva Fortress)",
-        "missionType": "Disruption",
-        "evPerMinute": 6.54,
-        "priority": 4.97,
-        "expiresAt": "2026-07-08T02:40:41.187Z",
-        "confidenceScore": 0.76,
-        "status": "green",
-        "warnings": [],
-        "source": {
-          "source": "warframestat",
-          "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
-          "ttlSeconds": 300,
-          "confidence": "medium",
-          "warnings": []
-        },
-        "explanation": {
-          "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
-          "expectedOutcome": "6.54 estimated EV/minute before user inventory adjustments.",
-          "dataBasis": [
-            "warframestat fissure payload",
-            "Prime/Relic method EV multiplier by tier and mission speed"
-          ],
-          "mechanics": [
-            "Requiem tier",
-            "standard fissure",
-            "Steel Path flag present"
-          ],
-          "liquidity": [
-            "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
-          ],
-          "risks": [
-            "User relic inventory is manual/unknown; verify you have useful relics for this tier."
-          ],
-          "alternatives": [
-            "Sell high-EV relics unopened",
-            "Run a faster fissure type",
-            "Hold traces for Radiant chase relics"
-          ]
-        }
-      },
-      {
-        "id": "6a4d991a9fc3df8a0269bdce",
-        "activityType": "fissure",
-        "title": "Hydra (Pluto) Axi Fissure",
-        "node": "Hydra (Pluto)",
-        "missionType": "Capture",
+        "title": "Brugia (Eris) Axi Fissure",
+        "node": "Brugia (Eris)",
+        "missionType": "Rescue",
         "evPerMinute": 6.48,
         "priority": 4.92,
-        "expiresAt": "2026-07-08T02:25:49.736Z",
+        "expiresAt": "2026-07-08T05:17:54.885Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
@@ -340,66 +297,21 @@
         }
       },
       {
-        "id": "6a4d991a9fc3df8a0269bdcf",
-        "activityType": "fissure",
-        "title": "Isos (Eris) Axi Fissure",
-        "node": "Isos (Eris)",
-        "missionType": "Capture",
-        "evPerMinute": 6.48,
-        "priority": 4.92,
-        "expiresAt": "2026-07-08T01:51:13.365Z",
-        "confidenceScore": 0.76,
-        "status": "green",
-        "warnings": [],
-        "source": {
-          "source": "warframestat",
-          "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
-          "ttlSeconds": 300,
-          "confidence": "medium",
-          "warnings": []
-        },
-        "explanation": {
-          "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
-          "expectedOutcome": "6.48 estimated EV/minute before user inventory adjustments.",
-          "dataBasis": [
-            "warframestat fissure payload",
-            "Prime/Relic method EV multiplier by tier and mission speed"
-          ],
-          "mechanics": [
-            "Axi tier",
-            "standard fissure",
-            "normal path"
-          ],
-          "liquidity": [
-            "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
-          ],
-          "risks": [
-            "User relic inventory is manual/unknown; verify you have useful relics for this tier."
-          ],
-          "alternatives": [
-            "Sell high-EV relics unopened",
-            "Run a faster fissure type",
-            "Hold traces for Radiant chase relics"
-          ]
-        }
-      },
-      {
-        "id": "6a4d8e524c29d1170e919f47",
+        "id": "6a4db8828c47f78e289f80ed",
         "activityType": "void_storm",
         "title": "Fenton's Field (Pluto) Axi Void Storm",
         "node": "Fenton's Field (Pluto)",
         "missionType": "Survival",
         "evPerMinute": 6.24,
         "priority": 4.74,
-        "expiresAt": "2026-07-08T01:50:03.358Z",
+        "expiresAt": "2026-07-08T04:50:03.358Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
@@ -430,21 +342,156 @@
         }
       },
       {
-        "id": "6a4d919a3a53b60f2c1c36a6",
+        "id": "6a4dc30f4ef77744d80e2f7c",
+        "activityType": "fissure",
+        "title": "Laomedeia (Neptune) Neo Fissure",
+        "node": "Laomedeia (Neptune)",
+        "missionType": "Disruption",
+        "evPerMinute": 6.08,
+        "priority": 4.62,
+        "expiresAt": "2026-07-08T04:49:19.951Z",
+        "confidenceScore": 0.76,
+        "status": "green",
+        "warnings": [],
+        "source": {
+          "source": "warframestat",
+          "url": "https://api.warframestat.us/pc/fissures",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
+          "ttlSeconds": 300,
+          "confidence": "medium",
+          "warnings": []
+        },
+        "explanation": {
+          "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
+          "expectedOutcome": "6.08 estimated EV/minute before user inventory adjustments.",
+          "dataBasis": [
+            "warframestat fissure payload",
+            "Prime/Relic method EV multiplier by tier and mission speed"
+          ],
+          "mechanics": [
+            "Neo tier",
+            "standard fissure",
+            "Steel Path flag present"
+          ],
+          "liquidity": [
+            "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
+          ],
+          "risks": [
+            "User relic inventory is manual/unknown; verify you have useful relics for this tier."
+          ],
+          "alternatives": [
+            "Sell high-EV relics unopened",
+            "Run a faster fissure type",
+            "Hold traces for Radiant chase relics"
+          ]
+        }
+      },
+      {
+        "id": "6a4dd1d27bf87db6187d8115",
+        "activityType": "fissure",
+        "title": "Tamu (Kuva Fortress) Requiem Fissure",
+        "node": "Tamu (Kuva Fortress)",
+        "missionType": "Disruption",
+        "evPerMinute": 6.05,
+        "priority": 4.6,
+        "expiresAt": "2026-07-08T05:29:28.848Z",
+        "confidenceScore": 0.76,
+        "status": "green",
+        "warnings": [],
+        "source": {
+          "source": "warframestat",
+          "url": "https://api.warframestat.us/pc/fissures",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
+          "ttlSeconds": 300,
+          "confidence": "medium",
+          "warnings": []
+        },
+        "explanation": {
+          "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
+          "expectedOutcome": "6.05 estimated EV/minute before user inventory adjustments.",
+          "dataBasis": [
+            "warframestat fissure payload",
+            "Prime/Relic method EV multiplier by tier and mission speed"
+          ],
+          "mechanics": [
+            "Requiem tier",
+            "standard fissure",
+            "normal path"
+          ],
+          "liquidity": [
+            "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
+          ],
+          "risks": [
+            "User relic inventory is manual/unknown; verify you have useful relics for this tier."
+          ],
+          "alternatives": [
+            "Sell high-EV relics unopened",
+            "Run a faster fissure type",
+            "Hold traces for Radiant chase relics"
+          ]
+        }
+      },
+      {
+        "id": "6a4dcaca5f60a2d502fa089d",
+        "activityType": "fissure",
+        "title": "Ani (Void) Axi Fissure",
+        "node": "Ani (Void)",
+        "missionType": "Survival",
+        "evPerMinute": 6.02,
+        "priority": 4.58,
+        "expiresAt": "2026-07-08T05:14:31.765Z",
+        "confidenceScore": 0.76,
+        "status": "green",
+        "warnings": [],
+        "source": {
+          "source": "warframestat",
+          "url": "https://api.warframestat.us/pc/fissures",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
+          "ttlSeconds": 300,
+          "confidence": "medium",
+          "warnings": []
+        },
+        "explanation": {
+          "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
+          "expectedOutcome": "6.02 estimated EV/minute before user inventory adjustments.",
+          "dataBasis": [
+            "warframestat fissure payload",
+            "Prime/Relic method EV multiplier by tier and mission speed"
+          ],
+          "mechanics": [
+            "Axi tier",
+            "standard fissure",
+            "Steel Path flag present"
+          ],
+          "liquidity": [
+            "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
+          ],
+          "risks": [
+            "User relic inventory is manual/unknown; verify you have useful relics for this tier."
+          ],
+          "alternatives": [
+            "Sell high-EV relics unopened",
+            "Run a faster fissure type",
+            "Hold traces for Radiant chase relics"
+          ]
+        }
+      },
+      {
+        "id": "6a4dc12ee8e7e0913a7f05ca",
         "activityType": "fissure",
         "title": "Roche (Phobos) Meso Fissure",
         "node": "Roche (Phobos)",
         "missionType": "Extermination",
         "evPerMinute": 5.93,
         "priority": 4.51,
-        "expiresAt": "2026-07-08T01:27:55.782Z",
+        "expiresAt": "2026-07-08T04:55:44.748Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
@@ -475,36 +522,36 @@
         }
       },
       {
-        "id": "6a4d919a3a53b60f2c1c36a7",
+        "id": "6a4dc5de33b0290300553dff",
         "activityType": "fissure",
-        "title": "Metis (Jupiter) Meso Fissure",
-        "node": "Metis (Jupiter)",
-        "missionType": "Rescue",
-        "evPerMinute": 5.93,
-        "priority": 4.51,
-        "expiresAt": "2026-07-08T01:30:48.462Z",
+        "title": "Oxomoco (Void) Neo Fissure",
+        "node": "Oxomoco (Void)",
+        "missionType": "Extermination",
+        "evPerMinute": 5.82,
+        "priority": 4.42,
+        "expiresAt": "2026-07-08T05:26:24.760Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
         },
         "explanation": {
           "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
-          "expectedOutcome": "5.93 estimated EV/minute before user inventory adjustments.",
+          "expectedOutcome": "5.82 estimated EV/minute before user inventory adjustments.",
           "dataBasis": [
             "warframestat fissure payload",
             "Prime/Relic method EV multiplier by tier and mission speed"
           ],
           "mechanics": [
-            "Meso tier",
+            "Neo tier",
             "standard fissure",
-            "Steel Path flag present"
+            "normal path"
           ],
           "liquidity": [
             "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
@@ -520,21 +567,111 @@
         }
       },
       {
-        "id": "6a4d9a82c81d15a7f9c35a7d",
+        "id": "6a4dc5de33b0290300553e00",
         "activityType": "fissure",
-        "title": "Cassini (Saturn) Meso Fissure",
-        "node": "Cassini (Saturn)",
-        "missionType": "Capture",
+        "title": "Neso (Neptune) Neo Fissure",
+        "node": "Neso (Neptune)",
+        "missionType": "Extermination",
+        "evPerMinute": 5.82,
+        "priority": 4.42,
+        "expiresAt": "2026-07-08T04:44:12.922Z",
+        "confidenceScore": 0.76,
+        "status": "green",
+        "warnings": [],
+        "source": {
+          "source": "warframestat",
+          "url": "https://api.warframestat.us/pc/fissures",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
+          "ttlSeconds": 300,
+          "confidence": "medium",
+          "warnings": []
+        },
+        "explanation": {
+          "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
+          "expectedOutcome": "5.82 estimated EV/minute before user inventory adjustments.",
+          "dataBasis": [
+            "warframestat fissure payload",
+            "Prime/Relic method EV multiplier by tier and mission speed"
+          ],
+          "mechanics": [
+            "Neo tier",
+            "standard fissure",
+            "normal path"
+          ],
+          "liquidity": [
+            "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
+          ],
+          "risks": [
+            "User relic inventory is manual/unknown; verify you have useful relics for this tier."
+          ],
+          "alternatives": [
+            "Sell high-EV relics unopened",
+            "Run a faster fissure type",
+            "Hold traces for Radiant chase relics"
+          ]
+        }
+      },
+      {
+        "id": "6a4dc7fa7364a8ebd6d7f7b7",
+        "activityType": "fissure",
+        "title": "Palus (Pluto) Axi Fissure",
+        "node": "Palus (Pluto)",
+        "missionType": "Survival",
+        "evPerMinute": 5.58,
+        "priority": 4.24,
+        "expiresAt": "2026-07-08T04:55:50.705Z",
+        "confidenceScore": 0.76,
+        "status": "green",
+        "warnings": [],
+        "source": {
+          "source": "warframestat",
+          "url": "https://api.warframestat.us/pc/fissures",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
+          "ttlSeconds": 300,
+          "confidence": "medium",
+          "warnings": []
+        },
+        "explanation": {
+          "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
+          "expectedOutcome": "5.58 estimated EV/minute before user inventory adjustments.",
+          "dataBasis": [
+            "warframestat fissure payload",
+            "Prime/Relic method EV multiplier by tier and mission speed"
+          ],
+          "mechanics": [
+            "Axi tier",
+            "standard fissure",
+            "normal path"
+          ],
+          "liquidity": [
+            "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
+          ],
+          "risks": [
+            "User relic inventory is manual/unknown; verify you have useful relics for this tier."
+          ],
+          "alternatives": [
+            "Sell high-EV relics unopened",
+            "Run a faster fissure type",
+            "Hold traces for Radiant chase relics"
+          ]
+        }
+      },
+      {
+        "id": "6a4dc7be464bbdc6ab9180d5",
+        "activityType": "fissure",
+        "title": "Telesto (Saturn) Meso Fissure",
+        "node": "Telesto (Saturn)",
+        "missionType": "Extermination",
         "evPerMinute": 5.49,
         "priority": 4.17,
-        "expiresAt": "2026-07-08T02:07:56.644Z",
+        "expiresAt": "2026-07-08T04:56:11.215Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
@@ -565,21 +702,21 @@
         }
       },
       {
-        "id": "6a4d96c2ac5bca1e0f3d11f8",
+        "id": "6a4dc656515cee5f2719f757",
         "activityType": "fissure",
         "title": "Ultor (Mars) Lith Fissure",
         "node": "Ultor (Mars)",
         "missionType": "Extermination",
         "evPerMinute": 5.34,
         "priority": 4.06,
-        "expiresAt": "2026-07-08T01:52:05.329Z",
+        "expiresAt": "2026-07-08T04:44:10.882Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
@@ -610,21 +747,66 @@
         }
       },
       {
-        "id": "6a4d8e524c29d1170e919f48",
-        "activityType": "void_storm",
-        "title": "R-9 Cloud (Veil) Axi Void Storm",
-        "node": "R-9 Cloud (Veil)",
-        "missionType": "Skirmish",
-        "evPerMinute": 5.11,
-        "priority": 3.88,
-        "expiresAt": "2026-07-08T01:50:03.360Z",
+        "id": "6a4dc656515cee5f2719f758",
+        "activityType": "fissure",
+        "title": "E Prime (Earth) Lith Fissure",
+        "node": "E Prime (Earth)",
+        "missionType": "Extermination",
+        "evPerMinute": 5.34,
+        "priority": 4.06,
+        "expiresAt": "2026-07-08T04:45:56.650Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
+          "ttlSeconds": 300,
+          "confidence": "medium",
+          "warnings": []
+        },
+        "explanation": {
+          "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
+          "expectedOutcome": "5.34 estimated EV/minute before user inventory adjustments.",
+          "dataBasis": [
+            "warframestat fissure payload",
+            "Prime/Relic method EV multiplier by tier and mission speed"
+          ],
+          "mechanics": [
+            "Lith tier",
+            "standard fissure",
+            "Steel Path flag present"
+          ],
+          "liquidity": [
+            "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
+          ],
+          "risks": [
+            "User relic inventory is manual/unknown; verify you have useful relics for this tier."
+          ],
+          "alternatives": [
+            "Sell high-EV relics unopened",
+            "Run a faster fissure type",
+            "Hold traces for Radiant chase relics"
+          ]
+        }
+      },
+      {
+        "id": "6a4db8828c47f78e289f80ee",
+        "activityType": "void_storm",
+        "title": "Nsu Grid (Veil) Axi Void Storm",
+        "node": "Nsu Grid (Veil)",
+        "missionType": "Skirmish",
+        "evPerMinute": 5.11,
+        "priority": 3.88,
+        "expiresAt": "2026-07-08T04:50:03.360Z",
+        "confidenceScore": 0.76,
+        "status": "green",
+        "warnings": [],
+        "source": {
+          "source": "warframestat",
+          "url": "https://api.warframestat.us/pc/fissures",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
@@ -655,35 +837,35 @@
         }
       },
       {
-        "id": "6a4d95967a3dca1d52f6bd9d",
-        "activityType": "fissure",
-        "title": "Mot (Void) Neo Fissure",
-        "node": "Mot (Void)",
-        "missionType": "Survival",
-        "evPerMinute": 5.01,
-        "priority": 3.81,
-        "expiresAt": "2026-07-08T01:34:40.767Z",
+        "id": "6a4dc69253338ef1455c248f",
+        "activityType": "void_storm",
+        "title": "Profit Margin (Pluto) Axi Void Storm",
+        "node": "Profit Margin (Pluto)",
+        "missionType": "Volatile",
+        "evPerMinute": 5.11,
+        "priority": 3.88,
+        "expiresAt": "2026-07-08T05:50:03.358Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
         },
         "explanation": {
           "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
-          "expectedOutcome": "5.01 estimated EV/minute before user inventory adjustments.",
+          "expectedOutcome": "5.11 estimated EV/minute before user inventory adjustments.",
           "dataBasis": [
             "warframestat fissure payload",
             "Prime/Relic method EV multiplier by tier and mission speed"
           ],
           "mechanics": [
-            "Neo tier",
-            "standard fissure",
+            "Axi tier",
+            "Void Storm reward overlap",
             "normal path"
           ],
           "liquidity": [
@@ -700,66 +882,21 @@
         }
       },
       {
-        "id": "6a4da022aba6d9e5ababda70",
-        "activityType": "fissure",
-        "title": "Rotuma (Kuva Fortress) Requiem Fissure",
-        "node": "Rotuma (Kuva Fortress)",
-        "missionType": "Mobile Defense",
-        "evPerMinute": 4.76,
-        "priority": 3.62,
-        "expiresAt": "2026-07-08T02:25:06.974Z",
-        "confidenceScore": 0.76,
-        "status": "green",
-        "warnings": [],
-        "source": {
-          "source": "warframestat",
-          "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
-          "ttlSeconds": 300,
-          "confidence": "medium",
-          "warnings": []
-        },
-        "explanation": {
-          "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
-          "expectedOutcome": "4.76 estimated EV/minute before user inventory adjustments.",
-          "dataBasis": [
-            "warframestat fissure payload",
-            "Prime/Relic method EV multiplier by tier and mission speed"
-          ],
-          "mechanics": [
-            "Requiem tier",
-            "standard fissure",
-            "Steel Path flag present"
-          ],
-          "liquidity": [
-            "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
-          ],
-          "risks": [
-            "User relic inventory is manual/unknown; verify you have useful relics for this tier."
-          ],
-          "alternatives": [
-            "Sell high-EV relics unopened",
-            "Run a faster fissure type",
-            "Hold traces for Radiant chase relics"
-          ]
-        }
-      },
-      {
-        "id": "6a4d8e524c29d1170e919f46",
+        "id": "6a4db8828c47f78e289f80ec",
         "activityType": "void_storm",
         "title": "Sovereign Grasp (Neptune) Neo Void Storm",
         "node": "Sovereign Grasp (Neptune)",
         "missionType": "Volatile",
         "evPerMinute": 4.59,
         "priority": 3.49,
-        "expiresAt": "2026-07-08T01:50:03.356Z",
+        "expiresAt": "2026-07-08T04:50:03.356Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
@@ -790,36 +927,36 @@
         }
       },
       {
-        "id": "6a4d97b29b609e51c931d4d0",
+        "id": "6a4dd1d27bf87db6187d8116",
         "activityType": "fissure",
-        "title": "Kelpie (Sedna) Axi Fissure",
-        "node": "Kelpie (Sedna)",
-        "missionType": "Spy",
-        "evPerMinute": 4.47,
-        "priority": 3.4,
-        "expiresAt": "2026-07-08T01:27:02.587Z",
+        "title": "Rotuma (Kuva Fortress) Requiem Fissure",
+        "node": "Rotuma (Kuva Fortress)",
+        "missionType": "Mobile Defense",
+        "evPerMinute": 4.41,
+        "priority": 3.35,
+        "expiresAt": "2026-07-08T06:16:36.860Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
         },
         "explanation": {
           "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
-          "expectedOutcome": "4.47 estimated EV/minute before user inventory adjustments.",
+          "expectedOutcome": "4.41 estimated EV/minute before user inventory adjustments.",
           "dataBasis": [
             "warframestat fissure payload",
             "Prime/Relic method EV multiplier by tier and mission speed"
           ],
           "mechanics": [
-            "Axi tier",
+            "Requiem tier",
             "standard fissure",
-            "Steel Path flag present"
+            "normal path"
           ],
           "liquidity": [
             "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
@@ -835,21 +972,21 @@
         }
       },
       {
-        "id": "6a4d8e524c29d1170e919f45",
+        "id": "6a4db8828c47f78e289f80eb",
         "activityType": "void_storm",
-        "title": "Mordo Cluster (Saturn) Meso Void Storm",
-        "node": "Mordo Cluster (Saturn)",
+        "title": "Nodo Gap (Saturn) Meso Void Storm",
+        "node": "Nodo Gap (Saturn)",
         "missionType": "Skirmish",
         "evPerMinute": 4.33,
         "priority": 3.29,
-        "expiresAt": "2026-07-08T01:50:03.355Z",
+        "expiresAt": "2026-07-08T04:50:03.355Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
@@ -880,35 +1017,35 @@
         }
       },
       {
-        "id": "6a4da0d7dab99633ceb3c901",
-        "activityType": "fissure",
-        "title": "Pago (Kuva Fortress) Requiem Fissure",
-        "node": "Pago (Kuva Fortress)",
-        "missionType": "Spy",
-        "evPerMinute": 4,
-        "priority": 3.04,
-        "expiresAt": "2026-07-08T02:38:59.341Z",
+        "id": "6a4dc69253338ef1455c248d",
+        "activityType": "void_storm",
+        "title": "Lupal Pass (Saturn) Meso Void Storm",
+        "node": "Lupal Pass (Saturn)",
+        "missionType": "Skirmish",
+        "evPerMinute": 4.33,
+        "priority": 3.29,
+        "expiresAt": "2026-07-08T05:50:03.355Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
         },
         "explanation": {
           "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
-          "expectedOutcome": "4 estimated EV/minute before user inventory adjustments.",
+          "expectedOutcome": "4.33 estimated EV/minute before user inventory adjustments.",
           "dataBasis": [
             "warframestat fissure payload",
             "Prime/Relic method EV multiplier by tier and mission speed"
           ],
           "mechanics": [
-            "Requiem tier",
-            "standard fissure",
+            "Meso tier",
+            "Void Storm reward overlap",
             "normal path"
           ],
           "liquidity": [
@@ -925,21 +1062,201 @@
         }
       },
       {
-        "id": "6a4d8e524c29d1170e919f43",
-        "activityType": "void_storm",
-        "title": "Bendar Cluster (Earth) Lith Void Storm",
-        "node": "Bendar Cluster (Earth)",
-        "missionType": "Skirmish",
-        "evPerMinute": 3.9,
-        "priority": 2.96,
-        "expiresAt": "2026-07-08T01:50:03.351Z",
+        "id": "6a4dd20e6eebb743ae7c8ea7",
+        "activityType": "fissure",
+        "title": "Pago (Kuva Fortress) Requiem Fissure",
+        "node": "Pago (Kuva Fortress)",
+        "missionType": "Spy",
+        "evPerMinute": 4.32,
+        "priority": 3.28,
+        "expiresAt": "2026-07-08T05:44:49.841Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
+          "ttlSeconds": 300,
+          "confidence": "medium",
+          "warnings": []
+        },
+        "explanation": {
+          "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
+          "expectedOutcome": "4.32 estimated EV/minute before user inventory adjustments.",
+          "dataBasis": [
+            "warframestat fissure payload",
+            "Prime/Relic method EV multiplier by tier and mission speed"
+          ],
+          "mechanics": [
+            "Requiem tier",
+            "standard fissure",
+            "Steel Path flag present"
+          ],
+          "liquidity": [
+            "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
+          ],
+          "risks": [
+            "User relic inventory is manual/unknown; verify you have useful relics for this tier."
+          ],
+          "alternatives": [
+            "Sell high-EV relics unopened",
+            "Run a faster fissure type",
+            "Hold traces for Radiant chase relics"
+          ]
+        }
+      },
+      {
+        "id": "6a4dcaca5f60a2d502fa089e",
+        "activityType": "fissure",
+        "title": "Kala-azar (Eris) Axi Fissure",
+        "node": "Kala-azar (Eris)",
+        "missionType": "Defense",
+        "evPerMinute": 4.24,
+        "priority": 3.22,
+        "expiresAt": "2026-07-08T05:12:14.978Z",
+        "confidenceScore": 0.76,
+        "status": "green",
+        "warnings": [],
+        "source": {
+          "source": "warframestat",
+          "url": "https://api.warframestat.us/pc/fissures",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
+          "ttlSeconds": 300,
+          "confidence": "medium",
+          "warnings": []
+        },
+        "explanation": {
+          "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
+          "expectedOutcome": "4.24 estimated EV/minute before user inventory adjustments.",
+          "dataBasis": [
+            "warframestat fissure payload",
+            "Prime/Relic method EV multiplier by tier and mission speed"
+          ],
+          "mechanics": [
+            "Axi tier",
+            "standard fissure",
+            "Steel Path flag present"
+          ],
+          "liquidity": [
+            "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
+          ],
+          "risks": [
+            "User relic inventory is manual/unknown; verify you have useful relics for this tier."
+          ],
+          "alternatives": [
+            "Sell high-EV relics unopened",
+            "Run a faster fissure type",
+            "Hold traces for Radiant chase relics"
+          ]
+        }
+      },
+      {
+        "id": "6a4dc69253338ef1455c248e",
+        "activityType": "void_storm",
+        "title": "Brom Cluster (Neptune) Neo Void Storm",
+        "node": "Brom Cluster (Neptune)",
+        "missionType": "Spy",
+        "evPerMinute": 4.17,
+        "priority": 3.17,
+        "expiresAt": "2026-07-08T05:50:03.356Z",
+        "confidenceScore": 0.76,
+        "status": "green",
+        "warnings": [],
+        "source": {
+          "source": "warframestat",
+          "url": "https://api.warframestat.us/pc/fissures",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
+          "ttlSeconds": 300,
+          "confidence": "medium",
+          "warnings": []
+        },
+        "explanation": {
+          "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
+          "expectedOutcome": "4.17 estimated EV/minute before user inventory adjustments.",
+          "dataBasis": [
+            "warframestat fissure payload",
+            "Prime/Relic method EV multiplier by tier and mission speed"
+          ],
+          "mechanics": [
+            "Neo tier",
+            "Void Storm reward overlap",
+            "normal path"
+          ],
+          "liquidity": [
+            "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
+          ],
+          "risks": [
+            "User relic inventory is manual/unknown; verify you have useful relics for this tier."
+          ],
+          "alternatives": [
+            "Sell high-EV relics unopened",
+            "Run a faster fissure type",
+            "Hold traces for Radiant chase relics"
+          ]
+        }
+      },
+      {
+        "id": "6a4dc30f4ef77744d80e2f7d",
+        "activityType": "fissure",
+        "title": "Valac (Europa) Neo Fissure",
+        "node": "Valac (Europa)",
+        "missionType": "Spy",
+        "evPerMinute": 4.02,
+        "priority": 3.06,
+        "expiresAt": "2026-07-08T04:54:18.989Z",
+        "confidenceScore": 0.76,
+        "status": "green",
+        "warnings": [],
+        "source": {
+          "source": "warframestat",
+          "url": "https://api.warframestat.us/pc/fissures",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
+          "ttlSeconds": 300,
+          "confidence": "medium",
+          "warnings": []
+        },
+        "explanation": {
+          "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
+          "expectedOutcome": "4.02 estimated EV/minute before user inventory adjustments.",
+          "dataBasis": [
+            "warframestat fissure payload",
+            "Prime/Relic method EV multiplier by tier and mission speed"
+          ],
+          "mechanics": [
+            "Neo tier",
+            "standard fissure",
+            "Steel Path flag present"
+          ],
+          "liquidity": [
+            "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
+          ],
+          "risks": [
+            "User relic inventory is manual/unknown; verify you have useful relics for this tier."
+          ],
+          "alternatives": [
+            "Sell high-EV relics unopened",
+            "Run a faster fissure type",
+            "Hold traces for Radiant chase relics"
+          ]
+        }
+      },
+      {
+        "id": "6a4db8828c47f78e289f80e9",
+        "activityType": "void_storm",
+        "title": "Bendar Cluster (Earth) Lith Void Storm",
+        "node": "Bendar Cluster (Earth)",
+        "missionType": "Skirmish",
+        "evPerMinute": 3.9,
+        "priority": 2.96,
+        "expiresAt": "2026-07-08T04:50:03.351Z",
+        "confidenceScore": 0.76,
+        "status": "green",
+        "warnings": [],
+        "source": {
+          "source": "warframestat",
+          "url": "https://api.warframestat.us/pc/fissures",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
@@ -970,35 +1287,35 @@
         }
       },
       {
-        "id": "6a4d9a82c81d15a7f9c35a7e",
-        "activityType": "fissure",
-        "title": "Sharpless (Phobos) Meso Fissure",
-        "node": "Sharpless (Phobos)",
-        "missionType": "Mobile Defense",
-        "evPerMinute": 3.87,
-        "priority": 2.94,
-        "expiresAt": "2026-07-08T02:29:40.451Z",
+        "id": "6a4dc69253338ef1455c248b",
+        "activityType": "void_storm",
+        "title": "Korm's Belt (Earth) Lith Void Storm",
+        "node": "Korm's Belt (Earth)",
+        "missionType": "Skirmish",
+        "evPerMinute": 3.9,
+        "priority": 2.96,
+        "expiresAt": "2026-07-08T05:50:03.351Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
         },
         "explanation": {
           "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
-          "expectedOutcome": "3.87 estimated EV/minute before user inventory adjustments.",
+          "expectedOutcome": "3.9 estimated EV/minute before user inventory adjustments.",
           "dataBasis": [
             "warframestat fissure payload",
             "Prime/Relic method EV multiplier by tier and mission speed"
           ],
           "mechanics": [
-            "Meso tier",
-            "standard fissure",
+            "Lith tier",
+            "Void Storm reward overlap",
             "normal path"
           ],
           "liquidity": [
@@ -1015,21 +1332,66 @@
         }
       },
       {
-        "id": "6a4d9a46a863b3da9c6cbcc6",
-        "activityType": "fissure",
-        "title": "Stephano (Uranus) Neo Fissure",
-        "node": "Stephano (Uranus)",
-        "missionType": "Defense",
-        "evPerMinute": 3.81,
-        "priority": 2.9,
-        "expiresAt": "2026-07-08T01:48:46.390Z",
+        "id": "6a4dc69253338ef1455c248c",
+        "activityType": "void_storm",
+        "title": "Beacon Shield Ring (Venus) Lith Void Storm",
+        "node": "Beacon Shield Ring (Venus)",
+        "missionType": "Volatile",
+        "evPerMinute": 3.9,
+        "priority": 2.96,
+        "expiresAt": "2026-07-08T05:50:03.353Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
+          "ttlSeconds": 300,
+          "confidence": "medium",
+          "warnings": []
+        },
+        "explanation": {
+          "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
+          "expectedOutcome": "3.9 estimated EV/minute before user inventory adjustments.",
+          "dataBasis": [
+            "warframestat fissure payload",
+            "Prime/Relic method EV multiplier by tier and mission speed"
+          ],
+          "mechanics": [
+            "Lith tier",
+            "Void Storm reward overlap",
+            "normal path"
+          ],
+          "liquidity": [
+            "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
+          ],
+          "risks": [
+            "User relic inventory is manual/unknown; verify you have useful relics for this tier."
+          ],
+          "alternatives": [
+            "Sell high-EV relics unopened",
+            "Run a faster fissure type",
+            "Hold traces for Radiant chase relics"
+          ]
+        }
+      },
+      {
+        "id": "6a4dc30f4ef77744d80e2f7b",
+        "activityType": "fissure",
+        "title": "Stephano (Uranus) Neo Fissure",
+        "node": "Stephano (Uranus)",
+        "missionType": "Defense",
+        "evPerMinute": 3.81,
+        "priority": 2.9,
+        "expiresAt": "2026-07-08T04:57:46.347Z",
+        "confidenceScore": 0.76,
+        "status": "green",
+        "warnings": [],
+        "source": {
+          "source": "warframestat",
+          "url": "https://api.warframestat.us/pc/fissures",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
@@ -1060,34 +1422,34 @@
         }
       },
       {
-        "id": "6a4d9eba9cfc3a93bb52562a",
+        "id": "6a4dd1d27bf87db6187d8117",
         "activityType": "fissure",
-        "title": "Everest (Earth) Lith Fissure",
-        "node": "Everest (Earth)",
-        "missionType": "Excavation",
-        "evPerMinute": 3.65,
-        "priority": 2.77,
-        "expiresAt": "2026-07-08T02:09:43.938Z",
+        "title": "Nabuk (Kuva Fortress) Requiem Fissure",
+        "node": "Nabuk (Kuva Fortress)",
+        "missionType": "Defense",
+        "evPerMinute": 3.8,
+        "priority": 2.89,
+        "expiresAt": "2026-07-08T05:49:37.320Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
         },
         "explanation": {
           "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
-          "expectedOutcome": "3.65 estimated EV/minute before user inventory adjustments.",
+          "expectedOutcome": "3.8 estimated EV/minute before user inventory adjustments.",
           "dataBasis": [
             "warframestat fissure payload",
             "Prime/Relic method EV multiplier by tier and mission speed"
           ],
           "mechanics": [
-            "Lith tier",
+            "Requiem tier",
             "standard fissure",
             "normal path"
           ],
@@ -1105,21 +1467,21 @@
         }
       },
       {
-        "id": "6a4d8e524c29d1170e919f44",
+        "id": "6a4db8828c47f78e289f80ea",
         "activityType": "void_storm",
         "title": "Orvin-Haarc (Venus) Lith Void Storm",
         "node": "Orvin-Haarc (Venus)",
         "missionType": "Spy",
         "evPerMinute": 3.54,
         "priority": 2.69,
-        "expiresAt": "2026-07-08T01:50:03.353Z",
+        "expiresAt": "2026-07-08T04:50:03.353Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
@@ -1150,21 +1512,21 @@
         }
       },
       {
-        "id": "6a4d95967a3dca1d52f6bd9e",
+        "id": "6a4dc5de33b0290300553e01",
         "activityType": "fissure",
         "title": "Umbriel (Uranus) Neo Fissure",
         "node": "Umbriel (Uranus)",
         "missionType": "Interception",
         "evPerMinute": 3.53,
         "priority": 2.68,
-        "expiresAt": "2026-07-08T02:08:43.939Z",
+        "expiresAt": "2026-07-08T04:53:23.668Z",
         "confidenceScore": 0.76,
         "status": "green",
         "warnings": [],
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/fissures",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": []
@@ -1193,9 +1555,129 @@
             "Hold traces for Radiant chase relics"
           ]
         }
+      },
+      {
+        "id": "6a4dc656515cee5f2719f759",
+        "activityType": "fissure",
+        "title": "Cytherean (Venus) Lith Fissure",
+        "node": "Cytherean (Venus)",
+        "missionType": "Interception",
+        "evPerMinute": 3.24,
+        "priority": 2.46,
+        "expiresAt": "2026-07-08T05:35:59.976Z",
+        "confidenceScore": 0.76,
+        "status": "green",
+        "warnings": [],
+        "source": {
+          "source": "warframestat",
+          "url": "https://api.warframestat.us/pc/fissures",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
+          "ttlSeconds": 300,
+          "confidence": "medium",
+          "warnings": []
+        },
+        "explanation": {
+          "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
+          "expectedOutcome": "3.24 estimated EV/minute before user inventory adjustments.",
+          "dataBasis": [
+            "warframestat fissure payload",
+            "Prime/Relic method EV multiplier by tier and mission speed"
+          ],
+          "mechanics": [
+            "Lith tier",
+            "standard fissure",
+            "Steel Path flag present"
+          ],
+          "liquidity": [
+            "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
+          ],
+          "risks": [
+            "User relic inventory is manual/unknown; verify you have useful relics for this tier."
+          ],
+          "alternatives": [
+            "Sell high-EV relics unopened",
+            "Run a faster fissure type",
+            "Hold traces for Radiant chase relics"
+          ]
+        }
+      },
+      {
+        "id": "6a4dcaca5f60a2d502fa089c",
+        "activityType": "fissure",
+        "title": "Unda (Venus) Lith Fissure",
+        "node": "Unda (Venus)",
+        "missionType": "Spy",
+        "evPerMinute": 3.16,
+        "priority": 2.4,
+        "expiresAt": "2026-07-08T05:43:27.141Z",
+        "confidenceScore": 0.76,
+        "status": "green",
+        "warnings": [],
+        "source": {
+          "source": "warframestat",
+          "url": "https://api.warframestat.us/pc/fissures",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
+          "ttlSeconds": 300,
+          "confidence": "medium",
+          "warnings": []
+        },
+        "explanation": {
+          "recommendation": "Run now if the fissure tier matches relics you plan to crack or if Omnia/fast mission overlap improves EV.",
+          "expectedOutcome": "3.16 estimated EV/minute before user inventory adjustments.",
+          "dataBasis": [
+            "warframestat fissure payload",
+            "Prime/Relic method EV multiplier by tier and mission speed"
+          ],
+          "mechanics": [
+            "Lith tier",
+            "standard fissure",
+            "normal path"
+          ],
+          "liquidity": [
+            "Uses current relic/prime liquidity where available; confidence is lower without manual inventory."
+          ],
+          "risks": [
+            "User relic inventory is manual/unknown; verify you have useful relics for this tier."
+          ],
+          "alternatives": [
+            "Sell high-EV relics unopened",
+            "Run a faster fissure type",
+            "Hold traces for Radiant chase relics"
+          ]
+        }
       }
     ],
     "rejectedActivities": [
+      {
+        "id": "6a4db71a91cba29c5591279b",
+        "title": "Taveuni (Kuva Fortress)",
+        "reason": "activity has expired",
+        "source": {
+          "source": "warframestat",
+          "url": "https://api.warframestat.us/pc/fissures",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
+          "ttlSeconds": 300,
+          "confidence": "medium",
+          "warnings": [
+            "activity has expired"
+          ]
+        }
+      },
+      {
+        "id": "6a4db79265d9bdbbd3f62e3a",
+        "title": "Dakata (Kuva Fortress)",
+        "reason": "activity has expired",
+        "source": {
+          "source": "warframestat",
+          "url": "https://api.warframestat.us/pc/fissures",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
+          "ttlSeconds": 300,
+          "confidence": "medium",
+          "warnings": [
+            "activity has expired"
+          ]
+        }
+      },
       {
         "id": "00585e073437d864ee23b57f467c6890d6726025c4f6ad09f9a86e7f86544e4a",
         "title": "SolNode000",
@@ -1203,7 +1685,7 @@
         "source": {
           "source": "warframestat",
           "url": "https://api.warframestat.us/pc/arbitration",
-          "fetchedAt": "2026-07-08T01:12:05.134Z",
+          "fetchedAt": "2026-07-08T04:34:17.118Z",
           "ttlSeconds": 300,
           "confidence": "medium",
           "warnings": [
@@ -1213,6 +1695,8 @@
       }
     ],
     "warnings": [
+      "Taveuni (Kuva Fortress): activity has expired",
+      "Dakata (Kuva Fortress): activity has expired",
       "Arbitration rejected: activity payload is already expired"
     ]
   }
