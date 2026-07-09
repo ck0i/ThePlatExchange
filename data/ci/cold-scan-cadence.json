@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "last_started_at": "2026-07-09T05:39:01Z",
-  "workflow_run_id": "28996516338",
+  "last_started_at": "2026-07-09T07:04:53Z",
+  "workflow_run_id": "29000404883",
   "workflow_run_attempt": "1",
-  "event": "workflow_dispatch"
+  "event": "schedule"
 }
