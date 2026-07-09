@@ -227,6 +227,20 @@ const WARFRAME_PAGE_BACKGROUNDS = Object.freeze([
   "https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/mainframe/dynamic-config/homepage/11/conversions/b01a3593-6752-4632-8e7e-a8e4c3e73480-webp.webp",
   "https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/mainframe/dynamic-config/homepage/11/conversions/29c1042d-5d1c-4985-85f7-bef4e65dbbe5-webp.webp",
   "https://www-static.warframe.com/images/promo/comics/1999_bg.jpg",
+  "https://www-static.warframe.com/images/promo/1999/card-hub-reworks.jpg",
+  "https://www-static.warframe.com/images/promo/1999/card-hub-caliber.jpg",
+  "https://www-static.warframe.com/images/promo/1999/card-hub-seasons.jpg",
+  "https://www-static.warframe.com/images/promo/1999/card-hub-drifter.jpg",
+  "https://www-static.warframe.com/images/promo/1999/card-hub-bikes.jpg",
+  "https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/mainframe/dynamic-config/shadowgrapher-hubsite/2/01KJDVF6W3QERFNS0WPR62VF4D.webp",
+  "https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/mainframe/dynamic-config/shadowgrapher-hubsite/2/01KKCMKRVGP03WCANGGFMZRXSR.jpg",
+  "https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/mainframe/dynamic-config/shadowgrapher-hubsite/2/01KKA8PAMPJ6J7E41618GZ3477.jpg",
+  "https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/mainframe/dynamic-config/shadowgrapher-hubsite/2/01KJ8SAAYQNKHZTAPXNN4DRZEH.webp",
+  "https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/mainframe/dynamic-config/shadowgrapher-hubsite/2/01KJ8SABD2RP45DVZMFJX1C9VC.webp",
+  "https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/mainframe/dynamic-config/shadowgrapher-hubsite/2/01KJ8XRA0J9YH25K5K9E59KS2B.webp",
+  "https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/mainframe/dynamic-config/shadowgrapher-hubsite/2/01KJ8XRAECKEQNY4GZVD806QG9.webp",
+  "https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/mainframe/dynamic-config/shadowgrapher-hubsite/2/01KKHT84CJF40MZ262N0MTNM3B.jpg",
+  "https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/mainframe/dynamic-config/shadowgrapher-hubsite/2/01KKEHCXZ2P7GSPQTSPSMTFHPR.jpg",
 ]);
 const pageBackgroundAssignments = new Map();
 const CONFIDENCE_BAR_SEGMENTS = Array.from({ length: 6 }, (_, filled) => {
