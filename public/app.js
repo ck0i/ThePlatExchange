@@ -220,6 +220,15 @@ const SPOTLIGHT_CLONE_FADE_MS = 45;
 const MOTION_REVEAL_MS = 220;
 const NUMBER_FORMATTER = new Intl.NumberFormat();
 const HTML_ESCAPE = { "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" };
+const WARFRAME_PAGE_BACKGROUNDS = Object.freeze([
+  "https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/mainframe/dynamic-config/homepage/11/conversions/63de0df4-3bd5-44e8-b9de-495300a62bad-webp.webp",
+  "https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/mainframe/dynamic-config/homepage/11/conversions/7de78226-523f-42c7-be0b-3136448e17b8-webp.webp",
+  "https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/mainframe/dynamic-config/homepage/11/conversions/52a8dc42-f53e-49e9-a9e8-cf5f36cd5b98-webp.webp",
+  "https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/mainframe/dynamic-config/homepage/11/conversions/b01a3593-6752-4632-8e7e-a8e4c3e73480-webp.webp",
+  "https://warframe-web-assets.nyc3.cdn.digitaloceanspaces.com/mainframe/dynamic-config/homepage/11/conversions/29c1042d-5d1c-4985-85f7-bef4e65dbbe5-webp.webp",
+  "https://www-static.warframe.com/images/promo/comics/1999_bg.jpg",
+]);
+const pageBackgroundAssignments = new Map();
 const CONFIDENCE_BAR_SEGMENTS = Array.from({ length: 6 }, (_, filled) => {
   let html = "";
   for (let index = 0; index < 5; index += 1) html += `<span${index < filled ? " class=\"on\"" : ""}></span>`;
@@ -259,6 +268,26 @@ function triggerMotionReveal() {
   motionRevealTimer = window.setTimeout(() => document.body.classList.remove("motion-reveal"), MOTION_REVEAL_MS);
 }
 
+function cssBackgroundUrl(url) {
+  return `url("${String(url).replace(/\\/g, "\\\\").replace(/"/g, "\\\"")}")`;
+}
+
+function backgroundForPage(page) {
+  if (pageBackgroundAssignments.has(page)) return pageBackgroundAssignments.get(page);
+  const used = new Set(pageBackgroundAssignments.values());
+  const available = WARFRAME_PAGE_BACKGROUNDS.filter((url) => !used.has(url));
+  const pool = available.length ? available : WARFRAME_PAGE_BACKGROUNDS;
+  const selected = pool[Math.floor(Math.random() * pool.length)];
+  pageBackgroundAssignments.set(page, selected);
+  return selected;
+}
+
+function applyPageBackground(page) {
+  if (!elements.pageRoot || WARFRAME_PAGE_BACKGROUNDS.length === 0) return;
+  elements.pageRoot.style.setProperty("--page-art", cssBackgroundUrl(backgroundForPage(page)));
+  elements.pageRoot.dataset.pageAccent = page;
+}
+
 function setOpportunityFiltersHidden(hidden) {
   document.querySelector(".opportunities-grid")?.classList.toggle("filters-auto-hidden", hidden);
 }
@@ -281,7 +310,9 @@ function handlePageRootScroll() {
 }
 
 function navigate(page, options = {}) {
+  const pageChanged = currentPage !== page;
   currentPage = page;
+  if (pageChanged) applyPageBackground(page);
   for (const panel of elements.pagePanels) panel.classList.toggle("active", panel.dataset.pagePanel === page);
   for (const button of elements.pageButtons) button.classList.toggle("active", button.dataset.page === page);
   triggerMotionReveal();
@@ -2965,6 +2996,8 @@ if (window.EventSource) {
     // Native EventSource reconnects automatically.
   });
 }
+
+applyPageBackground(currentPage);
 
 loadState().catch((error) => {
   if (elements.summary) elements.summary.textContent = error.message;
