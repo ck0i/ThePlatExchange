@@ -13,7 +13,7 @@ It reads public Warframe.market riven data, enriches weapons with warframestat.u
 - Watchlist filters for scanning specific weapons.
 - ROI-vs-profit chart and weapon market detail cards.
 - Instant-win candidates computed from raw actionable auctions when a listing is materially below same-signature peers or the usable weapon-market floor.
-- MCP tools for live snapshots, opportunity queries, refreshes, watchlist updates, health checks, signature valuation, and instant-win lookup.
+- MCP tools for live snapshots, riven opportunities, arcane valuation, expanded product surfaces, refreshes, health checks, signature valuation, and planner slices.
 
 ## Requirements
 
@@ -141,6 +141,15 @@ Available MCP tools include:
 - `arcane_dissolve_recommendations`
 - `arcane_market`
 - `arcane_detail`
+- `product_health`
+- `product_refresh`
+- `product_methods`
+- `product_opportunities`
+- `product_prime_relics`
+- `product_run_now`
+- `product_expansion_markets`
+- `product_advanced_analytics`
+- `product_planner`
 
 ## HTTP endpoints
 

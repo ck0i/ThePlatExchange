@@ -483,6 +483,143 @@ const arcaneDetailDataSchema: Record<string, unknown> = {
   ],
 };
 
+const productItemRefJsonSchema: Record<string, unknown> = {
+  type: "object",
+  required: ["tpeId", "name"],
+  additionalProperties: true,
+  properties: {
+    tpeId: { type: "string" },
+    name: { type: "string" },
+    wfmSlug: { type: "string" },
+    wfmId: { type: "string" },
+    gameRef: { type: "string" },
+    uniqueName: { type: "string" },
+    rank: { type: "integer" },
+  },
+};
+
+const productSourceHealthJsonSchema: Record<string, unknown> = {
+  type: "object",
+  required: ["id", "label", "status", "source", "ttlSeconds", "warningCount", "warnings"],
+  additionalProperties: true,
+  properties: {
+    id: { type: "string" },
+    label: { type: "string" },
+    status: { enum: ["green", "yellow", "red"] },
+    source: { type: "string" },
+    url: { type: "string" },
+    lastSuccessAt: { type: "string" },
+    lastFailureAt: { type: "string" },
+    ttlSeconds: { type: "integer" },
+    coverage: { type: "object" },
+    warningCount: { type: "integer" },
+    warnings: { type: "array", items: { type: "string" } },
+  },
+};
+
+const productMethodJsonSchema: Record<string, unknown> = {
+  type: "object",
+  required: ["id", "label", "description", "status", "opportunityCount", "sourceIds", "warnings"],
+  additionalProperties: true,
+  properties: {
+    id: { type: "string" },
+    label: { type: "string" },
+    description: { type: "string" },
+    status: { enum: ["green", "yellow", "red"] },
+    opportunityCount: { type: "integer" },
+    bestOpportunityId: { type: "string" },
+    sourceIds: { type: "array", items: { type: "string" } },
+    sources: { type: "array", items: productSourceHealthJsonSchema },
+    warnings: { type: "array", items: { type: "string" } },
+  },
+};
+
+const productExplanationJsonSchema: Record<string, unknown> = {
+  type: "object",
+  additionalProperties: true,
+  properties: {
+    recommendation: { type: "string" },
+    expectedOutcome: { type: "string" },
+    dataBasis: { type: "array", items: { type: "string" } },
+    mechanics: { type: "array", items: { type: "string" } },
+    liquidity: { type: "array", items: { type: "string" } },
+    risks: { type: "array", items: { type: "string" } },
+    alternatives: { type: "array", items: { type: "string" } },
+  },
+};
+
+const productOpportunityJsonSchema: Record<string, unknown> = {
+  type: "object",
+  required: ["id", "methodId", "title", "action", "itemRefs", "expectedPlat", "liquidityScore", "confidenceScore", "riskScore", "explanation"],
+  additionalProperties: true,
+  properties: {
+    id: { type: "string" },
+    methodId: { type: "string" },
+    title: { type: "string" },
+    action: { enum: ["buy", "sell", "farm", "open", "refine", "hold", "convert", "rank", "run_mission", "complete_set"] },
+    itemRefs: { type: "array", items: productItemRefJsonSchema },
+    expectedPlat: { type: "number" },
+    expectedCostPlat: { type: "number" },
+    expectedProfitPlat: { type: "number" },
+    roi: { type: "number" },
+    timeToExecuteMinutes: { type: "number" },
+    liquidityScore: { type: "number" },
+    confidenceScore: { type: "number" },
+    riskScore: { type: "number" },
+    assumptions: { type: "array", items: { type: "string" } },
+    warnings: { type: "array", items: { type: "string" } },
+    explanation: productExplanationJsonSchema,
+    expiresAt: { type: "string" },
+    url: { type: "string" },
+    tags: { type: "array", items: { type: "string" } },
+  },
+};
+
+const productHealthDataSchema: Record<string, unknown> = {
+  type: "object",
+  required: ["generatedAt", "status", "sources", "warnings", "counts", "methods"],
+  additionalProperties: true,
+  properties: {
+    generatedAt: { type: "string" },
+    status: { enum: ["green", "yellow", "red"] },
+    sources: { type: "array", items: productSourceHealthJsonSchema },
+    warnings: { type: "array", items: { type: "string" } },
+    counts: { type: "object" },
+    methods: { type: "array", items: productMethodJsonSchema },
+  },
+};
+
+const productRunNowDataSchema: Record<string, unknown> = {
+  type: "object",
+  required: ["generatedAt", "activities", "warnings"],
+  additionalProperties: true,
+  properties: {
+    generatedAt: { type: "string" },
+    activities: { type: "array", items: { type: "object", additionalProperties: true } },
+    rejectedActivities: { type: "array", items: { type: "object", additionalProperties: true } },
+    warnings: { type: "array", items: { type: "string" } },
+  },
+};
+
+const productSliceObjectSchema: Record<string, unknown> = {
+  type: "object",
+  additionalProperties: true,
+};
+
+const productPlannerDataSchema: Record<string, unknown> = {
+  type: "object",
+  additionalProperties: true,
+  properties: {
+    profile: { type: "object", additionalProperties: true },
+    watchlists: { type: "array", items: { type: "object", additionalProperties: true } },
+    portfolio: { type: "array", items: { type: "object", additionalProperties: true } },
+    todos: { type: "array", items: { type: "object", additionalProperties: true } },
+    notificationRules: { type: "array", items: { type: "object", additionalProperties: true } },
+    tradeJournal: { type: "array", items: { type: "object", additionalProperties: true } },
+    warnings: { type: "array", items: { type: "string" } },
+  },
+};
+
 export const outputSchemas = {
   snapshot: envelopeJsonSchema({
     type: "object",
@@ -559,4 +696,18 @@ export const outputSchemas = {
     items: arcaneMarketSummaryJsonSchema,
   }),
   arcaneDetail: envelopeJsonSchema(arcaneDetailDataSchema),
+  productHealth: envelopeJsonSchema(productHealthDataSchema),
+  productMethods: envelopeJsonSchema({
+    type: "array",
+    items: productMethodJsonSchema,
+  }),
+  productOpportunities: envelopeJsonSchema({
+    type: "array",
+    items: productOpportunityJsonSchema,
+  }),
+  productPrimeRelics: envelopeJsonSchema(productSliceObjectSchema),
+  productRunNow: envelopeJsonSchema(productRunNowDataSchema),
+  productExpansionMarkets: envelopeJsonSchema(productSliceObjectSchema),
+  productAdvancedAnalytics: envelopeJsonSchema(productSliceObjectSchema),
+  productPlanner: envelopeJsonSchema(productPlannerDataSchema),
 };

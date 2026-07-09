@@ -22,8 +22,9 @@ import {
   type EnvelopeMeta,
   type MetaComputeInput,
 } from "./mcp/schemas.js";
-import { isRecord, readNumber, readPositiveInteger, readString, readStringArray } from "./wfm/guards.js";
+import { isRecord, readBoolean, readNumber, readPositiveInteger, readString, readStringArray } from "./wfm/guards.js";
 import { attributeSignature, slugify } from "./wfm/opportunities.js";
+import type { ProductDashboardState, ProductOpportunity, ProductOpportunityAction, SourceHealth } from "./wfm/product.js";
 import type { ThePlatExchangeService } from "./wfm/scanner.js";
 import type { ArcaneDashboardState, ArcaneDissolveRecommendation, ArcaneMarketSummary, ArcanePackStrategy, ArcanePackValuation, DashboardState, TraderConfig } from "./wfm/types.js";
 
@@ -127,6 +128,15 @@ export class McpSseServer {
     if (name === "arcane_dissolve_recommendations") return this.arcaneDissolveRecommendationsTool(request.id, argumentsRecord);
     if (name === "arcane_market") return this.arcaneMarketTool(request.id, argumentsRecord);
     if (name === "arcane_detail") return this.arcaneDetailTool(request.id, argumentsRecord);
+    if (name === "product_health") return this.productHealthTool(request.id);
+    if (name === "product_refresh") return this.productRefreshTool(request.id);
+    if (name === "product_methods") return this.productMethodsTool(request.id, argumentsRecord);
+    if (name === "product_opportunities") return this.productOpportunitiesTool(request.id, argumentsRecord);
+    if (name === "product_prime_relics") return this.productPrimeRelicsTool(request.id, argumentsRecord);
+    if (name === "product_run_now") return this.productRunNowTool(request.id, argumentsRecord);
+    if (name === "product_expansion_markets") return this.productExpansionMarketsTool(request.id, argumentsRecord);
+    if (name === "product_advanced_analytics") return this.productAdvancedAnalyticsTool(request.id, argumentsRecord);
+    if (name === "product_planner") return this.productPlannerTool(request.id, argumentsRecord);
     return err(request.id, -32602, `Unknown tool: ${name ?? "missing"}`, { retryable: false });
   }
 
@@ -328,6 +338,239 @@ export class McpSseServer {
     return ok(id, this.finalizeEnvelope(toEnvelope(detail, meta)));
   }
 
+  private productHealthTool(id: unknown): Record<string, unknown> {
+    const product = this.service.getProductState();
+    const meta = this.buildProductMeta(product);
+    const data = {
+      generatedAt: product.generatedAt,
+      status: product.dataHealth.status,
+      sources: product.dataHealth.sources,
+      warnings: product.dataHealth.warnings,
+      counts: {
+        methods: product.methods.length,
+        opportunities: product.opportunities.length,
+        runNowActivities: product.runNow.activities.length,
+        runNowRejectedActivities: product.runNow.rejectedActivities.length,
+        primeRelics: product.prime.relicCount,
+        primeRewards: product.prime.rewardCount,
+        expansion: {
+          mods: product.expansion.mods.length,
+          syndicates: product.expansion.syndicates.length,
+          baro: product.expansion.baro.length,
+          resources: product.expansion.resources.length,
+          eventShocks: product.expansion.eventShocks.length,
+          bespokeMarkets: product.expansion.bespokeMarkets.length,
+        },
+        planner: {
+          watchlists: product.personalization.watchlists.length,
+          portfolio: product.personalization.portfolio.length,
+          todos: product.personalization.todos.length,
+          notificationRules: product.personalization.notificationRules.length,
+          tradeJournal: product.personalization.tradeJournal.length,
+        },
+      },
+      methods: product.methods,
+    };
+    return ok(id, this.finalizeEnvelope(toEnvelope(data, meta)));
+  }
+
+  private productRefreshTool(id: unknown): Record<string, unknown> {
+    void this.service.refreshProduct("mcp-product");
+    const product = this.service.getProductState();
+    const meta = this.buildProductMeta(product);
+    return ok(id, this.finalizeEnvelope(toEnvelope({ accepted: true, reason: "product refresh scheduled" }, meta)));
+  }
+
+  private productMethodsTool(id: unknown, args: Record<string, unknown>): Record<string, unknown> {
+    const limit = readPositiveInteger(args, "limit", 25);
+    const product = this.service.getProductState();
+    const meta = this.buildProductMeta(product);
+    const sourcesById = new Map(product.dataHealth.sources.map((source) => [source.id, source]));
+    const ids = readStringSet(args, ["methodId", "method_id", "id"], ["methodIds", "method_ids", "ids"]);
+    const statuses = readStringSet(args, ["status"], ["statuses"]);
+    const needle = (readString(args, "query") ?? readString(args, "q") ?? "").trim().toLowerCase();
+    const methods = product.methods
+      .filter((method) => ids.size === 0 || ids.has(method.id))
+      .filter((method) => statuses.size === 0 || statuses.has(method.status))
+      .filter((method) => !needle || method.id.toLowerCase().includes(needle) || method.label.toLowerCase().includes(needle) || method.description.toLowerCase().includes(needle))
+      .map((method) => ({
+        ...method,
+        sources: method.sourceIds.map((sourceId) => sourcesById.get(sourceId)).filter((source): source is SourceHealth => source !== undefined),
+      }))
+      .slice(0, limit);
+    return ok(id, this.finalizeEnvelope(toEnvelope(methods, meta)));
+  }
+
+  private productOpportunitiesTool(id: unknown, args: Record<string, unknown>): Record<string, unknown> {
+    const limit = readPositiveInteger(args, "limit", 25);
+    const product = this.service.getProductState();
+    const meta = this.buildProductMeta(product);
+    const opportunities = filterProductOpportunities(product.opportunities, args)
+      .sort((left, right) => compareProductOpportunitiesForTool(left, right, readProductOpportunitySort(args)))
+      .slice(0, limit);
+    return ok(id, this.finalizeEnvelope(toEnvelope(opportunities, meta)));
+  }
+
+  private productPrimeRelicsTool(id: unknown, args: Record<string, unknown>): Record<string, unknown> {
+    const limit = readPositiveInteger(args, "limit", 10);
+    const product = this.service.getProductState();
+    const meta = this.buildProductMeta(product);
+    const section = readPrimeSection(args);
+    const minConfidence = readNumber(args, "minConfidence") ?? readNumber(args, "min_confidence");
+    const prime = product.prime;
+    const data: Record<string, unknown> = {
+      generatedAt: prime.generatedAt,
+      summary: prime.summary,
+      relicCount: prime.relicCount,
+      rewardCount: prime.rewardCount,
+      scannedMarketItems: prime.scannedMarketItems,
+      sources: prime.sources,
+      warnings: prime.warnings,
+      section,
+    };
+    const include = (name: PrimeSection) => section === "all" || section === name;
+    const relicFilter = <T extends { confidence?: number }>(entries: readonly T[]) => entries
+      .filter((entry) => minConfidence === undefined || (entry.confidence ?? 0) >= minConfidence)
+      .slice(0, limit);
+    const opportunityFilter = (entries: readonly ProductOpportunity[]) => filterProductOpportunities(entries, args).slice(0, limit);
+    if (include("best_relics_to_sell")) data.bestRelicsToSell = relicFilter(prime.bestRelicsToSell);
+    if (include("best_relics_to_crack")) data.bestRelicsToCrack = relicFilter(prime.bestRelicsToCrack);
+    if (include("best_aya_purchases")) data.bestAyaPurchases = relicFilter(prime.bestAyaPurchases);
+    if (include("set_completion")) data.setCompletion = opportunityFilter(prime.setCompletion);
+    if (include("ducat_recommendations")) data.ducatRecommendations = opportunityFilter(prime.ducatRecommendations);
+    if (include("fissures")) data.fissures = relicFilter(prime.fissures);
+    if (include("supply_shocks")) data.supplyShocks = opportunityFilter(prime.supplyShocks);
+    if (section !== "all") data.items = firstProductSlice(data);
+    return ok(id, this.finalizeEnvelope(toEnvelope(data, meta)));
+  }
+
+  private productRunNowTool(id: unknown, args: Record<string, unknown>): Record<string, unknown> {
+    const limit = readPositiveInteger(args, "limit", 10);
+    const product = this.service.getProductState();
+    const meta = this.buildProductMeta(product);
+    const query = (readString(args, "query") ?? readString(args, "q") ?? "").trim().toLowerCase();
+    const activityType = (readString(args, "activityType") ?? readString(args, "activity_type") ?? "").trim().toLowerCase();
+    const minPriority = readNumber(args, "minPriority") ?? readNumber(args, "min_priority");
+    const minEvPerMinute = readNumber(args, "minEvPerMinute") ?? readNumber(args, "min_ev_per_minute");
+    const includeRejected = readBoolean(args, "includeRejected") ?? readBoolean(args, "include_rejected") ?? false;
+    const activities = [...product.runNow.activities]
+      .filter((activity) => !activityType || activity.activityType.toLowerCase() === activityType)
+      .filter((activity) => !query || activity.title.toLowerCase().includes(query) || activity.node?.toLowerCase().includes(query) || activity.missionType?.toLowerCase().includes(query))
+      .filter((activity) => minPriority === undefined || activity.priority >= minPriority)
+      .filter((activity) => minEvPerMinute === undefined || activity.evPerMinute >= minEvPerMinute)
+      .sort((left, right) => right.priority - left.priority || right.evPerMinute - left.evPerMinute || right.confidenceScore - left.confidenceScore)
+      .slice(0, limit);
+    const data: Record<string, unknown> = {
+      generatedAt: product.runNow.generatedAt,
+      activities,
+      warnings: product.runNow.warnings,
+    };
+    if (includeRejected) data.rejectedActivities = product.runNow.rejectedActivities.slice(0, limit);
+    return ok(id, this.finalizeEnvelope(toEnvelope(data, meta)));
+  }
+
+  private productExpansionMarketsTool(id: unknown, args: Record<string, unknown>): Record<string, unknown> {
+    const limit = readPositiveInteger(args, "limit", 10);
+    const product = this.service.getProductState();
+    const meta = this.buildProductMeta(product);
+    const sections = readExpansionSections(args);
+    const includeGated = readBoolean(args, "includeGated") ?? readBoolean(args, "include_gated") ?? true;
+    const data: Record<string, unknown> = { generatedAt: product.generatedAt, sections: [...sections] };
+    const include = (section: ExpansionSection) => sections.has("all") || sections.has(section);
+    if (include("mods")) data.mods = filterProductOpportunities(product.expansion.mods, args).slice(0, limit);
+    if (include("syndicates")) data.syndicates = filterProductOpportunities(product.expansion.syndicates, args).slice(0, limit);
+    if (include("baro")) data.baro = filterProductOpportunities(product.expansion.baro, args).slice(0, limit);
+    if (include("resources")) data.resources = filterProductOpportunities(product.expansion.resources, args).slice(0, limit);
+    if (include("event_shocks")) data.eventShocks = filterProductOpportunities(product.expansion.eventShocks, args).slice(0, limit);
+    if (includeGated && include("bespoke_markets")) data.bespokeMarkets = product.expansion.bespokeMarkets.slice(0, limit);
+    if (!sections.has("all")) data.items = firstProductSlice(data);
+    return ok(id, this.finalizeEnvelope(toEnvelope(data, meta)));
+  }
+
+  private productAdvancedAnalyticsTool(id: unknown, args: Record<string, unknown>): Record<string, unknown> {
+    const limit = readPositiveInteger(args, "limit", 10);
+    const product = this.service.getProductState();
+    const meta = this.buildProductMeta(product);
+    const section = readAdvancedSection(args);
+    const advanced = product.advanced;
+    const data: Record<string, unknown> = { generatedAt: product.generatedAt, section };
+    const include = (name: AdvancedSection) => section === "all" || section === name;
+    if (include("trade_journal")) data.tradeJournal = advanced.tradeJournal;
+    if (include("portfolio_aging")) data.portfolioAging = advanced.portfolioAging.slice(0, limit);
+    if (include("aggregate_trends")) data.aggregateTrends = advanced.aggregateTrends.slice(0, limit);
+    if (include("team_watchlists")) data.teamWatchlists = advanced.teamWatchlists.slice(0, limit);
+    if (include("method_guides")) data.methodGuides = advanced.methodGuides.slice(0, limit);
+    if (section !== "all") data.items = firstProductSlice(data);
+    return ok(id, this.finalizeEnvelope(toEnvelope(data, meta)));
+  }
+
+  private productPlannerTool(id: unknown, args: Record<string, unknown>): Record<string, unknown> {
+    const limit = readPositiveInteger(args, "limit", 25);
+    const product = this.service.getProductState();
+    const meta = this.buildProductMeta(product);
+    const section = readPlannerSection(args);
+    const personalization = product.personalization;
+    const query = (readString(args, "query") ?? readString(args, "q") ?? "").trim().toLowerCase();
+    const methodIds = readStringSet(args, ["methodId", "method_id"], ["methodIds", "method_ids"]);
+    const todoStatuses = readStringSet(args, ["status"], ["statuses"]);
+    const data: Record<string, unknown> = { generatedAt: product.generatedAt, section, warnings: personalization.warnings };
+    const include = (name: PlannerSection) => section === "all" || section === name;
+    if (include("profile")) data.profile = personalization.profile;
+    if (include("watchlists")) data.watchlists = personalization.watchlists
+      .filter((entry) => !query || entry.name.toLowerCase().includes(query) || entry.itemRefs.some((item) => item.name.toLowerCase().includes(query) || item.wfmSlug?.toLowerCase().includes(query)))
+      .slice(0, limit);
+    if (include("portfolio")) data.portfolio = personalization.portfolio
+      .filter((entry) => !query || entry.item.name.toLowerCase().includes(query) || entry.item.wfmSlug?.toLowerCase().includes(query))
+      .slice(0, limit);
+    if (include("todos")) data.todos = personalization.todos
+      .filter((entry) => todoStatuses.size === 0 || todoStatuses.has(entry.status))
+      .filter((entry) => methodIds.size === 0 || (entry.methodId !== undefined && methodIds.has(entry.methodId)))
+      .filter((entry) => !query || entry.title.toLowerCase().includes(query) || entry.itemRefs.some((item) => item.name.toLowerCase().includes(query) || item.wfmSlug?.toLowerCase().includes(query)))
+      .slice(0, limit);
+    if (include("notification_rules")) data.notificationRules = personalization.notificationRules
+      .filter((entry) => methodIds.size === 0 || entry.methodIds.some((methodId) => methodIds.has(methodId)))
+      .filter((entry) => !query || entry.name.toLowerCase().includes(query))
+      .slice(0, limit);
+    if (include("deliveries")) data.deliveries = personalization.deliveries.slice(0, limit);
+    if (include("trade_journal")) data.tradeJournal = personalization.tradeJournal
+      .filter((entry) => !query || entry.item.name.toLowerCase().includes(query) || entry.item.wfmSlug?.toLowerCase().includes(query))
+      .slice(0, limit);
+    data.exportAvailable = personalization.exportAvailable;
+    data.deleteAvailable = personalization.deleteAvailable;
+    if (section !== "all") data.items = firstProductSlice(data);
+    return ok(id, this.finalizeEnvelope(toEnvelope(data, meta)));
+  }
+
+  private buildProductMeta(product: ProductDashboardState): EnvelopeMeta {
+    const responseAtMs = Date.now();
+    const generatedAt = new Date(responseAtMs).toISOString();
+    const productGeneratedAtMs = Date.parse(product.generatedAt);
+    const healthGeneratedAtMs = Date.parse(product.dataHealth.generatedAt);
+    const sourceTimes = [
+      productGeneratedAtMs,
+      healthGeneratedAtMs,
+      ...product.dataHealth.sources.map((source) => Date.parse(source.lastSuccessAt ?? source.lastFailureAt ?? "")),
+    ].filter((value) => Number.isFinite(value));
+    const newestSourceAt = sourceTimes.length > 0 ? Math.max(...sourceTimes) : Number.NaN;
+    const freshness = Number.isFinite(newestSourceAt)
+      ? Math.max(0, responseAtMs - newestSourceAt)
+      : Number.MAX_SAFE_INTEGER;
+    const totalSources = product.dataHealth.sources.length;
+    const healthySources = product.dataHealth.sources.filter((source) => source.status !== "red").length;
+    const computed = computeMeta({
+      generated_at: generatedAt,
+      data_source: freshness < LIVE_WINDOW_MS ? "live" : "cache",
+      freshness_ms: freshness,
+      scanned: healthySources,
+      total: totalSources,
+      scan_running: false,
+    });
+    return {
+      ...computed,
+      quality: worseQuality(computed.quality, product.dataHealth.status),
+    };
+  }
+
   private buildArcaneMeta(state: DashboardState): EnvelopeMeta {
     const arcanes = state.arcanes;
     const status = arcanes?.status;
@@ -525,6 +768,149 @@ export class McpSseServer {
         },
         outputSchema: outputSchemas.arcaneDetail,
       },
+      {
+        name: "product_health",
+        description: "Return expanded TPE product health, source warnings, method counts, and planner counts. Product source warnings stay in `data`; `meta.quality` is downgraded from product.dataHealth.status.",
+        inputSchema: { type: "object", properties: {}, additionalProperties: false },
+        outputSchema: outputSchemas.productHealth,
+      },
+      {
+        name: "product_refresh",
+        description: "Start a non-overlapping refresh for the expanded product engine (Prime/Relics, Run Now, mods, syndicates, Baro, resources, and analytics) without triggering riven or arcane scans.",
+        inputSchema: { type: "object", properties: {}, additionalProperties: false },
+        outputSchema: outputSchemas.action,
+      },
+      {
+        name: "product_methods",
+        description: "List expanded TPE methods with source-health details: Prime/Relics, Run Now, Mods/Endo, Syndicates, Baro/Ducats, resources, and gated bespoke markets.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            limit: { type: "number", minimum: 1, default: 25 },
+            methodId: { type: "string" },
+            methodIds: { type: "array", items: { type: "string" } },
+            status: { enum: ["green", "yellow", "red"] },
+            statuses: { type: "array", items: { enum: ["green", "yellow", "red"] } },
+            query: { type: "string" },
+            q: { type: "string" },
+          },
+          additionalProperties: false,
+        },
+        outputSchema: outputSchemas.productMethods,
+      },
+      {
+        name: "product_opportunities",
+        description: "Return ranked non-riven product opportunities across the expanded TPE methods. Supports method, action, query, tag, profit, ROI, confidence, liquidity, risk, and sort filters.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            limit: { type: "number", minimum: 1, default: 25 },
+            methodId: { type: "string" },
+            methodIds: { type: "array", items: { type: "string" } },
+            action: { enum: ["buy", "sell", "farm", "open", "refine", "hold", "convert", "rank", "run_mission", "complete_set"] },
+            actions: { type: "array", items: { enum: ["buy", "sell", "farm", "open", "refine", "hold", "convert", "rank", "run_mission", "complete_set"] } },
+            query: { type: "string" },
+            q: { type: "string" },
+            tags: { type: "array", items: { type: "string" } },
+            minExpectedProfitPlat: { type: "number" },
+            minRoi: { type: "number" },
+            minConfidence: { type: "number", minimum: 0, maximum: 1 },
+            minLiquidity: { type: "number", minimum: 0, maximum: 1 },
+            maxRisk: { type: "number", minimum: 0, maximum: 1 },
+            sort: { enum: ["default", "expected_profit", "expected_plat", "roi", "confidence", "liquidity", "risk", "expires_soon"] },
+          },
+          additionalProperties: false,
+        },
+        outputSchema: outputSchemas.productOpportunities,
+      },
+      {
+        name: "product_prime_relics",
+        description: "Return Prime/Relic/Aya slices: relics to sell, relics to crack, Aya purchases, set completion, ducat recommendations, fissures, and supply shocks.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            limit: { type: "number", minimum: 1, default: 10 },
+            section: { enum: ["all", "best_relics_to_sell", "best_relics_to_crack", "best_aya_purchases", "set_completion", "ducat_recommendations", "fissures", "supply_shocks"] },
+            minConfidence: { type: "number", minimum: 0, maximum: 1 },
+            query: { type: "string" },
+            q: { type: "string" },
+            minExpectedProfitPlat: { type: "number" },
+          },
+          additionalProperties: false,
+        },
+        outputSchema: outputSchemas.productPrimeRelics,
+      },
+      {
+        name: "product_run_now",
+        description: "Return live Run Now activities ranked by priority and EV/minute, with optional rejected live activities for debugging source gates.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            limit: { type: "number", minimum: 1, default: 10 },
+            activityType: { type: "string" },
+            query: { type: "string" },
+            q: { type: "string" },
+            minPriority: { type: "number" },
+            minEvPerMinute: { type: "number" },
+            includeRejected: { type: "boolean", default: false },
+          },
+          additionalProperties: false,
+        },
+        outputSchema: outputSchemas.productRunNow,
+      },
+      {
+        name: "product_expansion_markets",
+        description: "Return expanded non-riven/non-arcane market slices: Mods/Endo, Syndicates, Baro/Ducats, tradable resources, event shocks, and gated bespoke markets.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            limit: { type: "number", minimum: 1, default: 10 },
+            section: { enum: ["all", "mods", "syndicates", "baro", "resources", "event_shocks", "bespoke_markets"] },
+            sections: { type: "array", items: { enum: ["all", "mods", "syndicates", "baro", "resources", "event_shocks", "bespoke_markets"] } },
+            query: { type: "string" },
+            q: { type: "string" },
+            minExpectedProfitPlat: { type: "number" },
+            minRoi: { type: "number" },
+            minConfidence: { type: "number", minimum: 0, maximum: 1 },
+            maxRisk: { type: "number", minimum: 0, maximum: 1 },
+            includeGated: { type: "boolean", default: true },
+          },
+          additionalProperties: false,
+        },
+        outputSchema: outputSchemas.productExpansionMarkets,
+      },
+      {
+        name: "product_advanced_analytics",
+        description: "Return advanced product analytics slices: trade-journal rollups, portfolio aging, anonymous aggregate trends, team watchlists, and generated method guides.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            limit: { type: "number", minimum: 1, default: 10 },
+            section: { enum: ["all", "trade_journal", "portfolio_aging", "aggregate_trends", "team_watchlists", "method_guides"] },
+          },
+          additionalProperties: false,
+        },
+        outputSchema: outputSchemas.productAdvancedAnalytics,
+      },
+      {
+        name: "product_planner",
+        description: "Opt-in exposure of local private planning data. Defaults to todos only; pass section=all or a specific section to expose profile/email if stored, watchlists, portfolio, notification rules, deliveries, or trade journal.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            limit: { type: "number", minimum: 1, default: 25 },
+            section: { enum: ["all", "profile", "watchlists", "portfolio", "todos", "notification_rules", "deliveries", "trade_journal"] },
+            status: { enum: ["open", "in_progress", "blocked", "done", "archived"] },
+            statuses: { type: "array", items: { enum: ["open", "in_progress", "blocked", "done", "archived"] } },
+            methodId: { type: "string" },
+            methodIds: { type: "array", items: { type: "string" } },
+            query: { type: "string" },
+            q: { type: "string" },
+          },
+          additionalProperties: false,
+        },
+        outputSchema: outputSchemas.productPlanner,
+      },
     ];
   }
 
@@ -567,6 +953,217 @@ function parseWatchlist(record: Record<string, unknown>): string[] {
   const text = readString(record, "watchlistText");
   const textValues = text ? text.split(/[\n,]+/).map((entry) => entry.trim()).filter((entry) => entry.length > 0) : [];
   return [...arrayValues, ...textValues];
+}
+
+type ProductOpportunitySort = "default" | "expected_profit" | "expected_plat" | "roi" | "confidence" | "liquidity" | "risk" | "expires_soon";
+type PrimeSection = "all" | "best_relics_to_sell" | "best_relics_to_crack" | "best_aya_purchases" | "set_completion" | "ducat_recommendations" | "fissures" | "supply_shocks";
+type ExpansionSection = "all" | "mods" | "syndicates" | "baro" | "resources" | "event_shocks" | "bespoke_markets";
+type AdvancedSection = "all" | "trade_journal" | "portfolio_aging" | "aggregate_trends" | "team_watchlists" | "method_guides";
+type PlannerSection = "all" | "profile" | "watchlists" | "portfolio" | "todos" | "notification_rules" | "deliveries" | "trade_journal";
+
+function readStringSet(record: Record<string, unknown>, singleKeys: readonly string[], arrayKeys: readonly string[]): Set<string> {
+  const values: string[] = [];
+  for (const key of singleKeys) {
+    const value = readString(record, key);
+    if (value) values.push(value);
+  }
+  for (const key of arrayKeys) values.push(...readStringArray(record, key));
+  return new Set(values.map((value) => value.trim()).filter((value) => value.length > 0));
+}
+
+function readProductOpportunitySort(record: Record<string, unknown>): ProductOpportunitySort {
+  const value = readString(record, "sort");
+  switch (value) {
+    case "expected_profit":
+    case "expected_plat":
+    case "roi":
+    case "confidence":
+    case "liquidity":
+    case "risk":
+    case "expires_soon":
+      return value;
+    default:
+      return "default";
+  }
+}
+
+function filterProductOpportunities(entries: readonly ProductOpportunity[], args: Record<string, unknown>): ProductOpportunity[] {
+  const methodIds = readStringSet(args, ["methodId", "method_id"], ["methodIds", "method_ids"]);
+  const actionValues = readStringSet(args, ["action"], ["actions"]);
+  const actions = new Set<ProductOpportunityAction>();
+  for (const value of actionValues) {
+    if (isProductAction(value)) actions.add(value);
+  }
+  const tagValues = Array.from(readStringSet(args, ["tag"], ["tags"]), (value) => value.toLowerCase());
+  const query = (readString(args, "query") ?? readString(args, "q") ?? "").trim().toLowerCase();
+  const minExpectedProfit = readNumber(args, "minExpectedProfitPlat") ?? readNumber(args, "min_expected_profit_plat") ?? readNumber(args, "minProfit") ?? readNumber(args, "min_profit");
+  const minRoi = readNumber(args, "minRoi") ?? readNumber(args, "min_roi");
+  const minConfidence = readNumber(args, "minConfidence") ?? readNumber(args, "min_confidence");
+  const minLiquidity = readNumber(args, "minLiquidity") ?? readNumber(args, "min_liquidity");
+  const maxRisk = readNumber(args, "maxRisk") ?? readNumber(args, "max_risk");
+  return entries
+    .filter((entry) => methodIds.size === 0 || methodIds.has(entry.methodId))
+    .filter((entry) => actions.size === 0 || actions.has(entry.action))
+    .filter((entry) => tagValues.length === 0 || (entry.tags ?? []).some((tag) => tagValues.includes(tag.toLowerCase())))
+    .filter((entry) => !query || productOpportunityMatchesQuery(entry, query))
+    .filter((entry) => minExpectedProfit === undefined || expectedProductProfit(entry) >= minExpectedProfit)
+    .filter((entry) => minRoi === undefined || productOpportunityRoi(entry) >= minRoi)
+    .filter((entry) => minConfidence === undefined || entry.confidenceScore >= minConfidence)
+    .filter((entry) => minLiquidity === undefined || entry.liquidityScore >= minLiquidity)
+    .filter((entry) => maxRisk === undefined || entry.riskScore <= maxRisk);
+}
+
+function isProductAction(value: string): value is ProductOpportunityAction {
+  switch (value) {
+    case "buy":
+    case "sell":
+    case "farm":
+    case "open":
+    case "refine":
+    case "hold":
+    case "convert":
+    case "rank":
+    case "run_mission":
+    case "complete_set":
+      return true;
+    default:
+      return false;
+  }
+}
+
+function productOpportunityMatchesQuery(entry: ProductOpportunity, query: string): boolean {
+  if (entry.id.toLowerCase().includes(query) || entry.methodId.toLowerCase().includes(query) || entry.title.toLowerCase().includes(query)) return true;
+  if ((entry.tags ?? []).some((tag) => tag.toLowerCase().includes(query))) return true;
+  return entry.itemRefs.some((item) =>
+    item.name.toLowerCase().includes(query)
+    || (item.wfmSlug ?? "").toLowerCase().includes(query)
+    || (item.tpeId ?? "").toLowerCase().includes(query),
+  );
+}
+
+function expectedProductProfit(entry: ProductOpportunity): number {
+  return entry.expectedProfitPlat ?? entry.expectedPlat - (entry.expectedCostPlat ?? 0);
+}
+
+function productOpportunityRoi(entry: ProductOpportunity): number {
+  if (entry.roi !== undefined) return entry.roi;
+  const cost = entry.expectedCostPlat ?? 0;
+  return cost > 0 ? expectedProductProfit(entry) / cost : 0;
+}
+
+function compareProductOpportunitiesForTool(left: ProductOpportunity, right: ProductOpportunity, sort: ProductOpportunitySort): number {
+  switch (sort) {
+    case "expected_plat":
+      return right.expectedPlat - left.expectedPlat || expectedProductProfit(right) - expectedProductProfit(left);
+    case "roi":
+      return productOpportunityRoi(right) - productOpportunityRoi(left) || expectedProductProfit(right) - expectedProductProfit(left);
+    case "confidence":
+      return right.confidenceScore - left.confidenceScore || expectedProductProfit(right) - expectedProductProfit(left);
+    case "liquidity":
+      return right.liquidityScore - left.liquidityScore || right.confidenceScore - left.confidenceScore;
+    case "risk":
+      return left.riskScore - right.riskScore || expectedProductProfit(right) - expectedProductProfit(left);
+    case "expires_soon":
+      return nullableAsc(parseOptionalTime(left.expiresAt), parseOptionalTime(right.expiresAt)) || expectedProductProfit(right) - expectedProductProfit(left);
+    case "expected_profit":
+    case "default":
+      return expectedProductProfit(right) - expectedProductProfit(left) || right.confidenceScore - left.confidenceScore || right.liquidityScore - left.liquidityScore;
+  }
+}
+
+function parseOptionalTime(value: string | undefined): number | null {
+  if (!value) return null;
+  const parsed = Date.parse(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function readPrimeSection(record: Record<string, unknown>): PrimeSection {
+  const value = readString(record, "section") ?? readString(record, "category");
+  switch (value) {
+    case "best_relics_to_sell":
+    case "best_relics_to_crack":
+    case "best_aya_purchases":
+    case "set_completion":
+    case "ducat_recommendations":
+    case "fissures":
+    case "supply_shocks":
+      return value;
+    default:
+      return "all";
+  }
+}
+
+function readExpansionSections(record: Record<string, unknown>): Set<ExpansionSection> {
+  const values = [...readStringArray(record, "sections")];
+  const single = readString(record, "section") ?? readString(record, "category");
+  if (single) values.push(single);
+  const sections = new Set<ExpansionSection>();
+  for (const value of values) {
+    switch (value) {
+      case "all":
+      case "mods":
+      case "syndicates":
+      case "baro":
+      case "resources":
+      case "event_shocks":
+      case "bespoke_markets":
+        sections.add(value);
+        break;
+      case "eventShocks":
+        sections.add("event_shocks");
+        break;
+      case "bespokeMarkets":
+        sections.add("bespoke_markets");
+        break;
+    }
+  }
+  if (sections.size === 0 || sections.has("all")) return new Set<ExpansionSection>(["all"]);
+  return sections;
+}
+
+function readAdvancedSection(record: Record<string, unknown>): AdvancedSection {
+  const value = readString(record, "section") ?? readString(record, "category");
+  switch (value) {
+    case "trade_journal":
+    case "portfolio_aging":
+    case "aggregate_trends":
+    case "team_watchlists":
+    case "method_guides":
+      return value;
+    default:
+      return "all";
+  }
+}
+
+function readPlannerSection(record: Record<string, unknown>): PlannerSection {
+  const value = readString(record, "section") ?? readString(record, "category");
+  switch (value) {
+    case "all":
+    case "profile":
+    case "watchlists":
+    case "portfolio":
+    case "todos":
+    case "notification_rules":
+    case "deliveries":
+    case "trade_journal":
+      return value;
+    default:
+      return "todos";
+  }
+}
+
+function firstProductSlice(data: Record<string, unknown>): unknown {
+  for (const [key, value] of Object.entries(data)) {
+    if (key === "generatedAt" || key === "summary" || key === "relicCount" || key === "rewardCount" || key === "scannedMarketItems" || key === "sources" || key === "warnings" || key === "section" || key === "sections" || key === "exportAvailable" || key === "deleteAvailable") continue;
+    if (Array.isArray(value)) return value;
+    if (key === "tradeJournal" && value && typeof value === "object") return value;
+  }
+  return [];
+}
+
+function worseQuality(left: EnvelopeMeta["quality"], right: EnvelopeMeta["quality"]): EnvelopeMeta["quality"] {
+  const rank: Record<EnvelopeMeta["quality"], number> = { green: 0, yellow: 1, red: 2 };
+  return rank[right] > rank[left] ? right : left;
 }
 
 type ArcaneAction = ArcaneDissolveRecommendation["action"];
