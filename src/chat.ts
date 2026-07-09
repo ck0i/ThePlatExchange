@@ -5,7 +5,7 @@ import { isRecord, readString } from "./wfm/guards.js";
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
 const OPENROUTER_PUBLIC_FREE_KEY = "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";
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || OPENROUTER_PUBLIC_FREE_KEY;
-const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL || "poolside/laguna-m.1:free";
+const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL || "openai/gpt-oss-120b:free";
 const MAX_HISTORY_MESSAGES = 24;
 const MAX_CHAT_MESSAGE_CHARS = 16_000;
 const MAX_TOOL_CALLS = 8;
