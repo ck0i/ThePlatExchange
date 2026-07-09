@@ -68,6 +68,7 @@ const auctions: RivenAuction[] = [
   makeAuction("closed-bait", 1, "ingame", exactAttrs, { closed: true }),
   makeAuction("hidden-bait", 2, "ingame", exactAttrs, { visible: false }),
   makeAuction("auction-bid-only", 3, "ingame", exactAttrs, { isDirectSell: false }),
+  makeAuction("six-figure-bait", 100_000, "ingame", exactAttrs),
 ];
 
 assert.equal(slugify("Kuva Bramma"), "kuva_bramma");
@@ -91,6 +92,7 @@ assert(!ids.includes("offline-cheap"), "offline seller is not actionable by defa
 assert(!ids.includes("closed-bait"), "closed listings must be ignored");
 assert(!ids.includes("hidden-bait"), "invisible listings must be ignored");
 assert(!ids.includes("auction-bid-only"), "non-direct auctions must be ignored");
+assert(!ids.includes("six-figure-bait"), "six-figure listings must be ignored");
 assert.equal(analysis.opportunities[0]?.auctionId, "unique-cheap", "default ordering should favor largest platinum margin");
 for (const opportunity of analysis.opportunities) {
   assert(opportunity.score >= 0 && opportunity.score <= 100, "score should be an understandable 0-100 value");

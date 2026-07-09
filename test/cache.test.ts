@@ -91,11 +91,47 @@ try {
 }
 
 await testArcaneOrderRankFallback();
+await testRivenAuctionSearchMergesPriceExtremes();
 
 console.log("cache and client parsing tests passed");
 
 function jsonResponse(body: unknown): Response {
   return new Response(JSON.stringify(body), { status: 200, headers: { "content-type": "application/json" } });
+}
+
+async function testRivenAuctionSearchMergesPriceExtremes(): Promise<void> {
+  const requestedSorts: string[] = [];
+  const ascAuctions = Array.from({ length: 500 }, (_, index) => rivenAuctionPayload(`asc-${index}`, index + 1));
+  ascAuctions[498] = rivenAuctionPayload("duplicate-bookend", 25);
+  ascAuctions[499] = rivenAuctionPayload("six-figure-bait", 100_000);
+  const descAuctions = [
+    rivenAuctionPayload("six-figure-whale", 150_000),
+    rivenAuctionPayload("desc-expensive", 99_999),
+    rivenAuctionPayload("duplicate-bookend", 25),
+  ];
+  const fetcher = async (input: URL, _init: RequestInit) => {
+    if (input.pathname !== "/v1/auctions/search") {
+      return new Response(JSON.stringify({ error: "unexpected path" }), { status: 404 });
+    }
+    const sort = input.searchParams.get("sort_by") ?? "";
+    requestedSorts.push(sort);
+    return jsonResponse({
+      payload: {
+        auctions: sort === "price_desc" ? descAuctions : ascAuctions,
+      },
+    });
+  };
+
+  const client = new WarframeMarketClient({ fetcher, ratePerSecond: 1000, burst: 10, maxRetries: 1 });
+  const auctions = await client.searchRivenAuctions("war");
+  const ids = auctions.map((auction) => auction.id);
+
+  assert.deepEqual(requestedSorts, ["price_asc", "price_desc"], "capped riven searches must fetch both low and high price bookends");
+  assert(ids.includes("desc-expensive"), "descending price fetch should add high-end non-outlier listings");
+  assert.equal(ids.filter((id) => id === "duplicate-bookend").length, 1, "asc/desc overlap must be deduped by auction id");
+  assert(!ids.includes("six-figure-bait"), "six-figure asc listings must be filtered out at ingestion");
+  assert(!ids.includes("six-figure-whale"), "six-figure desc listings must be filtered out at ingestion");
+  assert(auctions.every((auction) => auction.buyoutPrice < 100_000), "ingested riven auctions must stay below the six-figure plat cutoff");
 }
 
 async function testArcaneOrderRankFallback(): Promise<void> {
@@ -151,6 +187,36 @@ async function testArcaneOrderRankFallback(): Promise<void> {
   assert.equal(orders.find((order) => order.id === "rank-zero-omits-rank")?.rank, 0);
   assert.equal(orders.find((order) => order.id === "max-rank-omits-rank")?.rank, 5);
   assert.equal(orders.find((order) => order.id === "explicit-rank-wins")?.rank, 3);
+}
+
+function rivenAuctionPayload(id: string, buyoutPrice: number): Record<string, unknown> {
+  return {
+    id,
+    buyout_price: buyoutPrice,
+    starting_price: buyoutPrice,
+    is_direct_sell: true,
+    visible: true,
+    closed: false,
+    platform: "pc",
+    crossplay: true,
+    created: "2026-07-06T00:00:00.000Z",
+    updated: "2026-07-06T00:00:00.000Z",
+    owner: {
+      id: `${id}-seller`,
+      ingame_name: `${id}-seller`,
+      slug: `${id}-seller`,
+      status: "ingame",
+    },
+    item: {
+      weapon_url_name: "war",
+      name: id,
+      mastery_level: 0,
+      mod_rank: 0,
+      re_rolls: 0,
+      polarity: "madurai",
+      attributes: [],
+    },
+  };
 }
 
 function arcaneOrderPayload(id: string, type: "sell" | "buy", platinum: number, rank?: number): Record<string, unknown> {

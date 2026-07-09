@@ -62,6 +62,9 @@ const DEFAULT_OPTIONS: ClientOptions = {
   maxRetries: 6,
   userAgent: "the-plat-exchange-ts/0.1 (public API, cached, rate-limited)",
 };
+const RIVEN_AUCTION_SEARCH_CAP = 500;
+const MAX_REASONABLE_RIVEN_BUYOUT = 100_000;
+const RIVEN_AUCTION_SORTS = ["price_asc", "price_desc"] as const;
 
 export class WarframeMarketClient {
   readonly baseUrl: string;
@@ -202,10 +205,25 @@ export class WarframeMarketClient {
   }
 
   async searchRivenAuctions(weaponSlug: string): Promise<RivenAuction[]> {
+    const asc = await this.searchRivenAuctionsSorted(weaponSlug, "price_asc");
+    const books = asc.length >= RIVEN_AUCTION_SEARCH_CAP
+      ? [asc, await this.searchRivenAuctionsSorted(weaponSlug, "price_desc")]
+      : [asc];
+    const merged = new Map<string, RivenAuction>();
+    for (const book of books) {
+      for (const auction of book) {
+        if (auction.buyoutPrice >= MAX_REASONABLE_RIVEN_BUYOUT) continue;
+        if (!merged.has(auction.id)) merged.set(auction.id, auction);
+      }
+    }
+    return [...merged.values()];
+  }
+
+  private async searchRivenAuctionsSorted(weaponSlug: string, sortBy: typeof RIVEN_AUCTION_SORTS[number]): Promise<RivenAuction[]> {
     const payload = await this.getV1("/v1/auctions/search", {
       type: "riven",
       weapon_url_name: weaponSlug,
-      sort_by: "price_asc",
+      sort_by: sortBy,
       buyout_policy: "direct",
     });
     if (!isRecord(payload)) return [];

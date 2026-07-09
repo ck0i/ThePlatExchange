@@ -52,6 +52,7 @@ const HIGH_SIDE_OUTLIER_MAX_TAIL_FRACTION = 0.4;
 const HIGH_SIDE_OUTLIER_MIN_MEDIAN_RATIO = 10;
 const HIGH_SIDE_OUTLIER_IQR_MULTIPLIER = 8;
 export const MAX_REASONABLE_ROI = 17.5;
+const MAX_REASONABLE_RIVEN_BUYOUT = 100_000;
 
 export interface MarketAnalysis {
   opportunities: Opportunity[];
@@ -116,9 +117,9 @@ export function analyzeMarket(
   const instantWins: InstantWin[] = [];
   const weaponSummaries: WeaponSummary[] = [];
   const summariesBySlug = new Map<string, WeaponSummary>();
-
   for (const weapon of targets) {
-    const allAuctions = auctionsByWeapon.get(weapon.slug) ?? [];
+
+    const allAuctions = (auctionsByWeapon.get(weapon.slug) ?? []).filter((auction) => auction.buyoutPrice < MAX_REASONABLE_RIVEN_BUYOUT);
     const rawDirectAuctions = allAuctions.filter(isTradableDirectListing);
     const directAuctions = filterHighSideOutlierAuctions(rawDirectAuctions);
     const actionableAuctions = directAuctions.filter((auction) => config.statuses.includes(auction.owner.status));
@@ -453,7 +454,7 @@ function resolveTargetWeapons(weapons: RivenWeapon[], config: TraderConfig): Riv
 }
 
 function isTradableDirectListing(auction: RivenAuction): boolean {
-  return auction.visible && !auction.closed && auction.isDirectSell && auction.buyoutPrice > 0;
+  return auction.visible && !auction.closed && auction.isDirectSell && auction.buyoutPrice > 0 && auction.buyoutPrice < MAX_REASONABLE_RIVEN_BUYOUT;
 }
 
 function groupComparableAuctions(auctions: readonly RivenAuction[]): Map<string, RivenAuction[]> {
