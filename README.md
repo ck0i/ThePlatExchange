@@ -121,10 +121,10 @@ WFM_SCAN_MODE=tiered WFM_WATCHLIST="war,kuva bramma" WFM_MIN_PROFIT=50 npm run d
 The app starts an MCP-over-SSE server with the dashboard.
 
 - SSE endpoint: `http://127.0.0.1:3417/mcp/sse`
-- Message endpoint: `/mcp/messages`
+- Message route pattern: `/mcp/messages?sessionId=<from SSE endpoint event>`
 - Info endpoint: `/api/mcp-info`
 
-Open **Settings → MCP connect** in the dashboard to copy Claude Desktop or Claude Code configuration snippets and test the connection.
+Open **Settings → MCP connect** in the dashboard to copy generic SSE connection values, native-client example fields, or an optional `mcp-remote` stdio bridge config, then test the SSE handshake.
 
 Available MCP tools include:
 

@@ -54,7 +54,7 @@ body {
 button, input, textarea { font: inherit; }
 button { color: inherit; }
 button:not(:disabled) { cursor: pointer; }
-button:disabled { cursor: wait; opacity: .58; }
+button:disabled { cursor: default; opacity: .58; }
 [hidden] { display: none !important; }
 a { color: var(--primary-light); }
 h1, h2, h3, .brand-name { font-family: "Bricolage Grotesque", Inter, system-ui, sans-serif; }
@@ -623,9 +623,14 @@ body.motion-reveal .fresh-card:nth-child(-n+5), body.motion-reveal .instant-prev
 .mode-btn.active strong { color: var(--primary-light); }
 .mode-hint, .settings-status { margin-top: 12px; padding: 10px 12px; border: 1px solid var(--border); background: var(--card-elev); border-radius: var(--radius-sm); color: var(--muted); font-size: 11px; line-height: 1.5; }
 .mcp-block { margin-bottom: 12px; }
+.mcp-intro { margin-bottom: 12px; }
 .mcp-block-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 10px; }
 .mcp-block-head h3 { color: var(--muted); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
-.mcp-endpoint { display: block; padding: 10px 12px; background: var(--row); color: var(--primary-light); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow-x: auto; }
+.mcp-values { display: grid; gap: 8px; margin: 0; }
+.mcp-values div { display: grid; grid-template-columns: minmax(110px, .35fr) minmax(0, 1fr); gap: 10px; align-items: start; padding: 10px 12px; background: var(--row); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.mcp-values dt { color: var(--muted); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.mcp-values dd { min-width: 0; margin: 0; color: var(--muted-light); display: flex; align-items: center; gap: 10px; }
+.mcp-endpoint, .mcp-values code { display: block; min-width: 0; max-width: 100%; color: var(--primary-light); overflow-x: auto; }
 .mcp-block pre { padding: 12px; border: 1px solid var(--border); background: #0d0d12; border-radius: var(--radius-sm); overflow-x: auto; }
 .mcp-block pre code { color: var(--muted-light); font-size: 11px; line-height: 1.55; white-space: pre; }
 .mcp-tool-list { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }

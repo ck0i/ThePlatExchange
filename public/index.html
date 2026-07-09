@@ -386,18 +386,25 @@
             </div>
 
             <div class="settings-panel" data-settings-panel="mcp" hidden>
-
+              <p class="muted-copy mcp-intro">Connect any MCP client that supports legacy SSE with the values below. If your client only launches stdio MCP servers, use the optional mcp-remote bridge config.</p>
               <div class="mcp-block panel-subtle">
-                <div class="mcp-block-head"><h3>SSE endpoint</h3><button class="mcp-copy" data-copy-target="mcpEndpoint" type="button">Copy</button></div>
-                <code id="mcpEndpoint" class="mcp-endpoint"></code>
+                <div class="mcp-block-head"><h3>Connection values</h3><button class="mcp-copy" data-copy-target="mcpEndpoint" type="button">Copy SSE URL</button></div>
+                <dl class="mcp-values">
+                  <div><dt>Server name</dt><dd><code id="mcpServerName"></code></dd></div>
+                  <div><dt>Transport</dt><dd><code id="mcpTransport"></code></dd></div>
+                  <div><dt>SSE URL</dt><dd><code id="mcpEndpoint" class="mcp-endpoint"></code></dd></div>
+                  <div><dt>Message route pattern</dt><dd><code id="mcpMessageEndpoint" class="mcp-endpoint"></code><button class="mcp-copy" data-copy-target="mcpMessageEndpoint" type="button">Copy pattern</button></dd></div>
+                </dl>
               </div>
               <div class="mcp-block panel-subtle">
-                <div class="mcp-block-head"><h3>Claude Desktop</h3><button class="mcp-copy" data-copy-target="mcpConfigDesktop" type="button">Copy config</button></div>
-                <pre><code id="mcpConfigDesktop"></code></pre>
+                <div class="mcp-block-head"><h3>Native SSE client values</h3><button class="mcp-copy" data-copy-target="mcpConfigNative" type="button">Copy JSON</button></div>
+                <p class="small">Example shape only. Most clients only need the SSE URL; the message route is a handshake detail emitted with the session id after connect.</p>
+                <pre><code id="mcpConfigNative"></code></pre>
               </div>
               <div class="mcp-block panel-subtle">
-                <div class="mcp-block-head"><h3>Claude Code CLI</h3><button class="mcp-copy" data-copy-target="mcpConfigCli" type="button">Copy command</button></div>
-                <pre><code id="mcpConfigCli"></code></pre>
+                <div class="mcp-block-head"><h3>Stdio bridge via mcp-remote</h3><button class="mcp-copy" data-copy-target="mcpConfigBridge" type="button">Copy bridge config</button></div>
+                <p class="small">Use this when a client only accepts launched stdio MCP servers. Requires Node/npm so <code>npx</code> can run <code>mcp-remote</code>.</p>
+                <pre><code id="mcpConfigBridge"></code></pre>
               </div>
               <div class="mcp-block panel-subtle">
                 <div class="mcp-block-head"><h3>Available tools</h3><button id="mcpTestButton" class="ghost-button" type="button">Test connection</button></div>

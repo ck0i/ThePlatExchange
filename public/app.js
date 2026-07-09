@@ -100,8 +100,11 @@ const elements = {
   settingsTabs: document.querySelectorAll(".settings-tab"),
   settingsPanels: document.querySelectorAll(".settings-panel"),
   mcpEndpoint: document.getElementById("mcpEndpoint"),
-  mcpConfigDesktop: document.getElementById("mcpConfigDesktop"),
-  mcpConfigCli: document.getElementById("mcpConfigCli"),
+  mcpMessageEndpoint: document.getElementById("mcpMessageEndpoint"),
+  mcpServerName: document.getElementById("mcpServerName"),
+  mcpTransport: document.getElementById("mcpTransport"),
+  mcpConfigNative: document.getElementById("mcpConfigNative"),
+  mcpConfigBridge: document.getElementById("mcpConfigBridge"),
   mcpToolList: document.getElementById("mcpToolList"),
   mcpTestButton: document.getElementById("mcpTestButton"),
   mcpTestResult: document.getElementById("mcpTestResult"),
@@ -151,6 +154,8 @@ let spotlightFilter = null;
 let currentPage = "home";
 let expandedOpportunityKey = null;
 let copiedOpportunityKey = null;
+let currentMcpInfo = null;
+let mcpInfoRequest = 0;
 let opportunityRenderToken = 0;
 let opportunityRenderIdleHandle = null;
 let opportunityVisibleCount = 25;
@@ -2862,49 +2867,103 @@ for (const button of document.querySelectorAll(".mcp-copy")) {
   });
 }
 
-function populateMcp() {
-  const origin = window.location.origin;
-  const sseUrl = `${origin}/mcp/sse`;
-  if (elements.mcpEndpoint) elements.mcpEndpoint.textContent = sseUrl;
-  if (elements.mcpConfigDesktop) {
-    elements.mcpConfigDesktop.textContent = JSON.stringify({
+async function populateMcp() {
+  const requestId = ++mcpInfoRequest;
+  if (elements.mcpTestResult) elements.mcpTestResult.textContent = "";
+  if (elements.mcpToolList) elements.mcpToolList.innerHTML = `<li class="small">Loading…</li>`;
+  try {
+    const rawInfo = await fetchMcpInfo();
+    if (requestId !== mcpInfoRequest) return;
+    currentMcpInfo = normalizeMcpInfo(rawInfo);
+    renderMcpInfo(currentMcpInfo);
+  } catch (error) {
+    if (requestId !== mcpInfoRequest) return;
+    currentMcpInfo = null;
+    renderMcpInfoError(error);
+  }
+}
+
+async function fetchMcpInfo() {
+  const response = await fetch("/api/mcp-info");
+  if (!response.ok) throw new Error(`status ${response.status}`);
+  return response.json();
+}
+
+function normalizeMcpInfo(info) {
+  const server = info?.server && typeof info.server === "object" ? info.server : {};
+  const serverName = typeof server.name === "string" && server.name ? server.name : "the-plat-exchange";
+  const transport = typeof info?.transport === "string" && info.transport ? info.transport : "sse";
+  const endpoint = absoluteMcpUrl(typeof info?.endpoint === "string" && info.endpoint ? info.endpoint : "/mcp/sse");
+  const messagesEndpoint = absoluteMcpUrl(typeof info?.messages_endpoint === "string" && info.messages_endpoint ? info.messages_endpoint : "/mcp/messages");
+  const messagesPattern = `${messagesEndpoint}${messagesEndpoint.includes("?") ? "&" : "?"}sessionId=<from endpoint event>`;
+  const tools = Array.isArray(info?.tools) ? info.tools : [];
+  return { serverName, transport, endpoint, messagesEndpoint, messagesPattern, tools };
+}
+
+function absoluteMcpUrl(value) {
+  try {
+    return new URL(value, window.location.origin).href;
+  } catch {
+    return String(value ?? "");
+  }
+}
+
+function renderMcpInfo(info) {
+  if (elements.mcpEndpoint) elements.mcpEndpoint.textContent = info.endpoint;
+  if (elements.mcpMessageEndpoint) elements.mcpMessageEndpoint.textContent = info.messagesPattern;
+  if (elements.mcpServerName) elements.mcpServerName.textContent = info.serverName;
+  if (elements.mcpTransport) elements.mcpTransport.textContent = info.transport;
+  if (elements.mcpConfigNative) {
+    elements.mcpConfigNative.textContent = JSON.stringify({
+      name: info.serverName,
+      transport: info.transport,
+      url: info.endpoint,
+    }, null, 2);
+  }
+  if (elements.mcpConfigBridge) {
+    elements.mcpConfigBridge.textContent = JSON.stringify({
       mcpServers: {
-        "the-plat-exchange": {
+        [info.serverName]: {
           command: "npx",
-          args: ["-y", "mcp-remote", sseUrl],
+          args: ["-y", "mcp-remote", info.endpoint],
         },
       },
     }, null, 2);
   }
-  if (elements.mcpConfigCli) elements.mcpConfigCli.textContent = `claude mcp add the-plat-exchange --transport sse ${sseUrl}`;
-  if (elements.mcpTestResult) elements.mcpTestResult.textContent = "";
-  void loadMcpToolList();
+  renderMcpToolList(info.tools);
 }
 
-async function loadMcpToolList() {
-  if (!elements.mcpToolList) return;
-  elements.mcpToolList.innerHTML = `<li class="small">Loading…</li>`;
-  try {
-    const response = await fetch("/api/mcp-info");
-    if (!response.ok) throw new Error(`status ${response.status}`);
-    const info = await response.json();
-    if (!Array.isArray(info.tools) || info.tools.length === 0) {
-      elements.mcpToolList.innerHTML = `<li class="small">No tools registered.</li>`;
-      return;
-    }
-    elements.mcpToolList.innerHTML = info.tools.map((tool) => `<li><strong>${escapeHtml(tool.name)}</strong><div class="small">${escapeHtml(tool.description)}</div></li>`).join("");
-  } catch (error) {
-    elements.mcpToolList.innerHTML = `<li class="small">Failed: ${escapeHtml(error.message)}</li>`;
+function renderMcpInfoError(error) {
+  for (const target of [elements.mcpEndpoint, elements.mcpMessageEndpoint, elements.mcpServerName, elements.mcpTransport, elements.mcpConfigNative, elements.mcpConfigBridge]) {
+    if (target) target.textContent = "";
   }
+  if (elements.mcpToolList) elements.mcpToolList.innerHTML = `<li class="small">Failed: ${escapeHtml(error.message)}</li>`;
+}
+
+function renderMcpToolList(tools) {
+  if (!elements.mcpToolList) return;
+  if (!Array.isArray(tools) || tools.length === 0) {
+    elements.mcpToolList.innerHTML = `<li class="small">No tools registered.</li>`;
+    return;
+  }
+  elements.mcpToolList.innerHTML = tools.map((tool) => `<li><strong>${escapeHtml(tool.name)}</strong><div class="small">${escapeHtml(tool.description)}</div></li>`).join("");
 }
 
 async function testMcpConnection() {
   if (!elements.mcpTestResult) return;
-  elements.mcpTestResult.textContent = "Opening SSE session…";
+  elements.mcpTestResult.textContent = "Opening MCP SSE session…";
+  if (!currentMcpInfo) {
+    try {
+      currentMcpInfo = normalizeMcpInfo(await fetchMcpInfo());
+      renderMcpInfo(currentMcpInfo);
+    } catch {
+      currentMcpInfo = normalizeMcpInfo({});
+    }
+  }
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 4000);
   try {
-    const response = await fetch("/mcp/sse", { signal: controller.signal });
+    const response = await fetch(currentMcpInfo.endpoint, { signal: controller.signal });
     if (!response.ok || !response.body) throw new Error(`status ${response.status}`);
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
@@ -2918,11 +2977,11 @@ async function testMcpConnection() {
     }
     controller.abort();
     elements.mcpTestResult.innerHTML = sessionOk
-      ? `<span class="good">✓ SSE handshake succeeded — endpoint event received.</span>`
+      ? `<span class="good">✓ MCP SSE handshake succeeded — endpoint event received.</span>`
       : `<span class="warn">Handshake ended without an endpoint event.</span>`;
   } catch (error) {
     elements.mcpTestResult.innerHTML = error.name === "AbortError"
-      ? `<span class="good">✓ Session opened.</span>`
+      ? `<span class="good">✓ MCP SSE session opened.</span>`
       : `<span class="warn">Handshake failed: ${escapeHtml(error.message)}</span>`;
   } finally {
     clearTimeout(timeout);
