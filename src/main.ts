@@ -28,6 +28,7 @@ interface LaunchConfig {
   historyDbPath: string;
   remoteDataUrl: string | undefined;
   remoteDataBase: string | undefined;
+  remoteRunNowPollMs: number;
   traderConfig: Partial<TraderConfig>;
 }
 
@@ -61,6 +62,7 @@ export async function main(): Promise<void> {
     ...(history ? { history } : {}),
     ...(launch.remoteDataUrl ? { remoteDataUrl: launch.remoteDataUrl } : {}),
     ...(launch.remoteDataBase ? { remoteDataBase: launch.remoteDataBase } : {}),
+    remoteRunNowPollMs: launch.remoteRunNowPollMs,
   });
   const server = createAppServer(service, launch.remoteDataUrl ? { remoteFallback: { url: launch.remoteDataUrl } } : {});
   await listen(server, launch.port, launch.host);
@@ -114,6 +116,7 @@ export function readLaunchConfig(args: string[], env: NodeJS.ProcessEnv): Launch
   const remoteDataBase = env.WFM_DATA_BASE === "off" || env.WFM_DATA_BASE === ""
     ? undefined
     : env.WFM_DATA_BASE ?? "https://raw.githubusercontent.com/ck0i/ThePlatExchange/data/data";
+  const remoteRunNowPollMs = readNumberEnv(env, "WFM_RUN_NOW_POLL_MS", 5_000);
 
   return {
     host,
@@ -134,6 +137,7 @@ export function readLaunchConfig(args: string[], env: NodeJS.ProcessEnv): Launch
     historyDbPath,
     remoteDataUrl,
     remoteDataBase,
+    remoteRunNowPollMs,
     traderConfig,
   };
 }

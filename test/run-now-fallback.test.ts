@@ -100,10 +100,15 @@ const service = new ThePlatExchangeService({
 });
 const server = createAppServer(service, { remoteFallback: { url: "https://example.test/latest/state.json", cacheMs: 60_000 } });
 
+const runNowFetchUrls: string[] = [];
 globalThis.fetch = async (input, init) => {
   const url = requestUrl(input);
-  if (url.endsWith("/latest/state.json")) return jsonResponse(remoteState);
-  if (url.endsWith("/latest/run-now.json")) return jsonResponse(runNowArtifact);
+  const parsedUrl = new URL(url);
+  if (parsedUrl.pathname.endsWith("/latest/state.json")) return jsonResponse(remoteState);
+  if (parsedUrl.pathname.endsWith("/latest/run-now.json")) {
+    runNowFetchUrls.push(url);
+    return jsonResponse(runNowArtifact);
+  }
   return originalFetch(input, init);
 };
 
@@ -126,6 +131,8 @@ try {
   const liveSource = dataHealth.sources.find((source) => Boolean(source && typeof source === "object" && "id" in source && source.id === "live"));
   assert.ok(liveSource && typeof liveSource === "object" && "status" in liveSource, "fallback must include live source health");
   assert.equal(liveSource.status, "green", "fallback live source health must come from the live artifact, not stale cold state");
+  assert.ok(runNowFetchUrls.length > 0, "fallback must fetch the standalone Run Now artifact");
+  assert.ok(runNowFetchUrls.every((url) => new URL(url).searchParams.has("_")), "fallback Run Now artifact fetches must cache-bust raw GitHub URLs");
 } finally {
   await new Promise<void>((resolve) => server.close(() => resolve()));
   globalThis.fetch = originalFetch;

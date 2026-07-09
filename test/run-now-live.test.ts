@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { buildRunNowLiveArtifact, fetchLiveActivitySnapshot, overlayRunNowArtifact } from "../src/wfm/live.js";
+import { buildRunNowLiveArtifact, fetchLiveActivitySnapshot, overlayRunNowArtifact, validateFissures } from "../src/wfm/live.js";
 import { createInitialProductDashboard } from "../src/wfm/productEngine.js";
 
 const generatedAt = new Date("2026-07-07T12:00:00.000Z");
@@ -23,16 +23,45 @@ const fetcher: typeof fetch = async (input) => {
         activation: "2026-07-07T11:55:00.000Z",
         expiry: "2026-07-07T12:10:00.000Z",
       },
+      {
+        id: "keep-storm",
+        node: "Bifrost Echo",
+        missionType: "Extermination",
+        tier: "Meso",
+        isStorm: true,
+        isHard: false,
+        activation: "2026-07-07T11:55:00.000Z",
+        expiry: "2026-07-07T12:50:00.000Z",
+      },
+      {
+        id: "steel-path-fissure",
+        node: "Acheron",
+        missionType: "Extermination",
+        tier: "Axi",
+        isHard: true,
+        activation: "2026-07-07T11:55:00.000Z",
+        expiry: "2026-07-07T12:50:00.000Z",
+      },
+      {
+        id: "future-fissure",
+        node: "Mantle",
+        missionType: "Capture",
+        tier: "Lith",
+        isHard: false,
+        activation: "2026-07-07T12:05:00.000Z",
+        expiry: "2026-07-07T12:55:00.000Z",
+      },
+      {
+        id: "requiem-fissure",
+        node: "Tamu",
+        missionType: "Disruption",
+        tier: "Requiem",
+        tierNum: 5,
+        isHard: false,
+        activation: "2026-07-07T11:55:00.000Z",
+        expiry: "2026-07-07T12:55:00.000Z",
+      },
     ]);
-  }
-  if (url.endsWith("/arbitration")) {
-    return jsonResponse({
-      id: "fresh-arbitration",
-      node: "Selkie",
-      type: "Survival",
-      activation: "2026-07-07T11:55:00.000Z",
-      expiry: "2026-07-07T12:50:00.000Z",
-    });
   }
   return new Response(JSON.stringify({ error: "unexpected url" }), { status: 404 });
 };
@@ -41,9 +70,27 @@ const live = await fetchLiveActivitySnapshot("test-agent", fetcher, generatedAt)
 const artifact = buildRunNowLiveArtifact(live, generatedAt.toISOString(), generatedAt);
 assert.deepEqual(
   artifact.runNow.activities.map((activity) => activity.id).sort(),
-  ["fresh-arbitration", "keep-fissure", "soon-expired-fissure"],
-  "run-now artifact should include only the live endpoints and no WFM/cold scan data",
+  ["keep-fissure", "keep-storm", "soon-expired-fissure"],
+  "run-now artifact should include only active normal Void Fissures and Void Storms",
 );
+assert.deepEqual(
+  artifact.runNow.rejectedActivities.map((activity) => activity.id).sort(),
+  [],
+  "expected out-of-scope future, Requiem, and Steel Path rows should be ignored without degrading live health",
+);
+assert.equal(artifact.live.warningCount, 0, "expected out-of-scope fissure rows must not produce user-facing live warnings");
+
+const visibleLimitFixture = Array.from({ length: 13 }, (_, index) => ({
+  id: `visible-${index}`,
+  node: `Node ${index}`,
+  missionType: index === 0 ? "Defense" : "Capture",
+  tier: "Lith",
+  activation: "2026-07-07T11:50:00.000Z",
+  expiry: "2026-07-07T12:55:00.000Z",
+}));
+const visibleLimited = validateFissures(visibleLimitFixture, generatedAt.toISOString(), generatedAt).accepted;
+assert.equal(visibleLimited.length, 12, "Run Now must never expose more than the visible fissure/storm limit");
+assert.equal(visibleLimited.some((activity) => activity.id === "visible-0"), false, "visible limit should drop the lowest-priority active row, not source-order rows");
 assert.equal(artifact.live.id, "live", "artifact must carry the live source health row used by the Run Now UI");
 
 const baseProduct = createInitialProductDashboard();
@@ -61,7 +108,7 @@ baseProduct.methods = [{
 const overlaid = overlayRunNowArtifact(baseProduct, artifact, new Date("2026-07-07T12:20:00.000Z"));
 assert.deepEqual(
   overlaid.runNow.activities.map((activity) => activity.id).sort(),
-  ["fresh-arbitration", "keep-fissure"],
+  ["keep-fissure", "keep-storm"],
   "backend overlay must prune activities that expired after the artifact was written but before it is served",
 );
 assert.ok(

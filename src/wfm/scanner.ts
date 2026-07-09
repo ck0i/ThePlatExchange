@@ -27,6 +27,7 @@ export interface ScannerOptions {
   remoteDataUrl?: string;
   remoteDataBase?: string;
   remotePollMs?: number;
+  remoteRunNowPollMs?: number;
   userStore?: UserStore;
 }
 
@@ -129,6 +130,7 @@ export class ThePlatExchangeService {
   readonly remoteDataUrl: string | undefined;
   readonly remoteDataBase: string | undefined;
   readonly remotePollMs: number;
+  readonly remoteRunNowPollMs: number;
   private remoteState: DashboardState | null = null;
   private remoteReference: ReferenceSnapshot | null = null;
   private remoteRunNowArtifact: RunNowLiveArtifact | null = null;
@@ -161,6 +163,7 @@ export class ThePlatExchangeService {
     this.remoteDataUrl = options.remoteDataUrl;
     this.remoteDataBase = options.remoteDataBase ?? inferRemoteBase(options.remoteDataUrl);
     this.remotePollMs = Math.max(15_000, options.remotePollMs ?? 45_000);
+    this.remoteRunNowPollMs = Math.max(5_000, options.remoteRunNowPollMs ?? 5_000);
     this.hydrateFromHistory();
   }
 
@@ -284,11 +287,13 @@ export class ThePlatExchangeService {
       startedAt: new Date().toISOString(),
       scannedWeapons: 0,
       totalWeapons: 0,
-      lastMessage: `Polling ${stateUrl} every ${Math.round(this.remotePollMs / 1000)}s`,
+      lastMessage: `Polling ${stateUrl} every ${Math.round(this.remotePollMs / 1000)}s; Run Now artifact every ${Math.round(this.remoteRunNowPollMs / 1000)}s`,
     };
     this.emitStateImmediate();
     void this.pollRemote();
+    void this.pollRemoteRunNow();
     this.timers.push(setInterval(() => void this.pollRemote(), this.remotePollMs));
+    if (this.remoteUrl("run-now")) this.timers.push(setInterval(() => void this.pollRemoteRunNow(), this.remoteRunNowPollMs));
   }
 
   private async pollRemote(): Promise<void> {
@@ -298,7 +303,6 @@ export class ThePlatExchangeService {
     const promises: Array<Promise<void>> = [this.pollRemoteState(stateUrl)];
     if (now - this.lastRemoteReferenceFetchAt > 5 * 60_000) promises.push(this.pollRemoteReference());
     if (now - this.lastRemoteValuationsFetchAt > 5 * 60_000) promises.push(this.pollRemoteValuations());
-    if (now - this.lastRemoteRunNowFetchAt > 60_000) promises.push(this.pollRemoteRunNow());
     await Promise.all(promises);
   }
 
@@ -390,13 +394,15 @@ export class ThePlatExchangeService {
     const url = this.remoteUrl("run-now");
     if (!url) return;
     try {
-      const response = await fetch(url);
+      const previousKey = this.remoteRunNowArtifact ? runNowArtifactKey(this.remoteRunNowArtifact) : "";
+      const response = await fetch(cacheBustedUrl(url), { cache: "no-store", headers: { "Cache-Control": "no-cache", Pragma: "no-cache" } });
       if (!response.ok) return;
       const parsed = await response.json();
       if (!isRunNowLiveArtifact(parsed)) return;
+      const nextKey = runNowArtifactKey(parsed);
       this.remoteRunNowArtifact = parsed;
       this.lastRemoteRunNowFetchAt = Date.now();
-      this.emitStateImmediate();
+      if (nextKey !== previousKey) this.emitStateImmediate();
     } catch {
       // silently skip; the cold state remains usable and the next live poll retries
     }
@@ -1069,5 +1075,24 @@ function inferRemoteBase(dataUrl: string | undefined): string | undefined {
     .replace(/\/latest\/state\.json$/, "")
     .replace(/\/latest\/opportunities\.json$/, "")
     .replace(/\/state\.json$/, "");
+}
+
+function cacheBustedUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+    parsed.searchParams.set("_", Date.now().toString());
+    return parsed.toString();
+  } catch {
+    return `${url}${url.includes("?") ? "&" : "?"}_=${Date.now()}`;
+  }
+}
+
+function runNowArtifactKey(artifact: RunNowLiveArtifact): string {
+  return [
+    artifact.generatedAt,
+    artifact.live.lastSuccessAt ?? "",
+    artifact.runNow.activities.map((activity) => `${activity.id}:${activity.expiresAt ?? ""}`).join(","),
+    artifact.runNow.rejectedActivities.length.toString(),
+  ].join("|");
 }
 

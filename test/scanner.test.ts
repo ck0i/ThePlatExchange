@@ -121,12 +121,17 @@ const service = new ThePlatExchangeService({
 });
 const ready = Promise.withResolvers<DashboardState>();
 let unsubscribe = (): void => {};
+const runNowFetchUrls: string[] = [];
 const fetchMock: typeof fetch = async (input) => {
   const url = fetchUrl(input);
-  if (url.endsWith("/latest/state.json")) return jsonResponse(remoteState);
-  if (url.endsWith("/reference/current.json")) return jsonResponse({ rivenWeapons: [], rivenAttributes: [], versions: {}, loadedAt: "2026-07-06T00:00:00.000Z" });
-  if (url.endsWith("/valuations/latest.json")) return jsonResponse({ valuations: {}, velocities: {} });
-  if (url.endsWith("/latest/run-now.json")) return jsonResponse(remoteRunNowArtifact);
+  const parsedUrl = new URL(url);
+  if (parsedUrl.pathname.endsWith("/latest/state.json")) return jsonResponse(remoteState);
+  if (parsedUrl.pathname.endsWith("/reference/current.json")) return jsonResponse({ rivenWeapons: [], rivenAttributes: [], versions: {}, loadedAt: "2026-07-06T00:00:00.000Z" });
+  if (parsedUrl.pathname.endsWith("/valuations/latest.json")) return jsonResponse({ valuations: {}, velocities: {} });
+  if (parsedUrl.pathname.endsWith("/latest/run-now.json")) {
+    runNowFetchUrls.push(url);
+    return jsonResponse(remoteRunNowArtifact);
+  }
   return new Response(JSON.stringify({ error: "unexpected url" }), { status: 404 });
 };
 
@@ -144,6 +149,8 @@ try {
   assert.deepEqual(state.instantWins?.map((entry) => entry.opportunity.auctionId), ["normal-roi"], "remote instant wins must remove ROI outliers too");
   assert.equal(state.product?.runNow.activities[0]?.id, "remote-live-fissure", "remote mode must overlay the live Run Now artifact onto stale cold product data");
   assert.equal(state.product?.dataHealth.sources.find((source) => source.id === "live")?.status, "green", "remote live health must come from the live artifact");
+  assert.ok(runNowFetchUrls.length > 0, "remote mode must fetch the standalone Run Now artifact");
+  assert.ok(runNowFetchUrls.every((url) => new URL(url).searchParams.has("_")), "remote Run Now artifact fetches must cache-bust raw GitHub URLs");
 } finally {
   unsubscribe();
   service.stop();

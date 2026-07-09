@@ -98,44 +98,45 @@ export interface RemoteFallbackOptions {
   url: string;
   runNowUrl?: string;
   cacheMs?: number;
+  runNowCacheMs?: number;
 }
 
 class RemoteFallback {
   private lastFetch = 0;
   private cached: unknown = null;
+  private lastRunNowFetch = 0;
+  private cachedRunNow: RunNowLiveArtifact | null = null;
   private readonly url: string;
   private readonly cacheMs: number;
+  private readonly runNowCacheMs: number;
   private readonly runNowUrl: string | undefined;
 
   constructor(options: RemoteFallbackOptions) {
     this.url = options.url;
     this.runNowUrl = options.runNowUrl ?? inferRunNowUrl(options.url);
     this.cacheMs = options.cacheMs ?? 60_000;
+    this.runNowCacheMs = Math.max(1_000, options.runNowCacheMs ?? 5_000);
   }
 
   async fetchIfStale(): Promise<unknown | null> {
     const now = Date.now();
-    if (this.cached && now - this.lastFetch < this.cacheMs) return this.cachedWithCurrentRunNowWindow();
+    if (this.cached && now - this.lastFetch < this.cacheMs) return await this.cachedWithCurrentRunNowWindow();
     try {
       const response = await fetch(this.url);
-      if (!response.ok) return this.cachedWithCurrentRunNowWindow();
+      if (!response.ok) return await this.cachedWithCurrentRunNowWindow();
       const parsed = await response.json();
       const withRunNow = await this.overlayRunNow(parsed);
       this.cached = withRunNow;
       this.lastFetch = now;
       return withRunNow;
     } catch {
-      return this.cachedWithCurrentRunNowWindow();
+      return await this.cachedWithCurrentRunNowWindow();
     }
   }
 
-  private cachedWithCurrentRunNowWindow(): unknown | null {
+  private async cachedWithCurrentRunNowWindow(): Promise<unknown | null> {
     if (!this.cached) return null;
-    if (!isDashboardStateWithProduct(this.cached)) return this.cached;
-    return {
-      ...this.cached,
-      product: enforceRunNowWindow(this.cached.product),
-    };
+    return await this.overlayRunNow(this.cached);
   }
 
   private async overlayRunNow(parsed: unknown): Promise<unknown> {
@@ -149,13 +150,18 @@ class RemoteFallback {
 
   private async fetchRunNowArtifact(): Promise<RunNowLiveArtifact | null> {
     if (!this.runNowUrl) return null;
+    const now = Date.now();
+    if (this.cachedRunNow && now - this.lastRunNowFetch < this.runNowCacheMs) return this.cachedRunNow;
     try {
-      const response = await fetch(this.runNowUrl);
-      if (!response.ok) return null;
+      const response = await fetch(cacheBustedUrl(this.runNowUrl), { cache: "no-store", headers: { "Cache-Control": "no-cache", Pragma: "no-cache" } });
+      if (!response.ok) return this.cachedRunNow;
       const parsed = await response.json();
-      return isRunNowLiveArtifact(parsed) ? parsed : null;
+      if (!isRunNowLiveArtifact(parsed)) return this.cachedRunNow;
+      this.cachedRunNow = parsed;
+      this.lastRunNowFetch = now;
+      return parsed;
     } catch {
-      return null;
+      return this.cachedRunNow;
     }
   }
 }
@@ -165,6 +171,16 @@ function inferRunNowUrl(url: string): string | undefined {
     .replace(/\/latest\/state\.json$/, "/latest/run-now.json")
     .replace(/\/state\.json$/, "/run-now.json");
   return runNowUrl === url ? undefined : runNowUrl;
+}
+
+function cacheBustedUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+    parsed.searchParams.set("_", Date.now().toString());
+    return parsed.toString();
+  } catch {
+    return `${url}${url.includes("?") ? "&" : "?"}_=${Date.now()}`;
+  }
 }
 
 function isDashboardStateWithProduct(value: unknown): value is DashboardState & { product: ProductDashboardState } {

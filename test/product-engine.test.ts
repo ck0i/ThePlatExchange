@@ -7,7 +7,6 @@ type FetchMode = "success" | "failure";
 
 type LivePayload = {
   fissures: Array<Record<string, unknown>>;
-  arbitration: Record<string, unknown>;
 };
 
 const personalization = createInitialProductDashboard().personalization;
@@ -223,14 +222,6 @@ function buildLivePayload(base: Date): LivePayload {
         isHard: false,
       },
     ],
-    arbitration: {
-      id: "arbitration-1",
-      activation,
-      expiry,
-      expired: false,
-      node: "Fortuna",
-      type: "Extermination",
-    },
   };
 }
 
@@ -256,12 +247,6 @@ function makeFetcher(
       return jsonResponse(live.fissures);
     }
 
-    if (url.includes("/arbitration")) {
-      if (mode === "failure") {
-        throw new Error("simulated live outage");
-      }
-      return jsonResponse(live.arbitration);
-    }
 
     return textResponse("public-export-manifest");
   };
@@ -303,7 +288,7 @@ assert.ok(
 );
 assert.ok(
   success.opportunities.some((entry) => entry.methodId === "run_now"),
-  "valid live fissure/arbitration payload must emit run-now opportunities",
+  "valid live fissure payload must emit run-now opportunities",
 );
 
 assert.ok(!success.opportunities.some((entry) => entry.id === "mod-rank:aya"), "Aya should not become a rank/mod opportunity");

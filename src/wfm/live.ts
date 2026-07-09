@@ -4,6 +4,7 @@ import { clamp01, maxStatus, round, statusFromScore } from "./product.js";
 export const WARFRAMESTAT_BASE = "https://api.warframestat.us/pc";
 export const LIVE_TTL_SECONDS = 5 * 60;
 export const RUN_NOW_MAX_SOURCE_AGE_MS = 60 * 60 * 1000;
+const RUN_NOW_VISIBLE_FISSURE_LIMIT = 12;
 const KNOWN_MISSION_TYPES = new Set([
   "Alchemy",
   "Assassination",
@@ -38,16 +39,11 @@ export interface WarframestatFissure {
   expired?: boolean;
 }
 
-export interface WarframestatArbitration {
-  id?: string;
-  activation?: string;
-  expiry?: string;
-  node?: string;
-  type?: string;
-  enemy?: string;
-  archwing?: boolean;
-  expired?: boolean;
+interface RunNowFissureCandidate {
+  fissure: FissureRecommendation;
+  activationMs: number;
 }
+
 
 export interface LiveActivitySnapshot {
   fetchedAt: string;
@@ -112,26 +108,6 @@ export async function fetchLiveActivitySnapshot(userAgent: string, fetcher: type
   }
   sources.push(fissureSource);
   for (const fissure of fissures) activities.push(fissureToActivity(fissure));
-
-  const arbitrationSource = source("https://api.warframestat.us/pc/arbitration", fetchedAt, []);
-  try {
-    const response = await fetcher(`${WARFRAMESTAT_BASE}/arbitration`, { headers: { "User-Agent": userAgent, Accept: "application/json" } });
-    if (!response.ok) throw new Error(`arbitration ${response.status}`);
-    const activity = validateArbitration(await response.json() as WarframestatArbitration, fetchedAt, now);
-    if (activity.accepted) activities.push(activity.accepted);
-    if (activity.rejected) rejected.push(activity.rejected);
-    arbitrationSource.confidence = activity.warning ? "low" : "medium";
-    if (activity.warning) {
-      warnings.push(activity.warning);
-      arbitrationSource.warnings.push(activity.warning);
-    }
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    warnings.push(`Warframestat arbitration unavailable: ${message}`);
-    arbitrationSource.confidence = "low";
-    arbitrationSource.warnings.push(message);
-  }
-  sources.push(arbitrationSource);
 
   activities.sort((left, right) => right.priority - left.priority || right.evPerMinute - left.evPerMinute);
   return { fetchedAt, fissures, activities, rejected, sources, warnings };
@@ -345,10 +321,11 @@ function compareProductOpportunities(left: ProductOpportunity, right: ProductOpp
 }
 
 export function validateFissures(entries: readonly WarframestatFissure[], fetchedAt = new Date().toISOString(), now = new Date()): { accepted: FissureRecommendation[]; rejected: LiveActivitySnapshot["rejected"]; warnings: string[] } {
-  const accepted: FissureRecommendation[] = [];
+  const accepted: RunNowFissureCandidate[] = [];
   const rejected: LiveActivitySnapshot["rejected"] = [];
   const warnings: string[] = [];
   for (const entry of entries) {
+    if (outOfScopeFissureReason(entry, now)) continue;
     const id = typeof entry.id === "string" && entry.id ? entry.id : `fissure-${accepted.length + rejected.length}`;
     const sourceInfo = source("https://api.warframestat.us/pc/fissures", fetchedAt, []);
     const invalid = invalidActivityReason({
@@ -371,64 +348,53 @@ export function validateFissures(entries: readonly WarframestatFissure[], fetche
     const tierValue = tierValueMultiplier(tier);
     const omniaBonus = tier === "Omnia" ? 1.35 : 1;
     const stormBonus = entry.isStorm ? 1.12 : 1;
-    const hardBonus = entry.isHard ? 1.08 : 1;
-    const evPerMinute = round(4.5 * speed * tierValue * omniaBonus * stormBonus * hardBonus, 2);
+    const evPerMinute = round(4.5 * speed * tierValue * omniaBonus * stormBonus, 2);
     const confidence = clamp01(0.58 + (KNOWN_MISSION_TYPES.has(missionType) ? 0.18 : -0.22) + (tier === "Omnia" ? 0.04 : 0));
     const recWarnings = KNOWN_MISSION_TYPES.has(missionType) ? [] : [`Unknown mission type ${missionType}; verify manually.`];
+    const activationMs = Date.parse(entry.activation!);
     accepted.push({
-      id,
-      node: entry.node!,
-      missionType,
-      tier,
-      isStorm: entry.isStorm === true,
-      isHard: entry.isHard === true,
-      expiresAt: entry.expiry!,
-      evPerMinute,
-      priority: round(evPerMinute * confidence, 2),
-      confidence,
-      warnings: recWarnings,
-      source: sourceInfo,
+      activationMs,
+      fissure: {
+        id,
+        node: entry.node!,
+        missionType,
+        tier,
+        isStorm: entry.isStorm === true,
+        isHard: false,
+        expiresAt: entry.expiry!,
+        evPerMinute,
+        priority: round(evPerMinute * confidence, 2),
+        confidence,
+        warnings: recWarnings,
+        source: sourceInfo,
+      },
     });
   }
-  return { accepted, rejected, warnings };
+  return { accepted: selectVisibleFissures(accepted), rejected, warnings };
 }
 
-export function validateArbitration(entry: WarframestatArbitration, fetchedAt = new Date().toISOString(), now = new Date()): { accepted: RunActivityCard | null; rejected: LiveActivitySnapshot["rejected"][number] | null; warning?: string } {
-  const sourceInfo = source("https://api.warframestat.us/pc/arbitration", fetchedAt, []);
-  const id = typeof entry.id === "string" && entry.id ? entry.id : "arbitration";
-  const missionType = entry.type ?? "Unknown";
-  const invalid = invalidActivityReason({ activation: entry.activation, expiry: entry.expiry, node: entry.node, missionType, expired: entry.expired, now });
-  if (invalid) {
-    sourceInfo.warnings.push(invalid);
-    return { accepted: null, rejected: { id, title: entry.node ?? "Arbitration", reason: invalid, source: sourceInfo }, warning: `Arbitration rejected: ${invalid}` };
-  }
-  const confidenceScore = clamp01(0.62 + (KNOWN_MISSION_TYPES.has(missionType) ? 0.12 : -0.2));
-  const evPerMinute = round(5.8 * missionSpeedMultiplier(missionType), 2);
-  const accepted: RunActivityCard = {
-    id,
-    activityType: "arbitration",
-    title: `${entry.node ?? "Unknown node"} Arbitration`,
-    missionType,
-    evPerMinute,
-    priority: round(evPerMinute * confidenceScore, 2),
-    confidenceScore,
-    status: statusFromScore(confidenceScore),
-    warnings: KNOWN_MISSION_TYPES.has(missionType) ? [] : [`Unknown arbitration type ${missionType}; verify manually.`],
-    source: sourceInfo,
-    explanation: {
-      recommendation: "Run only if you can clear this Arbitration efficiently and want Vitus/mod resale exposure.",
-      expectedOutcome: `${evPerMinute} estimated plat-equivalent/minute from Vitus conversion and Arbitration drops.`,
-      dataBasis: ["warframestat wrapper activity payload; market conversion is conservative until item-specific Arbitration prices are scanned."],
-      mechanics: ["Rejects expired, epoch, far-future, missing-node, and placeholder Arbitration payloads before scoring."],
-      liquidity: ["Arbitration rewards depend on Vitus/rotation market liquidity; verify current reward demand."],
-      risks: ["Wrapper data can lag raw worldstate; confidence is capped at medium."],
-      alternatives: ["Compare against active fissures and current Prime/Relic EV before committing time."],
-    },
-  };
-  if (entry.node !== undefined) accepted.node = entry.node;
-  if (entry.expiry !== undefined) accepted.expiresAt = entry.expiry;
-  return { accepted, rejected: null };
+function outOfScopeFissureReason(entry: WarframestatFissure, now: Date): string | null {
+  if (entry.isHard === true) return "Steel Path fissure is outside Run Now scope";
+  if (entry.tier === "Requiem" || entry.tierNum === 5) return "Requiem fissure is outside Run Now scope";
+  const activation = Date.parse(entry.activation ?? "");
+  if (Number.isFinite(activation) && activation > now.getTime()) return "fissure has not activated yet";
+  return null;
 }
+
+function selectVisibleFissures(candidates: readonly RunNowFissureCandidate[]): FissureRecommendation[] {
+  const ordered = [...candidates].sort((left, right) => {
+    if (left.activationMs !== right.activationMs) return right.activationMs - left.activationMs;
+    const priority = right.fissure.priority - left.fissure.priority;
+    if (priority !== 0) return priority;
+    const leftExpiry = Date.parse(left.fissure.expiresAt);
+    const rightExpiry = Date.parse(right.fissure.expiresAt);
+    if (Number.isFinite(leftExpiry) && Number.isFinite(rightExpiry) && leftExpiry !== rightExpiry) return leftExpiry - rightExpiry;
+    return left.fissure.id.localeCompare(right.fissure.id);
+  });
+  return ordered.slice(0, RUN_NOW_VISIBLE_FISSURE_LIMIT).map((candidate) => candidate.fissure);
+}
+
+
 
 export function fissureToActivity(fissure: FissureRecommendation): RunActivityCard {
   const confidenceScore = fissure.confidence;
@@ -468,7 +434,7 @@ function invalidActivityReason(input: { activation: string | undefined; expiry: 
   if (!Number.isFinite(expiry)) return "activity expiry is invalid";
   if (expiry <= nowMs) return "activity has expired";
   if (expiry - nowMs > 8 * 60 * 60 * 1000) return "activity expiry is implausibly far in the future";
-  if (activation - nowMs > 10 * 60 * 1000) return "activity activation is in the future";
+  if (activation > nowMs) return "activity activation is in the future";
   return null;
 }
 
