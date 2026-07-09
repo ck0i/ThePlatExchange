@@ -3,13 +3,14 @@ import type { PriceHistoryStore, SignatureValuation as SignatureValuationResult,
 import { analyzeArcaneMarket } from "./arcanes.js";
 import { analyzeMarket, DEFAULT_CONFIG, deriveWeaponMarketIntel, MAX_REASONABLE_ROI, normalizeConfig, slugify, type MarketAnalysis } from "./opportunities.js";
 import { buildProductDashboard, createInitialProductDashboard } from "./productEngine.js";
-import { enforceRunNowWindow, isRunNowLiveArtifact, overlayRunNowArtifact, type RunNowLiveArtifact } from "./live.js";
+import { buildRunNowLiveArtifact, enforceRunNowWindow, fetchLiveActivitySnapshot, isRunNowArtifactUsable, isRunNowLiveArtifact, overlayRunNowArtifact, type RunNowLiveArtifact } from "./live.js";
 import type { PersonalizationState, ProductDashboardState } from "./product.js";
 import { UserStore, type NotificationRuleInput, type PortfolioInput, type ProfileUpdate, type TodoInput, type TodoUpdate } from "./userStore.js";
 import type { ArcaneDashboardState, ArcaneItem, ArcaneOrder, ArcaneReferenceSnapshot, DashboardState, ReferenceSnapshot, RivenAuction, RivenWeapon, ScanStatus, TraderConfig, WeaponSummary } from "./types.js";
 
 export type ScanTier = "hot" | "cold" | "full";
 export type ScanMode = "tiered" | "full" | "remote";
+const RUN_NOW_DIRECT_USER_AGENT = "the-plat-exchange-run-now-direct/0.1";
 
 export interface ScannerOptions {
   client: WarframeMarketClient;
@@ -392,20 +393,38 @@ export class ThePlatExchangeService {
 
   private async pollRemoteRunNow(): Promise<void> {
     const url = this.remoteUrl("run-now");
-    if (!url) return;
-    try {
-      const previousKey = this.remoteRunNowArtifact ? runNowArtifactKey(this.remoteRunNowArtifact) : "";
-      const response = await fetch(cacheBustedUrl(url), { cache: "no-store", headers: { "Cache-Control": "no-cache", Pragma: "no-cache" } });
-      if (!response.ok) return;
-      const parsed = await response.json();
-      if (!isRunNowLiveArtifact(parsed)) return;
-      const nextKey = runNowArtifactKey(parsed);
-      this.remoteRunNowArtifact = parsed;
-      this.lastRemoteRunNowFetchAt = Date.now();
-      if (nextKey !== previousKey) this.emitStateImmediate();
-    } catch {
-      // silently skip; the cold state remains usable and the next live poll retries
+    const now = new Date();
+    const previousKey = this.remoteRunNowArtifact ? runNowArtifactKey(this.remoteRunNowArtifact) : "";
+    let remoteArtifact: RunNowLiveArtifact | null = null;
+    if (url) {
+      try {
+        const response = await fetch(cacheBustedUrl(url), { cache: "no-store", headers: { "Cache-Control": "no-cache", Pragma: "no-cache" } });
+        if (response.ok) {
+          const parsed = await response.json();
+          if (isRunNowLiveArtifact(parsed)) remoteArtifact = parsed;
+        }
+      } catch {
+        // fall through to the direct live producer below
+      }
     }
+
+    let nextArtifact = remoteArtifact;
+    if (this.remoteRunNowArtifact && isRunNowArtifactUsable(this.remoteRunNowArtifact, now) && (!remoteArtifact || !isRunNowArtifactUsable(remoteArtifact, now))) {
+      nextArtifact = this.remoteRunNowArtifact;
+    }
+    if (!nextArtifact || !isRunNowArtifactUsable(nextArtifact, now)) {
+      try {
+        const live = await fetchLiveActivitySnapshot(RUN_NOW_DIRECT_USER_AGENT, fetch, now);
+        nextArtifact = buildRunNowLiveArtifact(live, now.toISOString(), now);
+      } catch {
+        // keep the stale/cached artifact; overlayRunNowArtifact will hide it
+      }
+    }
+    if (!nextArtifact) return;
+    const nextKey = runNowArtifactKey(nextArtifact);
+    this.remoteRunNowArtifact = nextArtifact;
+    this.lastRemoteRunNowFetchAt = Date.now();
+    if (nextKey !== previousKey) this.emitStateImmediate();
   }
 
   stop(): void {

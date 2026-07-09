@@ -6,12 +6,13 @@ import { extname, join, normalize, resolve } from "node:path";
 import { McpSseServer } from "./mcp.js";
 import { enrichOpportunity, type SignatureLookupHit } from "./mcp/schemas.js";
 import { attributeSignature } from "./wfm/opportunities.js";
-import { enforceRunNowWindow, isRunNowLiveArtifact, overlayRunNowArtifact, type RunNowLiveArtifact } from "./wfm/live.js";
+import { buildRunNowLiveArtifact, enforceRunNowWindow, fetchLiveActivitySnapshot, isRunNowArtifactUsable, isRunNowLiveArtifact, overlayRunNowArtifact, type RunNowLiveArtifact } from "./wfm/live.js";
 import { isRecord, readBoolean, readNumber, readString } from "./wfm/guards.js";
 import type { ItemRef, NotificationChannel, NotificationThreshold, ProductDashboardState, ProductOpportunityAction, TodoStatus } from "./wfm/product.js";
 import type { NotificationRuleInput, PortfolioInput, ProfileUpdate, TodoInput, TodoUpdate } from "./wfm/userStore.js";
 import type { ThePlatExchangeService } from "./wfm/scanner.js";
 import type { DashboardState, SellerStatus, TraderConfig } from "./wfm/types.js";
+const RUN_NOW_DIRECT_USER_AGENT = "the-plat-exchange-run-now-direct/0.1";
 
 export interface AppServerOptions {
   publicDir?: string;
@@ -149,20 +150,37 @@ class RemoteFallback {
   }
 
   private async fetchRunNowArtifact(): Promise<RunNowLiveArtifact | null> {
-    if (!this.runNowUrl) return null;
-    const now = Date.now();
-    if (this.cachedRunNow && now - this.lastRunNowFetch < this.runNowCacheMs) return this.cachedRunNow;
-    try {
-      const response = await fetch(cacheBustedUrl(this.runNowUrl), { cache: "no-store", headers: { "Cache-Control": "no-cache", Pragma: "no-cache" } });
-      if (!response.ok) return this.cachedRunNow;
-      const parsed = await response.json();
-      if (!isRunNowLiveArtifact(parsed)) return this.cachedRunNow;
-      this.cachedRunNow = parsed;
-      this.lastRunNowFetch = now;
-      return parsed;
-    } catch {
-      return this.cachedRunNow;
+    const now = new Date();
+    const nowMs = now.getTime();
+    if (this.cachedRunNow && isRunNowArtifactUsable(this.cachedRunNow, now) && nowMs - this.lastRunNowFetch < this.runNowCacheMs) return this.cachedRunNow;
+
+    let remoteArtifact: RunNowLiveArtifact | null = null;
+    if (this.runNowUrl) {
+      try {
+        const response = await fetch(cacheBustedUrl(this.runNowUrl), { cache: "no-store", headers: { "Cache-Control": "no-cache", Pragma: "no-cache" } });
+        if (response.ok) {
+          const parsed = await response.json();
+          if (isRunNowLiveArtifact(parsed)) remoteArtifact = parsed;
+        }
+      } catch {
+        // fall through to the direct live producer below
+      }
     }
+
+    let nextArtifact = remoteArtifact;
+    if (this.cachedRunNow && isRunNowArtifactUsable(this.cachedRunNow, now) && (!remoteArtifact || !isRunNowArtifactUsable(remoteArtifact, now))) nextArtifact = this.cachedRunNow;
+    if (!nextArtifact || !isRunNowArtifactUsable(nextArtifact, now)) {
+      try {
+        const live = await fetchLiveActivitySnapshot(RUN_NOW_DIRECT_USER_AGENT, fetch, now);
+        nextArtifact = buildRunNowLiveArtifact(live, now.toISOString(), now);
+      } catch {
+        // keep the stale/cached artifact; overlayRunNowArtifact will hide it
+      }
+    }
+    if (!nextArtifact) return this.cachedRunNow;
+    this.cachedRunNow = nextArtifact;
+    this.lastRunNowFetch = nowMs;
+    return nextArtifact;
   }
 }
 

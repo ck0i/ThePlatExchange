@@ -1549,14 +1549,24 @@ function currentLiveStatus(product, activities) {
     ?? activities.find((activity) => activity.source?.fetchedAt)?.source
     ?? null;
   const fetchedAt = liveSource?.lastSuccessAt ?? liveSource?.fetchedAt ?? null;
-  const ageMs = fetchedAt ? Date.now() - Date.parse(fetchedAt) : Infinity;
-  const fresh = Number.isFinite(ageMs) && ageMs <= 60 * 60 * 1000;
+  const fresh = isCurrentUtcHour(fetchedAt);
   const healthy = liveSource?.status ? liveSource.status !== "red" : true;
   const hasValidatedLiveRows = Array.isArray(activities) && activities.length > 0;
   if (fresh && healthy && hasValidatedLiveRows) return { live: true, message: "" };
-  if (!fresh) return { live: false, message: "No live Warframe activity source has refreshed successfully within the last hour. Run Now is hidden until the heartbeat receives fresh live data." };
+  if (!fresh) return { live: false, message: "No live Warframe activity source has refreshed successfully for the current UTC hour. Run Now is hidden until the heartbeat receives this hour's live data." };
   if (!healthy) return { live: false, message: "The live activity source is reporting a failed health state. Run Now is hidden until the heartbeat recovers it." };
   return { live: false, message: "No validated live activities are available from the current Warframe activity feed." };
+}
+
+function isCurrentUtcHour(value) {
+  const timestamp = Date.parse(value ?? "");
+  if (!Number.isFinite(timestamp)) return false;
+  const date = new Date(timestamp);
+  const now = new Date();
+  return date.getUTCFullYear() === now.getUTCFullYear()
+    && date.getUTCMonth() === now.getUTCMonth()
+    && date.getUTCDate() === now.getUTCDate()
+    && date.getUTCHours() === now.getUTCHours();
 }
 
 function renderDataHealth(product) {
@@ -2628,12 +2638,12 @@ function timeAgo(value) {
   if (!value) return "—";
   const diff = Date.now() - Date.parse(value);
   if (!Number.isFinite(diff)) return shortTime(value);
-  const minutes = Math.max(0, Math.round(diff / 60_000));
+  const minutes = Math.max(0, Math.floor(diff / 60_000));
   if (minutes < 1) return "now";
   if (minutes < 60) return `${minutes}m`;
-  const hours = Math.round(minutes / 60);
+  const hours = Math.floor(minutes / 60);
   if (hours < 48) return `${hours}h`;
-  return `${Math.round(hours / 24)}d`;
+  return `${Math.floor(hours / 24)}d`;
 }
 
 function escapeHtml(value) {

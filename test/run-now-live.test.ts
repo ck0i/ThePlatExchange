@@ -124,8 +124,28 @@ assert.ok(
   "global product opportunities must not retain expired run-now rows",
 );
 
+const boundaryActivity = artifact.runNow.activities[0];
+assert(boundaryActivity, "boundary fixture needs a Run Now activity");
+const boundaryArtifact = {
+  ...artifact,
+  generatedAt: "2026-07-07T12:50:00.000Z",
+  live: { ...artifact.live, status: "green" as const, lastSuccessAt: "2026-07-07T12:50:00.000Z", warnings: [] },
+  runNow: {
+    ...artifact.runNow,
+    generatedAt: "2026-07-07T12:50:00.000Z",
+    activities: [{ ...boundaryActivity, expiresAt: "2026-07-07T13:30:00.000Z" }],
+    warnings: [],
+  },
+};
+const sameHour = overlayRunNowArtifact(baseProduct, boundaryArtifact, new Date("2026-07-07T12:59:00.000Z"));
+assert.equal(sameHour.runNow.activities.length, 1, "same-hour Run Now artifacts must stay visible even late in the hour");
+assert.notEqual(sameHour.dataHealth.sources.find((source) => source.id === "live")?.status, "red", "same-hour Run Now artifacts must not be marked stale");
+const nextHour = overlayRunNowArtifact(baseProduct, boundaryArtifact, new Date("2026-07-07T13:00:00.000Z"));
+assert.equal(nextHour.runNow.activities.length, 0, "previous-hour Run Now artifacts must be hidden as soon as the UTC hour changes");
+assert.equal(nextHour.dataHealth.sources.find((source) => source.id === "live")?.status, "red", "previous-hour Run Now artifacts must force the live health row red");
+
 const stale = overlayRunNowArtifact(baseProduct, artifact, new Date("2026-07-07T13:01:00.000Z"));
-assert.equal(stale.runNow.activities.length, 0, "artifacts older than one hour must not serve Run Now activities");
+assert.equal(stale.runNow.activities.length, 0, "previous-hour artifacts must not serve Run Now activities");
 assert.equal(stale.dataHealth.sources.find((source) => source.id === "live")?.status, "red", "stale live artifacts must force the live health row red");
 assert.equal(
   "bestOpportunityId" in (stale.methods.find((method) => method.id === "run_now") ?? {}),

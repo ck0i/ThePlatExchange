@@ -3,7 +3,6 @@ import { clamp01, maxStatus, round, statusFromScore } from "./product.js";
 
 export const WARFRAMESTAT_BASE = "https://api.warframestat.us/pc";
 export const LIVE_TTL_SECONDS = 5 * 60;
-export const RUN_NOW_MAX_SOURCE_AGE_MS = 60 * 60 * 1000;
 const RUN_NOW_VISIBLE_FISSURE_LIMIT = 12;
 const KNOWN_MISSION_TYPES = new Set([
   "Alchemy",
@@ -141,6 +140,15 @@ export function buildRunNowLiveArtifact(live: LiveActivitySnapshot, generatedAt 
   };
 }
 
+
+export function isRunNowArtifactCurrentHour(artifact: RunNowLiveArtifact, now = new Date()): boolean {
+  const fetchedAt = artifact.live.lastSuccessAt ?? artifact.live.lastFailureAt ?? artifact.generatedAt;
+  return !isOlderThanRunNowWindow(fetchedAt, now);
+}
+
+export function isRunNowArtifactUsable(artifact: RunNowLiveArtifact, now = new Date()): boolean {
+  return isRunNowArtifactCurrentHour(artifact, now) && artifact.live.status !== "red" && artifact.runNow.activities.length > 0;
+}
 export function overlayRunNowArtifact(product: ProductDashboardState, artifact: RunNowLiveArtifact, now = new Date()): ProductDashboardState {
   const artifactFetchedAt = artifact.live.lastSuccessAt ?? artifact.live.lastFailureAt ?? artifact.generatedAt;
   const artifactStale = isOlderThanRunNowWindow(artifactFetchedAt, now);
@@ -149,7 +157,7 @@ export function overlayRunNowArtifact(product: ProductDashboardState, artifact: 
     ? {
         ...pruned,
         activities: [],
-        warnings: appendUniqueWarning(pruned.warnings, "Run Now live artifact is older than one hour; live activities are hidden until the next live refresh."),
+        warnings: appendUniqueWarning(pruned.warnings, "Run Now live artifact is from a previous UTC hour; live activities are hidden until the current hour refreshes."),
       }
     : pruned;
   const live = normalizeRunNowSourceHealth(artifact.live, runNow, artifact.generatedAt, now);
@@ -217,7 +225,7 @@ function runNowSourceHealth(fetchedAt: string, runNow: RunNowDashboard, rejected
   const stale = isOlderThanRunNowWindow(fetchedAt, now);
   const warnings = mergeWarnings(sourceWarnings, rejected.slice(0, 3).map((entry) => `${entry.title}: ${entry.reason}`));
   const finalWarnings = stale
-    ? appendUniqueWarning(warnings, "Live activity source is older than one hour; Run Now is hidden until the live feed refreshes.")
+    ? appendUniqueWarning(warnings, "Live activity source is from a previous UTC hour; Run Now is hidden until the live feed refreshes for the current hour.")
     : warnings;
   const status: SourceHealth["status"] = stale ? "red" : runNow.activities.length > 0 ? finalWarnings.length > 0 ? "yellow" : "green" : rejected.length > 0 ? "yellow" : "red";
   const health: SourceHealth = {
@@ -241,7 +249,7 @@ function normalizeRunNowSourceHealth(source: SourceHealth, runNow: RunNowDashboa
   const fetchedAt = source.lastSuccessAt ?? source.lastFailureAt ?? artifactGeneratedAt;
   const stale = isOlderThanRunNowWindow(fetchedAt, now);
   const warnings = stale
-    ? appendUniqueWarning(mergeWarnings(source.warnings, runNow.warnings), "Live activity source is older than one hour; Run Now is hidden until the live feed refreshes.")
+    ? appendUniqueWarning(mergeWarnings(source.warnings, runNow.warnings), "Live activity source is from a previous UTC hour; Run Now is hidden until the live feed refreshes for the current hour.")
     : mergeWarnings(source.warnings, runNow.warnings);
   const status: SourceHealth["status"] = stale ? "red" : runNow.activities.length > 0 ? warnings.length > 0 ? "yellow" : "green" : source.status === "red" ? "red" : runNow.rejectedActivities.length > 0 ? "yellow" : "red";
   const health: SourceHealth = {
@@ -291,7 +299,12 @@ function laterIso(left: string, right: string): string {
 
 function isOlderThanRunNowWindow(fetchedAt: string, now: Date): boolean {
   const fetchedAtMs = Date.parse(fetchedAt);
-  return !Number.isFinite(fetchedAtMs) || now.getTime() - fetchedAtMs > RUN_NOW_MAX_SOURCE_AGE_MS;
+  if (!Number.isFinite(fetchedAtMs)) return true;
+  const fetched = new Date(fetchedAtMs);
+  return fetched.getUTCFullYear() !== now.getUTCFullYear()
+    || fetched.getUTCMonth() !== now.getUTCMonth()
+    || fetched.getUTCDate() !== now.getUTCDate()
+    || fetched.getUTCHours() !== now.getUTCHours();
 }
 
 function runActivityOpportunity(activity: RunActivityCard): ProductOpportunity {

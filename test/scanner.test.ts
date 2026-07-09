@@ -163,6 +163,59 @@ try {
   globalThis.fetch = originalFetch;
 }
 
+const directGeneratedAt = new Date().toISOString();
+const redRemoteRunNowArtifact = {
+  ...remoteRunNowArtifact,
+  generatedAt: directGeneratedAt,
+  live: { ...remoteRunNowArtifact.live, status: "red" as const, lastSuccessAt: directGeneratedAt, warningCount: 1, warnings: ["simulated remote live failure"] },
+  runNow: { ...remoteRunNowArtifact.runNow, generatedAt: directGeneratedAt, activities: [], warnings: ["simulated remote live failure"] },
+};
+const directService = new ThePlatExchangeService({
+  client,
+  scanMode: "remote",
+  remoteDataUrl: "https://example.test/latest/state.json",
+  remotePollMs: 5_000,
+  remoteRunNowPollMs: 5_000,
+});
+const directReady = Promise.withResolvers<DashboardState>();
+let directUnsubscribe = (): void => {};
+const directLiveFetchUrls: string[] = [];
+globalThis.fetch = async (input) => {
+  const url = fetchUrl(input);
+  const parsedUrl = new URL(url);
+  if (parsedUrl.pathname.endsWith("/latest/state.json")) return jsonResponse(remoteState);
+  if (parsedUrl.pathname.endsWith("/reference/current.json")) return jsonResponse({ rivenWeapons: [], rivenAttributes: [], versions: {}, loadedAt: "2026-07-06T00:00:00.000Z" });
+  if (parsedUrl.pathname.endsWith("/valuations/latest.json")) return jsonResponse({ valuations: {}, velocities: {} });
+  if (parsedUrl.pathname.endsWith("/latest/run-now.json")) return jsonResponse(redRemoteRunNowArtifact);
+  if (parsedUrl.pathname.endsWith("/pc/fissures")) {
+    directLiveFetchUrls.push(url);
+    return jsonResponse([{
+      id: "direct-live-fissure",
+      node: "Ukko",
+      missionType: "Capture",
+      tier: "Axi",
+      activation: new Date(Date.now() - 5 * 60_000).toISOString(),
+      expiry: new Date(Date.now() + 45 * 60_000).toISOString(),
+      isStorm: false,
+      isHard: false,
+    }]);
+  }
+  return new Response(JSON.stringify({ error: "unexpected url" }), { status: 404 });
+};
+try {
+  directUnsubscribe = directService.subscribe((state) => {
+    if (state.product?.runNow.activities.some((activity) => activity.id === "direct-live-fissure")) directReady.resolve(state);
+  });
+  directService.start();
+  const directState = await directReady.promise;
+  assert.equal(directState.product?.runNow.activities[0]?.id, "direct-live-fissure", "remote mode must produce Run Now data directly when the artifact is current-hour but unusable");
+  assert.ok(directLiveFetchUrls.length > 0, "remote mode must call the direct Warframestat Run Now producer when the artifact is unusable");
+} finally {
+  directUnsubscribe();
+  directService.stop();
+  globalThis.fetch = originalFetch;
+}
+
 console.log("scanner behavior tests passed");
 
 function opportunity(id: string, buyPrice: number, conservativeSellPrice: number, staleRoi?: number): Opportunity {
