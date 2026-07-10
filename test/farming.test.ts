@@ -212,7 +212,7 @@ assert.ok(ranked.credits.length <= FARMING_TOP_N, `credits capped at ${FARMING_T
 assert.equal(ranked.credits.length, 5, "5 credit cards emitted when 8 sources are available");
 const creditNodes = ranked.credits.map((card) => card.node);
 assert.deepEqual(creditNodes.slice(0, 4), ["Huge Node", "Hi Node", "Mid Node", "Low Node"], "credit cards sorted by materialScore desc");
-assert.equal(ARBY_TIER_MATERIAL.S > ARBY_TIER_MATERIAL.A, true, "S tier scores higher than A tier");
-assert.equal(ARBY_TIER_MATERIAL.A > ARBY_TIER_MATERIAL.B, true, "A tier scores higher than B tier");
+assert.equal((ARBY_TIER_MATERIAL.S ?? 0) > (ARBY_TIER_MATERIAL.A ?? 0), true, "S tier scores higher than A tier");
+assert.equal((ARBY_TIER_MATERIAL.A ?? 0) > (ARBY_TIER_MATERIAL.B ?? 0), true, "A tier scores higher than B tier");
 
 console.log("farming.test.ts: OK (ranking + top-N)");
