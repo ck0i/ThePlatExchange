@@ -1,11 +1,11 @@
 {
   "versions": {
-    "items": "MjAyNi0wNi0yM1QxMToyNTozNA==",
+    "items": "MjAyNi0wNy0xMVQxNDo1MDoyMQ==",
     "rivens": "MjAyNi0wNi0xOVQwMzo0MjozNw==",
     "liches": "MjAyNi0wNC0xOFQxNzo0Nzo1MA==",
     "sisters": "MjAyNi0wNC0xOFQxNzo0Nzo1MA==",
     "missions": "MjAyNi0wMy0yNlQxMjo1MDo0NA==",
-    "npcs": "MjAyNi0wNi0xN1QyMToxNjo0OA==",
+    "npcs": "MjAyNi0wNy0xMVQxNDo1ODowMQ==",
     "locations": "MjAyNi0wNi0xN1QyMToxNjo0OA=="
   },
   "rivenWeapons": [
@@ -5248,6 +5248,6 @@
       "name": "Chance to Gain Combo Count"
     }
   ],
-  "loadedAt": "2026-07-11T14:06:41.973Z",
-  "versionsUpdatedAt": "2026-06-23T11:25:34Z"
+  "loadedAt": "2026-07-11T15:14:53.480Z",
+  "versionsUpdatedAt": "2026-07-11T14:58:01Z"
 }
