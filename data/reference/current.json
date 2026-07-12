@@ -18,7 +18,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 5,
       "icon": "items/images/en/kulstar.92736ca911a3b84f99bc9e50f24369f0.png",
-      "thumb": "items/images/en/thumbs/kulstar.92736ca911a3b84f99bc9e50f24369f0.128x128.png"
+      "thumb": "items/images/en/thumbs/kulstar.92736ca911a3b84f99bc9e50f24369f0.128x128.png",
+      "imageName": "Kulstar.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe1d",
@@ -29,7 +30,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 9,
       "icon": "items/images/en/heliocor.49fc1b3f6c4e4a550a15ad7c96885195.png",
-      "thumb": "items/images/en/thumbs/heliocor.49fc1b3f6c4e4a550a15ad7c96885195.128x128.png"
+      "thumb": "items/images/en/thumbs/heliocor.49fc1b3f6c4e4a550a15ad7c96885195.128x128.png",
+      "imageName": "Heliocor.png"
     },
     {
       "id": "5cf5724d9597e1019b1678c5",
@@ -40,7 +42,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 9,
       "icon": "items/images/en/nagantaka.4ee86a7c5a800796a22e94e584577628.png",
-      "thumb": "items/images/en/thumbs/nagantaka.4ee86a7c5a800796a22e94e584577628.128x128.png"
+      "thumb": "items/images/en/thumbs/nagantaka.4ee86a7c5a800796a22e94e584577628.128x128.png",
+      "imageName": "GarudaCrossbow.png"
     },
     {
       "id": "5cf5724e9597e1019b1678c6",
@@ -51,7 +54,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 8,
       "icon": "items/images/en/ocucor.c3f776ad9924de2782e8c0d36be4e5b4.png",
-      "thumb": "items/images/en/thumbs/ocucor.c3f776ad9924de2782e8c0d36be4e5b4.128x128.png"
+      "thumb": "items/images/en/thumbs/ocucor.c3f776ad9924de2782e8c0d36be4e5b4.128x128.png",
+      "imageName": "CrpSentExperimentPistol.png"
     },
     {
       "id": "5cf5724f9597e1019b1678c7",
@@ -62,7 +66,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 8,
       "icon": "items/images/en/falcor.83897b2d4fbcbd312c70be4e25ea3b92.png",
-      "thumb": "items/images/en/thumbs/falcor.83897b2d4fbcbd312c70be4e25ea3b92.128x128.png"
+      "thumb": "items/images/en/thumbs/falcor.83897b2d4fbcbd312c70be4e25ea3b92.128x128.png",
+      "imageName": "CrpGlaive.png"
     },
     {
       "id": "5cf572509597e1019b1678c8",
@@ -73,7 +78,8 @@
       "disposition": 0.65,
       "reqMasteryRank": 10,
       "icon": "items/images/en/paracesis.bdc3b22813168a460ed1b82fc33c3139.png",
-      "thumb": "items/images/en/thumbs/paracesis.bdc3b22813168a460ed1b82fc33c3139.128x128.png"
+      "thumb": "items/images/en/thumbs/paracesis.bdc3b22813168a460ed1b82fc33c3139.128x128.png",
+      "imageName": "BallasSword.png"
     },
     {
       "id": "5cf572529597e1019b1678ca",
@@ -84,7 +90,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 8,
       "icon": "items/images/en/exergis.c9432d140c7138d21b9c275ba54eeecc.png",
-      "thumb": "items/images/en/thumbs/exergis.c9432d140c7138d21b9c275ba54eeecc.128x128.png"
+      "thumb": "items/images/en/thumbs/exergis.c9432d140c7138d21b9c275ba54eeecc.128x128.png",
+      "imageName": "CrpShapeBlastShotgun.png"
     },
     {
       "id": "5cf572549597e1019b1678cf",
@@ -95,7 +102,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 10,
       "icon": "items/images/en/battacor.141ff25ce24ea93a83a523dda7e94011.png",
-      "thumb": "items/images/en/thumbs/battacor.141ff25ce24ea93a83a523dda7e94011.128x128.png"
+      "thumb": "items/images/en/thumbs/battacor.141ff25ce24ea93a83a523dda7e94011.128x128.png",
+      "imageName": "CrpSentExperimentRifle.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdc3",
@@ -106,7 +114,8 @@
       "disposition": 0.95,
       "reqMasteryRank": 14,
       "icon": "riven_item/images/euphona_prime.6a18cc50c57ac13c3203e872baf85a8d.png",
-      "thumb": "riven_item/images/thumbs/euphona_prime.6a18cc50c57ac13c3203e872baf85a8d.128x128.png"
+      "thumb": "riven_item/images/thumbs/euphona_prime.6a18cc50c57ac13c3203e872baf85a8d.128x128.png",
+      "imageName": "EuphonaPrime.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdc5",
@@ -117,7 +126,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 7,
       "icon": "items/images/en/fusilai.dfe658fc2b5297fc495fd28be23ffd70.png",
-      "thumb": "items/images/en/thumbs/fusilai.dfe658fc2b5297fc495fd28be23ffd70.128x128.png"
+      "thumb": "items/images/en/thumbs/fusilai.dfe658fc2b5297fc495fd28be23ffd70.128x128.png",
+      "imageName": "Fusilai.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdce",
@@ -128,7 +138,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 0,
       "icon": "items/images/en/lato.75f74069daf8fed3d9397afe96a976a0.png",
-      "thumb": "items/images/en/thumbs/lato.75f74069daf8fed3d9397afe96a976a0.128x128.png"
+      "thumb": "items/images/en/thumbs/lato.75f74069daf8fed3d9397afe96a976a0.128x128.png",
+      "imageName": "Lato.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdd0",
@@ -139,7 +150,8 @@
       "disposition": 1.53,
       "reqMasteryRank": 10,
       "icon": "items/images/en/magnus.25f6050dc34973f444d1c6ea54487d5e.png",
-      "thumb": "items/images/en/thumbs/magnus.25f6050dc34973f444d1c6ea54487d5e.128x128.png"
+      "thumb": "items/images/en/thumbs/magnus.25f6050dc34973f444d1c6ea54487d5e.128x128.png",
+      "imageName": "Magnus.png"
     },
     {
       "id": "5c5ca81696e8d2003834fde9",
@@ -150,7 +162,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 3,
       "icon": "riven_item/images/ack_and_brunt.f5852c315691d80106e0ba42fb82f668.png",
-      "thumb": "riven_item/images/thumbs/ack_and_brunt.f5852c315691d80106e0ba42fb82f668.128x128.png"
+      "thumb": "riven_item/images/thumbs/ack_and_brunt.f5852c315691d80106e0ba42fb82f668.128x128.png",
+      "imageName": "AckAndBrunt.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdea",
@@ -161,7 +174,8 @@
       "disposition": 1.5,
       "reqMasteryRank": 5,
       "icon": "items/images/en/amphis.6ba40d253046114ead767591eb74d88b.png",
-      "thumb": "items/images/en/thumbs/amphis.6ba40d253046114ead767591eb74d88b.128x128.png"
+      "thumb": "items/images/en/thumbs/amphis.6ba40d253046114ead767591eb74d88b.128x128.png",
+      "imageName": "AmphisMelee.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdeb",
@@ -172,7 +186,8 @@
       "disposition": 1.46,
       "reqMasteryRank": 3,
       "icon": "items/images/en/anku.a7e5df1e6b599334e2fe014f14062cf0.png",
-      "thumb": "items/images/en/thumbs/anku.a7e5df1e6b599334e2fe014f14062cf0.128x128.png"
+      "thumb": "items/images/en/thumbs/anku.a7e5df1e6b599334e2fe014f14062cf0.128x128.png",
+      "imageName": "Anku.png"
     },
     {
       "id": "5c5ca81696e8d2003834fded",
@@ -183,7 +198,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 10,
       "icon": "riven_item/images/arca_titron.bd711749b9917222c85fea4b60376d45.png",
-      "thumb": "riven_item/images/thumbs/arca_titron.bd711749b9917222c85fea4b60376d45.128x128.png"
+      "thumb": "riven_item/images/thumbs/arca_titron.bd711749b9917222c85fea4b60376d45.128x128.png",
+      "imageName": "ArcaTitron.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdef",
@@ -194,7 +210,8 @@
       "disposition": 0.8,
       "reqMasteryRank": 0,
       "icon": "riven_item/images/balla.9e49720865f76d3a6b591ad2712a3afb.png",
-      "thumb": "riven_item/images/thumbs/balla.9e49720865f76d3a6b591ad2712a3afb.128x128.png"
+      "thumb": "riven_item/images/thumbs/balla.9e49720865f76d3a6b591ad2712a3afb.128x128.png",
+      "imageName": "TipOne.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdf1",
@@ -205,7 +222,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 4,
       "icon": "items/images/en/boltace.79a692a1f7d1f9b1251de0719403ab1f.png",
-      "thumb": "items/images/en/thumbs/boltace.79a692a1f7d1f9b1251de0719403ab1f.128x128.png"
+      "thumb": "items/images/en/thumbs/boltace.79a692a1f7d1f9b1251de0719403ab1f.128x128.png",
+      "imageName": "Boltace.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdf3",
@@ -216,7 +234,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 10,
       "icon": "items/images/en/broken_war.79aea5cde8a32f0cdb77bc19b5d1e9a5.png",
-      "thumb": "items/images/en/thumbs/broken_war.79aea5cde8a32f0cdb77bc19b5d1e9a5.128x128.png"
+      "thumb": "items/images/en/thumbs/broken_war.79aea5cde8a32f0cdb77bc19b5d1e9a5.128x128.png",
+      "imageName": "BrokenWar.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdf5",
@@ -227,7 +246,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 7,
       "icon": "items/images/en/caustacyst.1fb1dcd615381cbf7823f0471311c1fe.png",
-      "thumb": "items/images/en/thumbs/caustacyst.1fb1dcd615381cbf7823f0471311c1fe.128x128.png"
+      "thumb": "items/images/en/thumbs/caustacyst.1fb1dcd615381cbf7823f0471311c1fe.128x128.png",
+      "imageName": "Caustacyst.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdf7",
@@ -238,7 +258,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 7,
       "icon": "riven_item/images/cerata.a844799b207aaddaa4d4542bbffaee71.png",
-      "thumb": "riven_item/images/thumbs/cerata.a844799b207aaddaa4d4542bbffaee71.128x128.png"
+      "thumb": "riven_item/images/thumbs/cerata.a844799b207aaddaa4d4542bbffaee71.128x128.png",
+      "imageName": "Cerata.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe1a",
@@ -249,7 +270,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 8,
       "icon": "items/images/en/hate.1e4354f5dbd630a1809478ea19ca740d.png",
-      "thumb": "items/images/en/thumbs/hate.1e4354f5dbd630a1809478ea19ca740d.128x128.png"
+      "thumb": "items/images/en/thumbs/hate.1e4354f5dbd630a1809478ea19ca740d.128x128.png",
+      "imageName": "Hate.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd95",
@@ -260,7 +282,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 6,
       "icon": "items/images/en/soma.cdaf834f3db92d51d4452ce8f9aee19c.png",
-      "thumb": "items/images/en/thumbs/soma.cdaf834f3db92d51d4452ce8f9aee19c.128x128.png"
+      "thumb": "items/images/en/thumbs/soma.cdaf834f3db92d51d4452ce8f9aee19c.128x128.png",
+      "imageName": "Soma.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd9a",
@@ -271,7 +294,8 @@
       "disposition": 1.31,
       "reqMasteryRank": 11,
       "icon": "items/images/en/synapse.8f3428d652e080644e9a3028081f4acd.png",
-      "thumb": "items/images/en/thumbs/synapse.8f3428d652e080644e9a3028081f4acd.128x128.png"
+      "thumb": "items/images/en/thumbs/synapse.8f3428d652e080644e9a3028081f4acd.128x128.png",
+      "imageName": "Synapse.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd9e",
@@ -282,7 +306,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 7,
       "icon": "riven_item/images/tigris.7ce83c14bb12c7baee7429c095e54374.png",
-      "thumb": "riven_item/images/thumbs/tigris.7ce83c14bb12c7baee7429c095e54374.128x128.png"
+      "thumb": "riven_item/images/thumbs/tigris.7ce83c14bb12c7baee7429c095e54374.128x128.png",
+      "imageName": "Tigris.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd9f",
@@ -293,7 +318,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 5,
       "icon": "items/images/en/tonkor.18f437094ffdd53edc96e46d72eb7b59.png",
-      "thumb": "items/images/en/thumbs/tonkor.18f437094ffdd53edc96e46d72eb7b59.128x128.png"
+      "thumb": "items/images/en/thumbs/tonkor.18f437094ffdd53edc96e46d72eb7b59.128x128.png",
+      "imageName": "Tonkor.png"
     },
     {
       "id": "5c5ca81696e8d2003834fda0",
@@ -304,7 +330,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 4,
       "icon": "items/images/en/torid.44456f26160f4ece65656c524c4692fe.png",
-      "thumb": "items/images/en/thumbs/torid.44456f26160f4ece65656c524c4692fe.128x128.png"
+      "thumb": "items/images/en/thumbs/torid.44456f26160f4ece65656c524c4692fe.128x128.png",
+      "imageName": "Torid.png"
     },
     {
       "id": "5c5ca81696e8d2003834fda1",
@@ -315,7 +342,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 2,
       "icon": "items/images/en/vectis.439c24184ddd098ca33ba897be1b3fa9.png",
-      "thumb": "items/images/en/thumbs/vectis.439c24184ddd098ca33ba897be1b3fa9.128x128.png"
+      "thumb": "items/images/en/thumbs/vectis.439c24184ddd098ca33ba897be1b3fa9.128x128.png",
+      "imageName": "Vectis.png"
     },
     {
       "id": "5c5ca81696e8d2003834fda2",
@@ -326,7 +354,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 8,
       "icon": "items/images/en/veldt.1b5734a7f3f0935019d296accad86136.png",
-      "thumb": "items/images/en/thumbs/veldt.1b5734a7f3f0935019d296accad86136.128x128.png"
+      "thumb": "items/images/en/thumbs/veldt.1b5734a7f3f0935019d296accad86136.128x128.png",
+      "imageName": "Veldt.png"
     },
     {
       "id": "5c5ca81696e8d2003834fda3",
@@ -337,7 +366,8 @@
       "disposition": 1.45,
       "reqMasteryRank": 3,
       "icon": "items/images/en/vulkar.cd244ebd97bf1ef69ed49b756d07665f.png",
-      "thumb": "items/images/en/thumbs/vulkar.cd244ebd97bf1ef69ed49b756d07665f.128x128.png"
+      "thumb": "items/images/en/thumbs/vulkar.cd244ebd97bf1ef69ed49b756d07665f.128x128.png",
+      "imageName": "Vulkar.png"
     },
     {
       "id": "5c5ca81696e8d2003834fda4",
@@ -348,7 +378,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 7,
       "icon": "items/images/en/zarr.ab172f2a4dac5c140772ba2ac675b614.png",
-      "thumb": "items/images/en/thumbs/zarr.ab172f2a4dac5c140772ba2ac675b614.128x128.png"
+      "thumb": "items/images/en/thumbs/zarr.ab172f2a4dac5c140772ba2ac675b614.128x128.png",
+      "imageName": "Zarr.png"
     },
     {
       "id": "5c5ca81696e8d2003834fda5",
@@ -359,7 +390,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 10,
       "icon": "items/images/en/zenith.031d3559d3575fa5f23d17f1fd2cacb9.png",
-      "thumb": "items/images/en/thumbs/zenith.031d3559d3575fa5f23d17f1fd2cacb9.128x128.png"
+      "thumb": "items/images/en/thumbs/zenith.031d3559d3575fa5f23d17f1fd2cacb9.128x128.png",
+      "imageName": "Zenith.png"
     },
     {
       "id": "5c5ca81696e8d2003834fda6",
@@ -370,7 +402,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 10,
       "icon": "items/images/en/zhuge.69a6b4bcee465c6b3332ddb4d6d29e19.png",
-      "thumb": "items/images/en/thumbs/zhuge.69a6b4bcee465c6b3332ddb4d6d29e19.128x128.png"
+      "thumb": "items/images/en/thumbs/zhuge.69a6b4bcee465c6b3332ddb4d6d29e19.128x128.png",
+      "imageName": "Zhuge.png"
     },
     {
       "id": "5c5ca81696e8d2003834fda7",
@@ -381,7 +414,8 @@
       "disposition": 1.33,
       "reqMasteryRank": 7,
       "icon": "items/images/en/acrid.def858b7d99e216a123d8af9a4f3663c.png",
-      "thumb": "items/images/en/thumbs/acrid.def858b7d99e216a123d8af9a4f3663c.128x128.png"
+      "thumb": "items/images/en/thumbs/acrid.def858b7d99e216a123d8af9a4f3663c.128x128.png",
+      "imageName": "Acrid.png"
     },
     {
       "id": "5c5ca81696e8d2003834fda8",
@@ -392,7 +426,8 @@
       "disposition": 1.45,
       "reqMasteryRank": 4,
       "icon": "riven_item/images/afuris.836b9b7a1ea7cceeacf42f929d33ad3f.png",
-      "thumb": "riven_item/images/thumbs/afuris.836b9b7a1ea7cceeacf42f929d33ad3f.128x128.png"
+      "thumb": "riven_item/images/thumbs/afuris.836b9b7a1ea7cceeacf42f929d33ad3f.128x128.png",
+      "imageName": "Afuris.png"
     },
     {
       "id": "5c5ca81696e8d2003834fda9",
@@ -403,7 +438,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 8,
       "icon": "items/images/en/akbolto.ba66cf8e6481671a1a69057b78ed74e8.png",
-      "thumb": "items/images/en/thumbs/akbolto.ba66cf8e6481671a1a69057b78ed74e8.128x128.png"
+      "thumb": "items/images/en/thumbs/akbolto.ba66cf8e6481671a1a69057b78ed74e8.128x128.png",
+      "imageName": "Akbolto.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdaa",
@@ -414,7 +450,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 2,
       "icon": "items/images/en/akbronco.cc3f95412fa414ddd87a90c63240928f.png",
-      "thumb": "items/images/en/thumbs/akbronco.cc3f95412fa414ddd87a90c63240928f.128x128.png"
+      "thumb": "items/images/en/thumbs/akbronco.cc3f95412fa414ddd87a90c63240928f.128x128.png",
+      "imageName": "Akbronco.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdab",
@@ -425,7 +462,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 8,
       "icon": "items/images/en/akjagara.8d4087f177bb51d5b4fd5d3ac89ea78e.png",
-      "thumb": "items/images/en/thumbs/akjagara.8d4087f177bb51d5b4fd5d3ac89ea78e.128x128.png"
+      "thumb": "items/images/en/thumbs/akjagara.8d4087f177bb51d5b4fd5d3ac89ea78e.128x128.png",
+      "imageName": "Akjagara.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdac",
@@ -436,7 +474,8 @@
       "disposition": 1.52,
       "reqMasteryRank": 3,
       "icon": "items/images/en/aklato.fb4fd2557ee8190c747b8a21fc130f86.png",
-      "thumb": "items/images/en/thumbs/aklato.fb4fd2557ee8190c747b8a21fc130f86.128x128.png"
+      "thumb": "items/images/en/thumbs/aklato.fb4fd2557ee8190c747b8a21fc130f86.128x128.png",
+      "imageName": "Aklato.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdb4",
@@ -447,7 +486,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 10,
       "icon": "riven_item/images/arca_scisco.8f53fed9eb4af8089fd98846bc365ca4.png",
-      "thumb": "riven_item/images/thumbs/arca_scisco.8f53fed9eb4af8089fd98846bc365ca4.128x128.png"
+      "thumb": "riven_item/images/thumbs/arca_scisco.8f53fed9eb4af8089fd98846bc365ca4.128x128.png",
+      "imageName": "ArcaScisco.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdbd",
@@ -458,7 +498,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 8,
       "icon": "items/images/en/cycron.8c415cf09d5a258677c3f42d9477c0ee.png",
-      "thumb": "items/images/en/thumbs/cycron.8c415cf09d5a258677c3f42d9477c0ee.128x128.png"
+      "thumb": "items/images/en/thumbs/cycron.8c415cf09d5a258677c3f42d9477c0ee.128x128.png",
+      "imageName": "Cycron.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdbf",
@@ -469,7 +510,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 6,
       "icon": "items/images/en/detron.0d820dd8bfa6d4a9369456594232e0b6.png",
-      "thumb": "items/images/en/thumbs/detron.0d820dd8bfa6d4a9369456594232e0b6.128x128.png"
+      "thumb": "items/images/en/thumbs/detron.0d820dd8bfa6d4a9369456594232e0b6.128x128.png",
+      "imageName": "Detron.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdc2",
@@ -480,7 +522,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 9,
       "icon": "items/images/en/embolist.19e333826e9f646df007efc7778a373e.png",
-      "thumb": "items/images/en/thumbs/embolist.19e333826e9f646df007efc7778a373e.128x128.png"
+      "thumb": "items/images/en/thumbs/embolist.19e333826e9f646df007efc7778a373e.128x128.png",
+      "imageName": "Embolist.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe07",
@@ -491,7 +534,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 1,
       "icon": "riven_item/images/dual_kamas.3a49f1ae023c1988d14200425aff3057.png",
-      "thumb": "riven_item/images/thumbs/dual_kamas.3a49f1ae023c1988d14200425aff3057.128x128.png"
+      "thumb": "riven_item/images/thumbs/dual_kamas.3a49f1ae023c1988d14200425aff3057.128x128.png",
+      "imageName": "DualKamas.png"
     },
     {
       "id": "5dbe9b057ea27b0ffe3ca264",
@@ -502,7 +546,8 @@
       "disposition": 0.8,
       "reqMasteryRank": 13,
       "icon": "riven_item/images/kuva_shildeg.833d9ac75906e6ed810f87d16fc3bf23.png",
-      "thumb": "riven_item/images/thumbs/kuva_shildeg.833d9ac75906e6ed810f87d16fc3bf23.128x128.png"
+      "thumb": "riven_item/images/thumbs/kuva_shildeg.833d9ac75906e6ed810f87d16fc3bf23.128x128.png",
+      "imageName": "GrnKuvaLichScytheWeapon.png"
     },
     {
       "id": "5dbe9b057ea27b0ffe3ca266",
@@ -513,7 +558,8 @@
       "disposition": 0.95,
       "reqMasteryRank": 13,
       "icon": "riven_item/images/kuva_ayanga.4312560b94c47f98b046d81344504e0d.png",
-      "thumb": "riven_item/images/thumbs/kuva_ayanga.4312560b94c47f98b046d81344504e0d.128x128.png"
+      "thumb": "riven_item/images/thumbs/kuva_ayanga.4312560b94c47f98b046d81344504e0d.128x128.png",
+      "imageName": "GrnHeavyGrenadeLauncher.png"
     },
     {
       "id": "5fbd7b6fc34da301176015bc",
@@ -546,7 +592,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 7,
       "icon": "items/images/en/argonak.39fc2b8728117c8c7cc81370cd216ba2.png",
-      "thumb": "items/images/en/thumbs/argonak.39fc2b8728117c8c7cc81370cd216ba2.128x128.png"
+      "thumb": "items/images/en/thumbs/argonak.39fc2b8728117c8c7cc81370cd216ba2.128x128.png",
+      "imageName": "Argonak.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdbb",
@@ -557,7 +604,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 3,
       "icon": "items/images/en/castanas.5cc83e4f12ce19559e2bfe6e0f0f1935.png",
-      "thumb": "items/images/en/thumbs/castanas.5cc83e4f12ce19559e2bfe6e0f0f1935.128x128.png"
+      "thumb": "items/images/en/thumbs/castanas.5cc83e4f12ce19559e2bfe6e0f0f1935.128x128.png",
+      "imageName": "Castanas.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdbc",
@@ -568,7 +616,8 @@
       "disposition": 1.52,
       "reqMasteryRank": 4,
       "icon": "items/images/en/cestra.d37e157c149f8aa72194797d5175677d.png",
-      "thumb": "items/images/en/thumbs/cestra.d37e157c149f8aa72194797d5175677d.128x128.png"
+      "thumb": "items/images/en/thumbs/cestra.d37e157c149f8aa72194797d5175677d.128x128.png",
+      "imageName": "Cestra.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdc1",
@@ -579,7 +628,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 11,
       "icon": "riven_item/images/dual_toxocyst.c983c3cbfd781dec1226c09e5157ef13.png",
-      "thumb": "riven_item/images/thumbs/dual_toxocyst.c983c3cbfd781dec1226c09e5157ef13.128x128.png"
+      "thumb": "riven_item/images/thumbs/dual_toxocyst.c983c3cbfd781dec1226c09e5157ef13.128x128.png",
+      "imageName": "DualToxocyst.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdc8",
@@ -590,7 +640,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 7,
       "icon": "items/images/en/hystrix.c4771631ef9eb250562012fbf407d439.png",
-      "thumb": "items/images/en/thumbs/hystrix.c4771631ef9eb250562012fbf407d439.128x128.png"
+      "thumb": "items/images/en/thumbs/hystrix.c4771631ef9eb250562012fbf407d439.128x128.png",
+      "imageName": "Hystrix.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe11",
@@ -601,7 +652,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 2,
       "icon": "items/images/en/fragor.6b5c0c6d32b7f2d3a0576e7a0c28accb.png",
-      "thumb": "items/images/en/thumbs/fragor.6b5c0c6d32b7f2d3a0576e7a0c28accb.128x128.png"
+      "thumb": "items/images/en/thumbs/fragor.6b5c0c6d32b7f2d3a0576e7a0c28accb.128x128.png",
+      "imageName": "Fragor.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe13",
@@ -612,7 +664,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 3,
       "icon": "items/images/en/galatine.46969364e23ff22f2463e4479ef38b24.png",
-      "thumb": "items/images/en/thumbs/galatine.46969364e23ff22f2463e4479ef38b24.128x128.png"
+      "thumb": "items/images/en/thumbs/galatine.46969364e23ff22f2463e4479ef38b24.128x128.png",
+      "imageName": "Galatine.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe14",
@@ -623,7 +676,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 5,
       "icon": "riven_item/images/gazal_machete.a9fc381acf6ba7519b812cf9f4e8954b.png",
-      "thumb": "riven_item/images/thumbs/gazal_machete.a9fc381acf6ba7519b812cf9f4e8954b.128x128.png"
+      "thumb": "riven_item/images/thumbs/gazal_machete.a9fc381acf6ba7519b812cf9f4e8954b.128x128.png",
+      "imageName": "GazalMachete.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe16",
@@ -634,7 +688,8 @@
       "disposition": 1.44,
       "reqMasteryRank": 2,
       "icon": "items/images/en/gram.ab64eb4736d2acb63202cb34a320183e.png",
-      "thumb": "items/images/en/thumbs/gram.ab64eb4736d2acb63202cb34a320183e.128x128.png"
+      "thumb": "items/images/en/thumbs/gram.ab64eb4736d2acb63202cb34a320183e.128x128.png",
+      "imageName": "Gram.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe17",
@@ -645,7 +700,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 4,
       "icon": "items/images/en/guandao.68b20f3b44eb7bf103ed74b7a6219966.png",
-      "thumb": "items/images/en/thumbs/guandao.68b20f3b44eb7bf103ed74b7a6219966.128x128.png"
+      "thumb": "items/images/en/thumbs/guandao.68b20f3b44eb7bf103ed74b7a6219966.128x128.png",
+      "imageName": "Guandao.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe18",
@@ -656,7 +712,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 8,
       "icon": "items/images/en/gunsen.381adede029c793f0dfd7c90963089a5.png",
-      "thumb": "items/images/en/thumbs/gunsen.381adede029c793f0dfd7c90963089a5.128x128.png"
+      "thumb": "items/images/en/thumbs/gunsen.381adede029c793f0dfd7c90963089a5.128x128.png",
+      "imageName": "Gunsen.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe0a",
@@ -667,7 +724,8 @@
       "disposition": 1.48,
       "reqMasteryRank": 0,
       "icon": "riven_item/images/dual_skana.26ab111b35fe5cf8c76f1c484fae1fa2.png",
-      "thumb": "riven_item/images/thumbs/dual_skana.26ab111b35fe5cf8c76f1c484fae1fa2.128x128.png"
+      "thumb": "riven_item/images/thumbs/dual_skana.26ab111b35fe5cf8c76f1c484fae1fa2.128x128.png",
+      "imageName": "DualSkanas.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe21",
@@ -678,7 +736,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 0,
       "icon": "riven_item/images/jaw_sword.949c3646fad591912dc12df78f946c3f.png",
-      "thumb": "riven_item/images/thumbs/jaw_sword.949c3646fad591912dc12df78f946c3f.128x128.png"
+      "thumb": "riven_item/images/thumbs/jaw_sword.949c3646fad591912dc12df78f946c3f.128x128.png",
+      "imageName": "JawSword.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe24",
@@ -689,7 +748,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 7,
       "icon": "items/images/en/kesheg.fd223dc1c378610f8b550900bb2545c2.png",
-      "thumb": "items/images/en/thumbs/kesheg.fd223dc1c378610f8b550900bb2545c2.128x128.png"
+      "thumb": "items/images/en/thumbs/kesheg.fd223dc1c378610f8b550900bb2545c2.128x128.png",
+      "imageName": "Kesheg.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe25",
@@ -700,7 +760,8 @@
       "disposition": 1.45,
       "reqMasteryRank": 0,
       "icon": "items/images/en/kestrel.6486807517934177d97c300326ff0c10.png",
-      "thumb": "items/images/en/thumbs/kestrel.6486807517934177d97c300326ff0c10.128x128.png"
+      "thumb": "items/images/en/thumbs/kestrel.6486807517934177d97c300326ff0c10.128x128.png",
+      "imageName": "Kestrel.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe29",
@@ -711,7 +772,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 0,
       "icon": "items/images/en/kronsh.affe607fb84379769f756a2409cbf0b6.png",
-      "thumb": "items/images/en/thumbs/kronsh.affe607fb84379769f756a2409cbf0b6.128x128.png"
+      "thumb": "items/images/en/thumbs/kronsh.affe607fb84379769f756a2409cbf0b6.128x128.png",
+      "imageName": "TipSix.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdb7",
@@ -722,7 +784,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 2,
       "icon": "items/images/en/ballistica.178b8ec4820bbc01daa7ed321ef0890f.png",
-      "thumb": "items/images/en/thumbs/ballistica.178b8ec4820bbc01daa7ed321ef0890f.128x128.png"
+      "thumb": "items/images/en/thumbs/ballistica.178b8ec4820bbc01daa7ed321ef0890f.128x128.png",
+      "imageName": "Ballistica.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe1b",
@@ -733,7 +796,8 @@
       "disposition": 1.44,
       "reqMasteryRank": 3,
       "icon": "items/images/en/heat_dagger.1284a42f3ca7d49b6e1dc11a96559bc8.png",
-      "thumb": "items/images/en/thumbs/heat_dagger.1284a42f3ca7d49b6e1dc11a96559bc8.128x128.png"
+      "thumb": "items/images/en/thumbs/heat_dagger.1284a42f3ca7d49b6e1dc11a96559bc8.128x128.png",
+      "imageName": "HeatDagger.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe1f",
@@ -744,7 +808,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 5,
       "icon": "items/images/en/jat_kittag.37688018eac638eff7502f4389055926.png",
-      "thumb": "items/images/en/thumbs/jat_kittag.37688018eac638eff7502f4389055926.128x128.png"
+      "thumb": "items/images/en/thumbs/jat_kittag.37688018eac638eff7502f4389055926.128x128.png",
+      "imageName": "JatKittag.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdd8",
@@ -755,7 +820,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 2,
       "icon": "items/images/en/sonicor.c2e7aba399d4ba904c4a4f83a75e9bd7.png",
-      "thumb": "items/images/en/thumbs/sonicor.c2e7aba399d4ba904c4a4f83a75e9bd7.128x128.png"
+      "thumb": "items/images/en/thumbs/sonicor.c2e7aba399d4ba904c4a4f83a75e9bd7.128x128.png",
+      "imageName": "Sonicor.png"
     },
     {
       "id": "5ced51e0cd3f0b0098a3862e",
@@ -788,7 +854,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 7,
       "icon": "items/images/en/pupacyst.e81790fba493f2bfbe96184c7cc7064d.png",
-      "thumb": "items/images/en/thumbs/pupacyst.e81790fba493f2bfbe96184c7cc7064d.128x128.png"
+      "thumb": "items/images/en/thumbs/pupacyst.e81790fba493f2bfbe96184c7cc7064d.128x128.png",
+      "imageName": "InfStaff.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd61",
@@ -799,7 +866,8 @@
       "disposition": 0.95,
       "reqMasteryRank": 10,
       "icon": "riven_item/images/arca_plasmor.d992b822673f559b9b678ba1a7343002.png",
-      "thumb": "riven_item/images/thumbs/arca_plasmor.d992b822673f559b9b678ba1a7343002.128x128.png"
+      "thumb": "riven_item/images/thumbs/arca_plasmor.d992b822673f559b9b678ba1a7343002.128x128.png",
+      "imageName": "ArcaPlasmor.png"
     },
     {
       "id": "5cf572579597e1019b1678d4",
@@ -810,7 +878,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 6,
       "icon": "items/images/en/galvacord.2140990c96c2fdd29ffeaec8279094f1.png",
-      "thumb": "items/images/en/thumbs/galvacord.2140990c96c2fdd29ffeaec8279094f1.128x128.png"
+      "thumb": "items/images/en/thumbs/galvacord.2140990c96c2fdd29ffeaec8279094f1.128x128.png",
+      "imageName": "CrpShockWhip.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdba",
@@ -821,7 +890,8 @@
       "disposition": 1.45,
       "reqMasteryRank": 0,
       "icon": "items/images/en/bronco.c0b39eda7929fefbe5cf7e377c603c3f.png",
-      "thumb": "items/images/en/thumbs/bronco.c0b39eda7929fefbe5cf7e377c603c3f.128x128.png"
+      "thumb": "items/images/en/thumbs/bronco.c0b39eda7929fefbe5cf7e377c603c3f.128x128.png",
+      "imageName": "Bronco.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdc0",
@@ -832,7 +902,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 7,
       "icon": "riven_item/images/dual_cestra.c55565d7154d20796cbea06fc66a928f.png",
-      "thumb": "riven_item/images/thumbs/dual_cestra.c55565d7154d20796cbea06fc66a928f.128x128.png"
+      "thumb": "riven_item/images/thumbs/dual_cestra.c55565d7154d20796cbea06fc66a928f.128x128.png",
+      "imageName": "DualCestras.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdc4",
@@ -843,7 +914,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 1,
       "icon": "riven_item/images/furis.f2d9baed7db3eb0b5c9659ecee5cebe2.png",
-      "thumb": "riven_item/images/thumbs/furis.f2d9baed7db3eb0b5c9659ecee5cebe2.128x128.png"
+      "thumb": "riven_item/images/thumbs/furis.f2d9baed7db3eb0b5c9659ecee5cebe2.128x128.png",
+      "imageName": "Furis.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdec",
@@ -854,7 +926,8 @@
       "disposition": 1.5,
       "reqMasteryRank": 2,
       "icon": "items/images/en/ankyros.56404bf846a2eeea24245932f1897a30.png",
-      "thumb": "items/images/en/thumbs/ankyros.56404bf846a2eeea24245932f1897a30.128x128.png"
+      "thumb": "items/images/en/thumbs/ankyros.56404bf846a2eeea24245932f1897a30.128x128.png",
+      "imageName": "Ankyros.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdee",
@@ -865,7 +938,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 5,
       "icon": "items/images/en/atterax.79855f62aaa825e425eed6f36b687aa5.png",
-      "thumb": "items/images/en/thumbs/atterax.79855f62aaa825e425eed6f36b687aa5.128x128.png"
+      "thumb": "items/images/en/thumbs/atterax.79855f62aaa825e425eed6f36b687aa5.128x128.png",
+      "imageName": "Atterax.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdf0",
@@ -876,7 +950,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 0,
       "icon": "items/images/en/bo.52ac556f0b623ced5cc7e489a7c6d060.png",
-      "thumb": "items/images/en/thumbs/bo.52ac556f0b623ced5cc7e489a7c6d060.128x128.png"
+      "thumb": "items/images/en/thumbs/bo.52ac556f0b623ced5cc7e489a7c6d060.128x128.png",
+      "imageName": "Bo.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdf4",
@@ -887,7 +962,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 5,
       "icon": "items/images/en/cassowar.978e20cb98bf63a3d059c5883a99c3e6.png",
-      "thumb": "items/images/en/thumbs/cassowar.978e20cb98bf63a3d059c5883a99c3e6.128x128.png"
+      "thumb": "items/images/en/thumbs/cassowar.978e20cb98bf63a3d059c5883a99c3e6.128x128.png",
+      "imageName": "Cassowar.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdf6",
@@ -898,7 +974,8 @@
       "disposition": 1.43,
       "reqMasteryRank": 3,
       "icon": "items/images/en/ceramic_dagger.f32d32062b09723f6481fa1d8e79f5c2.png",
-      "thumb": "items/images/en/thumbs/ceramic_dagger.f32d32062b09723f6481fa1d8e79f5c2.128x128.png"
+      "thumb": "items/images/en/thumbs/ceramic_dagger.f32d32062b09723f6481fa1d8e79f5c2.128x128.png",
+      "imageName": "CeramicDagger.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe19",
@@ -909,7 +986,8 @@
       "disposition": 1.44,
       "reqMasteryRank": 7,
       "icon": "items/images/en/halikar.2836e85660670e0b7faf4ee5e31ed435.png",
-      "thumb": "items/images/en/thumbs/halikar.2836e85660670e0b7faf4ee5e31ed435.128x128.png"
+      "thumb": "items/images/en/thumbs/halikar.2836e85660670e0b7faf4ee5e31ed435.128x128.png",
+      "imageName": "Halikar.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe1e",
@@ -920,7 +998,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 7,
       "icon": "items/images/en/hirudo.a056a643f7582517371f13a8cf0243ed.png",
-      "thumb": "items/images/en/thumbs/hirudo.a056a643f7582517371f13a8cf0243ed.128x128.png"
+      "thumb": "items/images/en/thumbs/hirudo.a056a643f7582517371f13a8cf0243ed.128x128.png",
+      "imageName": "Hirudo.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe31",
@@ -931,7 +1010,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 5,
       "icon": "items/images/en/mire.4bc449120b1046c370d6fbca3b3c5f2a.png",
-      "thumb": "items/images/en/thumbs/mire.4bc449120b1046c370d6fbca3b3c5f2a.128x128.png"
+      "thumb": "items/images/en/thumbs/mire.4bc449120b1046c370d6fbca3b3c5f2a.128x128.png",
+      "imageName": "Mire.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe56",
@@ -942,7 +1022,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 10,
       "icon": "items/images/en/twin_krohkur.15144cd22c339ffc5f0226c260f95a91.png",
-      "thumb": "items/images/en/thumbs/twin_krohkur.15144cd22c339ffc5f0226c260f95a91.128x128.png"
+      "thumb": "items/images/en/thumbs/twin_krohkur.15144cd22c339ffc5f0226c260f95a91.128x128.png",
+      "imageName": "TwinKrohkur.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd81",
@@ -953,7 +1034,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 0,
       "icon": "items/images/en/latron.80c8dcc71e135db8e2fb398c0204d1be.png",
-      "thumb": "items/images/en/thumbs/latron.80c8dcc71e135db8e2fb398c0204d1be.128x128.png"
+      "thumb": "items/images/en/thumbs/latron.80c8dcc71e135db8e2fb398c0204d1be.128x128.png",
+      "imageName": "Latron.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd82",
@@ -964,7 +1046,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 8,
       "icon": "items/images/en/lenz.c503188d5decb7208a86975a77881152.png",
-      "thumb": "items/images/en/thumbs/lenz.c503188d5decb7208a86975a77881152.128x128.png"
+      "thumb": "items/images/en/thumbs/lenz.c503188d5decb7208a86975a77881152.128x128.png",
+      "imageName": "Lenz.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd83",
@@ -975,7 +1058,8 @@
       "disposition": 1.5,
       "reqMasteryRank": 6,
       "icon": "items/images/en/miter.6685ee070afd0ae6e10eff755ba6898b.png",
-      "thumb": "items/images/en/thumbs/miter.6685ee070afd0ae6e10eff755ba6898b.128x128.png"
+      "thumb": "items/images/en/thumbs/miter.6685ee070afd0ae6e10eff755ba6898b.128x128.png",
+      "imageName": "Miter.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd84",
@@ -986,7 +1070,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 7,
       "icon": "riven_item/images/mutalist_cernos.de5bd437b72e9c95f7cbc845769fbdfe.png",
-      "thumb": "riven_item/images/thumbs/mutalist_cernos.de5bd437b72e9c95f7cbc845769fbdfe.128x128.png"
+      "thumb": "riven_item/images/thumbs/mutalist_cernos.de5bd437b72e9c95f7cbc845769fbdfe.128x128.png",
+      "imageName": "MutalistCernos.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd85",
@@ -997,7 +1082,8 @@
       "disposition": 1.5,
       "reqMasteryRank": 2,
       "icon": "riven_item/images/mutalist_quanta.1bf95233f395adc4a44c46a23ed08c68.png",
-      "thumb": "riven_item/images/thumbs/mutalist_quanta.1bf95233f395adc4a44c46a23ed08c68.128x128.png"
+      "thumb": "riven_item/images/thumbs/mutalist_quanta.1bf95233f395adc4a44c46a23ed08c68.128x128.png",
+      "imageName": "MutalistQuanta.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd87",
@@ -1008,7 +1094,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 14,
       "icon": "items/images/en/opticor.5add59f5ba98aa6384eea9d7052943bf.png",
-      "thumb": "items/images/en/thumbs/opticor.5add59f5ba98aa6384eea9d7052943bf.128x128.png"
+      "thumb": "items/images/en/thumbs/opticor.5add59f5ba98aa6384eea9d7052943bf.128x128.png",
+      "imageName": "Opticor.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd88",
@@ -1019,7 +1106,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 7,
       "icon": "items/images/en/panthera.ee862561bf473b65df9fa58fbeaaa795.png",
-      "thumb": "items/images/en/thumbs/panthera.ee862561bf473b65df9fa58fbeaaa795.128x128.png"
+      "thumb": "items/images/en/thumbs/panthera.ee862561bf473b65df9fa58fbeaaa795.128x128.png",
+      "imageName": "Panthera.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd8b",
@@ -1030,7 +1118,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 6,
       "icon": "items/images/en/penta.2d713f1bdcad43f90dd5691a8bb775e7.png",
-      "thumb": "items/images/en/thumbs/penta.2d713f1bdcad43f90dd5691a8bb775e7.128x128.png"
+      "thumb": "items/images/en/thumbs/penta.2d713f1bdcad43f90dd5691a8bb775e7.128x128.png",
+      "imageName": "Penta.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd8c",
@@ -1041,7 +1130,8 @@
       "disposition": 1.46,
       "reqMasteryRank": 11,
       "icon": "items/images/en/phage.b0f3d7bd8b8f38805a316b46f00eb8fb.png",
-      "thumb": "items/images/en/thumbs/phage.b0f3d7bd8b8f38805a316b46f00eb8fb.128x128.png"
+      "thumb": "items/images/en/thumbs/phage.b0f3d7bd8b8f38805a316b46f00eb8fb.128x128.png",
+      "imageName": "Phage.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd8d",
@@ -1052,7 +1142,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 9,
       "icon": "items/images/en/phantasma.f98d17ed4134d5528ed7f21429ef6006.png",
-      "thumb": "items/images/en/thumbs/phantasma.f98d17ed4134d5528ed7f21429ef6006.128x128.png"
+      "thumb": "items/images/en/thumbs/phantasma.f98d17ed4134d5528ed7f21429ef6006.128x128.png",
+      "imageName": "Phantasma.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd8e",
@@ -1063,7 +1154,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 4,
       "icon": "items/images/en/quanta.a1b49d5f5d5c3c46b7f0cd130369559a.png",
-      "thumb": "items/images/en/thumbs/quanta.a1b49d5f5d5c3c46b7f0cd130369559a.128x128.png"
+      "thumb": "items/images/en/thumbs/quanta.a1b49d5f5d5c3c46b7f0cd130369559a.128x128.png",
+      "imageName": "Quanta.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd90",
@@ -1074,7 +1166,8 @@
       "disposition": 0.95,
       "reqMasteryRank": 6,
       "icon": "items/images/en/rubico.19654c8831d70f150f84be3f69b35a15.png",
-      "thumb": "items/images/en/thumbs/rubico.19654c8831d70f150f84be3f69b35a15.128x128.png"
+      "thumb": "items/images/en/thumbs/rubico.19654c8831d70f150f84be3f69b35a15.128x128.png",
+      "imageName": "Rubico.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd92",
@@ -1085,7 +1178,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 5,
       "icon": "items/images/en/simulor.b04c9a58fcb0b4802d67f39c5fc52732.png",
-      "thumb": "items/images/en/thumbs/simulor.b04c9a58fcb0b4802d67f39c5fc52732.128x128.png"
+      "thumb": "items/images/en/thumbs/simulor.b04c9a58fcb0b4802d67f39c5fc52732.128x128.png",
+      "imageName": "Simulor.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd93",
@@ -1096,7 +1190,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 0,
       "icon": "items/images/en/snipetron.fc41509b5224da3e9fd0dd1b149133cf.png",
-      "thumb": "items/images/en/thumbs/snipetron.fc41509b5224da3e9fd0dd1b149133cf.128x128.png"
+      "thumb": "items/images/en/thumbs/snipetron.fc41509b5224da3e9fd0dd1b149133cf.128x128.png",
+      "imageName": "Snipetron.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd94",
@@ -1107,7 +1202,8 @@
       "disposition": 1.33,
       "reqMasteryRank": 7,
       "icon": "items/images/en/sobek.9835bb100ba5988d4aeb812230ab767a.png",
-      "thumb": "items/images/en/thumbs/sobek.9835bb100ba5988d4aeb812230ab767a.128x128.png"
+      "thumb": "items/images/en/thumbs/sobek.9835bb100ba5988d4aeb812230ab767a.128x128.png",
+      "imageName": "Sobek.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd96",
@@ -1118,7 +1214,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 8,
       "icon": "items/images/en/stradavar.e69dd79f2dc691327e6f5475c032e09c.png",
-      "thumb": "items/images/en/thumbs/stradavar.e69dd79f2dc691327e6f5475c032e09c.128x128.png"
+      "thumb": "items/images/en/thumbs/stradavar.e69dd79f2dc691327e6f5475c032e09c.128x128.png",
+      "imageName": "Stradavar.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd97",
@@ -1129,7 +1226,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 1,
       "icon": "items/images/en/strun.e8cc2909f474436bb2573b8ba7ff43b7.png",
-      "thumb": "items/images/en/thumbs/strun.e8cc2909f474436bb2573b8ba7ff43b7.128x128.png"
+      "thumb": "items/images/en/thumbs/strun.e8cc2909f474436bb2573b8ba7ff43b7.128x128.png",
+      "imageName": "Strun.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd99",
@@ -1140,7 +1238,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 5,
       "icon": "riven_item/images/sybaris.5216e20cbf612b67bbe22a6c7c6b107e.png",
-      "thumb": "riven_item/images/thumbs/sybaris.5216e20cbf612b67bbe22a6c7c6b107e.128x128.png"
+      "thumb": "riven_item/images/thumbs/sybaris.5216e20cbf612b67bbe22a6c7c6b107e.128x128.png",
+      "imageName": "Sybaris.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd9c",
@@ -1151,7 +1250,8 @@
       "disposition": 1.5,
       "reqMasteryRank": 3,
       "icon": "items/images/en/tetra.f86faf40614dc3d227cdd7766b27fddc.png",
-      "thumb": "items/images/en/thumbs/tetra.f86faf40614dc3d227cdd7766b27fddc.128x128.png"
+      "thumb": "items/images/en/thumbs/tetra.f86faf40614dc3d227cdd7766b27fddc.128x128.png",
+      "imageName": "Tetra.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdc6",
@@ -1162,7 +1262,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 2,
       "icon": "items/images/en/gammacor.6d4b35b6390c9dcf97ac45c7082f4999.png",
-      "thumb": "items/images/en/thumbs/gammacor.6d4b35b6390c9dcf97ac45c7082f4999.128x128.png"
+      "thumb": "items/images/en/thumbs/gammacor.6d4b35b6390c9dcf97ac45c7082f4999.128x128.png",
+      "imageName": "Gammacor.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdd2",
@@ -1173,7 +1274,8 @@
       "disposition": 1.45,
       "reqMasteryRank": 4,
       "icon": "items/images/en/nukor.d4bffded3de6af3f2d6e420bd9e6a948.png",
-      "thumb": "items/images/en/thumbs/nukor.d4bffded3de6af3f2d6e420bd9e6a948.128x128.png"
+      "thumb": "items/images/en/thumbs/nukor.d4bffded3de6af3f2d6e420bd9e6a948.128x128.png",
+      "imageName": "Nukor.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdd3",
@@ -1184,7 +1286,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 8,
       "icon": "items/images/en/pandero.e21b74806853bf80e2b3ca9fc4bdc635.png",
-      "thumb": "items/images/en/thumbs/pandero.e21b74806853bf80e2b3ca9fc4bdc635.128x128.png"
+      "thumb": "items/images/en/thumbs/pandero.e21b74806853bf80e2b3ca9fc4bdc635.128x128.png",
+      "imageName": "Pandero.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdd4",
@@ -1195,7 +1298,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 9,
       "icon": "items/images/en/pox.7ee16999c33c310ac4c87c8a31f6c551.png",
-      "thumb": "items/images/en/thumbs/pox.7ee16999c33c310ac4c87c8a31f6c551.128x128.png"
+      "thumb": "items/images/en/thumbs/pox.7ee16999c33c310ac4c87c8a31f6c551.128x128.png",
+      "imageName": "Pox.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdd5",
@@ -1206,7 +1310,8 @@
       "disposition": 0.95,
       "reqMasteryRank": 12,
       "icon": "items/images/en/pyrana.76c730b1909750965e34b2ca2e12da81.png",
-      "thumb": "items/images/en/thumbs/pyrana.76c730b1909750965e34b2ca2e12da81.128x128.png"
+      "thumb": "items/images/en/thumbs/pyrana.76c730b1909750965e34b2ca2e12da81.128x128.png",
+      "imageName": "Pyrana.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdd7",
@@ -1217,7 +1322,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 3,
       "icon": "items/images/en/sicarus.630099456411a4fc42c99708f1208200.png",
-      "thumb": "items/images/en/thumbs/sicarus.630099456411a4fc42c99708f1208200.128x128.png"
+      "thumb": "items/images/en/thumbs/sicarus.630099456411a4fc42c99708f1208200.128x128.png",
+      "imageName": "Sicarus.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdda",
@@ -1228,7 +1334,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 8,
       "icon": "riven_item/images/spira.ba156097272dd7bf205ff6cc49015c43.png",
-      "thumb": "riven_item/images/thumbs/spira.ba156097272dd7bf205ff6cc49015c43.128x128.png"
+      "thumb": "riven_item/images/thumbs/spira.ba156097272dd7bf205ff6cc49015c43.128x128.png",
+      "imageName": "Spira.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdfe",
@@ -1239,7 +1346,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 0,
       "icon": "items/images/en/dehtat.9a28bb6c6f0a1608301aea395a8e87c8.png",
-      "thumb": "items/images/en/thumbs/dehtat.9a28bb6c6f0a1608301aea395a8e87c8.128x128.png"
+      "thumb": "items/images/en/thumbs/dehtat.9a28bb6c6f0a1608301aea395a8e87c8.128x128.png",
+      "imageName": "TipFive.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdff",
@@ -1250,7 +1358,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 7,
       "icon": "items/images/en/destreza.4d34c03000e5462ae2a21c4306a731e0.png",
-      "thumb": "items/images/en/thumbs/destreza.4d34c03000e5462ae2a21c4306a731e0.128x128.png"
+      "thumb": "items/images/en/thumbs/destreza.4d34c03000e5462ae2a21c4306a731e0.128x128.png",
+      "imageName": "Destreza.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe00",
@@ -1261,7 +1370,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 6,
       "icon": "riven_item/images/dex_dakra.bfa2fbc9398fd0db61a295f4bcff715d.png",
-      "thumb": "riven_item/images/thumbs/dex_dakra.bfa2fbc9398fd0db61a295f4bcff715d.128x128.png"
+      "thumb": "riven_item/images/thumbs/dex_dakra.bfa2fbc9398fd0db61a295f4bcff715d.128x128.png",
+      "imageName": "DexDakra.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe01",
@@ -1272,7 +1382,8 @@
       "disposition": 0.75,
       "reqMasteryRank": 0,
       "icon": "items/images/en/dokrahm.57b0f7d49c3389c9760481a8043e9e9f.png",
-      "thumb": "items/images/en/thumbs/dokrahm.57b0f7d49c3389c9760481a8043e9e9f.128x128.png"
+      "thumb": "items/images/en/thumbs/dokrahm.57b0f7d49c3389c9760481a8043e9e9f.128x128.png",
+      "imageName": "TipEleven.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe02",
@@ -1283,7 +1394,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 8,
       "icon": "riven_item/images/dragon_nikana.3525eba6c48fb62195e846bc8030b492.png",
-      "thumb": "riven_item/images/thumbs/dragon_nikana.3525eba6c48fb62195e846bc8030b492.128x128.png"
+      "thumb": "riven_item/images/thumbs/dragon_nikana.3525eba6c48fb62195e846bc8030b492.128x128.png",
+      "imageName": "DragonNikana.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe03",
@@ -1294,7 +1406,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 5,
       "icon": "riven_item/images/dual_cleavers.376cee4cc5b1c3cc62e460710ceff5fc.png",
-      "thumb": "riven_item/images/thumbs/dual_cleavers.376cee4cc5b1c3cc62e460710ceff5fc.128x128.png"
+      "thumb": "riven_item/images/thumbs/dual_cleavers.376cee4cc5b1c3cc62e460710ceff5fc.128x128.png",
+      "imageName": "DualCleavers.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe04",
@@ -1305,7 +1418,8 @@
       "disposition": 1.45,
       "reqMasteryRank": 8,
       "icon": "riven_item/images/dual_ether.4b8f0d2adee9f4a36ba5efa60f176f5a.png",
-      "thumb": "riven_item/images/thumbs/dual_ether.4b8f0d2adee9f4a36ba5efa60f176f5a.128x128.png"
+      "thumb": "riven_item/images/thumbs/dual_ether.4b8f0d2adee9f4a36ba5efa60f176f5a.128x128.png",
+      "imageName": "DualEther.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe05",
@@ -1316,7 +1430,8 @@
       "disposition": 1.44,
       "reqMasteryRank": 3,
       "icon": "riven_item/images/dual_heat_swords.db32e731d487a5c4218f71108290cc06.png",
-      "thumb": "riven_item/images/thumbs/dual_heat_swords.db32e731d487a5c4218f71108290cc06.128x128.png"
+      "thumb": "riven_item/images/thumbs/dual_heat_swords.db32e731d487a5c4218f71108290cc06.128x128.png",
+      "imageName": "DualHeatSwords.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe06",
@@ -1327,7 +1442,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 6,
       "icon": "riven_item/images/dual_ichor.e18da7cac99ec9154bc6ad895fc39185.png",
-      "thumb": "riven_item/images/thumbs/dual_ichor.e18da7cac99ec9154bc6ad895fc39185.128x128.png"
+      "thumb": "riven_item/images/thumbs/dual_ichor.e18da7cac99ec9154bc6ad895fc39185.128x128.png",
+      "imageName": "DualIchor.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe08",
@@ -1338,7 +1454,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 7,
       "icon": "riven_item/images/dual_keres.0a93b2e4eab73c24e0fb4675f59f2781.png",
-      "thumb": "riven_item/images/thumbs/dual_keres.0a93b2e4eab73c24e0fb4675f59f2781.128x128.png"
+      "thumb": "riven_item/images/thumbs/dual_keres.0a93b2e4eab73c24e0fb4675f59f2781.128x128.png",
+      "imageName": "DualKeres.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe22",
@@ -1349,7 +1466,8 @@
       "disposition": 1.47,
       "reqMasteryRank": 1,
       "icon": "items/images/en/kama.4e5a6ecdb5d523f9684d104714655b9e.png",
-      "thumb": "items/images/en/thumbs/kama.4e5a6ecdb5d523f9684d104714655b9e.128x128.png"
+      "thumb": "items/images/en/thumbs/kama.4e5a6ecdb5d523f9684d104714655b9e.128x128.png",
+      "imageName": "Kama.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe26",
@@ -1360,7 +1478,8 @@
       "disposition": 1.46,
       "reqMasteryRank": 2,
       "icon": "items/images/en/kogake.f09fa04d9a65d621c0505649274db68a.png",
-      "thumb": "items/images/en/thumbs/kogake.f09fa04d9a65d621c0505649274db68a.128x128.png"
+      "thumb": "items/images/en/thumbs/kogake.f09fa04d9a65d621c0505649274db68a.128x128.png",
+      "imageName": "Kogake.png"
     },
     {
       "id": "5d70ebe17ea27b064d455074",
@@ -1393,7 +1512,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 8,
       "icon": "items/images/en/masseter.e61dbb2678e344be701b9d376c1bf3fc.png",
-      "thumb": "items/images/en/thumbs/masseter.e61dbb2678e344be701b9d376c1bf3fc.128x128.png"
+      "thumb": "items/images/en/thumbs/masseter.e61dbb2678e344be701b9d376c1bf3fc.128x128.png",
+      "imageName": "TnChiselKanabo.png"
     },
     {
       "id": "5dbe9b057ea27b0ffe3ca263",
@@ -1404,7 +1524,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 9,
       "icon": "items/images/en/pathocyst.f423b7a6a78d2e4780c1007f0f0fb464.png",
-      "thumb": "items/images/en/thumbs/pathocyst.f423b7a6a78d2e4780c1007f0f0fb464.128x128.png"
+      "thumb": "items/images/en/thumbs/pathocyst.f423b7a6a78d2e4780c1007f0f0fb464.128x128.png",
+      "imageName": "InfBoomerang.png"
     },
     {
       "id": "5dbe9b057ea27b0ffe3ca265",
@@ -1415,7 +1536,8 @@
       "disposition": 0.95,
       "reqMasteryRank": 15,
       "icon": "riven_item/images/kuva_chakkhurr.c8ae46ec1358d74e80e1cad8c74fe62b.png",
-      "thumb": "riven_item/images/thumbs/kuva_chakkhurr.c8ae46ec1358d74e80e1cad8c74fe62b.128x128.png"
+      "thumb": "riven_item/images/thumbs/kuva_chakkhurr.c8ae46ec1358d74e80e1cad8c74fe62b.128x128.png",
+      "imageName": "GrnKuvaLichRifleWeapon.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe2b",
@@ -1426,7 +1548,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 0,
       "icon": "items/images/en/lecta.d6de28d017ed55fc6f5ee90db6e2c621.png",
-      "thumb": "items/images/en/thumbs/lecta.d6de28d017ed55fc6f5ee90db6e2c621.128x128.png"
+      "thumb": "items/images/en/thumbs/lecta.d6de28d017ed55fc6f5ee90db6e2c621.128x128.png",
+      "imageName": "Lecta.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe2d",
@@ -1437,7 +1560,8 @@
       "disposition": 1.45,
       "reqMasteryRank": 1,
       "icon": "items/images/en/machete.b871c145d37c3fdde5715fe80524101f.png",
-      "thumb": "items/images/en/thumbs/machete.b871c145d37c3fdde5715fe80524101f.128x128.png"
+      "thumb": "items/images/en/thumbs/machete.b871c145d37c3fdde5715fe80524101f.128x128.png",
+      "imageName": "Machete.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe2e",
@@ -1448,7 +1572,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 1,
       "icon": "items/images/en/magistar.3e7a9bed8a7c19ca24351b7a291ff6e7.png",
-      "thumb": "items/images/en/thumbs/magistar.3e7a9bed8a7c19ca24351b7a291ff6e7.128x128.png"
+      "thumb": "items/images/en/thumbs/magistar.3e7a9bed8a7c19ca24351b7a291ff6e7.128x128.png",
+      "imageName": "Magistar.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe2f",
@@ -1459,7 +1584,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 0,
       "icon": "items/images/en/mewan.96388512f768a99763561d0a410f62c5.png",
-      "thumb": "items/images/en/thumbs/mewan.96388512f768a99763561d0a410f62c5.128x128.png"
+      "thumb": "items/images/en/thumbs/mewan.96388512f768a99763561d0a410f62c5.128x128.png",
+      "imageName": "TipThree.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe30",
@@ -1470,7 +1596,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 8,
       "icon": "items/images/en/mios.da75e577f209d8954d9b44c80994f32e.png",
-      "thumb": "items/images/en/thumbs/mios.da75e577f209d8954d9b44c80994f32e.128x128.png"
+      "thumb": "items/images/en/thumbs/mios.da75e577f209d8954d9b44c80994f32e.128x128.png",
+      "imageName": "Mios.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe41",
@@ -1481,7 +1608,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 0,
       "icon": "items/images/en/rabvee.a99b8ff88268ccd1a827bcacdd48fecf.png",
-      "thumb": "items/images/en/thumbs/rabvee.a99b8ff88268ccd1a827bcacdd48fecf.128x128.png"
+      "thumb": "items/images/en/thumbs/rabvee.a99b8ff88268ccd1a827bcacdd48fecf.128x128.png",
+      "imageName": "TipTen.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe59",
@@ -1492,7 +1620,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 10,
       "icon": "items/images/en/war.7273eef3bc28b2a6455ab57cbfb46006.png",
-      "thumb": "items/images/en/thumbs/war.7273eef3bc28b2a6455ab57cbfb46006.128x128.png"
+      "thumb": "items/images/en/thumbs/war.7273eef3bc28b2a6455ab57cbfb46006.128x128.png",
+      "imageName": "War.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe5b",
@@ -1547,7 +1676,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 10,
       "icon": "items/images/en/astilla.a172d60ec9a6cfe760c408f6a66fbbd4.png",
-      "thumb": "items/images/en/thumbs/astilla.a172d60ec9a6cfe760c408f6a66fbbd4.128x128.png"
+      "thumb": "items/images/en/thumbs/astilla.a172d60ec9a6cfe760c408f6a66fbbd4.128x128.png",
+      "imageName": "Astilla.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd65",
@@ -1558,7 +1688,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 7,
       "icon": "items/images/en/baza.e6765564311125de7ff2d24fa1c5f6cc.png",
-      "thumb": "items/images/en/thumbs/baza.e6765564311125de7ff2d24fa1c5f6cc.128x128.png"
+      "thumb": "items/images/en/thumbs/baza.e6765564311125de7ff2d24fa1c5f6cc.128x128.png",
+      "imageName": "Baza.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd66",
@@ -1569,7 +1700,8 @@
       "disposition": 1.45,
       "reqMasteryRank": 2,
       "icon": "items/images/en/boar.9b6d1ef6c217e48180e3702ab0d4e6c8.png",
-      "thumb": "items/images/en/thumbs/boar.9b6d1ef6c217e48180e3702ab0d4e6c8.128x128.png"
+      "thumb": "items/images/en/thumbs/boar.9b6d1ef6c217e48180e3702ab0d4e6c8.128x128.png",
+      "imageName": "Boar.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd73",
@@ -1580,7 +1712,8 @@
       "disposition": 1.55,
       "reqMasteryRank": 6,
       "icon": "riven_item/images/flux_rifle.715baa0ac2fcaa3d16a41c7622ad86ac.png",
-      "thumb": "riven_item/images/thumbs/flux_rifle.715baa0ac2fcaa3d16a41c7622ad86ac.128x128.png"
+      "thumb": "riven_item/images/thumbs/flux_rifle.715baa0ac2fcaa3d16a41c7622ad86ac.128x128.png",
+      "imageName": "FluxRifle.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdf8",
@@ -1591,7 +1724,8 @@
       "disposition": 1.48,
       "reqMasteryRank": 0,
       "icon": "items/images/en/cronus.f32d32062b09723f6481fa1d8e79f5c2.png",
-      "thumb": "items/images/en/thumbs/cronus.f32d32062b09723f6481fa1d8e79f5c2.128x128.png"
+      "thumb": "items/images/en/thumbs/cronus.f32d32062b09723f6481fa1d8e79f5c2.128x128.png",
+      "imageName": "Cronus.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe0c",
@@ -1602,7 +1736,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 7,
       "icon": "items/images/en/endura.7c0cbf05f44774e720900848d2333767.png",
-      "thumb": "items/images/en/thumbs/endura.7c0cbf05f44774e720900848d2333767.128x128.png"
+      "thumb": "items/images/en/thumbs/endura.7c0cbf05f44774e720900848d2333767.128x128.png",
+      "imageName": "Endura.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe15",
@@ -1613,7 +1748,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 1,
       "icon": "items/images/en/glaive.7b1c251b4f1fcc0afe64ce5233a39891.png",
-      "thumb": "items/images/en/thumbs/glaive.7b1c251b4f1fcc0afe64ce5233a39891.128x128.png"
+      "thumb": "items/images/en/thumbs/glaive.7b1c251b4f1fcc0afe64ce5233a39891.128x128.png",
+      "imageName": "Glaive.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe1c",
@@ -1624,7 +1760,8 @@
       "disposition": 1.48,
       "reqMasteryRank": 3,
       "icon": "items/images/en/heat_sword.37ec8d825dc0fbc83d951149ff3ba8b6.png",
-      "thumb": "items/images/en/thumbs/heat_sword.37ec8d825dc0fbc83d951149ff3ba8b6.128x128.png"
+      "thumb": "items/images/en/thumbs/heat_sword.37ec8d825dc0fbc83d951149ff3ba8b6.128x128.png",
+      "imageName": "HeatSword.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe20",
@@ -1635,7 +1772,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 11,
       "icon": "items/images/en/jat_kusar.1b8964cd6faa0ed9a27c39eb5e5d795f.png",
-      "thumb": "items/images/en/thumbs/jat_kusar.1b8964cd6faa0ed9a27c39eb5e5d795f.128x128.png"
+      "thumb": "items/images/en/thumbs/jat_kusar.1b8964cd6faa0ed9a27c39eb5e5d795f.128x128.png",
+      "imageName": "JatKusar.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe32",
@@ -1646,7 +1784,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 2,
       "icon": "riven_item/images/nami_skyla.29176d53b6ce46afda32cdc292b391ad.png",
-      "thumb": "riven_item/images/thumbs/nami_skyla.29176d53b6ce46afda32cdc292b391ad.128x128.png"
+      "thumb": "riven_item/images/thumbs/nami_skyla.29176d53b6ce46afda32cdc292b391ad.128x128.png",
+      "imageName": "NamiSkyla.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe33",
@@ -1657,7 +1796,8 @@
       "disposition": 1.43,
       "reqMasteryRank": 6,
       "icon": "riven_item/images/nami_solo.daf0c2684b5d12b9e8ca2ff0958b405d.png",
-      "thumb": "riven_item/images/thumbs/nami_solo.daf0c2684b5d12b9e8ca2ff0958b405d.128x128.png"
+      "thumb": "riven_item/images/thumbs/nami_solo.daf0c2684b5d12b9e8ca2ff0958b405d.128x128.png",
+      "imageName": "NamiSolo.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe34",
@@ -1668,7 +1808,8 @@
       "disposition": 0.95,
       "reqMasteryRank": 4,
       "icon": "items/images/en/nikana.ded47e934d4f2051d9a89bcf017cdfca.png",
-      "thumb": "items/images/en/thumbs/nikana.ded47e934d4f2051d9a89bcf017cdfca.128x128.png"
+      "thumb": "items/images/en/thumbs/nikana.ded47e934d4f2051d9a89bcf017cdfca.128x128.png",
+      "imageName": "Nikana.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe35",
@@ -1679,7 +1820,8 @@
       "disposition": 1.41,
       "reqMasteryRank": 8,
       "icon": "items/images/en/ninkondi.390943b9c551749e19d348e2e8950ae1.png",
-      "thumb": "items/images/en/thumbs/ninkondi.390943b9c551749e19d348e2e8950ae1.128x128.png"
+      "thumb": "items/images/en/thumbs/ninkondi.390943b9c551749e19d348e2e8950ae1.128x128.png",
+      "imageName": "Ninkondi.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe36",
@@ -1690,7 +1832,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 4,
       "icon": "items/images/en/obex.40b015303d936acebc71e5430dd85367.png",
-      "thumb": "items/images/en/thumbs/obex.40b015303d936acebc71e5430dd85367.128x128.png"
+      "thumb": "items/images/en/thumbs/obex.40b015303d936acebc71e5430dd85367.128x128.png",
+      "imageName": "Obex.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe37",
@@ -1701,7 +1844,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 8,
       "icon": "items/images/en/ohma.44487796f209ddbbc355edcf60619800.png",
-      "thumb": "items/images/en/thumbs/ohma.44487796f209ddbbc355edcf60619800.128x128.png"
+      "thumb": "items/images/en/thumbs/ohma.44487796f209ddbbc355edcf60619800.128x128.png",
+      "imageName": "Ohma.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe38",
@@ -1712,7 +1856,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 5,
       "icon": "items/images/en/okina.46be8af0b880aa60168c0988ad64ea19.png",
-      "thumb": "items/images/en/thumbs/okina.46be8af0b880aa60168c0988ad64ea19.128x128.png"
+      "thumb": "items/images/en/thumbs/okina.46be8af0b880aa60168c0988ad64ea19.128x128.png",
+      "imageName": "Okina.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe39",
@@ -1723,7 +1868,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 0,
       "icon": "items/images/en/ooltha.e13df69ef5130d9335f2bd364599ae86.png",
-      "thumb": "items/images/en/thumbs/ooltha.e13df69ef5130d9335f2bd364599ae86.128x128.png"
+      "thumb": "items/images/en/thumbs/ooltha.e13df69ef5130d9335f2bd364599ae86.128x128.png",
+      "imageName": "TipTwo.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe3a",
@@ -1734,7 +1880,8 @@
       "disposition": 1,
       "reqMasteryRank": 2,
       "icon": "items/images/en/orthos.7e3529cd44b8e270233180b907f72a1d.png",
-      "thumb": "items/images/en/thumbs/orthos.7e3529cd44b8e270233180b907f72a1d.128x128.png"
+      "thumb": "items/images/en/thumbs/orthos.7e3529cd44b8e270233180b907f72a1d.128x128.png",
+      "imageName": "Orthos.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe3b",
@@ -1745,7 +1892,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 5,
       "icon": "items/images/en/orvius.dfeabc5bbe31c5c3f253d8a20f2a40b2.png",
-      "thumb": "items/images/en/thumbs/orvius.dfeabc5bbe31c5c3f253d8a20f2a40b2.128x128.png"
+      "thumb": "items/images/en/thumbs/orvius.dfeabc5bbe31c5c3f253d8a20f2a40b2.128x128.png",
+      "imageName": "Orvius.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe3c",
@@ -1756,7 +1904,8 @@
       "disposition": 1.47,
       "reqMasteryRank": 3,
       "icon": "riven_item/images/pangolin_sword.f47fec884e189d952e37d6b184901eb9.png",
-      "thumb": "riven_item/images/thumbs/pangolin_sword.f47fec884e189d952e37d6b184901eb9.128x128.png"
+      "thumb": "riven_item/images/thumbs/pangolin_sword.f47fec884e189d952e37d6b184901eb9.128x128.png",
+      "imageName": "PangolinSword.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe3d",
@@ -1767,7 +1916,8 @@
       "disposition": 0.85,
       "reqMasteryRank": 0,
       "icon": "riven_item/images/plague_keewar.b5e3ceedb8d0ff5ed2defa788e484805.png",
-      "thumb": "riven_item/images/thumbs/plague_keewar.b5e3ceedb8d0ff5ed2defa788e484805.128x128.png"
+      "thumb": "riven_item/images/thumbs/plague_keewar.b5e3ceedb8d0ff5ed2defa788e484805.128x128.png",
+      "imageName": "InfestedTipTwo.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe3e",
@@ -1778,7 +1928,8 @@
       "disposition": 0.65,
       "reqMasteryRank": 0,
       "icon": "riven_item/images/plague_kripath.00191263224f5e5d1ed7957631073fa6.png",
-      "thumb": "riven_item/images/thumbs/plague_kripath.00191263224f5e5d1ed7957631073fa6.128x128.png"
+      "thumb": "riven_item/images/thumbs/plague_kripath.00191263224f5e5d1ed7957631073fa6.128x128.png",
+      "imageName": "InfestedTipOne.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe3f",
@@ -1789,7 +1940,8 @@
       "disposition": 1.48,
       "reqMasteryRank": 4,
       "icon": "items/images/en/plasma_sword.89dee5321cc774df8fbbd818b844e193.png",
-      "thumb": "items/images/en/thumbs/plasma_sword.89dee5321cc774df8fbbd818b844e193.128x128.png"
+      "thumb": "items/images/en/thumbs/plasma_sword.89dee5321cc774df8fbbd818b844e193.128x128.png",
+      "imageName": "PlasmaSword.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe40",
@@ -1800,7 +1952,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 3,
       "icon": "items/images/en/prova.81054da7c6c20e79abd36521923fa925.png",
-      "thumb": "items/images/en/thumbs/prova.81054da7c6c20e79abd36521923fa925.128x128.png"
+      "thumb": "items/images/en/thumbs/prova.81054da7c6c20e79abd36521923fa925.128x128.png",
+      "imageName": "Prova.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe43",
@@ -1811,7 +1964,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 4,
       "icon": "items/images/en/redeemer.b39a80a47d3b0df5056bd07b5e277af8.png",
-      "thumb": "items/images/en/thumbs/redeemer.b39a80a47d3b0df5056bd07b5e277af8.128x128.png"
+      "thumb": "items/images/en/thumbs/redeemer.b39a80a47d3b0df5056bd07b5e277af8.128x128.png",
+      "imageName": "Redeemer.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe4f",
@@ -1822,7 +1976,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 0,
       "icon": "items/images/en/skana.5b98dcf4cb92f1d6fab21a56d365fcc0.png",
-      "thumb": "items/images/en/thumbs/skana.5b98dcf4cb92f1d6fab21a56d365fcc0.128x128.png"
+      "thumb": "items/images/en/thumbs/skana.5b98dcf4cb92f1d6fab21a56d365fcc0.128x128.png",
+      "imageName": "Skana.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd78",
@@ -1833,7 +1988,8 @@
       "disposition": 1.55,
       "reqMasteryRank": 7,
       "icon": "items/images/en/harpak.948d1817c05097ff14a16639dbcd5bb2.png",
-      "thumb": "items/images/en/thumbs/harpak.948d1817c05097ff14a16639dbcd5bb2.128x128.png"
+      "thumb": "items/images/en/thumbs/harpak.948d1817c05097ff14a16639dbcd5bb2.128x128.png",
+      "imageName": "Harpak.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd7a",
@@ -1844,7 +2000,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 7,
       "icon": "items/images/en/hema.4cc3a2ff4a815c7dfdb07a514a883b82.png",
-      "thumb": "items/images/en/thumbs/hema.4cc3a2ff4a815c7dfdb07a514a883b82.128x128.png"
+      "thumb": "items/images/en/thumbs/hema.4cc3a2ff4a815c7dfdb07a514a883b82.128x128.png",
+      "imageName": "Hema.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd7b",
@@ -1855,7 +2012,8 @@
       "disposition": 1.42,
       "reqMasteryRank": 0,
       "icon": "items/images/en/hind.c12777c936ceac97a065a03a655a750e.png",
-      "thumb": "items/images/en/thumbs/hind.c12777c936ceac97a065a03a655a750e.128x128.png"
+      "thumb": "items/images/en/thumbs/hind.c12777c936ceac97a065a03a655a750e.128x128.png",
+      "imageName": "Hind.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd7c",
@@ -1866,7 +2024,8 @@
       "disposition": 0.7,
       "reqMasteryRank": 5,
       "icon": "items/images/en/ignis.5b4369035d619c37fed2ecbdafb7594a.png",
-      "thumb": "items/images/en/thumbs/ignis.5b4369035d619c37fed2ecbdafb7594a.128x128.png"
+      "thumb": "items/images/en/thumbs/ignis.5b4369035d619c37fed2ecbdafb7594a.128x128.png",
+      "imageName": "Ignis.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd7d",
@@ -1877,7 +2036,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 7,
       "icon": "items/images/en/javlok.c389afeba8aac67aadb738377bdb4ec8.png",
-      "thumb": "items/images/en/thumbs/javlok.c389afeba8aac67aadb738377bdb4ec8.128x128.png"
+      "thumb": "items/images/en/thumbs/javlok.c389afeba8aac67aadb738377bdb4ec8.128x128.png",
+      "imageName": "Javlok.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd7e",
@@ -1888,7 +2048,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 1,
       "icon": "items/images/en/karak.bbe0d895125d9c2b3b612c34a5e611f3.png",
-      "thumb": "items/images/en/thumbs/karak.bbe0d895125d9c2b3b612c34a5e611f3.128x128.png"
+      "thumb": "items/images/en/thumbs/karak.bbe0d895125d9c2b3b612c34a5e611f3.128x128.png",
+      "imageName": "Karak.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd7f",
@@ -1899,7 +2060,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 5,
       "icon": "items/images/en/kohm.361a454b487f45e05ef7c884a6a0dad2.png",
-      "thumb": "items/images/en/thumbs/kohm.361a454b487f45e05ef7c884a6a0dad2.128x128.png"
+      "thumb": "items/images/en/thumbs/kohm.361a454b487f45e05ef7c884a6a0dad2.128x128.png",
+      "imageName": "Kohm.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd80",
@@ -1910,7 +2072,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 10,
       "icon": "items/images/en/lanka.fc41509b5224da3e9fd0dd1b149133cf.png",
-      "thumb": "items/images/en/thumbs/lanka.fc41509b5224da3e9fd0dd1b149133cf.128x128.png"
+      "thumb": "items/images/en/thumbs/lanka.fc41509b5224da3e9fd0dd1b149133cf.128x128.png",
+      "imageName": "Lanka.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd8a",
@@ -1921,7 +2084,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 0,
       "icon": "items/images/en/paris.644a8cdf6a49b88e7df042cbac294e15.png",
-      "thumb": "items/images/en/thumbs/paris.644a8cdf6a49b88e7df042cbac294e15.128x128.png"
+      "thumb": "items/images/en/thumbs/paris.644a8cdf6a49b88e7df042cbac294e15.128x128.png",
+      "imageName": "Paris.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd8f",
@@ -1932,7 +2096,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 10,
       "icon": "items/images/en/quartakk.3c94922cd929ce60e3a6acbb6a47bea9.png",
-      "thumb": "items/images/en/thumbs/quartakk.3c94922cd929ce60e3a6acbb6a47bea9.128x128.png"
+      "thumb": "items/images/en/thumbs/quartakk.3c94922cd929ce60e3a6acbb6a47bea9.128x128.png",
+      "imageName": "Quartakk.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd91",
@@ -1943,7 +2108,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 6,
       "icon": "items/images/en/scourge.055569ef8aba07d2c53fc3f82390c482.png",
-      "thumb": "items/images/en/thumbs/scourge.055569ef8aba07d2c53fc3f82390c482.128x128.png"
+      "thumb": "items/images/en/thumbs/scourge.055569ef8aba07d2c53fc3f82390c482.128x128.png",
+      "imageName": "Scourge.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdd9",
@@ -1954,7 +2120,8 @@
       "disposition": 1.49,
       "reqMasteryRank": 4,
       "icon": "items/images/en/spectra.2d58d17ca4cad3d43d7e373294a6c7ce.png",
-      "thumb": "items/images/en/thumbs/spectra.2d58d17ca4cad3d43d7e373294a6c7ce.128x128.png"
+      "thumb": "items/images/en/thumbs/spectra.2d58d17ca4cad3d43d7e373294a6c7ce.128x128.png",
+      "imageName": "Spectra.png"
     },
     {
       "id": "5c5ca81696e8d2003834fddb",
@@ -1965,7 +2132,8 @@
       "disposition": 0.9,
       "reqMasteryRank": 10,
       "icon": "items/images/en/staticor.7f88069ac20fd028ff8c5d3bc8cd8057.png",
-      "thumb": "items/images/en/thumbs/staticor.7f88069ac20fd028ff8c5d3bc8cd8057.128x128.png"
+      "thumb": "items/images/en/thumbs/staticor.7f88069ac20fd028ff8c5d3bc8cd8057.128x128.png",
+      "imageName": "Staticor.png"
     },
     {
       "id": "5c5ca81696e8d2003834fddc",
@@ -1976,7 +2144,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 7,
       "icon": "items/images/en/stubba.6d4ac00860e711de12a9c746113fe987.png",
-      "thumb": "items/images/en/thumbs/stubba.6d4ac00860e711de12a9c746113fe987.128x128.png"
+      "thumb": "items/images/en/thumbs/stubba.6d4ac00860e711de12a9c746113fe987.128x128.png",
+      "imageName": "Stubba.png"
     },
     {
       "id": "5c5ca81696e8d2003834fddd",
@@ -1987,7 +2156,8 @@
       "disposition": 1.48,
       "reqMasteryRank": 2,
       "icon": "items/images/en/stug.dc2ff3e23d19a9c4657316879ed40033.png",
-      "thumb": "items/images/en/thumbs/stug.dc2ff3e23d19a9c4657316879ed40033.128x128.png"
+      "thumb": "items/images/en/thumbs/stug.dc2ff3e23d19a9c4657316879ed40033.128x128.png",
+      "imageName": "Stug.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdde",
@@ -1998,7 +2168,8 @@
       "disposition": 1.44,
       "reqMasteryRank": 8,
       "icon": "items/images/en/talons.a4e7d6091b69a8e27d9bb572c58df3ff.png",
-      "thumb": "items/images/en/thumbs/talons.a4e7d6091b69a8e27d9bb572c58df3ff.128x128.png"
+      "thumb": "items/images/en/thumbs/talons.a4e7d6091b69a8e27d9bb572c58df3ff.128x128.png",
+      "imageName": "Talons.png"
     },
     {
       "id": "5c5ca81696e8d2003834fddf",
@@ -2009,7 +2180,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 9,
       "icon": "items/images/en/twin_grakatas.02ca4e72db844e9787bb834dffaba710.png",
-      "thumb": "items/images/en/thumbs/twin_grakatas.02ca4e72db844e9787bb834dffaba710.128x128.png"
+      "thumb": "items/images/en/thumbs/twin_grakatas.02ca4e72db844e9787bb834dffaba710.128x128.png",
+      "imageName": "TwinGrakatas.png"
     },
     {
       "id": "5c5ca81696e8d2003834fde0",
@@ -2020,7 +2192,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 5,
       "icon": "items/images/en/twin_gremlins.36127609f284a9c973fcedd340d45187.png",
-      "thumb": "items/images/en/thumbs/twin_gremlins.36127609f284a9c973fcedd340d45187.128x128.png"
+      "thumb": "items/images/en/thumbs/twin_gremlins.36127609f284a9c973fcedd340d45187.128x128.png",
+      "imageName": "TwinGremlin.png"
     },
     {
       "id": "5c5ca81696e8d2003834fde1",
@@ -2031,7 +2204,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 10,
       "icon": "items/images/en/twin_kohmak.358010434239192a9d8adfa3c3a85333.png",
-      "thumb": "items/images/en/thumbs/twin_kohmak.358010434239192a9d8adfa3c3a85333.128x128.png"
+      "thumb": "items/images/en/thumbs/twin_kohmak.358010434239192a9d8adfa3c3a85333.128x128.png",
+      "imageName": "TwinKohmak.png"
     },
     {
       "id": "5c5ca81696e8d2003834fde2",
@@ -2042,7 +2216,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 9,
       "icon": "items/images/en/twin_rogga.0b8d505d6436e04c8a99c1ccf99ac3da.png",
-      "thumb": "items/images/en/thumbs/twin_rogga.0b8d505d6436e04c8a99c1ccf99ac3da.128x128.png"
+      "thumb": "items/images/en/thumbs/twin_rogga.0b8d505d6436e04c8a99c1ccf99ac3da.128x128.png",
+      "imageName": "TwinRogga.png"
     },
     {
       "id": "5c5ca81696e8d2003834fde3",
@@ -2053,7 +2228,8 @@
       "disposition": 1.45,
       "reqMasteryRank": 5,
       "icon": "items/images/en/twin_vipers.1c0e4335bf0f64303f2e469cfa10022b.png",
-      "thumb": "items/images/en/thumbs/twin_vipers.1c0e4335bf0f64303f2e469cfa10022b.128x128.png"
+      "thumb": "items/images/en/thumbs/twin_vipers.1c0e4335bf0f64303f2e469cfa10022b.128x128.png",
+      "imageName": "TwinVipers.png"
     },
     {
       "id": "5c5ca81696e8d2003834fde4",
@@ -2064,7 +2240,8 @@
       "disposition": 1.45,
       "reqMasteryRank": 9,
       "icon": "items/images/en/tysis.9d80f73358c18d058b92787dd54d704d.png",
-      "thumb": "items/images/en/thumbs/tysis.9d80f73358c18d058b92787dd54d704d.128x128.png"
+      "thumb": "items/images/en/thumbs/tysis.9d80f73358c18d058b92787dd54d704d.128x128.png",
+      "imageName": "Tysis.png"
     },
     {
       "id": "5c5ca81696e8d2003834fde5",
@@ -2075,7 +2252,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 4,
       "icon": "items/images/en/vasto.cab25e30e10e1a8d9fbe3a487bd7b9f2.png",
-      "thumb": "items/images/en/thumbs/vasto.cab25e30e10e1a8d9fbe3a487bd7b9f2.128x128.png"
+      "thumb": "items/images/en/thumbs/vasto.cab25e30e10e1a8d9fbe3a487bd7b9f2.128x128.png",
+      "imageName": "Vasto.png"
     },
     {
       "id": "5c5ca81696e8d2003834fde6",
@@ -2086,7 +2264,8 @@
       "disposition": 1.45,
       "reqMasteryRank": 4,
       "icon": "items/images/en/viper.9da1c64daaf6ee8ab90d81cfb7f5598d.png",
-      "thumb": "items/images/en/thumbs/viper.9da1c64daaf6ee8ab90d81cfb7f5598d.128x128.png"
+      "thumb": "items/images/en/thumbs/viper.9da1c64daaf6ee8ab90d81cfb7f5598d.128x128.png",
+      "imageName": "Viper.png"
     },
     {
       "id": "5c5ca81696e8d2003834fde8",
@@ -2097,7 +2276,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 6,
       "icon": "items/images/en/zylok.fa578a9c8fa46de167ff200523b6276c.png",
-      "thumb": "items/images/en/thumbs/zylok.fa578a9c8fa46de167ff200523b6276c.128x128.png"
+      "thumb": "items/images/en/thumbs/zylok.fa578a9c8fa46de167ff200523b6276c.128x128.png",
+      "imageName": "ConclaveLeverPistol.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdfa",
@@ -2108,7 +2288,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 10,
       "icon": "riven_item/images/dakra_prime.34da279951b92713480d09bdbf7104b7.png",
-      "thumb": "riven_item/images/thumbs/dakra_prime.34da279951b92713480d09bdbf7104b7.128x128.png"
+      "thumb": "riven_item/images/thumbs/dakra_prime.34da279951b92713480d09bdbf7104b7.128x128.png",
+      "imageName": "DakraPrime.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdfb",
@@ -2119,7 +2300,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 2,
       "icon": "items/images/en/dark_dagger.bbd0865d2a2bb1c399b80c6170f37c2d.png",
-      "thumb": "items/images/en/thumbs/dark_dagger.bbd0865d2a2bb1c399b80c6170f37c2d.128x128.png"
+      "thumb": "items/images/en/thumbs/dark_dagger.bbd0865d2a2bb1c399b80c6170f37c2d.128x128.png",
+      "imageName": "DarkDagger.png"
     },
     {
       "id": "5dc2d8bbff08fd007d021a44",
@@ -2130,7 +2312,8 @@
       "disposition": 1,
       "reqMasteryRank": 13,
       "icon": "riven_item/images/kuva_twin_stubbas.dc0f04384096b1b10ffd15a4a65bf2fb.png",
-      "thumb": "riven_item/images/thumbs/kuva_twin_stubbas.dc0f04384096b1b10ffd15a4a65bf2fb.128x128.png"
+      "thumb": "riven_item/images/thumbs/kuva_twin_stubbas.dc0f04384096b1b10ffd15a4a65bf2fb.128x128.png",
+      "imageName": "KuvaLichStubbaSkin.png"
     },
     {
       "id": "5e02154d14569703bf43e548",
@@ -2141,7 +2324,8 @@
       "disposition": 0.95,
       "reqMasteryRank": 7,
       "icon": "items/images/en/pennant.c466162ce14d3ae4acbf5ccae316026c.png",
-      "thumb": "items/images/en/thumbs/pennant.c466162ce14d3ae4acbf5ccae316026c.128x128.png"
+      "thumb": "items/images/en/thumbs/pennant.c466162ce14d3ae4acbf5ccae316026c.128x128.png",
+      "imageName": "TnRailjackGreatKatana.png"
     },
     {
       "id": "5e41458f7b0275011bc5b7cc",
@@ -2152,7 +2336,8 @@
       "disposition": 0.65,
       "reqMasteryRank": 15,
       "icon": "riven_item/images/kuva_bramma.11b49af045d8c2594e41fffd4490c73f.png",
-      "thumb": "riven_item/images/thumbs/kuva_bramma.11b49af045d8c2594e41fffd4490c73f.128x128.png"
+      "thumb": "riven_item/images/thumbs/kuva_bramma.11b49af045d8c2594e41fffd4490c73f.128x128.png",
+      "imageName": "KuvaGrnBow.png"
     },
     {
       "id": "5ee7dea904d55c0b2614f571",
@@ -2163,7 +2348,8 @@
       "disposition": 0.65,
       "reqMasteryRank": 10,
       "icon": "items/images/en/stropha.08c23ce01edf041f6204aa470f8f12c9.png",
-      "thumb": "items/images/en/thumbs/stropha.08c23ce01edf041f6204aa470f8f12c9.128x128.png"
+      "thumb": "items/images/en/thumbs/stropha.08c23ce01edf041f6204aa470f8f12c9.128x128.png",
+      "imageName": "CrpGunBladeWeapon.png"
     },
     {
       "id": "5fb847a0c34da30068f912bd",
@@ -2174,7 +2360,8 @@
       "disposition": 1,
       "reqMasteryRank": 15,
       "icon": "items/images/en/morgha.afc1c19230048e45ab0813aa68a996d1.png",
-      "thumb": "items/images/en/thumbs/morgha.afc1c19230048e45ab0813aa68a996d1.128x128.png"
+      "thumb": "items/images/en/thumbs/morgha.afc1c19230048e45ab0813aa68a996d1.128x128.png",
+      "imageName": "ThanoTechGrenadeLauncher.png"
     },
     {
       "id": "5fb847a0c34da30068f912be",
@@ -2185,7 +2372,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 11,
       "icon": "riven_item/images/catabolyst.176976251f7674bbe864356f3ebbe1fd.png",
-      "thumb": "riven_item/images/thumbs/catabolyst.176976251f7674bbe864356f3ebbe1fd.128x128.png"
+      "thumb": "riven_item/images/thumbs/catabolyst.176976251f7674bbe864356f3ebbe1fd.128x128.png",
+      "imageName": "InfBeamPistol.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdc7",
@@ -2196,7 +2384,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 2,
       "icon": "items/images/en/hikou.193c15fbaf82f2391dc78cc7d64cf16f.png",
-      "thumb": "items/images/en/thumbs/hikou.193c15fbaf82f2391dc78cc7d64cf16f.128x128.png"
+      "thumb": "items/images/en/thumbs/hikou.193c15fbaf82f2391dc78cc7d64cf16f.128x128.png",
+      "imageName": "Hikou.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdc9",
@@ -2207,7 +2396,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 10,
       "icon": "items/images/en/knell.9a97c9771a12c761b115a2db54c82481.png",
-      "thumb": "items/images/en/thumbs/knell.9a97c9771a12c761b115a2db54c82481.128x128.png"
+      "thumb": "items/images/en/thumbs/knell.9a97c9771a12c761b115a2db54c82481.128x128.png",
+      "imageName": "Knell.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdca",
@@ -2218,7 +2408,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 5,
       "icon": "items/images/en/kohmak.eb021126188f25d7e5d136e10a35f6b5.png",
-      "thumb": "items/images/en/thumbs/kohmak.eb021126188f25d7e5d136e10a35f6b5.128x128.png"
+      "thumb": "items/images/en/thumbs/kohmak.eb021126188f25d7e5d136e10a35f6b5.128x128.png",
+      "imageName": "Kohmak.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdcb",
@@ -2229,7 +2420,8 @@
       "disposition": 1.53,
       "reqMasteryRank": 0,
       "icon": "items/images/en/kraken.8a24a27094e9102e359200fdffe3fab7.png",
-      "thumb": "items/images/en/thumbs/kraken.8a24a27094e9102e359200fdffe3fab7.128x128.png"
+      "thumb": "items/images/en/thumbs/kraken.8a24a27094e9102e359200fdffe3fab7.128x128.png",
+      "imageName": "Kraken.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdcd",
@@ -2240,7 +2432,8 @@
       "disposition": 1.51,
       "reqMasteryRank": 0,
       "icon": "items/images/en/kunai.4ebd6a5b7383356584c275fbdf34c9e3.png",
-      "thumb": "items/images/en/thumbs/kunai.4ebd6a5b7383356584c275fbdf34c9e3.128x128.png"
+      "thumb": "items/images/en/thumbs/kunai.4ebd6a5b7383356584c275fbdf34c9e3.128x128.png",
+      "imageName": "Kunai.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdcf",
@@ -2251,7 +2444,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 3,
       "icon": "items/images/en/lex.7f92c6b8ee87ab528af27c1821fdbb9f.png",
-      "thumb": "items/images/en/thumbs/lex.7f92c6b8ee87ab528af27c1821fdbb9f.128x128.png"
+      "thumb": "items/images/en/thumbs/lex.7f92c6b8ee87ab528af27c1821fdbb9f.128x128.png",
+      "imageName": "Lex.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdd1",
@@ -2262,7 +2456,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 7,
       "icon": "items/images/en/marelok.71aee4b391af97aa2376fe28d24fdf26.png",
-      "thumb": "items/images/en/thumbs/marelok.71aee4b391af97aa2376fe28d24fdf26.128x128.png"
+      "thumb": "items/images/en/thumbs/marelok.71aee4b391af97aa2376fe28d24fdf26.128x128.png",
+      "imageName": "Marelok.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdf2",
@@ -2273,7 +2468,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 7,
       "icon": "items/images/en/broken_scepter.9412cd26613aca64d75a63330b444d31.png",
-      "thumb": "items/images/en/thumbs/broken_scepter.9412cd26613aca64d75a63330b444d31.128x128.png"
+      "thumb": "items/images/en/thumbs/broken_scepter.9412cd26613aca64d75a63330b444d31.128x128.png",
+      "imageName": "BrokenScepter.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe0b",
@@ -2284,7 +2480,8 @@
       "disposition": 1.44,
       "reqMasteryRank": 2,
       "icon": "riven_item/images/dual_zoren.200bb76dd57b17d1c9da6c21645fd42c.png",
-      "thumb": "riven_item/images/thumbs/dual_zoren.200bb76dd57b17d1c9da6c21645fd42c.128x128.png"
+      "thumb": "riven_item/images/thumbs/dual_zoren.200bb76dd57b17d1c9da6c21645fd42c.128x128.png",
+      "imageName": "DualZoren.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe0d",
@@ -2295,7 +2492,8 @@
       "disposition": 1.49,
       "reqMasteryRank": 6,
       "icon": "riven_item/images/ether_daggers.10073a53eadf3eef92bdbbe55b19bace.png",
-      "thumb": "riven_item/images/thumbs/ether_daggers.10073a53eadf3eef92bdbbe55b19bace.128x128.png"
+      "thumb": "riven_item/images/thumbs/ether_daggers.10073a53eadf3eef92bdbbe55b19bace.128x128.png",
+      "imageName": "EtherDaggers.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe0e",
@@ -2306,7 +2504,8 @@
       "disposition": 1.45,
       "reqMasteryRank": 4,
       "icon": "riven_item/images/ether_reaper.3eca2ba4f605744704c3c6b1b8a8cf8b.png",
-      "thumb": "riven_item/images/thumbs/ether_reaper.3eca2ba4f605744704c3c6b1b8a8cf8b.128x128.png"
+      "thumb": "riven_item/images/thumbs/ether_reaper.3eca2ba4f605744704c3c6b1b8a8cf8b.128x128.png",
+      "imageName": "EtherReaper.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe0f",
@@ -2317,7 +2516,8 @@
       "disposition": 1.44,
       "reqMasteryRank": 7,
       "icon": "riven_item/images/ether_sword.d12cfe31514386723ebda1e804ca33c9.png",
-      "thumb": "riven_item/images/thumbs/ether_sword.d12cfe31514386723ebda1e804ca33c9.128x128.png"
+      "thumb": "riven_item/images/thumbs/ether_sword.d12cfe31514386723ebda1e804ca33c9.128x128.png",
+      "imageName": "EtherSword.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe10",
@@ -2328,7 +2528,8 @@
       "disposition": 1.36,
       "reqMasteryRank": 0,
       "icon": "items/images/en/fang.e9cd7e9f9a5c2ffb3b2a84485d9a34af.png",
-      "thumb": "items/images/en/thumbs/fang.e9cd7e9f9a5c2ffb3b2a84485d9a34af.128x128.png"
+      "thumb": "items/images/en/thumbs/fang.e9cd7e9f9a5c2ffb3b2a84485d9a34af.128x128.png",
+      "imageName": "Fang.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe12",
@@ -2339,7 +2540,8 @@
       "disposition": 1.38,
       "reqMasteryRank": 5,
       "icon": "items/images/en/furax.3192073e79805e28de48aded8faf2f2c.png",
-      "thumb": "items/images/en/thumbs/furax.3192073e79805e28de48aded8faf2f2c.128x128.png"
+      "thumb": "items/images/en/thumbs/furax.3192073e79805e28de48aded8faf2f2c.128x128.png",
+      "imageName": "Furax.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe23",
@@ -2350,7 +2552,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 6,
       "icon": "items/images/en/karyst.6c88b8b1ffdd6dbd5e71d1443ddd8bb2.png",
-      "thumb": "items/images/en/thumbs/karyst.6c88b8b1ffdd6dbd5e71d1443ddd8bb2.128x128.png"
+      "thumb": "items/images/en/thumbs/karyst.6c88b8b1ffdd6dbd5e71d1443ddd8bb2.128x128.png",
+      "imageName": "Karyst.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe60",
@@ -2394,7 +2597,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 6,
       "icon": "items/images/en/plinx.cf7698c478e44f83968e66f21a1558ae.png",
-      "thumb": "items/images/en/thumbs/plinx.cf7698c478e44f83968e66f21a1558ae.128x128.png"
+      "thumb": "items/images/en/thumbs/plinx.cf7698c478e44f83968e66f21a1558ae.128x128.png",
+      "imageName": "CrpBlastorWeapon.png"
     },
     {
       "id": "5cf572529597e1019b1678cc",
@@ -2405,7 +2609,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 9,
       "icon": "items/images/en/korrudo.2f569c1c1ba03172278a5f3e88358aed.png",
-      "thumb": "items/images/en/thumbs/korrudo.2f569c1c1ba03172278a5f3e88358aed.128x128.png"
+      "thumb": "items/images/en/thumbs/korrudo.2f569c1c1ba03172278a5f3e88358aed.128x128.png",
+      "imageName": "GrnSpiderSparring.png"
     },
     {
       "id": "5cf572539597e1019b1678cd",
@@ -2416,7 +2621,8 @@
       "disposition": 1,
       "reqMasteryRank": 8,
       "icon": "items/images/en/fulmin.f2e4fae730960f6c0617577ea0f496ad.png",
-      "thumb": "items/images/en/thumbs/fulmin.f2e4fae730960f6c0617577ea0f496ad.128x128.png"
+      "thumb": "items/images/en/thumbs/fulmin.f2e4fae730960f6c0617577ea0f496ad.128x128.png",
+      "imageName": "TnWispRifle.png"
     },
     {
       "id": "5cf572549597e1019b1678ce",
@@ -2427,7 +2633,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 10,
       "icon": "riven_item/images/cobra_and_crane.41a0914a2e6890b42e7ab2175a8d9c1c.png",
-      "thumb": "riven_item/images/thumbs/cobra_and_crane.41a0914a2e6890b42e7ab2175a8d9c1c.128x128.png"
+      "thumb": "riven_item/images/thumbs/cobra_and_crane.41a0914a2e6890b42e7ab2175a8d9c1c.128x128.png",
+      "imageName": "PacifistShieldSword.png"
     },
     {
       "id": "5cf572549597e1019b1678d0",
@@ -2438,7 +2645,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 8,
       "icon": "items/images/en/komorex.a6b6018eca915e11179a2bf29b55d3ea.png",
-      "thumb": "items/images/en/thumbs/komorex.a6b6018eca915e11179a2bf29b55d3ea.128x128.png"
+      "thumb": "items/images/en/thumbs/komorex.a6b6018eca915e11179a2bf29b55d3ea.128x128.png",
+      "imageName": "CrpSentAmalgSniper.png"
     },
     {
       "id": "5cf572559597e1019b1678d2",
@@ -2449,7 +2657,8 @@
       "disposition": 1,
       "reqMasteryRank": 8,
       "icon": "items/images/en/cyanex.286f84f86986ce93a3a47f5fee6ee18d.png",
-      "thumb": "items/images/en/thumbs/cyanex.286f84f86986ce93a3a47f5fee6ee18d.128x128.png"
+      "thumb": "items/images/en/thumbs/cyanex.286f84f86986ce93a3a47f5fee6ee18d.128x128.png",
+      "imageName": "CrpSentAmalgPistol.png"
     },
     {
       "id": "5cf572579597e1019b1678d5",
@@ -2460,7 +2669,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 7,
       "icon": "riven_item/images/tatsu.7c620e4ccaf9d3c7ee56d8156c77d09f.png",
-      "thumb": "riven_item/images/thumbs/tatsu.7c620e4ccaf9d3c7ee56d8156c77d09f.128x128.png"
+      "thumb": "riven_item/images/thumbs/tatsu.7c620e4ccaf9d3c7ee56d8156c77d09f.128x128.png",
+      "imageName": "TnTwoHandedKatana.png"
     },
     {
       "id": "5cfe91738be64500e4430cdc",
@@ -2471,7 +2681,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 4,
       "icon": "items/images/en/cyngas.06e5a46f3d3b985ce51c8154c0325088.png",
-      "thumb": "items/images/en/thumbs/cyngas.06e5a46f3d3b985ce51c8154c0325088.128x128.png"
+      "thumb": "items/images/en/thumbs/cyngas.06e5a46f3d3b985ce51c8154c0325088.128x128.png",
+      "imageName": "Cyngas.png"
     },
     {
       "id": "5cfe91748be64500e4430cdd",
@@ -2482,7 +2693,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 8,
       "icon": "items/images/en/larkspur.dd276ff94db2ebbc9cc778ee03db8d71.png",
-      "thumb": "items/images/en/thumbs/larkspur.dd276ff94db2ebbc9cc778ee03db8d71.128x128.png"
+      "thumb": "items/images/en/thumbs/larkspur.dd276ff94db2ebbc9cc778ee03db8d71.128x128.png",
+      "imageName": "ShieldFrameArchGun.png"
     },
     {
       "id": "5cfe91768be64500e4430cde",
@@ -2493,7 +2705,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 0,
       "icon": "items/images/en/imperator.ca5c50909c6e4d40fc93fa5e9a525897.png",
-      "thumb": "items/images/en/thumbs/imperator.ca5c50909c6e4d40fc93fa5e9a525897.128x128.png"
+      "thumb": "items/images/en/thumbs/imperator.ca5c50909c6e4d40fc93fa5e9a525897.128x128.png",
+      "imageName": "Imperator.png"
     },
     {
       "id": "5cfe91788be64500e4430cdf",
@@ -2504,7 +2717,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 1,
       "icon": "items/images/en/corvas.2eb50d3296c78f3875e5e95f45fac275.png",
-      "thumb": "items/images/en/thumbs/corvas.2eb50d3296c78f3875e5e95f45fac275.128x128.png"
+      "thumb": "items/images/en/thumbs/corvas.2eb50d3296c78f3875e5e95f45fac275.128x128.png",
+      "imageName": "Corvas.png"
     },
     {
       "id": "5cfe91798be64500e4430ce1",
@@ -2515,7 +2729,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 3,
       "icon": "items/images/en/phaedra.990089ecdb2751f628e24bfe0493059e.png",
-      "thumb": "items/images/en/thumbs/phaedra.990089ecdb2751f628e24bfe0493059e.128x128.png"
+      "thumb": "items/images/en/thumbs/phaedra.990089ecdb2751f628e24bfe0493059e.128x128.png",
+      "imageName": "Phaedra.png"
     },
     {
       "id": "5cfe917a8be64500e4430ce2",
@@ -2526,7 +2741,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 4,
       "icon": "items/images/en/grattler.1332aad0c83155f87a1caeac7bb93fc4.png",
-      "thumb": "items/images/en/thumbs/grattler.1332aad0c83155f87a1caeac7bb93fc4.128x128.png"
+      "thumb": "items/images/en/thumbs/grattler.1332aad0c83155f87a1caeac7bb93fc4.128x128.png",
+      "imageName": "Grattler.png"
     },
     {
       "id": "5cfe917d8be64500e4430ce4",
@@ -2537,7 +2753,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 1,
       "icon": "riven_item/images/dual_decurion.c38ff4f5a6e811f42c54fd0d15144942.png",
-      "thumb": "riven_item/images/thumbs/dual_decurion.c38ff4f5a6e811f42c54fd0d15144942.128x128.png"
+      "thumb": "riven_item/images/thumbs/dual_decurion.c38ff4f5a6e811f42c54fd0d15144942.128x128.png",
+      "imageName": "DualDecurion.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd64",
@@ -2548,7 +2765,8 @@
       "disposition": 1.42,
       "reqMasteryRank": 7,
       "icon": "items/images/en/attica.d75ddb584fa9ea3cd44f20c09e121cda.png",
-      "thumb": "items/images/en/thumbs/attica.d75ddb584fa9ea3cd44f20c09e121cda.128x128.png"
+      "thumb": "items/images/en/thumbs/attica.d75ddb584fa9ea3cd44f20c09e121cda.128x128.png",
+      "imageName": "Attica.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd67",
@@ -2559,7 +2777,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 2,
       "icon": "items/images/en/boltor.b00dd8933257acaab1936c88e345edfc.png",
-      "thumb": "items/images/en/thumbs/boltor.b00dd8933257acaab1936c88e345edfc.128x128.png"
+      "thumb": "items/images/en/thumbs/boltor.b00dd8933257acaab1936c88e345edfc.128x128.png",
+      "imageName": "Boltor.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd68",
@@ -2570,7 +2789,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 0,
       "icon": "items/images/en/braton.139748d7e02e1d7370a0641ec81f4e2a.png",
-      "thumb": "items/images/en/thumbs/braton.139748d7e02e1d7370a0641ec81f4e2a.128x128.png"
+      "thumb": "items/images/en/thumbs/braton.139748d7e02e1d7370a0641ec81f4e2a.128x128.png",
+      "imageName": "Braton.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd6d",
@@ -2581,7 +2801,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 8,
       "icon": "items/images/en/corinth.1c30d611482746b4c0a4ef2d83be750c.png",
-      "thumb": "items/images/en/thumbs/corinth.1c30d611482746b4c0a4ef2d83be750c.128x128.png"
+      "thumb": "items/images/en/thumbs/corinth.1c30d611482746b4c0a4ef2d83be750c.128x128.png",
+      "imageName": "Corinth.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd72",
@@ -2592,7 +2813,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 14,
       "icon": "items/images/en/ferrox.5a29b2afc0382ce4f85d78dc9d086c2c.png",
-      "thumb": "items/images/en/thumbs/ferrox.5a29b2afc0382ce4f85d78dc9d086c2c.128x128.png"
+      "thumb": "items/images/en/thumbs/ferrox.5a29b2afc0382ce4f85d78dc9d086c2c.128x128.png",
+      "imageName": "Ferrox.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd79",
@@ -2603,7 +2825,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 4,
       "icon": "items/images/en/hek.01deb97da07d4680bf7db7111d6fb533.png",
-      "thumb": "items/images/en/thumbs/hek.01deb97da07d4680bf7db7111d6fb533.128x128.png"
+      "thumb": "items/images/en/thumbs/hek.01deb97da07d4680bf7db7111d6fb533.128x128.png",
+      "imageName": "Hek.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd86",
@@ -2614,7 +2837,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 9,
       "icon": "items/images/en/ogris.9155e81ec783c0afd68646499883b17c.png",
-      "thumb": "items/images/en/thumbs/ogris.9155e81ec783c0afd68646499883b17c.128x128.png"
+      "thumb": "items/images/en/thumbs/ogris.9155e81ec783c0afd68646499883b17c.128x128.png",
+      "imageName": "Ogris.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd89",
@@ -2625,7 +2849,8 @@
       "disposition": 1.31,
       "reqMasteryRank": 7,
       "icon": "items/images/en/paracyst.c81528e565a7651b7a7d809e9a8f2974.png",
-      "thumb": "items/images/en/thumbs/paracyst.c81528e565a7651b7a7d809e9a8f2974.128x128.png"
+      "thumb": "items/images/en/thumbs/paracyst.c81528e565a7651b7a7d809e9a8f2974.128x128.png",
+      "imageName": "Paracyst.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd98",
@@ -2636,7 +2861,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 12,
       "icon": "items/images/en/supra.f1e9cbaf71eff60771de3aa57a9596f4.png",
-      "thumb": "items/images/en/thumbs/supra.f1e9cbaf71eff60771de3aa57a9596f4.128x128.png"
+      "thumb": "items/images/en/thumbs/supra.f1e9cbaf71eff60771de3aa57a9596f4.128x128.png",
+      "imageName": "Supra.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd9b",
@@ -2647,7 +2873,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 10,
       "icon": "items/images/en/tenora.19b00a342112d86c188adc35be697eda.png",
-      "thumb": "items/images/en/thumbs/tenora.19b00a342112d86c188adc35be697eda.128x128.png"
+      "thumb": "items/images/en/thumbs/tenora.19b00a342112d86c188adc35be697eda.128x128.png",
+      "imageName": "Tenora.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd9d",
@@ -2658,7 +2885,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 10,
       "icon": "items/images/en/tiberon.d3bd3db70fcc6bd97713419f1ac222e3.png",
-      "thumb": "items/images/en/thumbs/tiberon.d3bd3db70fcc6bd97713419f1ac222e3.128x128.png"
+      "thumb": "items/images/en/thumbs/tiberon.d3bd3db70fcc6bd97713419f1ac222e3.128x128.png",
+      "imageName": "Tiberon.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdad",
@@ -2669,7 +2897,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 4,
       "icon": "riven_item/images/aklex.800394d7e0f24986229130ea22dfa4e7.png",
-      "thumb": "riven_item/images/thumbs/aklex.800394d7e0f24986229130ea22dfa4e7.128x128.png"
+      "thumb": "riven_item/images/thumbs/aklex.800394d7e0f24986229130ea22dfa4e7.128x128.png",
+      "imageName": "Aklex.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdae",
@@ -2680,7 +2909,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 12,
       "icon": "items/images/en/akmagnus.71b5c604b03e3afd601d3d1ec5d116a3.png",
-      "thumb": "items/images/en/thumbs/akmagnus.71b5c604b03e3afd601d3d1ec5d116a3.128x128.png"
+      "thumb": "items/images/en/thumbs/akmagnus.71b5c604b03e3afd601d3d1ec5d116a3.128x128.png",
+      "imageName": "Akmagnus.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdaf",
@@ -2691,7 +2921,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 9,
       "icon": "items/images/en/aksomati.7f420cc90ae6ef6d8130c9475dc50274.png",
-      "thumb": "items/images/en/thumbs/aksomati.7f420cc90ae6ef6d8130c9475dc50274.128x128.png"
+      "thumb": "items/images/en/thumbs/aksomati.7f420cc90ae6ef6d8130c9475dc50274.128x128.png",
+      "imageName": "Aksomati.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdb0",
@@ -2702,7 +2933,8 @@
       "disposition": 0.95,
       "reqMasteryRank": 8,
       "icon": "items/images/en/akstiletto.2532b4ad6207e99496ac4a84021a9ad3.png",
-      "thumb": "items/images/en/thumbs/akstiletto.2532b4ad6207e99496ac4a84021a9ad3.128x128.png"
+      "thumb": "items/images/en/thumbs/akstiletto.2532b4ad6207e99496ac4a84021a9ad3.128x128.png",
+      "imageName": "Akstileto.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdb1",
@@ -2713,7 +2945,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 8,
       "icon": "items/images/en/akvasto.efa0bb0ef386af5bbb36fedc9a9e77eb.png",
-      "thumb": "items/images/en/thumbs/akvasto.efa0bb0ef386af5bbb36fedc9a9e77eb.128x128.png"
+      "thumb": "items/images/en/thumbs/akvasto.efa0bb0ef386af5bbb36fedc9a9e77eb.128x128.png",
+      "imageName": "Akvasto.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdb2",
@@ -2724,7 +2957,8 @@
       "disposition": 1.52,
       "reqMasteryRank": 4,
       "icon": "items/images/en/akzani.cdef36c1271e3298d65d24b43646f1cf.png",
-      "thumb": "items/images/en/thumbs/akzani.cdef36c1271e3298d65d24b43646f1cf.128x128.png"
+      "thumb": "items/images/en/thumbs/akzani.cdef36c1271e3298d65d24b43646f1cf.128x128.png",
+      "imageName": "Akzani.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdb3",
@@ -2735,7 +2969,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 4,
       "icon": "items/images/en/angstrum.8a8e60fea990e087f5075a5ad0027d1f.png",
-      "thumb": "items/images/en/thumbs/angstrum.8a8e60fea990e087f5075a5ad0027d1f.128x128.png"
+      "thumb": "items/images/en/thumbs/angstrum.8a8e60fea990e087f5075a5ad0027d1f.128x128.png",
+      "imageName": "Angstrum.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdb5",
@@ -2746,7 +2981,8 @@
       "disposition": 0.95,
       "reqMasteryRank": 5,
       "icon": "items/images/en/atomos.2f3af350060d4b7ff4adae2b12f97b0a.png",
-      "thumb": "items/images/en/thumbs/atomos.2f3af350060d4b7ff4adae2b12f97b0a.128x128.png"
+      "thumb": "items/images/en/thumbs/atomos.2f3af350060d4b7ff4adae2b12f97b0a.128x128.png",
+      "imageName": "Atomos.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdb6",
@@ -2757,7 +2993,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 6,
       "icon": "items/images/en/azima.8bb80c4b17a8fcbde5ef298c463d84e2.png",
-      "thumb": "items/images/en/thumbs/azima.8bb80c4b17a8fcbde5ef298c463d84e2.128x128.png"
+      "thumb": "items/images/en/thumbs/azima.8bb80c4b17a8fcbde5ef298c463d84e2.128x128.png",
+      "imageName": "Azima.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdb8",
@@ -2768,7 +3005,8 @@
       "disposition": 1.51,
       "reqMasteryRank": 7,
       "icon": "items/images/en/bolto.b5acc3cca68e54f8b45cb68288a63000.png",
-      "thumb": "items/images/en/thumbs/bolto.b5acc3cca68e54f8b45cb68288a63000.128x128.png"
+      "thumb": "items/images/en/thumbs/bolto.b5acc3cca68e54f8b45cb68288a63000.128x128.png",
+      "imageName": "Bolto.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdb9",
@@ -2779,7 +3017,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 6,
       "icon": "items/images/en/brakk.db24dd1bc4fe5bba11129bbbfc9de5b7.png",
-      "thumb": "items/images/en/thumbs/brakk.db24dd1bc4fe5bba11129bbbfc9de5b7.128x128.png"
+      "thumb": "items/images/en/thumbs/brakk.db24dd1bc4fe5bba11129bbbfc9de5b7.128x128.png",
+      "imageName": "Brakk.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdbe",
@@ -2790,7 +3029,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 4,
       "icon": "items/images/en/despair.dcdb6297c9579cb1457bd0b8d46dc52e.png",
-      "thumb": "items/images/en/thumbs/despair.dcdb6297c9579cb1457bd0b8d46dc52e.128x128.png"
+      "thumb": "items/images/en/thumbs/despair.dcdb6297c9579cb1457bd0b8d46dc52e.128x128.png",
+      "imageName": "Despair.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe09",
@@ -2801,7 +3041,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 6,
       "icon": "riven_item/images/dual_raza.36dfb4b0a9c567d3cb8505501381b62b.png",
-      "thumb": "riven_item/images/thumbs/dual_raza.36dfb4b0a9c567d3cb8505501381b62b.128x128.png"
+      "thumb": "riven_item/images/thumbs/dual_raza.36dfb4b0a9c567d3cb8505501381b62b.128x128.png",
+      "imageName": "DualRaza.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe42",
@@ -2812,7 +3053,8 @@
       "disposition": 0.8,
       "reqMasteryRank": 10,
       "icon": "riven_item/images/reaper_prime.128b035513016fffe8424704af103bb0.png",
-      "thumb": "riven_item/images/thumbs/reaper_prime.128b035513016fffe8424704af103bb0.128x128.png"
+      "thumb": "riven_item/images/thumbs/reaper_prime.128b035513016fffe8424704af103bb0.128x128.png",
+      "imageName": "ReaperPrime.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe44",
@@ -2823,7 +3065,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 5,
       "icon": "riven_item/images/ripkas.71a1f4cadb1fd39eee36642ca8189ef9.png",
-      "thumb": "riven_item/images/thumbs/ripkas.71a1f4cadb1fd39eee36642ca8189ef9.128x128.png"
+      "thumb": "riven_item/images/thumbs/ripkas.71a1f4cadb1fd39eee36642ca8189ef9.128x128.png",
+      "imageName": "Ripkas.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdfd",
@@ -2834,7 +3077,8 @@
       "disposition": 1.48,
       "reqMasteryRank": 8,
       "icon": "items/images/en/dark_sword.0d15d2fbdd2129494ab98d626798f39f.png",
-      "thumb": "items/images/en/thumbs/dark_sword.0d15d2fbdd2129494ab98d626798f39f.128x128.png"
+      "thumb": "items/images/en/thumbs/dark_sword.0d15d2fbdd2129494ab98d626798f39f.128x128.png",
+      "imageName": "DarkSword.png"
     },
     {
       "id": "5cf572559597e1019b1678d1",
@@ -2845,7 +3089,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 6,
       "icon": "items/images/en/kreska.b30c46cce9ef8e70c448a1c2479a0faf.png",
-      "thumb": "items/images/en/thumbs/kreska.b30c46cce9ef8e70c448a1c2479a0faf.128x128.png"
+      "thumb": "items/images/en/thumbs/kreska.b30c46cce9ef8e70c448a1c2479a0faf.128x128.png",
+      "imageName": "CrpVenusHatchet.png"
     },
     {
       "id": "5cfe91798be64500e4430ce0",
@@ -2856,7 +3101,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 0,
       "icon": "items/images/en/velocitus.cbd04bd264e30012bc32de60f2976d6e.png",
-      "thumb": "items/images/en/thumbs/velocitus.cbd04bd264e30012bc32de60f2976d6e.128x128.png"
+      "thumb": "items/images/en/thumbs/velocitus.cbd04bd264e30012bc32de60f2976d6e.128x128.png",
+      "imageName": "Velocitus.png"
     },
     {
       "id": "5cfe917a8be64500e4430ce3",
@@ -2867,7 +3113,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 2,
       "icon": "items/images/en/fluctus.1260f4c62a54ae230993e30f66453712.png",
-      "thumb": "items/images/en/thumbs/fluctus.1260f4c62a54ae230993e30f66453712.128x128.png"
+      "thumb": "items/images/en/thumbs/fluctus.1260f4c62a54ae230993e30f66453712.128x128.png",
+      "imageName": "Fluctus.png"
     },
     {
       "id": "5d322d0e74bdad027da4d06a",
@@ -2878,7 +3125,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 9,
       "icon": "items/images/en/quatz.f53f42abcec3d6827af56f37657a348e.png",
-      "thumb": "items/images/en/thumbs/quatz.f53f42abcec3d6827af56f37657a348e.128x128.png"
+      "thumb": "items/images/en/thumbs/quatz.f53f42abcec3d6827af56f37657a348e.128x128.png",
+      "imageName": "Amphis.png"
     },
     {
       "id": "5d6e947e7ea27b048cbea8cc",
@@ -2889,7 +3137,8 @@
       "disposition": 0.65,
       "reqMasteryRank": 8,
       "icon": "items/images/en/acceltra.2d57d4573999b2e19bedb218d9e9846c.png",
-      "thumb": "items/images/en/thumbs/acceltra.2d57d4573999b2e19bedb218d9e9846c.128x128.png"
+      "thumb": "items/images/en/thumbs/acceltra.2d57d4573999b2e19bedb218d9e9846c.128x128.png",
+      "imageName": "SapientPrimaryWeapon.png"
     },
     {
       "id": "5d6e947e7ea27b048cbea8cd",
@@ -2900,7 +3149,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 8,
       "icon": "items/images/en/akarius.e347dca439dcc09e7e5e7f45d961787a.png",
-      "thumb": "items/images/en/thumbs/akarius.e347dca439dcc09e7e5e7f45d961787a.128x128.png"
+      "thumb": "items/images/en/thumbs/akarius.e347dca439dcc09e7e5e7f45d961787a.128x128.png",
+      "imageName": "SapientPistol.png"
     },
     {
       "id": "5d70ebe07ea27b064d455072",
@@ -2933,7 +3183,8 @@
       "disposition": 0.75,
       "reqMasteryRank": 13,
       "icon": "items/images/en/shedu.765c016812e915e1e06ceb5e3820ae48.png",
-      "thumb": "items/images/en/thumbs/shedu.765c016812e915e1e06ceb5e3820ae48.128x128.png"
+      "thumb": "items/images/en/thumbs/shedu.765c016812e915e1e06ceb5e3820ae48.128x128.png",
+      "imageName": "Shedu.png"
     },
     {
       "id": "5f498a389426ed005af5ecb2",
@@ -2944,7 +3195,8 @@
       "disposition": 1,
       "reqMasteryRank": 14,
       "icon": "items/images/en/cortege.9ea6df8e184b821217af6bdf94abb310.png",
-      "thumb": "items/images/en/thumbs/cortege.9ea6df8e184b821217af6bdf94abb310.128x128.png"
+      "thumb": "items/images/en/thumbs/cortege.9ea6df8e184b821217af6bdf94abb310.128x128.png",
+      "imageName": "ThanotechArchGun.png"
     },
     {
       "id": "5f9963079dbdce02e693ec7b",
@@ -2955,7 +3207,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 13,
       "icon": "items/images/en/vitrica.6c9d26f8d4f7989e4361c015a64ec269.png",
-      "thumb": "items/images/en/thumbs/vitrica.6c9d26f8d4f7989e4361c015a64ec269.128x128.png"
+      "thumb": "items/images/en/thumbs/vitrica.6c9d26f8d4f7989e4361c015a64ec269.128x128.png",
+      "imageName": "NWOrokinSword.png"
     },
     {
       "id": "5fb847a0c34da30068f912b8",
@@ -2966,7 +3219,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 11,
       "icon": "items/images/en/pulmonars.919705abecc4facb4bc774d80c635cd3.png",
-      "thumb": "items/images/en/thumbs/pulmonars.919705abecc4facb4bc774d80c635cd3.128x128.png"
+      "thumb": "items/images/en/thumbs/pulmonars.919705abecc4facb4bc774d80c635cd3.128x128.png",
+      "imageName": "InfNunchuck.png"
     },
     {
       "id": "5fb847a0c34da30068f912b9",
@@ -2977,7 +3231,8 @@
       "disposition": 0.75,
       "reqMasteryRank": 13,
       "icon": "items/images/en/bubonico.b930df0a79fb66c92fdf28e76bfa1b2e.png",
-      "thumb": "items/images/en/thumbs/bubonico.b930df0a79fb66c92fdf28e76bfa1b2e.128x128.png"
+      "thumb": "items/images/en/thumbs/bubonico.b930df0a79fb66c92fdf28e76bfa1b2e.128x128.png",
+      "imageName": "InfArmCannon.png"
     },
     {
       "id": "5fb847a0c34da30068f912ba",
@@ -2988,7 +3243,8 @@
       "disposition": 0.9,
       "reqMasteryRank": 15,
       "icon": "riven_item/images/proboscis_cernos.5cac06026e1a51bfedec69ddf0af7cf9.png",
-      "thumb": "riven_item/images/thumbs/proboscis_cernos.5cac06026e1a51bfedec69ddf0af7cf9.128x128.png"
+      "thumb": "riven_item/images/thumbs/proboscis_cernos.5cac06026e1a51bfedec69ddf0af7cf9.128x128.png",
+      "imageName": "DerelictCernos.png"
     },
     {
       "id": "5fb847a0c34da30068f912bb",
@@ -2999,7 +3255,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 13,
       "icon": "items/images/en/sporothrix.6f9948b1f4636d57a1bd613468ddc2b3.png",
-      "thumb": "items/images/en/thumbs/sporothrix.6f9948b1f4636d57a1bd613468ddc2b3.128x128.png"
+      "thumb": "items/images/en/thumbs/sporothrix.6f9948b1f4636d57a1bd613468ddc2b3.128x128.png",
+      "imageName": "InfSniperRifle.png"
     },
     {
       "id": "5fb847a0c34da30068f912bc",
@@ -3010,7 +3267,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 11,
       "icon": "items/images/en/arum_spinosa.a676e9febc397c744ba0f3d4f13b891f.png",
-      "thumb": "items/images/en/thumbs/arum_spinosa.a676e9febc397c744ba0f3d4f13b891f.128x128.png"
+      "thumb": "items/images/en/thumbs/arum_spinosa.a676e9febc397c744ba0f3d4f13b891f.128x128.png",
+      "imageName": "InfWarfanWeapon.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe45",
@@ -3021,7 +3279,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 8,
       "icon": "items/images/en/sarpa.12468314201edd826d524da9116695de.png",
-      "thumb": "items/images/en/thumbs/sarpa.12468314201edd826d524da9116695de.128x128.png"
+      "thumb": "items/images/en/thumbs/sarpa.12468314201edd826d524da9116695de.128x128.png",
+      "imageName": "Sarpa.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe46",
@@ -3032,7 +3291,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 2,
       "icon": "items/images/en/scindo.2a8908be0b93b22e469de09c17a97d66.png",
-      "thumb": "items/images/en/thumbs/scindo.2a8908be0b93b22e469de09c17a97d66.128x128.png"
+      "thumb": "items/images/en/thumbs/scindo.2a8908be0b93b22e469de09c17a97d66.128x128.png",
+      "imageName": "Scindo.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe47",
@@ -3043,7 +3303,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 6,
       "icon": "items/images/en/scoliac.6703c0d6787801aa4e743570e345e268.png",
-      "thumb": "items/images/en/thumbs/scoliac.6703c0d6787801aa4e743570e345e268.128x128.png"
+      "thumb": "items/images/en/thumbs/scoliac.6703c0d6787801aa4e743570e345e268.128x128.png",
+      "imageName": "Scoliac.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe48",
@@ -3054,7 +3315,8 @@
       "disposition": 0.7,
       "reqMasteryRank": 0,
       "icon": "items/images/en/sepfahn.c445d087b86e821d11ee009a627429e6.png",
-      "thumb": "items/images/en/thumbs/sepfahn.c445d087b86e821d11ee009a627429e6.128x128.png"
+      "thumb": "items/images/en/thumbs/sepfahn.c445d087b86e821d11ee009a627429e6.128x128.png",
+      "imageName": "TipNine.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe49",
@@ -3065,7 +3327,8 @@
       "disposition": 1.38,
       "reqMasteryRank": 6,
       "icon": "items/images/en/serro.acb5f8ff71e74cd25d277e1a1dbefcb5.png",
-      "thumb": "items/images/en/thumbs/serro.acb5f8ff71e74cd25d277e1a1dbefcb5.128x128.png"
+      "thumb": "items/images/en/thumbs/serro.acb5f8ff71e74cd25d277e1a1dbefcb5.128x128.png",
+      "imageName": "Serro.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe4a",
@@ -3076,7 +3339,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 10,
       "icon": "items/images/en/shaku.dc15c1d78e22da3fede6f6ab3c5bef47.png",
-      "thumb": "items/images/en/thumbs/shaku.dc15c1d78e22da3fede6f6ab3c5bef47.128x128.png"
+      "thumb": "items/images/en/thumbs/shaku.dc15c1d78e22da3fede6f6ab3c5bef47.128x128.png",
+      "imageName": "Shaku.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe4b",
@@ -3087,7 +3351,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 5,
       "icon": "items/images/en/sheev.e083af0166692228641af774856fd04b.png",
-      "thumb": "items/images/en/thumbs/sheev.e083af0166692228641af774856fd04b.128x128.png"
+      "thumb": "items/images/en/thumbs/sheev.e083af0166692228641af774856fd04b.128x128.png",
+      "imageName": "Sheev.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe4c",
@@ -3098,7 +3363,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 6,
       "icon": "items/images/en/sibear.316a35a05e38b1826e5cf5056b4cb946.png",
-      "thumb": "items/images/en/thumbs/sibear.316a35a05e38b1826e5cf5056b4cb946.128x128.png"
+      "thumb": "items/images/en/thumbs/sibear.316a35a05e38b1826e5cf5056b4cb946.128x128.png",
+      "imageName": "Sibear.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe4d",
@@ -3109,7 +3375,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 10,
       "icon": "items/images/en/sigma_and_octantis.ba55ee8f63accecc063aa87c0d04ad17.png",
-      "thumb": "items/images/en/thumbs/sigma_and_octantis.ba55ee8f63accecc063aa87c0d04ad17.128x128.png"
+      "thumb": "items/images/en/thumbs/sigma_and_octantis.ba55ee8f63accecc063aa87c0d04ad17.128x128.png",
+      "imageName": "SigmaOctantis.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe4e",
@@ -3120,7 +3387,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 0,
       "icon": "items/images/en/silva_and_aegis.67594c1a2048db8a396756c0e4b63054.png",
-      "thumb": "items/images/en/thumbs/silva_and_aegis.67594c1a2048db8a396756c0e4b63054.128x128.png"
+      "thumb": "items/images/en/thumbs/silva_and_aegis.67594c1a2048db8a396756c0e4b63054.128x128.png",
+      "imageName": "SilvaAegis.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe50",
@@ -3131,7 +3399,8 @@
       "disposition": 0.9,
       "reqMasteryRank": 11,
       "icon": "riven_item/images/skiajati.545f2b491838bd12a8dc2d4fa9d8f1e9.png",
-      "thumb": "riven_item/images/thumbs/skiajati.545f2b491838bd12a8dc2d4fa9d8f1e9.128x128.png"
+      "thumb": "riven_item/images/thumbs/skiajati.545f2b491838bd12a8dc2d4fa9d8f1e9.128x128.png",
+      "imageName": "Skiajati.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe51",
@@ -3142,7 +3411,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 5,
       "icon": "items/images/en/sydon.85d4c0918503f427164dbc69d27d9443.png",
-      "thumb": "items/images/en/thumbs/sydon.85d4c0918503f427164dbc69d27d9443.128x128.png"
+      "thumb": "items/images/en/thumbs/sydon.85d4c0918503f427164dbc69d27d9443.128x128.png",
+      "imageName": "Sydon.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe52",
@@ -3153,7 +3423,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 6,
       "icon": "items/images/en/tekko.8c0daa853f7d5cbfdceef3fe3d8ecb01.png",
-      "thumb": "items/images/en/thumbs/tekko.8c0daa853f7d5cbfdceef3fe3d8ecb01.128x128.png"
+      "thumb": "items/images/en/thumbs/tekko.8c0daa853f7d5cbfdceef3fe3d8ecb01.128x128.png",
+      "imageName": "Tekko.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe53",
@@ -3164,7 +3435,8 @@
       "disposition": 1.31,
       "reqMasteryRank": 3,
       "icon": "items/images/en/tipedo.3231886049a74dae17e5fa0e2992c54f.png",
-      "thumb": "items/images/en/thumbs/tipedo.3231886049a74dae17e5fa0e2992c54f.128x128.png"
+      "thumb": "items/images/en/thumbs/tipedo.3231886049a74dae17e5fa0e2992c54f.128x128.png",
+      "imageName": "Tipedo.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe54",
@@ -3175,7 +3447,8 @@
       "disposition": 1.38,
       "reqMasteryRank": 3,
       "icon": "items/images/en/tonbo.4a9b061a66674a4ccdf65c794c0df0eb.png",
-      "thumb": "items/images/en/thumbs/tonbo.4a9b061a66674a4ccdf65c794c0df0eb.128x128.png"
+      "thumb": "items/images/en/thumbs/tonbo.4a9b061a66674a4ccdf65c794c0df0eb.128x128.png",
+      "imageName": "Tonbo.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe55",
@@ -3186,7 +3459,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 7,
       "icon": "items/images/en/twin_basolk.a6e398dafc2dcf1e2b4e2516ae08af06.png",
-      "thumb": "items/images/en/thumbs/twin_basolk.a6e398dafc2dcf1e2b4e2516ae08af06.128x128.png"
+      "thumb": "items/images/en/thumbs/twin_basolk.a6e398dafc2dcf1e2b4e2516ae08af06.128x128.png",
+      "imageName": "TwinBasolk.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd60",
@@ -3197,7 +3471,8 @@
       "disposition": 0.85,
       "reqMasteryRank": 10,
       "icon": "items/images/en/amprex.96d41f4e6b7c4f8483f90c44683ba2bf.png",
-      "thumb": "items/images/en/thumbs/amprex.96d41f4e6b7c4f8483f90c44683ba2bf.128x128.png"
+      "thumb": "items/images/en/thumbs/amprex.96d41f4e6b7c4f8483f90c44683ba2bf.128x128.png",
+      "imageName": "Amprex.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd69",
@@ -3208,7 +3483,8 @@
       "disposition": 1.45,
       "reqMasteryRank": 0,
       "icon": "items/images/en/burston.2aa5358640a76f5a43f11b4254560311.png",
-      "thumb": "items/images/en/thumbs/burston.2aa5358640a76f5a43f11b4254560311.128x128.png"
+      "thumb": "items/images/en/thumbs/burston.2aa5358640a76f5a43f11b4254560311.128x128.png",
+      "imageName": "Burston.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd6a",
@@ -3219,7 +3495,8 @@
       "disposition": 1.45,
       "reqMasteryRank": 11,
       "icon": "items/images/en/buzlok.505769cecc7314d13d236e6227be8c26.png",
-      "thumb": "items/images/en/thumbs/buzlok.505769cecc7314d13d236e6227be8c26.128x128.png"
+      "thumb": "items/images/en/thumbs/buzlok.505769cecc7314d13d236e6227be8c26.128x128.png",
+      "imageName": "Buzlok.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd6b",
@@ -3230,7 +3507,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 6,
       "icon": "items/images/en/cernos.6ea49e65e339e10cc84409e7dcb02cef.png",
-      "thumb": "items/images/en/thumbs/cernos.6ea49e65e339e10cc84409e7dcb02cef.128x128.png"
+      "thumb": "items/images/en/thumbs/cernos.6ea49e65e339e10cc84409e7dcb02cef.128x128.png",
+      "imageName": "Cernos.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd6c",
@@ -3241,7 +3519,8 @@
       "disposition": 1.46,
       "reqMasteryRank": 7,
       "icon": "items/images/en/convectrix.5b6ad3c7b9c59e7de5130bac9588315c.png",
-      "thumb": "items/images/en/thumbs/convectrix.5b6ad3c7b9c59e7de5130bac9588315c.128x128.png"
+      "thumb": "items/images/en/thumbs/convectrix.5b6ad3c7b9c59e7de5130bac9588315c.128x128.png",
+      "imageName": "Convectrix.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd6e",
@@ -3252,7 +3531,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 10,
       "icon": "riven_item/images/daikyu.8ae5a0a469eadd60b5a755d76a317dff.png",
-      "thumb": "riven_item/images/thumbs/daikyu.8ae5a0a469eadd60b5a755d76a317dff.128x128.png"
+      "thumb": "riven_item/images/thumbs/daikyu.8ae5a0a469eadd60b5a755d76a317dff.128x128.png",
+      "imageName": "Daikyu.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd6f",
@@ -3263,7 +3543,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 4,
       "icon": "items/images/en/dera.d2e71b091f5b5a62a6a11a6846dc924e.png",
-      "thumb": "items/images/en/thumbs/dera.d2e71b091f5b5a62a6a11a6846dc924e.128x128.png"
+      "thumb": "items/images/en/thumbs/dera.d2e71b091f5b5a62a6a11a6846dc924e.128x128.png",
+      "imageName": "Dera.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd70",
@@ -3274,7 +3555,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 5,
       "icon": "items/images/en/drakgoon.6b8dfef7ac875fa49f3418254b9a0d2b.png",
-      "thumb": "items/images/en/thumbs/drakgoon.6b8dfef7ac875fa49f3418254b9a0d2b.128x128.png"
+      "thumb": "items/images/en/thumbs/drakgoon.6b8dfef7ac875fa49f3418254b9a0d2b.128x128.png",
+      "imageName": "Drakgoon.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd71",
@@ -3285,7 +3567,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 5,
       "icon": "items/images/en/dread.c1bc8cbd36a8ff069e4388607a9d1ee6.png",
-      "thumb": "items/images/en/thumbs/dread.c1bc8cbd36a8ff069e4388607a9d1ee6.128x128.png"
+      "thumb": "items/images/en/thumbs/dread.c1bc8cbd36a8ff069e4388607a9d1ee6.128x128.png",
+      "imageName": "Dread.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd74",
@@ -3296,7 +3579,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 8,
       "icon": "items/images/en/glaxion.ef97d7dd12728d34ea7ed50100c197b0.png",
-      "thumb": "items/images/en/thumbs/glaxion.ef97d7dd12728d34ea7ed50100c197b0.128x128.png"
+      "thumb": "items/images/en/thumbs/glaxion.ef97d7dd12728d34ea7ed50100c197b0.128x128.png",
+      "imageName": "Glaxion.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd75",
@@ -3307,7 +3591,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 3,
       "icon": "items/images/en/gorgon.322fd818e70763de4ba6bf3334c498fd.png",
-      "thumb": "items/images/en/thumbs/gorgon.322fd818e70763de4ba6bf3334c498fd.128x128.png"
+      "thumb": "items/images/en/thumbs/gorgon.322fd818e70763de4ba6bf3334c498fd.128x128.png",
+      "imageName": "Gorgon.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd76",
@@ -3318,7 +3603,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 5,
       "icon": "items/images/en/grakata.cc349001047e5445675581a53cf4a30f.png",
-      "thumb": "items/images/en/thumbs/grakata.cc349001047e5445675581a53cf4a30f.128x128.png"
+      "thumb": "items/images/en/thumbs/grakata.cc349001047e5445675581a53cf4a30f.128x128.png",
+      "imageName": "Grakata.png"
     },
     {
       "id": "5c5ca81696e8d2003834fd77",
@@ -3329,7 +3615,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 7,
       "icon": "items/images/en/grinlok.d4946bece8cf876693fb748649e1e72b.png",
-      "thumb": "items/images/en/thumbs/grinlok.d4946bece8cf876693fb748649e1e72b.128x128.png"
+      "thumb": "items/images/en/thumbs/grinlok.d4946bece8cf876693fb748649e1e72b.128x128.png",
+      "imageName": "Grinlok.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdd6",
@@ -3340,7 +3627,8 @@
       "disposition": 1.5,
       "reqMasteryRank": 0,
       "icon": "items/images/en/seer.d6955128cc55ac9fce8eda2b8674712a.png",
-      "thumb": "items/images/en/thumbs/seer.d6955128cc55ac9fce8eda2b8674712a.128x128.png"
+      "thumb": "items/images/en/thumbs/seer.d6955128cc55ac9fce8eda2b8674712a.128x128.png",
+      "imageName": "Seer.png"
     },
     {
       "id": "5c5ca81696e8d2003834fde7",
@@ -3351,7 +3639,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 10,
       "icon": "items/images/en/zakti.41680477b8d0d79382d677e328336031.png",
-      "thumb": "items/images/en/thumbs/zakti.41680477b8d0d79382d677e328336031.128x128.png"
+      "thumb": "items/images/en/thumbs/zakti.41680477b8d0d79382d677e328336031.128x128.png",
+      "imageName": "Zakti.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdf9",
@@ -3362,7 +3651,8 @@
       "disposition": 1,
       "reqMasteryRank": 0,
       "icon": "items/images/en/cyath.9be1cfd6ca29427512ee0efe203aba4d.png",
-      "thumb": "items/images/en/thumbs/cyath.9be1cfd6ca29427512ee0efe203aba4d.128x128.png"
+      "thumb": "items/images/en/thumbs/cyath.9be1cfd6ca29427512ee0efe203aba4d.128x128.png",
+      "imageName": "TipFour.png"
     },
     {
       "id": "5c5ca81696e8d2003834fdfc",
@@ -3373,7 +3663,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 0,
       "icon": "riven_item/images/dark_split_sword_(dual_swords).a0e5f62b68b83216be729ed300be65f7.png",
-      "thumb": "riven_item/images/thumbs/dark_split_sword_(dual_swords).a0e5f62b68b83216be729ed300be65f7.128x128.png"
+      "thumb": "riven_item/images/thumbs/dark_split_sword_(dual_swords).a0e5f62b68b83216be729ed300be65f7.128x128.png",
+      "imageName": "DarkSplitSwordHybrid.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe27",
@@ -3384,7 +3675,8 @@
       "disposition": 1.35,
       "reqMasteryRank": 9,
       "icon": "items/images/en/krohkur.032f3fcc8aa332fb4ce3bd00ab8b0133.png",
-      "thumb": "items/images/en/thumbs/krohkur.032f3fcc8aa332fb4ce3bd00ab8b0133.128x128.png"
+      "thumb": "items/images/en/thumbs/krohkur.032f3fcc8aa332fb4ce3bd00ab8b0133.128x128.png",
+      "imageName": "Krohkur.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe28",
@@ -3395,7 +3687,8 @@
       "disposition": 1.43,
       "reqMasteryRank": 3,
       "icon": "items/images/en/kronen.f5271e71b923e6ba302a31bda9b3287f.png",
-      "thumb": "items/images/en/thumbs/kronen.f5271e71b923e6ba302a31bda9b3287f.128x128.png"
+      "thumb": "items/images/en/thumbs/kronen.f5271e71b923e6ba302a31bda9b3287f.128x128.png",
+      "imageName": "Kronen.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe2a",
@@ -3406,7 +3699,8 @@
       "disposition": 1.31,
       "reqMasteryRank": 7,
       "icon": "items/images/en/lacera.d609ef53d33cadf5c618c93ed238d6d2.png",
-      "thumb": "items/images/en/thumbs/lacera.d609ef53d33cadf5c618c93ed238d6d2.128x128.png"
+      "thumb": "items/images/en/thumbs/lacera.d609ef53d33cadf5c618c93ed238d6d2.128x128.png",
+      "imageName": "Lacera.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe2c",
@@ -3417,7 +3711,8 @@
       "disposition": 0.85,
       "reqMasteryRank": 9,
       "icon": "items/images/en/lesion.5e02a91a3896e5303279c0c929b8d5ec.png",
-      "thumb": "items/images/en/thumbs/lesion.5e02a91a3896e5303279c0c929b8d5ec.128x128.png"
+      "thumb": "items/images/en/thumbs/lesion.5e02a91a3896e5303279c0c929b8d5ec.128x128.png",
+      "imageName": "Lesion.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe57",
@@ -3428,7 +3723,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 4,
       "icon": "items/images/en/venka.e1ecfa02e0c61e38048695a98868fc3c.png",
-      "thumb": "items/images/en/thumbs/venka.e1ecfa02e0c61e38048695a98868fc3c.128x128.png"
+      "thumb": "items/images/en/thumbs/venka.e1ecfa02e0c61e38048695a98868fc3c.128x128.png",
+      "imageName": "Venka.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe58",
@@ -3439,7 +3735,8 @@
       "disposition": 1.4,
       "reqMasteryRank": 9,
       "icon": "items/images/en/volnus.2353fb37d6c473b12f28bfef8c8a95dd.png",
-      "thumb": "items/images/en/thumbs/volnus.2353fb37d6c473b12f28bfef8c8a95dd.128x128.png"
+      "thumb": "items/images/en/thumbs/volnus.2353fb37d6c473b12f28bfef8c8a95dd.128x128.png",
+      "imageName": "Volnus.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe5a",
@@ -3450,7 +3747,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 6,
       "icon": "items/images/en/zenistar.d99a217f3dde3380a9ea5145e9effa67.png",
-      "thumb": "items/images/en/thumbs/zenistar.d99a217f3dde3380a9ea5145e9effa67.128x128.png"
+      "thumb": "items/images/en/thumbs/zenistar.d99a217f3dde3380a9ea5145e9effa67.128x128.png",
+      "imageName": "Zenistar.png"
     },
     {
       "id": "5c5ca81696e8d2003834fe5d",
@@ -3494,7 +3792,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 7,
       "icon": "items/images/en/wolf_sledge.65accab6b5b94753be5db7d124f3b086.png",
-      "thumb": "items/images/en/thumbs/wolf_sledge.65accab6b5b94753be5db7d124f3b086.128x128.png"
+      "thumb": "items/images/en/thumbs/wolf_sledge.65accab6b5b94753be5db7d124f3b086.128x128.png",
+      "imageName": "WolfHammerSkin.png"
     },
     {
       "id": "5e02154d14569703bf43e549",
@@ -3505,7 +3804,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 12,
       "icon": "items/images/en/quellor.4a72101e1ef7e50287d619e68a44d97e.png",
-      "thumb": "items/images/en/thumbs/quellor.4a72101e1ef7e50287d619e68a44d97e.128x128.png"
+      "thumb": "items/images/en/thumbs/quellor.4a72101e1ef7e50287d619e68a44d97e.128x128.png",
+      "imageName": "RailjackRifle.png"
     },
     {
       "id": "5e7ca96f267539062bcc4179",
@@ -3516,7 +3816,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 11,
       "icon": "items/images/en/basmu.d7260ea6d078f34f6ebd751cdc8d7bcb.png",
-      "thumb": "items/images/en/thumbs/basmu.d7260ea6d078f34f6ebd751cdc8d7bcb.128x128.png"
+      "thumb": "items/images/en/thumbs/basmu.d7260ea6d078f34f6ebd751cdc8d7bcb.128x128.png",
+      "imageName": "SentRifleNewWarGun.png"
     },
     {
       "id": "5ee7dea904d55c0b2614f572",
@@ -3527,7 +3828,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 10,
       "icon": "items/images/en/stahlta.30d7537c3158976f86998e5b9fa05f96.png",
-      "thumb": "items/images/en/thumbs/stahlta.30d7537c3158976f86998e5b9fa05f96.128x128.png"
+      "thumb": "items/images/en/thumbs/stahlta.30d7537c3158976f86998e5b9fa05f96.128x128.png",
+      "imageName": "CrpRubanRifle.png"
     },
     {
       "id": "5ee7dea904d55c0b2614f573",
@@ -3538,7 +3840,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 8,
       "icon": "items/images/en/velox.8d807d2b4f5eddf0d1b17e52adc717ac.png",
-      "thumb": "items/images/en/thumbs/velox.8d807d2b4f5eddf0d1b17e52adc717ac.128x128.png"
+      "thumb": "items/images/en/thumbs/velox.8d807d2b4f5eddf0d1b17e52adc717ac.128x128.png",
+      "imageName": "OdaliskSmgWeapon.png"
     },
     {
       "id": "5f07214b9f527b017c17a95b",
@@ -3560,7 +3863,8 @@
       "disposition": 0.65,
       "reqMasteryRank": 4,
       "icon": "items/images/en/xoris.97a7c35070f3d75257662ad38798c9a1.png",
-      "thumb": "items/images/en/thumbs/xoris.97a7c35070f3d75257662ad38798c9a1.128x128.png"
+      "thumb": "items/images/en/thumbs/xoris.97a7c35070f3d75257662ad38798c9a1.128x128.png",
+      "imageName": "ProteaPolarizerCrpGlaive.png"
     },
     {
       "id": "5f2af41aad961e006bd6a95f",
@@ -3571,7 +3875,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 10,
       "icon": "items/images/en/athodai.a43f1e1a103b2fd440e7b940652ed8eb.png",
-      "thumb": "items/images/en/thumbs/athodai.a43f1e1a103b2fd440e7b940652ed8eb.128x128.png"
+      "thumb": "items/images/en/thumbs/athodai.a43f1e1a103b2fd440e7b940652ed8eb.128x128.png",
+      "imageName": "TnJetTurbinePistolWeapon.png"
     },
     {
       "id": "5f498a379426ed005af5ecac",
@@ -3582,7 +3887,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 14,
       "icon": "items/images/en/sepulcrum.e092d60c4da946e3d7c273cdbcd2759f.png",
-      "thumb": "items/images/en/thumbs/sepulcrum.e092d60c4da946e3d7c273cdbcd2759f.128x128.png"
+      "thumb": "items/images/en/thumbs/sepulcrum.e092d60c4da946e3d7c273cdbcd2759f.128x128.png",
+      "imageName": "ThanotechPistol.png"
     },
     {
       "id": "5f498a379426ed005af5ecad",
@@ -3593,7 +3899,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 8,
       "icon": "items/images/en/quassus.6875bf8f51ad6a9851c7a0588b516420.png",
-      "thumb": "items/images/en/thumbs/quassus.6875bf8f51ad6a9851c7a0588b516420.128x128.png"
+      "thumb": "items/images/en/thumbs/quassus.6875bf8f51ad6a9851c7a0588b516420.128x128.png",
+      "imageName": "BrokenFrameWarfan.png"
     },
     {
       "id": "5f498a379426ed005af5ecae",
@@ -3604,7 +3911,8 @@
       "disposition": 0.85,
       "reqMasteryRank": 13,
       "icon": "items/images/en/trumna.58fe7a2d48680a998ff55f77ff4b2b7d.png",
-      "thumb": "items/images/en/thumbs/trumna.58fe7a2d48680a998ff55f77ff4b2b7d.128x128.png"
+      "thumb": "items/images/en/thumbs/trumna.58fe7a2d48680a998ff55f77ff4b2b7d.128x128.png",
+      "imageName": "ThanotechRifle.png"
     },
     {
       "id": "5f498a379426ed005af5ecaf",
@@ -3615,7 +3923,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 11,
       "icon": "items/images/en/zymos.d358a221a7683eb20bd8af1b02e9d0da.png",
-      "thumb": "items/images/en/thumbs/zymos.d358a221a7683eb20bd8af1b02e9d0da.128x128.png"
+      "thumb": "items/images/en/thumbs/zymos.d358a221a7683eb20bd8af1b02e9d0da.128x128.png",
+      "imageName": "InfUziWeapon.png"
     },
     {
       "id": "5f498a379426ed005af5ecb0",
@@ -3626,7 +3935,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 9,
       "icon": "items/images/en/keratinos.48005cdde13b283b6bf2ecc70b8e866c.png",
-      "thumb": "items/images/en/thumbs/keratinos.48005cdde13b283b6bf2ecc70b8e866c.128x128.png"
+      "thumb": "items/images/en/thumbs/keratinos.48005cdde13b283b6bf2ecc70b8e866c.128x128.png",
+      "imageName": "InfTransformClaws.png"
     },
     {
       "id": "5f498a389426ed005af5ecb1",
@@ -3637,7 +3947,8 @@
       "disposition": 0.5,
       "reqMasteryRank": 14,
       "icon": "items/images/en/mausolon.e36603d05a4cf5721df96af425333d94.png",
-      "thumb": "items/images/en/thumbs/mausolon.e36603d05a4cf5721df96af425333d94.128x128.png"
+      "thumb": "items/images/en/thumbs/mausolon.e36603d05a4cf5721df96af425333d94.128x128.png",
+      "imageName": "ThanotechLongGun.png"
     },
     {
       "id": "5fde10b76db57b017abc81a7",
@@ -3648,7 +3959,8 @@
       "disposition": 0.65,
       "reqMasteryRank": 8,
       "icon": "items/images/en/cedo.d7860fa9e134a2632283d0f83acfe61d.png",
-      "thumb": "items/images/en/thumbs/cedo.d7860fa9e134a2632283d0f83acfe61d.128x128.png"
+      "thumb": "items/images/en/thumbs/cedo.d7860fa9e134a2632283d0f83acfe61d.128x128.png",
+      "imageName": "Cedo.png"
     },
     {
       "id": "6070925384a7d7024f5f5772",
@@ -3670,7 +3982,8 @@
       "disposition": 0.6,
       "reqMasteryRank": 8,
       "icon": "items/images/en/epitaph.b3a75cdcef1c7ba2971d2c550f8390e3.png",
-      "thumb": "items/images/en/thumbs/epitaph.b3a75cdcef1c7ba2971d2c550f8390e3.128x128.png"
+      "thumb": "items/images/en/thumbs/epitaph.b3a75cdcef1c7ba2971d2c550f8390e3.128x128.png",
+      "imageName": "TnWraithSidearmWeapon.png"
     },
     {
       "id": "60e5b9014794450053e99962",
@@ -3681,7 +3994,8 @@
       "disposition": 0.65,
       "reqMasteryRank": 16,
       "icon": "riven_item/images/tenet_envoy.a71da410bea25b5c129cf02e4432f482.png",
-      "thumb": "riven_item/images/thumbs/tenet_envoy.a71da410bea25b5c129cf02e4432f482.128x128.png"
+      "thumb": "riven_item/images/thumbs/tenet_envoy.a71da410bea25b5c129cf02e4432f482.128x128.png",
+      "imageName": "CrpBriefcaseLauncher.png"
     },
     {
       "id": "60e5b9014794450053e99963",
@@ -3692,7 +4006,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 14,
       "icon": "riven_item/images/tenet_spirex.83d8bd8063942b58eace31b5e2ad7ebc.png",
-      "thumb": "riven_item/images/thumbs/tenet_spirex.83d8bd8063942b58eace31b5e2ad7ebc.128x128.png"
+      "thumb": "riven_item/images/thumbs/tenet_spirex.83d8bd8063942b58eace31b5e2ad7ebc.128x128.png",
+      "imageName": "CrpIgniterPistol.png"
     },
     {
       "id": "60e5b9014794450053e99964",
@@ -3703,7 +4018,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 8,
       "icon": "items/images/en/kompressa.818145317760f0094b03dbb57e622448.png",
-      "thumb": "items/images/en/thumbs/kompressa.818145317760f0094b03dbb57e622448.128x128.png"
+      "thumb": "items/images/en/thumbs/kompressa.818145317760f0094b03dbb57e622448.128x128.png",
+      "imageName": "YareliPistol.png"
     },
     {
       "id": "60e5b9014794450053e99965",
@@ -3714,7 +4030,8 @@
       "disposition": 0.8,
       "reqMasteryRank": 16,
       "icon": "riven_item/images/tenet_exec.34824515181ac57467c400eadffbe575.png",
-      "thumb": "riven_item/images/thumbs/tenet_exec.34824515181ac57467c400eadffbe575.128x128.png"
+      "thumb": "riven_item/images/thumbs/tenet_exec.34824515181ac57467c400eadffbe575.128x128.png",
+      "imageName": "CrpBigSlash.png"
     },
     {
       "id": "60e5b9014794450053e99966",
@@ -3725,7 +4042,8 @@
       "disposition": 0.95,
       "reqMasteryRank": 14,
       "icon": "riven_item/images/tenet_grigori.bf041c1c790f3d6a1835281129543585.png",
-      "thumb": "riven_item/images/thumbs/tenet_grigori.bf041c1c790f3d6a1835281129543585.128x128.png"
+      "thumb": "riven_item/images/thumbs/tenet_grigori.bf041c1c790f3d6a1835281129543585.128x128.png",
+      "imageName": "CrpBriefcaseScythe.png"
     },
     {
       "id": "60e5b9014794450053e99967",
@@ -3736,7 +4054,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 10,
       "icon": "items/images/en/ambassador.7ccc0f5c1047f5a0cd9f02de8d40b06f.png",
-      "thumb": "items/images/en/thumbs/ambassador.7ccc0f5c1047f5a0cd9f02de8d40b06f.128x128.png"
+      "thumb": "items/images/en/thumbs/ambassador.7ccc0f5c1047f5a0cd9f02de8d40b06f.128x128.png",
+      "imageName": "CrpArSniper.png"
     },
     {
       "id": "60e5b9014794450053e99968",
@@ -3747,7 +4066,8 @@
       "disposition": 1.29,
       "reqMasteryRank": 4,
       "icon": "items/images/en/cadus.b26798533a21ebb73339ac124e24a1ec.png",
-      "thumb": "items/images/en/thumbs/cadus.b26798533a21ebb73339ac124e24a1ec.128x128.png"
+      "thumb": "items/images/en/thumbs/cadus.b26798533a21ebb73339ac124e24a1ec.128x128.png",
+      "imageName": "Cadus.png"
     },
     {
       "id": "60e5b9014794450053e99969",
@@ -3758,7 +4078,8 @@
       "disposition": 0.95,
       "reqMasteryRank": 14,
       "icon": "riven_item/images/tenet_livia.c1f24b173e76f43393e095c560a89499.png",
-      "thumb": "riven_item/images/thumbs/tenet_livia.c1f24b173e76f43393e095c560a89499.128x128.png"
+      "thumb": "riven_item/images/thumbs/tenet_livia.c1f24b173e76f43393e095c560a89499.128x128.png",
+      "imageName": "CrpBriefcase2HKatana.png"
     },
     {
       "id": "60e5b9014794450053e9996a",
@@ -3769,7 +4090,8 @@
       "disposition": 0.8,
       "reqMasteryRank": 16,
       "icon": "riven_item/images/tenet_diplos.12c9784343dc222697dcf4dffe313198.png",
-      "thumb": "riven_item/images/thumbs/tenet_diplos.12c9784343dc222697dcf4dffe313198.128x128.png"
+      "thumb": "riven_item/images/thumbs/tenet_diplos.12c9784343dc222697dcf4dffe313198.128x128.png",
+      "imageName": "CrpBriefcaseAkimboGun.png"
     },
     {
       "id": "60e5b9014794450053e9996b",
@@ -3780,7 +4102,8 @@
       "disposition": 0.9,
       "reqMasteryRank": 14,
       "icon": "riven_item/images/tenet_agendus.7924a44df9935ad357f046212cc2a774.png",
-      "thumb": "riven_item/images/thumbs/tenet_agendus.7924a44df9935ad357f046212cc2a774.128x128.png"
+      "thumb": "riven_item/images/thumbs/tenet_agendus.7924a44df9935ad357f046212cc2a774.128x128.png",
+      "imageName": "CrpHammerShield.png"
     },
     {
       "id": "60f3feb1b64404003f0bf5ff",
@@ -3824,7 +4147,8 @@
       "disposition": 0.9,
       "reqMasteryRank": 9,
       "icon": "items/images/en/vastilok.0d6a0cdb886e051eab8f6b4e26df3e99.png",
-      "thumb": "items/images/en/thumbs/vastilok.0d6a0cdb886e051eab8f6b4e26df3e99.128x128.png"
+      "thumb": "items/images/en/thumbs/vastilok.0d6a0cdb886e051eab8f6b4e26df3e99.128x128.png",
+      "imageName": "GrnGunblade.png"
     },
     {
       "id": "61460dcde330e600455dcea6",
@@ -3835,7 +4159,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 7,
       "icon": "riven_item/images/ghoulsaw.f9a355d3f35098841d346d536abd801c.png",
-      "thumb": "riven_item/images/thumbs/ghoulsaw.f9a355d3f35098841d346d536abd801c.128x128.png"
+      "thumb": "riven_item/images/thumbs/ghoulsaw.f9a355d3f35098841d346d536abd801c.128x128.png",
+      "imageName": "GrnGhoulSawWeapon.png"
     },
     {
       "id": "61bb64fe3132ff00482b5fd8",
@@ -3846,7 +4171,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 13,
       "icon": "items/images/en/verdilac.31e782e181638b3877fc06bae4e616b9.png",
-      "thumb": "items/images/en/thumbs/verdilac.31e782e181638b3877fc06bae4e616b9.128x128.png"
+      "thumb": "items/images/en/thumbs/verdilac.31e782e181638b3877fc06bae4e616b9.128x128.png",
+      "imageName": "ArchonWhip.png"
     },
     {
       "id": "61bb64fe3132ff00482b5fd9",
@@ -3857,7 +4183,8 @@
       "disposition": 1,
       "reqMasteryRank": 13,
       "icon": "items/images/en/nepheri.ba1daf808d7a71e3c8658da0f5ffdcb4.png",
-      "thumb": "items/images/en/thumbs/nepheri.ba1daf808d7a71e3c8658da0f5ffdcb4.128x128.png"
+      "thumb": "items/images/en/thumbs/nepheri.ba1daf808d7a71e3c8658da0f5ffdcb4.128x128.png",
+      "imageName": "ArchonDualDaggers.png"
     },
     {
       "id": "61bb64fe3132ff00482b5fda",
@@ -3868,7 +4195,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 8,
       "icon": "items/images/en/rumblejack.93665a0884f96782697b3c133be0302b.png",
-      "thumb": "items/images/en/thumbs/rumblejack.93665a0884f96782697b3c133be0302b.128x128.png"
+      "thumb": "items/images/en/thumbs/rumblejack.93665a0884f96782697b3c133be0302b.128x128.png",
+      "imageName": "DrifterTazer.png"
     },
     {
       "id": "61bb64fe3132ff00482b5fdb",
@@ -3879,7 +4207,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 13,
       "icon": "riven_item/images/korumm.517f966498590e6d1ac513f8232040db.png",
-      "thumb": "riven_item/images/thumbs/korumm.517f966498590e6d1ac513f8232040db.128x128.png"
+      "thumb": "riven_item/images/thumbs/korumm.517f966498590e6d1ac513f8232040db.128x128.png",
+      "imageName": "ArchonTrident.png"
     },
     {
       "id": "61bb64fe3132ff00482b5fdc",
@@ -3890,7 +4219,8 @@
       "disposition": 1.3,
       "reqMasteryRank": 9,
       "icon": "riven_item/images/venato.b9268f9545ab5bf0adcee8625647e309.png",
-      "thumb": "riven_item/images/thumbs/venato.b9268f9545ab5bf0adcee8625647e309.128x128.png"
+      "thumb": "riven_item/images/thumbs/venato.b9268f9545ab5bf0adcee8625647e309.128x128.png",
+      "imageName": "SentJointedScytheWeapon.png"
     },
     {
       "id": "61bb64fe3132ff00482b5fdd",
@@ -3901,7 +4231,8 @@
       "disposition": 0.65,
       "reqMasteryRank": 0,
       "icon": "items/images/en/nataruk.d3fca407c70c6a55f9af6f33b243b767.png",
-      "thumb": "items/images/en/thumbs/nataruk.d3fca407c70c6a55f9af6f33b243b767.128x128.png"
+      "thumb": "items/images/en/thumbs/nataruk.d3fca407c70c6a55f9af6f33b243b767.128x128.png",
+      "imageName": "OmicrusBow.png"
     },
     {
       "id": "626a197ef40db600660a1d90",
@@ -3912,7 +4243,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 12,
       "icon": "riven_item/images/hespar.58bd4fbd6ed4930402342b2662d68ac4.png",
-      "thumb": "riven_item/images/thumbs/hespar.58bd4fbd6ed4930402342b2662d68ac4.128x128.png"
+      "thumb": "riven_item/images/thumbs/hespar.58bd4fbd6ed4930402342b2662d68ac4.128x128.png",
+      "imageName": "DuviriHeavyScythe.png"
     },
     {
       "id": "626a197ef40db600660a1d91",
@@ -3923,7 +4255,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 8,
       "icon": "riven_item/images/alternox.b7f48c9f0ec9cc2b0045ccfa389f0d53.png",
-      "thumb": "riven_item/images/thumbs/alternox.b7f48c9f0ec9cc2b0045ccfa389f0d53.128x128.png"
+      "thumb": "riven_item/images/thumbs/alternox.b7f48c9f0ec9cc2b0045ccfa389f0d53.128x128.png",
+      "imageName": "GyreRifleWeapon.png"
     },
     {
       "id": "626a197ef40db600660a1d92",
@@ -3934,7 +4267,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 10,
       "icon": "riven_item/images/aeolak.8e4abcb1b4e14723c68c30636d4da6ab.png",
-      "thumb": "riven_item/images/thumbs/aeolak.8e4abcb1b4e14723c68c30636d4da6ab.128x128.png"
+      "thumb": "riven_item/images/thumbs/aeolak.8e4abcb1b4e14723c68c30636d4da6ab.128x128.png",
+      "imageName": "TnRifleErsatzWeapon.png"
     },
     {
       "id": "626a197ef40db600660a1d93",
@@ -3945,7 +4279,8 @@
       "disposition": 0.6,
       "reqMasteryRank": 14,
       "icon": "items/images/en/phenmor.4fa10f6dededc5af9b3515370302432a.png",
-      "thumb": "items/images/en/thumbs/phenmor.4fa10f6dededc5af9b3515370302432a.128x128.png"
+      "thumb": "items/images/en/thumbs/phenmor.4fa10f6dededc5af9b3515370302432a.128x128.png",
+      "imageName": "ZarimanSemiAutoRifle.png"
     },
     {
       "id": "626a197ef40db600660a1d94",
@@ -3956,7 +4291,8 @@
       "disposition": 0.5,
       "reqMasteryRank": 14,
       "icon": "items/images/en/laetum.7d096a802a809499e0ce83f41f712f78.png",
-      "thumb": "items/images/en/thumbs/laetum.7d096a802a809499e0ce83f41f712f78.128x128.png"
+      "thumb": "items/images/en/thumbs/laetum.7d096a802a809499e0ce83f41f712f78.128x128.png",
+      "imageName": "ZarimanHeavyPistol.png"
     },
     {
       "id": "626a197ef40db600660a1d95",
@@ -3967,7 +4303,8 @@
       "disposition": 0.6,
       "reqMasteryRank": 14,
       "icon": "items/images/en/praedos.e1da5767a0e93a169cc678f1a8bff20f.png",
-      "thumb": "items/images/en/thumbs/praedos.e1da5767a0e93a169cc678f1a8bff20f.128x128.png"
+      "thumb": "items/images/en/thumbs/praedos.e1da5767a0e93a169cc678f1a8bff20f.128x128.png",
+      "imageName": "ZarimanTonfa.png"
     },
     {
       "id": "62a2baecfbd62c00450b71e0",
@@ -3978,7 +4315,8 @@
       "disposition": 0.65,
       "reqMasteryRank": 14,
       "icon": "riven_item/images/innodem.2a892f04f30e5f12bd5689a2fd467aeb.png",
-      "thumb": "riven_item/images/thumbs/innodem.2a892f04f30e5f12bd5689a2fd467aeb.128x128.png"
+      "thumb": "riven_item/images/thumbs/innodem.2a892f04f30e5f12bd5689a2fd467aeb.128x128.png",
+      "imageName": "ZarimanDaggerWeapon.png"
     },
     {
       "id": "62a2baecfbd62c00450b71e1",
@@ -3989,7 +4327,8 @@
       "disposition": 0.6,
       "reqMasteryRank": 14,
       "icon": "items/images/en/felarx.053e1cdbccea41a95d0e3db9964665ff.png",
-      "thumb": "items/images/en/thumbs/felarx.053e1cdbccea41a95d0e3db9964665ff.128x128.png"
+      "thumb": "items/images/en/thumbs/felarx.053e1cdbccea41a95d0e3db9964665ff.128x128.png",
+      "imageName": "ZarimanPumpShotgun.png"
     },
     {
       "id": "62d3078680f54c00b5ddf5d2",
@@ -4000,7 +4339,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 8,
       "icon": "riven_item/images/vericres.78fa72dfb0e8a5060eba19ebdf2f3a5b.png",
-      "thumb": "riven_item/images/thumbs/vericres.78fa72dfb0e8a5060eba19ebdf2f3a5b.128x128.png"
+      "thumb": "riven_item/images/thumbs/vericres.78fa72dfb0e8a5060eba19ebdf2f3a5b.128x128.png",
+      "imageName": "MoonWarfan.png"
     },
     {
       "id": "6319dc240cd37200bcb88275",
@@ -4011,7 +4351,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 13,
       "icon": "riven_item/images/slaytra.784c1ca862dfdd321a3f538348cdd4f1.png",
-      "thumb": "riven_item/images/thumbs/slaytra.784c1ca862dfdd321a3f538348cdd4f1.128x128.png"
+      "thumb": "riven_item/images/thumbs/slaytra.784c1ca862dfdd321a3f538348cdd4f1.128x128.png",
+      "imageName": "GrnSharbolaWeapon.png"
     },
     {
       "id": "6319dc250cd37200bcb88276",
@@ -4022,7 +4363,8 @@
       "disposition": 1,
       "reqMasteryRank": 11,
       "icon": "riven_item/images/aegrit.3c6f1892e31ea35858cd3961b7618757.png",
-      "thumb": "riven_item/images/thumbs/aegrit.3c6f1892e31ea35858cd3961b7618757.128x128.png"
+      "thumb": "riven_item/images/thumbs/aegrit.3c6f1892e31ea35858cd3961b7618757.128x128.png",
+      "imageName": "GrnVorStickyBomb.png"
     },
     {
       "id": "6319dc250cd37200bcb88277",
@@ -4033,7 +4375,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 8,
       "icon": "riven_item/images/afentis.9f064bb2a6d5d35db0cb527907c6fcf7.png",
-      "thumb": "riven_item/images/thumbs/afentis.9f064bb2a6d5d35db0cb527907c6fcf7.128x128.png"
+      "thumb": "riven_item/images/thumbs/afentis.9f064bb2a6d5d35db0cb527907c6fcf7.128x128.png",
+      "imageName": "TnHopliteSpear.png"
     },
     {
       "id": "6388664ce7c98800a3b47115",
@@ -4044,7 +4387,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 8,
       "icon": "riven_item/images/sarofang.132b80ed3bbefa26846dbafa1bfe5f56.png",
-      "thumb": "riven_item/images/thumbs/sarofang.132b80ed3bbefa26846dbafa1bfe5f56.128x128.png"
+      "thumb": "riven_item/images/thumbs/sarofang.132b80ed3bbefa26846dbafa1bfe5f56.128x128.png",
+      "imageName": "WolfFrameAxeWeapon.png"
     },
     {
       "id": "6388664ce7c98800a3b47116",
@@ -4055,7 +4399,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 8,
       "icon": "riven_item/images/perigale.aa3026811b0bb347c6b723269ef8b61c.png",
-      "thumb": "riven_item/images/thumbs/perigale.aa3026811b0bb347c6b723269ef8b61c.128x128.png"
+      "thumb": "riven_item/images/thumbs/perigale.aa3026811b0bb347c6b723269ef8b61c.128x128.png",
+      "imageName": "TnQuadSniperRifle.png"
     },
     {
       "id": "63ee010110125411da49e700",
@@ -4066,7 +4411,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 8,
       "icon": "riven_item/images/corufell.1361201225387534bc5dd7896424974c.png",
-      "thumb": "riven_item/images/thumbs/corufell.1361201225387534bc5dd7896424974c.128x128.png"
+      "thumb": "riven_item/images/thumbs/corufell.1361201225387534bc5dd7896424974c.128x128.png",
+      "imageName": "ExaltedAWScytheWeapon.png"
     },
     {
       "id": "63ee010110125411da49e701",
@@ -4077,7 +4423,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 8,
       "icon": "riven_item/images/steflos.031e151f5273ef800823a8052d5cacec.png",
-      "thumb": "riven_item/images/thumbs/steflos.031e151f5273ef800823a8052d5cacec.128x128.png"
+      "thumb": "riven_item/images/thumbs/steflos.031e151f5273ef800823a8052d5cacec.128x128.png",
+      "imageName": "TnoLotusPodShotgun.png"
     },
     {
       "id": "644b00257ec1900044b97738",
@@ -4088,7 +4435,8 @@
       "disposition": 1,
       "reqMasteryRank": 0,
       "icon": "riven_item/images/sampotes.f984db830e9df86e25cf2ca4b52f658d.png",
-      "thumb": "riven_item/images/thumbs/sampotes.f984db830e9df86e25cf2ca4b52f658d.128x128.png"
+      "thumb": "riven_item/images/thumbs/sampotes.f984db830e9df86e25cf2ca4b52f658d.128x128.png",
+      "imageName": "DaxDuviriHammer.png"
     },
     {
       "id": "644b00257ec1900044b97739",
@@ -4099,7 +4447,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 0,
       "icon": "riven_item/images/azothane.442cb620637448e4532ff3b257cca60d.png",
-      "thumb": "riven_item/images/thumbs/azothane.442cb620637448e4532ff3b257cca60d.128x128.png"
+      "thumb": "riven_item/images/thumbs/azothane.442cb620637448e4532ff3b257cca60d.128x128.png",
+      "imageName": "DaxDuviriTwoHandedKatana.png"
     },
     {
       "id": "644b00267ec1900044b9773a",
@@ -4110,7 +4459,8 @@
       "disposition": 0.75,
       "reqMasteryRank": 0,
       "icon": "riven_item/images/syam.db59c65c841c1a5d3804bfb322cfa396.png",
-      "thumb": "riven_item/images/thumbs/syam.db59c65c841c1a5d3804bfb322cfa396.128x128.png"
+      "thumb": "riven_item/images/thumbs/syam.db59c65c841c1a5d3804bfb322cfa396.128x128.png",
+      "imageName": "DaxDuviriKatana.png"
     },
     {
       "id": "644b00267ec1900044b9773b",
@@ -4121,7 +4471,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 6,
       "icon": "riven_item/images/cinta.9362297c3ebd9acd6e874dd3b8a85e34.png",
-      "thumb": "riven_item/images/thumbs/cinta.9362297c3ebd9acd6e874dd3b8a85e34.128x128.png"
+      "thumb": "riven_item/images/thumbs/cinta.9362297c3ebd9acd6e874dd3b8a85e34.128x128.png",
+      "imageName": "DaxDuviriAsymmetricalLongBow.png"
     },
     {
       "id": "644b00267ec1900044b9773c",
@@ -4132,7 +4483,8 @@
       "disposition": 0.8,
       "reqMasteryRank": 0,
       "icon": "riven_item/images/sun_and_moon.7640cf4cca525818fca1bf6bc7845ac7.png",
-      "thumb": "riven_item/images/thumbs/sun_and_moon.7640cf4cca525818fca1bf6bc7845ac7.128x128.png"
+      "thumb": "riven_item/images/thumbs/sun_and_moon.7640cf4cca525818fca1bf6bc7845ac7.128x128.png",
+      "imageName": "TeshinDualSwords.png"
     },
     {
       "id": "644b00267ec1900044b9773d",
@@ -4143,7 +4495,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 0,
       "icon": "riven_item/images/edun.c8ee1908b2fcac4492d03eb28c8ecce1.png",
-      "thumb": "riven_item/images/thumbs/edun.c8ee1908b2fcac4492d03eb28c8ecce1.128x128.png"
+      "thumb": "riven_item/images/thumbs/edun.c8ee1908b2fcac4492d03eb28c8ecce1.128x128.png",
+      "imageName": "DaxDuviriPolearm.png"
     },
     {
       "id": "649325b17ec1902187d57141",
@@ -4154,7 +4507,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 8,
       "icon": "riven_item/images/rauta.cbe84e8e7131f82a5af0e4964dbbde79.png",
-      "thumb": "riven_item/images/thumbs/rauta.cbe84e8e7131f82a5af0e4964dbbde79.128x128.png"
+      "thumb": "riven_item/images/thumbs/rauta.cbe84e8e7131f82a5af0e4964dbbde79.128x128.png",
+      "imageName": "PaxDuviricusShotgun.png"
     },
     {
       "id": "64c2aa1766456704eba6ba4b",
@@ -4165,7 +4519,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 0,
       "icon": "riven_item/images/argo_and_vel.d820a015d857e5bac51524013de5b7b1.png",
-      "thumb": "riven_item/images/thumbs/argo_and_vel.d820a015d857e5bac51524013de5b7b1.128x128.png"
+      "thumb": "riven_item/images/thumbs/argo_and_vel.d820a015d857e5bac51524013de5b7b1.128x128.png",
+      "imageName": "DaxDuviriMaceShieldWeapon.png"
     },
     {
       "id": "65084702b0b39003de5c6608",
@@ -4176,7 +4531,8 @@
       "disposition": 0.85,
       "reqMasteryRank": 14,
       "icon": "riven_item/images/gotva_prime.323e7113fa10a54ab363496770917b19.png",
-      "thumb": "riven_item/images/thumbs/gotva_prime.323e7113fa10a54ab363496770917b19.128x128.png"
+      "thumb": "riven_item/images/thumbs/gotva_prime.323e7113fa10a54ab363496770917b19.128x128.png",
+      "imageName": "GrnOrokinRifle.png"
     },
     {
       "id": "653168b5f31453d36319c56b",
@@ -4187,7 +4543,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 8,
       "icon": "riven_item/unknown.png",
-      "thumb": "riven_item/unknown.thumb.png"
+      "thumb": "riven_item/unknown.thumb.png",
+      "imageName": "Dorrclave.png"
     },
     {
       "id": "657b07d2107314e45d820f3d",
@@ -4198,7 +4555,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 10,
       "icon": "riven_item/images/ekhein.0406d6c15108ca2ebeebefb7836f6f6f.png",
-      "thumb": "riven_item/images/thumbs/ekhein.0406d6c15108ca2ebeebefb7836f6f6f.128x128.png"
+      "thumb": "riven_item/images/thumbs/ekhein.0406d6c15108ca2ebeebefb7836f6f6f.128x128.png",
+      "imageName": "EntSphereHammer.png"
     },
     {
       "id": "657b07d2107314e45d820f3e",
@@ -4209,7 +4567,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 10,
       "icon": "riven_item/images/mandonel.242783b92f4aeadf1270b7012dfa9079.png",
-      "thumb": "riven_item/images/thumbs/mandonel.242783b92f4aeadf1270b7012dfa9079.128x128.png"
+      "thumb": "riven_item/images/thumbs/mandonel.242783b92f4aeadf1270b7012dfa9079.128x128.png",
+      "imageName": "TnConcreteArchgun.png"
     },
     {
       "id": "658324796a16d2e9b441c875",
@@ -4220,7 +4579,8 @@
       "disposition": 0.6,
       "reqMasteryRank": 10,
       "icon": "items/images/en/grimoire.395a51f57c90d8aed9e8236ffaaa3740.webp",
-      "thumb": "items/images/en/thumbs/grimoire.395a51f57c90d8aed9e8236ffaaa3740.128x128.webp"
+      "thumb": "items/images/en/thumbs/grimoire.395a51f57c90d8aed9e8236ffaaa3740.128x128.webp",
+      "imageName": "Grimoire.png"
     },
     {
       "id": "6605af996c556c21875eae30",
@@ -4231,7 +4591,8 @@
       "disposition": 0.8,
       "reqMasteryRank": 14,
       "icon": "riven_item/images/onos.400bb4c474ed685e11189bc95ab5cee7.png",
-      "thumb": "riven_item/images/thumbs/onos.400bb4c474ed685e11189bc95ab5cee7.128x128.png"
+      "thumb": "riven_item/images/thumbs/onos.400bb4c474ed685e11189bc95ab5cee7.128x128.png",
+      "imageName": "EntratiWristGun.png"
     },
     {
       "id": "6605af9e6c556c21875eae32",
@@ -4242,7 +4603,8 @@
       "disposition": 0.9,
       "reqMasteryRank": 14,
       "icon": "riven_item/images/ruvox.a42a6dd3ac466fbab378a12de9f965e5.png",
-      "thumb": "riven_item/images/thumbs/ruvox.a42a6dd3ac466fbab378a12de9f965e5.128x128.png"
+      "thumb": "riven_item/images/thumbs/ruvox.a42a6dd3ac466fbab378a12de9f965e5.128x128.png",
+      "imageName": "EntFistIncarnon.png"
     },
     {
       "id": "663203e0e85cac3856c86cb9",
@@ -4253,7 +4615,8 @@
       "disposition": 1.1,
       "reqMasteryRank": 8,
       "icon": "riven_item/images/dex_nikana.6416a6a21cd657661a87b3202c2916b5.png",
-      "thumb": "riven_item/images/thumbs/dex_nikana.6416a6a21cd657661a87b3202c2916b5.128x128.png"
+      "thumb": "riven_item/images/thumbs/dex_nikana.6416a6a21cd657661a87b3202c2916b5.128x128.png",
+      "imageName": "Dex2023Nikana.png"
     },
     {
       "id": "667239428ba7c81b70d02cc2",
@@ -4264,7 +4627,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 10,
       "icon": "riven_item/images/cantare.f50d1de3eddc876c4a086345f3a4089a.webp",
-      "thumb": "riven_item/images/thumbs/cantare.f50d1de3eddc876c4a086345f3a4089a.128x128.webp"
+      "thumb": "riven_item/images/thumbs/cantare.f50d1de3eddc876c4a086345f3a4089a.128x128.webp",
+      "imageName": "TnChoirframeKunai.png"
     },
     {
       "id": "667239468ba7c81b70d02cc4",
@@ -4275,7 +4639,8 @@
       "disposition": 1.2,
       "reqMasteryRank": 10,
       "icon": "riven_item/images/evensong.dffed8e4c6de1f3987d8502ce694fcf6.webp",
-      "thumb": "riven_item/images/thumbs/evensong.dffed8e4c6de1f3987d8502ce694fcf6.128x128.webp"
+      "thumb": "riven_item/images/thumbs/evensong.dffed8e4c6de1f3987d8502ce694fcf6.128x128.webp",
+      "imageName": "TnChoirBow.png"
     },
     {
       "id": "667239538ba7c81b70d02cc6",
@@ -4286,7 +4651,8 @@
       "disposition": 0.6,
       "reqMasteryRank": 10,
       "icon": "riven_item/images/harmony.cf0a729000e10b443b51726b73453970.webp",
-      "thumb": "riven_item/images/thumbs/harmony.cf0a729000e10b443b51726b73453970.128x128.webp"
+      "thumb": "riven_item/images/thumbs/harmony.cf0a729000e10b443b51726b73453970.128x128.webp",
+      "imageName": "TnChoirScythe.png"
     },
     {
       "id": "669c430a2bca759c7edfc9a4",
@@ -4297,7 +4663,8 @@
       "disposition": 0.85,
       "reqMasteryRank": 12,
       "icon": "riven_item/images/ax_52.f210bd36459da3059d2b0491343eb232.webp",
-      "thumb": "riven_item/images/thumbs/ax_52.f210bd36459da3059d2b0491343eb232.128x128.webp"
+      "thumb": "riven_item/images/thumbs/ax_52.f210bd36459da3059d2b0491343eb232.128x128.webp",
+      "imageName": "AK47Weapon.png"
     },
     {
       "id": "66fe9569755c14b58ddfa04b",
@@ -4308,7 +4675,8 @@
       "disposition": 1.25,
       "reqMasteryRank": 2,
       "icon": "riven_item/images/higasa.d10061fc5542784b36745d01e142db1f.webp",
-      "thumb": "riven_item/images/thumbs/higasa.d10061fc5542784b36745d01e142db1f.128x128.webp"
+      "thumb": "riven_item/images/thumbs/higasa.d10061fc5542784b36745d01e142db1f.128x128.webp",
+      "imageName": "GunbrellaWeapon.png"
     },
     {
       "id": "66fe956d755c14b58ddfa04d",
@@ -4319,7 +4687,8 @@
       "disposition": 0.85,
       "reqMasteryRank": 2,
       "icon": "riven_item/images/amanata.333572434025f3f95cdf883d417fa04f.webp",
-      "thumb": "riven_item/images/thumbs/amanata.333572434025f3f95cdf883d417fa04f.128x128.webp"
+      "thumb": "riven_item/images/thumbs/amanata.333572434025f3f95cdf883d417fa04f.128x128.webp",
+      "imageName": "NaginataWeapon.png"
     },
     {
       "id": "675d11bd47952ab3ea1928fa",
@@ -4330,7 +4699,8 @@
       "disposition": 0.8,
       "reqMasteryRank": 14,
       "icon": "items/images/en/vesper_77.458ee810a1bd761977bb568fdc4f0328.webp",
-      "thumb": "items/images/en/thumbs/vesper_77.458ee810a1bd761977bb568fdc4f0328.128x128.webp"
+      "thumb": "items/images/en/thumbs/vesper_77.458ee810a1bd761977bb568fdc4f0328.128x128.webp",
+      "imageName": "LasSilencedPistolWeapon.png"
     },
     {
       "id": "675d11c947952ab3ea1928fc",
@@ -4341,7 +4711,8 @@
       "disposition": 1,
       "reqMasteryRank": 14,
       "icon": "items/images/en/reconifex.9e42d364ade6de6aada425b4694486e4.webp",
-      "thumb": "items/images/en/thumbs/reconifex.9e42d364ade6de6aada425b4694486e4.128x128.webp"
+      "thumb": "items/images/en/thumbs/reconifex.9e42d364ade6de6aada425b4694486e4.128x128.webp",
+      "imageName": "TnBeltFedRifle.png"
     },
     {
       "id": "67db60f09cec3e52e62523f8",
@@ -4352,7 +4723,8 @@
       "disposition": 1,
       "reqMasteryRank": 14,
       "icon": "items/images/en/riot_848.c674e6dc3c29b1f7d580edf2e2714ce1.webp",
-      "thumb": "items/images/en/thumbs/riot_848.c674e6dc3c29b1f7d580edf2e2714ce1.128x128.webp"
+      "thumb": "items/images/en/thumbs/riot_848.c674e6dc3c29b1f7d580edf2e2714ce1.128x128.webp",
+      "imageName": "1999EntHybridPistol.png"
     },
     {
       "id": "67db60f19cec3e52e62523f9",
@@ -4363,7 +4735,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 14,
       "icon": "items/images/en/purgator_1.cd59243fe2d8a6cc4e29cb9adec65cb9.webp",
-      "thumb": "items/images/en/thumbs/purgator_1.cd59243fe2d8a6cc4e29cb9adec65cb9.128x128.webp"
+      "thumb": "items/images/en/thumbs/purgator_1.cd59243fe2d8a6cc4e29cb9adec65cb9.128x128.webp",
+      "imageName": "LasrianNox.png"
     },
     {
       "id": "67db60f29cec3e52e62523fa",
@@ -4374,7 +4747,8 @@
       "disposition": 0.8,
       "reqMasteryRank": 14,
       "icon": "items/images/en/dual_viciss.c15a2204ca280b7b4db1bfe0d53a07cf.webp",
-      "thumb": "items/images/en/thumbs/dual_viciss.c15a2204ca280b7b4db1bfe0d53a07cf.128x128.webp"
+      "thumb": "items/images/en/thumbs/dual_viciss.c15a2204ca280b7b4db1bfe0d53a07cf.128x128.webp",
+      "imageName": "LasGooSickle.png"
     },
     {
       "id": "67db60f39cec3e52e62523fb",
@@ -4385,7 +4759,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 14,
       "icon": "items/images/en/efv_8_mars.7ea6d23799085277f1942e054de9f6fd.webp",
-      "thumb": "items/images/en/thumbs/efv_8_mars.7ea6d23799085277f1942e054de9f6fd.128x128.webp"
+      "thumb": "items/images/en/thumbs/efv_8_mars.7ea6d23799085277f1942e054de9f6fd.128x128.webp",
+      "imageName": "LasGooPistolWeapon.png"
     },
     {
       "id": "67db60f49cec3e52e62523fc",
@@ -4396,7 +4771,8 @@
       "disposition": 1.05,
       "reqMasteryRank": 14,
       "icon": "items/images/en/efv_5_jupiter.c69153cce49d7d087e5b2268b3d37ac3.webp",
-      "thumb": "items/images/en/thumbs/efv_5_jupiter.c69153cce49d7d087e5b2268b3d37ac3.128x128.webp"
+      "thumb": "items/images/en/thumbs/efv_5_jupiter.c69153cce49d7d087e5b2268b3d37ac3.128x128.webp",
+      "imageName": "LasGooAK.png"
     },
     {
       "id": "67db60f69cec3e52e62523fd",
@@ -4407,7 +4783,8 @@
       "disposition": 0.55,
       "reqMasteryRank": 17,
       "icon": "items/images/en/dual_coda_torxica.2d513976357013881a1518e34fdc932b.webp",
-      "thumb": "items/images/en/thumbs/dual_coda_torxica.2d513976357013881a1518e34fdc932b.128x128.webp"
+      "thumb": "items/images/en/thumbs/dual_coda_torxica.2d513976357013881a1518e34fdc932b.128x128.webp",
+      "imageName": "1999InfSporePistolWeapon.png"
     },
     {
       "id": "67db60f79cec3e52e62523fe",
@@ -4418,7 +4795,8 @@
       "disposition": 0.8,
       "reqMasteryRank": 17,
       "icon": "items/images/en/coda_motovore.9a5e70eb18ccde9a01a4927414d6317b.webp",
-      "thumb": "items/images/en/thumbs/coda_motovore.9a5e70eb18ccde9a01a4927414d6317b.128x128.webp"
+      "thumb": "items/images/en/thumbs/coda_motovore.9a5e70eb18ccde9a01a4927414d6317b.128x128.webp",
+      "imageName": "InfLichHammerWeapon.png"
     },
     {
       "id": "67db60f89cec3e52e62523ff",
@@ -4429,7 +4807,8 @@
       "disposition": 0.6,
       "reqMasteryRank": 17,
       "icon": "items/images/en/coda_bassocyst.1180e893087145914848a49c3b31764c.webp",
-      "thumb": "items/images/en/thumbs/coda_bassocyst.1180e893087145914848a49c3b31764c.128x128.webp"
+      "thumb": "items/images/en/thumbs/coda_bassocyst.1180e893087145914848a49c3b31764c.128x128.webp",
+      "imageName": "1999InfShotgunWeapon.png"
     },
     {
       "id": "682dee1f35715d4f3e9c64b9",
@@ -4440,7 +4819,8 @@
       "disposition": 0.95,
       "reqMasteryRank": 9,
       "icon": "items/images/en/tak_and_lug.a4ccf56868c21b0c8441e8bd908ef99e.webp",
-      "thumb": "items/images/en/thumbs/tak_and_lug.a4ccf56868c21b0c8441e8bd908ef99e.128x128.webp"
+      "thumb": "items/images/en/thumbs/tak_and_lug.a4ccf56868c21b0c8441e8bd908ef99e.128x128.webp",
+      "imageName": "MortiforShieldAndSword.png"
     },
     {
       "id": "682dee2b35715d4f3e9c64bb",
@@ -4451,7 +4831,8 @@
       "disposition": 0.85,
       "reqMasteryRank": 9,
       "icon": "items/images/en/tonkkatt.ad1e629b25812b5f233a1c76f43648cd.webp",
-      "thumb": "items/images/en/thumbs/tonkkatt.ad1e629b25812b5f233a1c76f43648cd.128x128.webp"
+      "thumb": "items/images/en/thumbs/tonkkatt.ad1e629b25812b5f233a1c76f43648cd.128x128.webp",
+      "imageName": "GrnChainSawTonfa.png"
     },
     {
       "id": "685d4ebaf41598dddb4cc2ec",
@@ -4462,7 +4843,8 @@
       "disposition": 0.6,
       "reqMasteryRank": 12,
       "icon": "items/images/en/thalys.aa4927acfb5c920486d5ad084386db43.webp",
-      "thumb": "items/images/en/thumbs/thalys.aa4927acfb5c920486d5ad084386db43.128x128.webp"
+      "thumb": "items/images/en/thumbs/thalys.aa4927acfb5c920486d5ad084386db43.128x128.webp",
+      "imageName": "ZarimanHeavyScythe.png"
     },
     {
       "id": "685d4ec3f41598dddb4cc2ee",
@@ -4473,7 +4855,8 @@
       "disposition": 0.7,
       "reqMasteryRank": 12,
       "icon": "items/images/en/scyotid.d9229e8a66326aebd7ac98bf7c9eaf85.webp",
-      "thumb": "items/images/en/thumbs/scyotid.d9229e8a66326aebd7ac98bf7c9eaf85.128x128.webp"
+      "thumb": "items/images/en/thumbs/scyotid.d9229e8a66326aebd7ac98bf7c9eaf85.128x128.webp",
+      "imageName": "TnOraxiaFlechette.png"
     },
     {
       "id": "685d4ecbf41598dddb4cc2f0",
@@ -4484,7 +4867,8 @@
       "disposition": 0.75,
       "reqMasteryRank": 12,
       "icon": "items/images/en/spinnerex.8a267bd4c3a34a4a745f8b7f9f59633a.webp",
-      "thumb": "items/images/en/thumbs/spinnerex.8a267bd4c3a34a4a745f8b7f9f59633a.128x128.webp"
+      "thumb": "items/images/en/thumbs/spinnerex.8a267bd4c3a34a4a745f8b7f9f59633a.128x128.webp",
+      "imageName": "SpiderWhip.png"
     },
     {
       "id": "68add6831027572e028db6c7",
@@ -4495,7 +4879,8 @@
       "disposition": 0.75,
       "reqMasteryRank": 15,
       "icon": "items/images/en/vadarya_prime.0456477036c7f0194f3db68594ca85ab.webp",
-      "thumb": "items/images/en/thumbs/vadarya_prime.0456477036c7f0194f3db68594ca85ab.128x128.webp"
+      "thumb": "items/images/en/thumbs/vadarya_prime.0456477036c7f0194f3db68594ca85ab.128x128.webp",
+      "imageName": "VadaryaPrime.png"
     },
     {
       "id": "68efbff105fb2137056fb723",
@@ -4506,7 +4891,8 @@
       "disposition": 0.7,
       "reqMasteryRank": 0,
       "icon": "items/images/en/arbucep.f31d27a5f3be143aba9e645b1e4fc952.webp",
-      "thumb": "items/images/en/thumbs/arbucep.f31d27a5f3be143aba9e645b1e4fc952.128x128.webp"
+      "thumb": "items/images/en/thumbs/arbucep.f31d27a5f3be143aba9e645b1e4fc952.128x128.webp",
+      "imageName": "NokkoArchGun.png"
     },
     {
       "id": "68efc01705fb2137056fb725",
@@ -4517,7 +4903,8 @@
       "disposition": 1.15,
       "reqMasteryRank": 0,
       "icon": "items/images/en/thornbak.fd909dd625865ed8fdeadc98b8a86c4e.webp",
-      "thumb": "items/images/en/thumbs/thornbak.fd909dd625865ed8fdeadc98b8a86c4e.128x128.webp"
+      "thumb": "items/images/en/thumbs/thornbak.fd909dd625865ed8fdeadc98b8a86c4e.128x128.webp",
+      "imageName": "ModQuestRifle.png"
     },
     {
       "id": "6939d7d6d6a357b81964f869",
@@ -4528,7 +4915,8 @@
       "disposition": 0.6,
       "reqMasteryRank": 14,
       "icon": "items/images/en/vinquibus.09082e0492cea0183d18f7bd6d1fcfd6.webp",
-      "thumb": "items/images/en/thumbs/vinquibus.09082e0492cea0183d18f7bd6d1fcfd6.128x128.webp"
+      "thumb": "items/images/en/thumbs/vinquibus.09082e0492cea0183d18f7bd6d1fcfd6.128x128.webp",
+      "imageName": "TnBayonetRifle.png"
     },
     {
       "id": "6939d7e8d6a357b81964f86b",
@@ -4539,7 +4927,8 @@
       "disposition": 0.8,
       "reqMasteryRank": 14,
       "icon": "items/images/en/galariak_prime.f33fd333269f633ceb056531e15233c4.webp",
-      "thumb": "items/images/en/thumbs/galariak_prime.f33fd333269f633ceb056531e15233c4.128x128.webp"
+      "thumb": "items/images/en/thumbs/galariak_prime.f33fd333269f633ceb056531e15233c4.128x128.webp",
+      "imageName": "GrnDrillScythe.png"
     },
     {
       "id": "6939d7f5d6a357b81964f86d",
@@ -4550,7 +4939,8 @@
       "disposition": 0.8,
       "reqMasteryRank": 14,
       "icon": "items/images/en/sagek_prime.956e735a931c25ad9bcec44a6462348b.webp",
-      "thumb": "items/images/en/thumbs/sagek_prime.956e735a931c25ad9bcec44a6462348b.128x128.webp"
+      "thumb": "items/images/en/thumbs/sagek_prime.956e735a931c25ad9bcec44a6462348b.128x128.webp",
+      "imageName": "GrnOrokinPistol.png"
     },
     {
       "id": "6949f183bf34608b9906f035",
@@ -4572,7 +4962,8 @@
       "disposition": 0.7,
       "reqMasteryRank": 12,
       "icon": "items/images/en/enkaus.8a01a4f134bcaae4cfd4c836f8f7b9a8.webp",
-      "thumb": "items/images/en/thumbs/enkaus.8a01a4f134bcaae4cfd4c836f8f7b9a8.128x128.webp"
+      "thumb": "items/images/en/thumbs/enkaus.8a01a4f134bcaae4cfd4c836f8f7b9a8.128x128.webp",
+      "imageName": "TnInkRifleWeapon.png"
     },
     {
       "id": "6a3312dd875fcabc85ef4f7e",
@@ -4583,7 +4974,8 @@
       "disposition": 0.5,
       "reqMasteryRank": 14,
       "icon": "items/images/en/wrath.faea02dbccc63f50063192469e1cb02f.webp",
-      "thumb": "items/images/en/thumbs/wrath.faea02dbccc63f50063192469e1cb02f.128x128.webp"
+      "thumb": "items/images/en/thumbs/wrath.faea02dbccc63f50063192469e1cb02f.128x128.webp",
+      "imageName": "TnOrionScytheWeapon.png"
     },
     {
       "id": "6a3312ef875fcabc85ef4f80",
@@ -4594,7 +4986,8 @@
       "disposition": 0.5,
       "reqMasteryRank": 14,
       "icon": "items/images/en/pride.ace6ac2848bfe134898c2b3c70e97620.webp",
-      "thumb": "items/images/en/thumbs/pride.ace6ac2848bfe134898c2b3c70e97620.128x128.webp"
+      "thumb": "items/images/en/thumbs/pride.ace6ac2848bfe134898c2b3c70e97620.128x128.webp",
+      "imageName": "TnSiriusScytheWeapon.png"
     },
     {
       "id": "6a52617bcfb1ce3a499be63a",
@@ -4866,6 +5259,6 @@
       "name": "Chance to Gain Combo Count"
     }
   ],
-  "loadedAt": "2026-07-12T17:41:29.250Z",
+  "loadedAt": "2026-07-12T18:39:30.156Z",
   "versionsUpdatedAt": "2026-07-11T15:47:12Z"
 }
